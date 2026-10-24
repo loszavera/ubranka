@@ -32,7 +32,14 @@ Aleksy potwierdził działanie większości funkcji i pozytywny ponowny test pop
 usuwania. Logowanie Kasi pozostaje otwarte; szczegóły [odbioru](docs/P31-ACCEPTANCE.md).
 Bieżące dowody:
 [raport P3.1](docs/P31-VERIFICATION.md), [konfiguracja](docs/P31-SETUP.md).
-P3.2/P3.3 i nowe abonamenty nie zostały zatwierdzone.
+**P3.2 zatwierdzono 2026-10-25:** do 12 płatnych wywołań i 25 PLN łącznie,
+wyłącznie na syntetycznych obrazach fikcyjnych dorosłych, bez automatycznych ponowień.
+**Próba zakończona: 12/12 udanych wywołań, koszt API 0,432032 USD**, około 2,92 PLN
+z konserwatywną rezerwą. Dziesięć wyników uznano za technicznie użyteczne;
+dwa zmieniają krój spodni. [Galeria porównawcza](https://ubranka.vercel.app/p32/)
+i [raport jakości oraz kosztów](docs/P32-REPORT.md) czekają na ocenę Kasi i Aleksego.
+Użytkownik pozwolił rozpocząć pomiar bez pełnej estymacji, zachowując limity.
+P3.3 oraz nowe abonamenty nie są zatwierdzone. Aplikacja nie generuje jeszcze obrazów AI.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
 jest wspólna dla obu adresów. Lokalny zapis demo pozostaje osobny — publikacja
@@ -42,12 +49,15 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 ## Dokumenty
 
-- [Wymagania V1.4 — P3.1 zatwierdzone](docs/REQUIREMENTS-V1.4.md)
-- [Plan implementacji V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md)
+- [Wymagania V1.5 — zatwierdzona próba P3.2](docs/REQUIREMENTS-V1.5.md)
+- [Plan implementacji V1.5](docs/IMPLEMENTATION-PLAN-V1.5.md)
+- [P3.2 — raport jakości, kosztów i weryfikacji](docs/P32-REPORT.md)
+- [P3.2 — historyczny preflight i późniejsze rozstrzygnięcie użytkownika](docs/P32-PREFLIGHT.md)
+- [Przypadki P3.2, prompty i hashe wejść](docs/p32/cases.json)
 - [Przyjęte zasady zdjęć i usuwania](docs/P3-DATA-POLICY-V1.0.md)
 - [Konfiguracja usług P3.1](docs/P31-SETUP.md) i [backend](docs/P31-BACKEND.md)
 - [Weryfikacja P3.1 i jej ograniczenia](docs/P31-VERIFICATION.md)
-- [Aktualne koszty usług i scenariusze AI](docs/COST-PLAN-V1.3.md)
+- [Aktualne pomiary kosztów AI V1.4](docs/COST-PLAN-V1.4.md) i [usługi V1.3](docs/COST-PLAN-V1.3.md)
 - [Odpowiedzi uzupełniające](docs/INTERVIEW-V1.2.md) i [pierwsze 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
 - [Wybrany wygląd A](docs/design/DESIGN-DIRECTION-V1.2.md)
 - [Założenia budżetu przy 30 wizualizacjach na osobę](docs/COST-PLAN-V1.2.md)

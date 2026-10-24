@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Przymierzamy pomysł — próba P3.2 · Ubranka</title>
+  <style>
+    :root { --paper:#f8f5ef; --card:#fffdf9; --ink:#352b35; --muted:#70646f; --plum:#603c59; --pale:#eee4ed; --line:#dfd3dc; --warning:#f5ebd8; --radius:22px; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none!important; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55; }
+    button,select { font:inherit; }
+    button,a,select { -webkit-tap-highlight-color:transparent; }
+    a { color:var(--plum); text-underline-offset:4px; }
+    a:hover { text-decoration-thickness:2px; }
+    :focus-visible { outline:3px solid #98577f; outline-offset:4px; }
+    button { min-height:46px; border:1px solid var(--line); border-radius:14px; padding:10px 17px; color:var(--plum); background:var(--card); cursor:pointer; font-weight:600; }
+    button:hover:not(:disabled) { background:var(--pale); }
+    button:disabled { opacity:.45; cursor:default; }
+    .skip { position:absolute; top:-80px; left:16px; padding:12px; background:var(--card); z-index:10; }
+    .skip:focus { top:12px; }
+    .wrap { max-width:1180px; margin:auto; padding:0 24px; }
+    .masthead { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:86px; border-bottom:1px solid var(--line); }
+    .brand { font-size:25px; font-weight:850; letter-spacing:-1.2px; text-decoration:none; }
+    .back { font-size:14px; }
+    .intro { padding:48px 0 28px; max-width:760px; }
+    .eyebrow { color:var(--plum); font-size:12px; font-weight:750; letter-spacing:1.8px; text-transform:uppercase; margin:0 0 14px; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(36px,6vw,62px); line-height:1.06; letter-spacing:-1.7px; font-weight:400; margin-bottom:20px; }
+    .lead { font-size:18px; color:var(--muted); max-width:640px; margin-bottom:22px; }
+    .disclaimer { display:inline-block; color:var(--plum); background:var(--pale); padding:12px 16px; border-radius:14px; font-size:13px; margin:0; }
+    h2 { font-size:24px; line-height:1.25; letter-spacing:-.5px; margin-bottom:12px; }
+    h3 { font-size:19px; line-height:1.3; margin-bottom:10px; }
+    .muted { color:var(--muted); font-size:14px; }
+    .status-row { display:flex; align-items:center; flex-wrap:wrap; gap:10px 18px; margin-bottom:20px; }
+    .badge { display:inline-block; border:1px solid var(--line); border-radius:100px; padding:6px 12px; color:var(--plum); font-size:12px; font-weight:650; }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:24px; }
+    .message { margin:12px 0 30px; max-width:740px; }
+    .message p { margin-bottom:14px; }
+    .summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .metric { padding:20px; border-radius:18px; background:var(--card); border:1px solid var(--line); }
+    .metric dt { color:var(--muted); font-size:13px; margin-bottom:8px; }
+    .metric dd { margin:0; font-size:clamp(22px,3vw,31px); font-weight:600; color:var(--plum); overflow-wrap:anywhere; }
+    dl { margin:0; }
+    .cost-note { margin:14px 0 20px; max-width:760px; }
+    .model-summary { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:28px; }
+    .model-chip { margin:0; padding:10px 14px; background:var(--pale); border-radius:12px; font-size:13px; }
+    .case-controls { display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:10px; align-items:end; margin:34px 0 30px; padding:20px; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); }
+    .case-controls label { display:block; font-size:12px; color:var(--muted); margin-bottom:7px; font-weight:600; }
+    select { width:100%; min-height:48px; padding:9px 34px 9px 12px; border:1px solid var(--line); border-radius:12px; color:var(--ink); background:var(--paper); text-overflow:ellipsis; }
+    .section-head { display:flex; align-items:end; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-bottom:20px; }
+    .section-head h2 { margin:0; }
+    .section-head p { margin:0; }
+    .sources { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-bottom:36px; }
+    figure { margin:0; min-width:0; }
+    .image-card { overflow:hidden; border-radius:var(--radius); border:1px solid var(--line); background:var(--card); }
+    .photo-link { position:relative; display:block; text-decoration:none; background:#ece6e8; }
+    .photo-window { width:100%; aspect-ratio:2/3; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .sources .photo-window { aspect-ratio:4/3; max-height:380px; }
+    .photo-window img { width:100%; height:100%; object-fit:contain; display:block; }
+    .zoom { position:absolute; bottom:12px; right:12px; background:rgba(255,253,249,.94); border:1px solid var(--line); border-radius:100px; padding:5px 10px; font-size:12px; color:var(--plum); }
+    .missing { min-height:180px; padding:28px 18px; text-align:center; color:var(--muted); display:flex; align-items:center; justify-content:center; background:var(--pale); font-size:14px; }
+    figcaption { padding:15px 18px; font-size:14px; font-weight:600; }
+    .results { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; align-items:start; }
+    .result { min-width:0; overflow:hidden; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); }
+    .result-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; padding:19px 20px; }
+    .result-head h3 { margin:0; font-size:21px; }
+    .result-head span { font-size:12px; color:var(--muted); }
+    .result-body { padding:22px; }
+    .result .image-card { border:0; border-radius:0; }
+    .result figcaption { display:none; }
+    .score { font-size:16px; font-weight:650; color:var(--plum); margin-bottom:12px; }
+    .issues { padding-left:20px; font-size:14px; color:var(--muted); margin:0 0 20px; }
+    .issues li+li { margin-top:8px; }
+    .result-metrics { display:flex; flex-wrap:wrap; gap:14px 20px; padding-top:16px; border-top:1px solid var(--line); }
+    .result-metrics dt { font-size:11px; color:var(--muted); }
+    .result-metrics dd { margin:4px 0 0; font-size:14px; font-weight:600; }
+    details { margin:20px 0; border:1px solid var(--line); border-radius:14px; padding:14px 17px; font-size:14px; color:var(--muted); }
+    summary { cursor:pointer; color:var(--plum); min-height:24px; font-weight:600; }
+    details ul { padding-left:20px; margin-bottom:0; }
+    details li { margin-top:10px; overflow-wrap:anywhere; }
+    .footer { display:flex; flex-wrap:wrap; justify-content:space-between; gap:18px; border-top:1px solid var(--line); padding:26px 0 38px; margin-top:44px; font-size:14px; }
+    .footer p { margin:0; color:var(--muted); }
+    noscript { display:block; margin:24px; padding:20px; background:var(--warning); border-radius:14px; }
+    @media(max-width:640px) {
+      .wrap { padding:0 16px; } .masthead { min-height:74px; } .brand { font-size:23px; }
+      .intro { padding-top:32px; } .lead { font-size:16px; } .disclaimer { font-size:12px; }
+      .summary { gap:8px; } .metric { padding:14px 10px; border-radius:14px; } .metric dt { min-height:38px; font-size:11px; } .metric dd { font-size:20px; }
+      .case-controls { grid-template-columns:minmax(0,1fr) auto auto; padding:14px; gap:8px; } .case-controls .select-field { grid-column:1/-1; } .case-controls button { padding:9px 15px; } .case-controls button:first-of-type { grid-column:2; }
+      .sources { gap:10px; } .sources .photo-window { aspect-ratio:2/3; } figcaption { padding:12px; font-size:12px; }
+      .zoom { bottom:8px; right:8px; padding:4px 8px; font-size:11px; }
+      .results { grid-template-columns:1fr; gap:26px; } .result-body { padding:20px; }
+      h2 { font-size:22px; } .section-head .muted { font-size:12px; }
+    }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#gallery">Przejdź do porównania</a>
+  <div class="wrap">
+    <header class="masthead"><a class="brand" href="/" aria-label="Ubranka — aplikacja">ubranka</a><a class="back" href="/">Wróć do aplikacji ↗</a></header>
+    <main>
+      <div class="intro">
+        <p class="eyebrow">Pracownia Ubranka · P3.2</p>
+        <h1>Przymierzamy pomysł.</h1>
+        <p class="lead">Ta sama osoba, ten sam zestaw, dwa sposoby wizualizacji. Porównaj gotowe wyniki i sprawdź, co udało się zachować.</p>
+        <p class="disclaimer">Fikcyjne dorosłe osoby • próba P3.2 • wizualizacja nie potwierdza rozmiaru</p>
+      </div>
+      <section id="message" class="panel message" aria-live="polite" aria-busy="true"><h2 id="message-title">Wczytuję wyniki…</h2><p id="message-detail" class="muted">Pobieram zapisane podsumowanie próby.</p><button id="retry" type="button" hidden>Spróbuj ponownie</button></section>
+      <div id="content" hidden>
+        <div class="status-row"><span id="status" class="badge"></span><span id="date" class="muted"></span></div>
+        <dl class="summary" aria-label="Podsumowanie kosztów"><div class="metric"><dt>Wywołania API</dt><dd id="calls">—</dd></div><div class="metric"><dt>Koszt API · USD</dt><dd id="api-cost">—</dd></div><div class="metric"><dt>Z buforem · PLN</dt><dd id="budget-cost">—</dd></div></dl>
+        <p class="muted cost-note">USD to zapisany koszt wywołań API. PLN to kwota rozliczana w budżecie próby, z przeliczeniem i buforem — nie osobna opłata. To koszty tej próby, nie abonament aplikacji.</p>
+        <div id="models" class="model-summary"></div>
+        <div id="global-notes"></div>
+        <section id="gallery" aria-labelledby="case-title">
+          <nav class="case-controls" aria-label="Wybór przypadku"><div class="select-field"><label for="case-select">Wybierz porównanie</label><select id="case-select"></select></div><button id="previous" type="button" aria-label="Poprzedni przypadek">← Wstecz</button><button id="next" type="button" aria-label="Następny przypadek">Dalej →</button></nav>
+          <div class="section-head"><h2 id="case-title"></h2><p id="case-number" class="muted" aria-live="polite"></p></div>
+          <div id="sources" class="sources"></div>
+          <div class="section-head"><h2>Jak wypadły wizualizacje?</h2><p class="muted">Dotknij obrazu, aby obejrzeć go w pełnym rozmiarze.</p></div>
+          <div id="results" class="results"></div>
+          <div id="case-notes"></div>
+        </section>
+      </div>
+    </main>
+    <footer class="footer"><a href="https://github.com/loszavera/ubranka/blob/main/docs/P32-REPORT.md" target="_blank" rel="noopener noreferrer">Przeczytaj pełny raport ↗</a><p>Galeria gotowych wyników · bez generowania nowych obrazów</p></footer>
+  </div>
+  <noscript>Włącz JavaScript, aby wczytać galerię. Wyniki i ograniczenia są również opisane w raporcie pod linkiem powyżej.</noscript>
+  <script>
+    (() => {
+      'use strict';
+      const base = new URL('/p32/', location.origin);
+      const byId = id => document.getElementById(id);
+      const text = value => typeof value === 'string' ? value : typeof value === 'number' && Number.isFinite(value) ? String(value) : '';
+      const number = (value, digits = 2) => typeof value === 'number' && Number.isFinite(value) && value >= 0
+        ? new Intl.NumberFormat('pl-PL', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value) : '—';
+      const modelName = value => /sunburst/i.test(text(value)) ? 'Sunburst' : /flare/i.test(text(value)) ? 'Flare' : text(value) || 'Wynik';
+      const el = (tag, className, value) => { const node = document.createElement(tag); if (className) node.className = className; if (value !== undefined) node.textContent = value; return node; };
+      let data; let selected = 0; let controller;
+
+      function imageUrl(path) {
+        if (typeof path !== 'string' || !path.trim()) return null;
+        try {
+          const url = new URL(path, base);
+          return url.origin === base.origin && url.pathname.startsWith(base.pathname + 'images/') ? url.href : null;
+        } catch { return null; }
+      }
+      function imageFigure(path, label, context) {
+        const figure = el('figure', 'image-card');
+        const url = imageUrl(path);
+        if (!url) figure.append(el('div', 'missing', 'Brak zapisanego obrazu.'));
+        else {
+          const link = el('a', 'photo-link'); link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer';
+          link.setAttribute('aria-label', `${label}: ${context}. Otwórz pełny obraz w nowej karcie.`);
+          const window = el('div', 'photo-window');
+          const img = el('img'); img.src = url; img.alt = `${label} — ${context}`; img.loading = 'lazy'; img.decoding = 'async';
+          img.addEventListener('error', () => { link.replaceWith(el('div', 'missing', 'Nie udało się wczytać obrazu. Odśwież stronę i spróbuj ponownie.')); }, { once: true });
+          window.append(img); link.append(window, el('span', 'zoom', 'Powiększ ↗')); figure.append(link);
+        }
+        figure.append(el('figcaption', '', label)); return figure;
+      }
+      function notes(value, title = 'Uwagi do próby') {
+        const entries = (Array.isArray(value) ? value : [value]).map(text).filter(Boolean);
+        if (!entries.length) return null;
+        const details = el('details'); details.append(el('summary', '', title));
+        const list = el('ul'); entries.forEach(entry => list.append(el('li', '', entry))); details.append(list); return details;
+      }
+      function addNotes(target, source) {
+        target.replaceChildren();
+        const detail = notes(source.technicalNotes ?? source.notes); if (detail) target.append(detail);
+      }
+      function resultCard(result, label) {
+        const card = el('article', 'result'); const head = el('div', 'result-head');
+        head.append(el('h3', '', modelName(result.model)), el('span', '', 'Wizualizacja AI'));
+        card.append(head, imageFigure(result.src, modelName(result.model), label));
+        const body = el('div', 'result-body'); body.append(el('p', 'score', text(result.score) || 'Jeszcze nie oceniono'));
+        const issues = Array.isArray(result.issues) ? result.issues.map(text).filter(Boolean) : [];
+        if (issues.length) { const list = el('ul', 'issues'); issues.forEach(issue => list.append(el('li', '', issue))); body.append(list); }
+        else body.append(el('p', 'muted', 'Nie zapisano zastrzeżeń.'));
+        const metrics = el('dl', 'result-metrics');
+        [['API · USD', number(result.apiUsd, 4)], ['Z buforem · PLN', number(result.budgetedPln)], ['Czas', typeof result.seconds === 'number' ? number(result.seconds, 1) + ' s' : '—']].forEach(([label, value]) => {
+          const pair = el('div'); pair.append(el('dt', '', label), el('dd', '', value)); metrics.append(pair);
+        });
+        body.append(metrics); const detail = notes(result.technicalNotes ?? result.notes, 'Uwagi do wyniku'); if (detail) body.append(detail);
+        card.append(body); return card;
+      }
+      function renderCase() {
+        const item = data.cases[selected]; const label = text(item.label) || `Przypadek ${selected + 1}`;
+        byId('case-select').value = String(selected); byId('case-title').textContent = label;
+        byId('case-number').textContent = `Przypadek ${selected + 1} z ${data.cases.length}`;
+        byId('previous').disabled = selected === 0; byId('next').disabled = selected === data.cases.length - 1;
+        byId('sources').replaceChildren(imageFigure(item.person, 'Osoba przed zmianą', label), imageFigure(item.reference, 'Zestaw odniesienia', label));
+        const results = Array.isArray(item.results) ? item.results.filter(value => value && typeof value === 'object') : [];
+        byId('results').replaceChildren(...results.map(result => resultCard(result, label)));
+        if (!results.length) byId('results').append(el('p', 'panel muted', 'Dla tego przypadku nie ma jeszcze zapisanych wyników.'));
+        addNotes(byId('case-notes'), item);
+      }
+      function render() {
+        const states = { complete:'Próba zakończona', completed:'Próba zakończona', done:'Próba zakończona', running:'Próba w toku', partial:'Wyniki częściowe', stopped:'Próba zatrzymana', error:'Próba przerwana', failed:'Próba przerwana' };
+        byId('status').textContent = states[text(data.status).toLowerCase()] || text(data.status) || 'Zapisane wyniki próby';
+        byId('date').textContent = text(data.date) ? `Data próby: ${text(data.date)}` : '';
+        byId('calls').textContent = number(data.totals?.calls, 0); byId('api-cost').textContent = number(data.totals?.apiUsd, 4); byId('budget-cost').textContent = number(data.totals?.budgetedPln);
+        byId('models').replaceChildren();
+        (Array.isArray(data.models) ? data.models : []).forEach(model => {
+          if (!model || typeof model !== 'object') return;
+          byId('models').append(el('p', 'model-chip', `${modelName(model.label)} · ${number(model.apiUsd, 4)} USD · średnio ${number(model.averageSeconds, 1)} s`));
+        });
+        addNotes(byId('global-notes'), data);
+        byId('case-select').replaceChildren(...data.cases.map((item, index) => { const option = el('option', '', `${String(index + 1).padStart(2, '0')} · ${text(item.label) || 'Przypadek'}`); option.value = String(index); return option; }));
+        selected = Math.min(selected, data.cases.length - 1); renderCase();
+      }
+      async function load() {
+        controller?.abort(); controller = new AbortController(); const current = controller;
+        byId('content').hidden = true; byId('message').hidden = false; byId('retry').hidden = true;
+        byId('message').setAttribute('aria-busy', 'true'); byId('message-title').textContent = 'Wczytuję wyniki…'; byId('message-detail').textContent = 'Pobieram zapisane podsumowanie próby.';
+        const timeout = setTimeout(() => current.abort(), 15000);
+        try {
+          const response = await fetch(new URL('summary.json', base), { cache:'no-store', credentials:'omit', signal:current.signal });
+          if (!response.ok) throw new Error('unavailable');
+          const value = await response.json();
+          if (!value || !Array.isArray(value.cases) || value.cases.some(item => !item || typeof item !== 'object')) throw new Error('invalid');
+          if (!value.cases.length) {
+            byId('message-title').textContent = 'Wyniki jeszcze nie są dostępne'; byId('message-detail').textContent = 'Podsumowanie nie zawiera jeszcze przypadków do porównania.'; byId('retry').hidden = false; return;
+          }
+          data = value; render(); byId('message').hidden = true; byId('content').hidden = false;
+        } catch {
+          if (controller !== current) return;
+          byId('message-title').textContent = 'Nie udało się wczytać wyników';
+          byId('message-detail').textContent = 'Podsumowanie może być jeszcze niedostępne albo połączenie zostało przerwane. Nie zastępujemy wyników przykładami.';
+          byId('retry').hidden = false;
+        } finally { clearTimeout(timeout); if (controller === current) byId('message').setAttribute('aria-busy', 'false'); }
+      }
+      byId('case-select').addEventListener('change', event => { selected = Number(event.target.value); renderCase(); });
+      byId('previous').addEventListener('click', () => { if (selected > 0) { selected--; renderCase(); } });
+      byId('next').addEventListener('click', () => { if (selected < data.cases.length - 1) { selected++; renderCase(); } });
+      byId('retry').addEventListener('click', load);
+      load();
+    })();
+  </script>
+</body>
+</html>

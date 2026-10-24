@@ -1,0 +1,540 @@
+{
+  "date": "2026-10-25",
+  "parameters": {
+    "n": 1,
+    "quality": "medium",
+    "size": "1024x1536",
+    "background": "opaque",
+    "output_format": "png",
+    "moderation": "auto"
+  },
+  "ratesUsdPerMillion": {
+    "textInput": 5,
+    "imageInput": 8,
+    "imageOutput": 30
+  },
+  "budgetConversion": {
+    "planningPlnPerUsd": 5,
+    "taxReserveMultiplier": 1.23,
+    "feeBufferMultiplier": 1.1,
+    "allInPlnPerUsd": 6.765000000000001
+  },
+  "calls": [
+    {
+      "number": 1,
+      "caseId": "W-CASUAL",
+      "model": "gpt-image-2.5-sunburst-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "fac39d84035a708fc5bad1e6b73109f0165f32dd8d688493c1d63abcc4c0ca7d",
+      "inputHashes": [
+        "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+        "8aede920434099c03d7385315ae1d80473557df538f4d64b0ffdf961be1a5e26"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 14.5755534,
+      "usage": {
+        "input_tokens": 3300,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 228
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3643
+      },
+      "costUsd": 0.036006,
+      "costPlnBudgeted": 0.24358059000000004,
+      "output": {
+        "path": "public/p32/images/01-W-CASUAL-sunburst.webp",
+        "webpSha256": "b70da1fa9437ec2cbbbb5a100f4e05c9456c221aef705f9ecc6917267a6e01a4",
+        "originalPngSha256": "1e92222a0ea8886b0b6dfe1145660e27c338e11e74919bebcc4fdaaa64e4caf4",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 2,
+      "caseId": "W-CASUAL",
+      "model": "gpt-image-2.5-flare-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "fac39d84035a708fc5bad1e6b73109f0165f32dd8d688493c1d63abcc4c0ca7d",
+      "inputHashes": [
+        "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+        "8aede920434099c03d7385315ae1d80473557df538f4d64b0ffdf961be1a5e26"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 11.8657304,
+      "usage": {
+        "input_tokens": 3300,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 228
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3643
+      },
+      "costUsd": 0.036006,
+      "costPlnBudgeted": 0.24358059000000004,
+      "output": {
+        "path": "public/p32/images/02-W-CASUAL-flare.webp",
+        "webpSha256": "e4fc0f30bcb4b1e3dd29cfac12a0361fdbe3188800c12239e21db98a938dd9b2",
+        "originalPngSha256": "13666ecf85b438fcc415a69c25ba4f02ace2e0ec11ee0f24d4c8b54bf9752b3d",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 3,
+      "caseId": "M-CASUAL",
+      "model": "gpt-image-2.5-sunburst-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "b6e463d7b7083dc5aba46c5a94e37209f6769fe963e162957e76566c914c8df8",
+      "inputHashes": [
+        "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+        "972884d0df8ff8a28c9af65174fcc4ac2d4d18750d2a058effba2fff7d5847df"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 14.8659732,
+      "usage": {
+        "input_tokens": 3299,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 227
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3642
+      },
+      "costUsd": 0.036001,
+      "costPlnBudgeted": 0.243546765,
+      "output": {
+        "path": "public/p32/images/03-M-CASUAL-sunburst.webp",
+        "webpSha256": "b913042bcc0873d0207db785c4935e9f15e9446b00567474f0d0da22f4e56328",
+        "originalPngSha256": "ac2312e64078b0dc626c94ccbafe8b3662bfefd3c6509ab17af30826e4053a9b",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 4,
+      "caseId": "M-CASUAL",
+      "model": "gpt-image-2.5-flare-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "b6e463d7b7083dc5aba46c5a94e37209f6769fe963e162957e76566c914c8df8",
+      "inputHashes": [
+        "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+        "972884d0df8ff8a28c9af65174fcc4ac2d4d18750d2a058effba2fff7d5847df"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 12.430911,
+      "usage": {
+        "input_tokens": 3299,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 227
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3642
+      },
+      "costUsd": 0.036001,
+      "costPlnBudgeted": 0.243546765,
+      "output": {
+        "path": "public/p32/images/04-M-CASUAL-flare.webp",
+        "webpSha256": "6ccee7be0409b0b0ecaecf8d4d70c715c83fd262ef80bbea807864895aac5021",
+        "originalPngSha256": "c9f313208b79a057d22670b540e173c96892a3c4b8087ace955452c66fa52406",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 5,
+      "caseId": "W-ELEGANT",
+      "model": "gpt-image-2.5-sunburst-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "3597d2d4f2a332ebd76cc3dfb858554ac5c446bd287bdd0228a7cfe7fe2497e9",
+      "inputHashes": [
+        "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+        "25b83aae5d67b8f5a9c735b3fbcad7be4d3e2eafb23c45c3703ade86ebd2fad1"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 13.1491053,
+      "usage": {
+        "input_tokens": 3299,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 227
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3642
+      },
+      "costUsd": 0.036001,
+      "costPlnBudgeted": 0.243546765,
+      "output": {
+        "path": "public/p32/images/05-W-ELEGANT-sunburst.webp",
+        "webpSha256": "83b31ee2fa1318e52bc3427c25214da84b0728ecef61452da767397dcd0165c6",
+        "originalPngSha256": "c4b8a6c97a9aa8b03c7ec50408c413bcd1dfc44788380df9e5d1c6b812106cec",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 6,
+      "caseId": "W-ELEGANT",
+      "model": "gpt-image-2.5-flare-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "3597d2d4f2a332ebd76cc3dfb858554ac5c446bd287bdd0228a7cfe7fe2497e9",
+      "inputHashes": [
+        "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+        "25b83aae5d67b8f5a9c735b3fbcad7be4d3e2eafb23c45c3703ade86ebd2fad1"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 13.5885802,
+      "usage": {
+        "input_tokens": 3299,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 227
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3642
+      },
+      "costUsd": 0.036001,
+      "costPlnBudgeted": 0.243546765,
+      "output": {
+        "path": "public/p32/images/06-W-ELEGANT-flare.webp",
+        "webpSha256": "a16060890351b5b0377dbf70f80fd038f347e50f4455628da486e88d2e09b410",
+        "originalPngSha256": "1c3e8f8cc81b5a58a7a0a8b28fb2c0388bc2a18099539bf58e92b7261d9ee87c",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 7,
+      "caseId": "M-ELEGANT",
+      "model": "gpt-image-2.5-sunburst-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "bf6d0374daf7a82f13ee42bd15517c4eae8d039b093cb4e9aa5bc4a8bc36a0af",
+      "inputHashes": [
+        "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+        "a0847f633b9c49c57a150d5abf67754e644316488681bb7e9022962d19461b6d"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 14.555574400000001,
+      "usage": {
+        "input_tokens": 3298,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 226
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3641
+      },
+      "costUsd": 0.035996,
+      "costPlnBudgeted": 0.24351294,
+      "output": {
+        "path": "public/p32/images/07-M-ELEGANT-sunburst.webp",
+        "webpSha256": "49bd7be63ed766610cb2ca124240c98c369a54b988c3d95748275c89a1376c84",
+        "originalPngSha256": "a19fdbe71a7e39724bba3ebac7b98f7c4a3f0b2a99494292c0cf43cd33891e47",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 8,
+      "caseId": "M-ELEGANT",
+      "model": "gpt-image-2.5-flare-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "bf6d0374daf7a82f13ee42bd15517c4eae8d039b093cb4e9aa5bc4a8bc36a0af",
+      "inputHashes": [
+        "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+        "a0847f633b9c49c57a150d5abf67754e644316488681bb7e9022962d19461b6d"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 11.7950037,
+      "usage": {
+        "input_tokens": 3298,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 226
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3641
+      },
+      "costUsd": 0.035996,
+      "costPlnBudgeted": 0.24351294,
+      "output": {
+        "path": "public/p32/images/08-M-ELEGANT-flare.webp",
+        "webpSha256": "5eb01f66fd0c86174eb9b29d42fbc10b7477b23db079a9d82febee3ae8e9e00f",
+        "originalPngSha256": "01b4ab4328094f2c244b14eb155d8a2c9c7711a7b0a0e714a06840672fd53aee",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 9,
+      "caseId": "W-WEDDING",
+      "model": "gpt-image-2.5-sunburst-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "a87662679838a23c0e10c276b258b0b99b36f8ff8ddbbd77c18cbf070d193b7b",
+      "inputHashes": [
+        "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+        "1db25aaceae3d83f87a3d03ae70dad2e15919ca860834e61a13be532c890355d"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 14.105557899999999,
+      "usage": {
+        "input_tokens": 3297,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 225
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3640
+      },
+      "costUsd": 0.035991,
+      "costPlnBudgeted": 0.24347911500000002,
+      "output": {
+        "path": "public/p32/images/09-W-WEDDING-sunburst.webp",
+        "webpSha256": "ef89b7a135eefcaae21c87e39e52a399a1150d1c7b39f285b80fff56f5d91832",
+        "originalPngSha256": "01472a182fdf3fd70485d311d92284af6ad3942bd79daf90d860ae5beb43b6be",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 10,
+      "caseId": "W-WEDDING",
+      "model": "gpt-image-2.5-flare-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "a87662679838a23c0e10c276b258b0b99b36f8ff8ddbbd77c18cbf070d193b7b",
+      "inputHashes": [
+        "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+        "1db25aaceae3d83f87a3d03ae70dad2e15919ca860834e61a13be532c890355d"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 11.514978500000002,
+      "usage": {
+        "input_tokens": 3297,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 225
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3640
+      },
+      "costUsd": 0.035991,
+      "costPlnBudgeted": 0.24347911500000002,
+      "output": {
+        "path": "public/p32/images/10-W-WEDDING-flare.webp",
+        "webpSha256": "599e8480fe5ebdcc4e9698eba12f6f11d845e733dfa44a5fcbeb6100000e6327",
+        "originalPngSha256": "aee35ef1c7d6193de9d0457b80d4015edb66514d457630b89b13db3876ac9d1f",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 11,
+      "caseId": "M-WEDDING",
+      "model": "gpt-image-2.5-sunburst-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "314a120698022f149959023d7c5041403218bdd74bdac21406899c207cf64f3e",
+      "inputHashes": [
+        "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+        "8320008f9a72fbc3aa7caf66060d2ed1d23c2442f96004aed930591156146478"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 17.3981374,
+      "usage": {
+        "input_tokens": 3303,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 231
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3646
+      },
+      "costUsd": 0.036021,
+      "costPlnBudgeted": 0.243682065,
+      "output": {
+        "path": "public/p32/images/11-M-WEDDING-sunburst.webp",
+        "webpSha256": "b1a81bc1ffe25df3f7186d84a6e18f9178f551e450cf59f0f83760189f041e8f",
+        "originalPngSha256": "dbdffc861ab0b91babd356131613f1916a14f4afde337d1ece2211a7861bc00e",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    },
+    {
+      "number": 12,
+      "caseId": "M-WEDDING",
+      "model": "gpt-image-2.5-flare-2026-09-08",
+      "parameters": {
+        "n": 1,
+        "quality": "medium",
+        "size": "1024x1536",
+        "background": "opaque",
+        "output_format": "png",
+        "moderation": "auto"
+      },
+      "promptSha256": "314a120698022f149959023d7c5041403218bdd74bdac21406899c207cf64f3e",
+      "inputHashes": [
+        "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+        "8320008f9a72fbc3aa7caf66060d2ed1d23c2442f96004aed930591156146478"
+      ],
+      "httpStatus": 200,
+      "durationSeconds": 12.5869731,
+      "usage": {
+        "input_tokens": 3303,
+        "input_tokens_details": {
+          "image_tokens": 3072,
+          "text_tokens": 231
+        },
+        "output_tokens": 343,
+        "output_tokens_details": {
+          "image_tokens": 343,
+          "text_tokens": 0
+        },
+        "total_tokens": 3646
+      },
+      "costUsd": 0.036021,
+      "costPlnBudgeted": 0.243682065,
+      "output": {
+        "path": "public/p32/images/12-M-WEDDING-flare.webp",
+        "webpSha256": "f4c1e3bbe8313032d6bba1bc2d27279a99bfa234bcd680417a6bec38eacd36e6",
+        "originalPngSha256": "b78b88a96e9d07c554342b605c137020e602ae3423a044f58f927238b577bbba",
+        "width": 1024,
+        "height": 1536,
+        "losslessPixelEqualityVerified": true
+      }
+    }
+  ]
+}

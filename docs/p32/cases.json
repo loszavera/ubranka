@@ -1,0 +1,179 @@
+{
+  "version": "1.0",
+  "preparedDate": "2026-10-25",
+  "status": "completed",
+  "models": [
+    "gpt-image-2.5-sunburst-2026-09-08",
+    "gpt-image-2.5-flare-2026-09-08"
+  ],
+  "endpoint": "https://api.openai.com/v1/images/edits",
+  "parameters": {
+    "n": 1,
+    "quality": "medium",
+    "size": "1024x1536",
+    "background": "opaque",
+    "output_format": "png",
+    "moderation": "auto"
+  },
+  "limits": {
+    "maxCallsTotal": 12,
+    "budgetPlnTotal": 25,
+    "concurrency": 1,
+    "automaticRetries": 0,
+    "includePreparationAndFailures": true
+  },
+  "executionGate": "Closed: all 12 authorized calls were used successfully. No further paid calls or retries are authorized. See P32-REPORT.md.",
+  "cases": [
+    {
+      "id": "W-CASUAL",
+      "label": "Kobieta / na co dzień",
+      "calibration": true,
+      "inputs": [
+        {
+          "path": "assets/outfits/w1.png",
+          "role": "person",
+          "sha256": "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+          "bytes": 1858524,
+          "width": 1024,
+          "height": 1536
+        },
+        {
+          "path": "assets/outfits/w3.png",
+          "role": "outfit_on_fictional_adult",
+          "sha256": "8aede920434099c03d7385315ae1d80473557df538f4d64b0ffdf961be1a5e26",
+          "bytes": 1996305,
+          "width": 1024,
+          "height": 1536
+        }
+      ],
+      "prompt": "Edit image 1 to show that same fictional adult wearing the complete outfit from image 2. Image 1 is the sole reference for the person: preserve the face, hair, skin tone, apparent age, body proportions, pose, camera angle, framing, lighting and studio background. Image 2 is only the clothing reference; do not copy its person, face or pose. Replace all clothing and footwear in image 1 with the outfit in image 2: taupe open cardigan, white simple top, medium-blue straight jeans, tan loafers. Preserve the reference garments' colours, cuts, lengths, fabric textures, closures and visible details. Adapt the garments naturally to the pose of image 1. Show one full-body person, including the whole head and both shoes, with natural hands and realistic anatomy. Do not add accessories, logos, text, extra garments or other people. Both inputs depict synthetic fictional adults. Return one photorealistic outfit visualisation, not a collage or comparison board.",
+      "promptSha256": "fac39d84035a708fc5bad1e6b73109f0165f32dd8d688493c1d63abcc4c0ca7d"
+    },
+    {
+      "id": "M-CASUAL",
+      "label": "Mężczyzna / na co dzień",
+      "calibration": false,
+      "inputs": [
+        {
+          "path": "assets/outfits/m1.png",
+          "role": "person",
+          "sha256": "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+          "bytes": 1840972,
+          "width": 1024,
+          "height": 1536
+        },
+        {
+          "path": "assets/outfits/m3.png",
+          "role": "outfit_on_fictional_adult",
+          "sha256": "972884d0df8ff8a28c9af65174fcc4ac2d4d18750d2a058effba2fff7d5847df",
+          "bytes": 1857143,
+          "width": 1024,
+          "height": 1536
+        }
+      ],
+      "prompt": "Edit image 1 to show that same fictional adult wearing the complete outfit from image 2. Image 1 is the sole reference for the person: preserve the face, hair, skin tone, apparent age, body proportions, pose, camera angle, framing, lighting and studio background. Image 2 is only the clothing reference; do not copy its person, face or pose. Replace all clothing and footwear in image 1 with the outfit in image 2: olive open overshirt, white T-shirt, charcoal jeans, white low sneakers. Preserve the reference garments' colours, cuts, lengths, fabric textures, closures and visible details. Adapt the garments naturally to the pose of image 1. Show one full-body person, including the whole head and both shoes, with natural hands and realistic anatomy. Do not add accessories, logos, text, extra garments or other people. Both inputs depict synthetic fictional adults. Return one photorealistic outfit visualisation, not a collage or comparison board.",
+      "promptSha256": "b6e463d7b7083dc5aba46c5a94e37209f6769fe963e162957e76566c914c8df8"
+    },
+    {
+      "id": "W-ELEGANT",
+      "label": "Kobieta / elegancko",
+      "calibration": false,
+      "inputs": [
+        {
+          "path": "assets/outfits/w1.png",
+          "role": "person",
+          "sha256": "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+          "bytes": 1858524,
+          "width": 1024,
+          "height": 1536
+        },
+        {
+          "path": "assets/outfits/w4.png",
+          "role": "outfit_on_fictional_adult",
+          "sha256": "25b83aae5d67b8f5a9c735b3fbcad7be4d3e2eafb23c45c3703ade86ebd2fad1",
+          "bytes": 1744132,
+          "width": 1024,
+          "height": 1536
+        }
+      ],
+      "prompt": "Edit image 1 to show that same fictional adult wearing the complete outfit from image 2. Image 1 is the sole reference for the person: preserve the face, hair, skin tone, apparent age, body proportions, pose, camera angle, framing, lighting and studio background. Image 2 is only the clothing reference; do not copy its person, face or pose. Replace all clothing and footwear in image 1 with the outfit in image 2: navy open tailored blazer, pale-blue shirt, navy tailored trousers, black loafers. Preserve the reference garments' colours, cuts, lengths, fabric textures, closures and visible details. Adapt the garments naturally to the pose of image 1. Show one full-body person, including the whole head and both shoes, with natural hands and realistic anatomy. Do not add accessories, logos, text, extra garments or other people. Both inputs depict synthetic fictional adults. Return one photorealistic outfit visualisation, not a collage or comparison board.",
+      "promptSha256": "3597d2d4f2a332ebd76cc3dfb858554ac5c446bd287bdd0228a7cfe7fe2497e9"
+    },
+    {
+      "id": "M-ELEGANT",
+      "label": "Mężczyzna / elegancko",
+      "calibration": false,
+      "inputs": [
+        {
+          "path": "assets/outfits/m1.png",
+          "role": "person",
+          "sha256": "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+          "bytes": 1840972,
+          "width": 1024,
+          "height": 1536
+        },
+        {
+          "path": "assets/outfits/m4.png",
+          "role": "outfit_on_fictional_adult",
+          "sha256": "a0847f633b9c49c57a150d5abf67754e644316488681bb7e9022962d19461b6d",
+          "bytes": 1853533,
+          "width": 1024,
+          "height": 1536
+        }
+      ],
+      "prompt": "Edit image 1 to show that same fictional adult wearing the complete outfit from image 2. Image 1 is the sole reference for the person: preserve the face, hair, skin tone, apparent age, body proportions, pose, camera angle, framing, lighting and studio background. Image 2 is only the clothing reference; do not copy its person, face or pose. Replace all clothing and footwear in image 1 with the outfit in image 2: charcoal open tailored blazer, white shirt, charcoal tailored trousers, black derby shoes. Preserve the reference garments' colours, cuts, lengths, fabric textures, closures and visible details. Adapt the garments naturally to the pose of image 1. Show one full-body person, including the whole head and both shoes, with natural hands and realistic anatomy. Do not add accessories, logos, text, extra garments or other people. Both inputs depict synthetic fictional adults. Return one photorealistic outfit visualisation, not a collage or comparison board.",
+      "promptSha256": "bf6d0374daf7a82f13ee42bd15517c4eae8d039b093cb4e9aa5bc4a8bc36a0af"
+    },
+    {
+      "id": "W-WEDDING",
+      "label": "Kobieta / wesele jako gość",
+      "calibration": false,
+      "inputs": [
+        {
+          "path": "assets/outfits/w1.png",
+          "role": "person",
+          "sha256": "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+          "bytes": 1858524,
+          "width": 1024,
+          "height": 1536
+        },
+        {
+          "path": "assets/outfits/w5.png",
+          "role": "outfit_on_fictional_adult",
+          "sha256": "1db25aaceae3d83f87a3d03ae70dad2e15919ca860834e61a13be532c890355d",
+          "bytes": 1835424,
+          "width": 1024,
+          "height": 1536
+        }
+      ],
+      "prompt": "Edit image 1 to show that same fictional adult wearing the complete outfit from image 2. Image 1 is the sole reference for the person: preserve the face, hair, skin tone, apparent age, body proportions, pose, camera angle, framing, lighting and studio background. Image 2 is only the clothing reference; do not copy its person, face or pose. Replace all clothing and footwear in image 1 with the outfit in image 2: muted-blue midi dress with short flutter sleeves and beige closed-toe pumps. Preserve the reference garments' colours, cuts, lengths, fabric textures, closures and visible details. Adapt the garments naturally to the pose of image 1. Show one full-body person, including the whole head and both shoes, with natural hands and realistic anatomy. Do not add accessories, logos, text, extra garments or other people. Both inputs depict synthetic fictional adults. Return one photorealistic outfit visualisation, not a collage or comparison board.",
+      "promptSha256": "a87662679838a23c0e10c276b258b0b99b36f8ff8ddbbd77c18cbf070d193b7b"
+    },
+    {
+      "id": "M-WEDDING",
+      "label": "Mężczyzna / wesele jako gość",
+      "calibration": false,
+      "inputs": [
+        {
+          "path": "assets/outfits/m1.png",
+          "role": "person",
+          "sha256": "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+          "bytes": 1840972,
+          "width": 1024,
+          "height": 1536
+        },
+        {
+          "path": "assets/outfits/m5.png",
+          "role": "outfit_on_fictional_adult",
+          "sha256": "8320008f9a72fbc3aa7caf66060d2ed1d23c2442f96004aed930591156146478",
+          "bytes": 1757884,
+          "width": 1024,
+          "height": 1536
+        }
+      ],
+      "prompt": "Edit image 1 to show that same fictional adult wearing the complete outfit from image 2. Image 1 is the sole reference for the person: preserve the face, hair, skin tone, apparent age, body proportions, pose, camera angle, framing, lighting and studio background. Image 2 is only the clothing reference; do not copy its person, face or pose. Replace all clothing and footwear in image 1 with the outfit in image 2: navy two-piece suit, white dress shirt, navy tie, matching navy tailored trousers and black derby shoes. Preserve the reference garments' colours, cuts, lengths, fabric textures, closures and visible details. Adapt the garments naturally to the pose of image 1. Show one full-body person, including the whole head and both shoes, with natural hands and realistic anatomy. Do not add accessories, logos, text, extra garments or other people. Both inputs depict synthetic fictional adults. Return one photorealistic outfit visualisation, not a collage or comparison board.",
+      "promptSha256": "314a120698022f149959023d7c5041403218bdd74bdac21406899c207cf64f3e"
+    }
+  ],
+  "completedDate": "2026-10-25"
+}

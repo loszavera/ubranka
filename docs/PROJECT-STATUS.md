@@ -1,6 +1,17 @@
 # Stan projektu Ubranka
 
-Aktualizacja: 2026-10-24. Po przetestowaniu P2 Kasia i Aleksy zgłosili dodatkowe
+Aktualizacja: 2026-10-25.
+
+**P3.2 zakończone technicznie: 12/12 udanych wywołań, bez błędów i ponowień.**
+Sześć przypadków × dwa modele na istniejących obrazach fikcyjnych dorosłych.
+Koszt API **0,432032 USD**, rozliczenie budżetu z rezerwą **2,92269648 PLN / 25 PLN**.
+10/12 wyników spełnia próg techniczny; oba eleganckie zestawy damskie zmieniają
+krój spodni. Flare jest kandydatem do dalszego projektu: w tej próbie był szybszy
+przy tym samym koszcie. Ocena Kasi i Aleksego pozostaje oczekująca.
+[Galeria](https://ubranka.vercel.app/p32/), [raport](P32-REPORT.md),
+[koszty V1.4](COST-PLAN-V1.4.md). Limit wywołań wyczerpany; P3.3 nie rozpoczęto.
+
+Po przetestowaniu P2 Kasia i Aleksy zgłosili dodatkowe
 okazje. Aleksy zatwierdził P2.1: wesele jako gość, praca, randka i impreza,
 dobór do okazji, zachowanie danych P2, pracę na dev, testy i podgląd Vercel.
 Użytkownik odebrał P2.1 i polecił przenieść całość do main. Wersja produkcyjna
@@ -86,9 +97,12 @@ na logowanie Kasi, pełną checklistę urządzeń ani zgodę na P3.2.
 
 ## Aktualne dokumenty
 
-- [Wymagania V1.4](REQUIREMENTS-V1.4.md) i [plan V1.4](IMPLEMENTATION-PLAN-V1.4.md):
-  odebrane P2.1, zatwierdzone P3.1, propozycje P3.2/P3.3. Wersje V1.2/V1.3 zachowano.
-- [Przyjęte zasady zdjęć](P3-DATA-POLICY-V1.0.md), [koszty V1.3](COST-PLAN-V1.3.md).
+- [Wymagania V1.5](REQUIREMENTS-V1.5.md) i [plan V1.5](IMPLEMENTATION-PLAN-V1.5.md):
+  wykonana próba P3.2 i oczekujący odbiór przykładów przez użytkowników.
+  P3.3 pozostaje propozycją. Wersje V1.2–V1.4 zachowano.
+- [Raport P3.2](P32-REPORT.md), [historyczny preflight](P32-PREFLIGHT.md)
+  i [manifest przypadków](p32/cases.json).
+- [Przyjęte zasady zdjęć](P3-DATA-POLICY-V1.0.md), [pomiary kosztów V1.4](COST-PLAN-V1.4.md).
 - [Publikacja main i test produkcyjny P2.1](P21-PRODUCTION.md).
 - [Weryfikacja i scenariusz odbioru P2.1](P21-VERIFICATION.md).
 - [Historyczna weryfikacja P2](P2-VERIFICATION.md).
@@ -168,7 +182,7 @@ Historycznie P0 przeszedł [CI](https://github.com/loszavera/ubranka/actions/run
 Użytkownik potwierdził działanie hostingu oraz zdalnego Codex przez internet mobilny.
 P1/V1.1 i V1.2 przeszły przeglądy dokumentacji; wersje historyczne zachowano.
 
-## Przygotowanie dostępu OpenAI — bez płatnych wywołań
+## Historyczne przygotowanie dostępu OpenAI — przed P3.2
 
 Użytkownik utworzył projekt Ubranka, a następnie zatwierdził konfigurację jego
 limitu oraz dedykowany lokalny klucz testowy. Parametry konta pozostają w prywatnych
@@ -177,37 +191,21 @@ informacji o modelach oraz ograniczony okres ważności.
 Klucz zapisano wyłącznie lokalnie, jako DPAPI CurrentUser w ignorowanym katalogu
 `.local/p32-openai/`, z ACL użytkownik Windows + SYSTEM. Nie powstał jawny plik
 klucza; sprawdzono zgodność po zaszyfrowaniu/odszyfrowaniu, ACL i wykluczenie z Git.
-Panel potwierdził utworzenie klucza i brak jego użycia. Nie wykonano
-żądania modelu; poprawność lokalnego zapisu nie jest testem działania API.
+Na etapie przygotowania panel potwierdził utworzenie klucza i brak jego użycia.
+Nie wykonano wtedy żądania modelu. Późniejszą zatwierdzoną próbę zakończono;
+wynik i rzeczywiste użycie API opisuje [raport P3.2](P32-REPORT.md).
 
 Wynik odczytu ustawień konta przekazano użytkownikowi prywatnie. Sama konfiguracja
 dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-**Do zatwierdzenia: P3.2 — mała próba jakości i kosztu wizualizacji**, zgodnie
-z [planem V1.4](IMPLEMENTATION-PLAN-V1.4.md): sześć przypadków na syntetycznych
-obrazach fikcyjnych dorosłych, porównanie Sunburst/Flare, najwyżej 12 płatnych
-wywołań łącznie i 25 PLN z buforem. Wszystkie płatne przygotowania, kalibracje,
-błędy i ponowienia liczą się do limitów; bez automatycznych ponowień.
-Wynik: przykłady do wspólnej oceny, zmierzone koszty/czas, wniosek o wykonalności
-i aktualizacja dokumentacji. Zatrzymanie po raporcie, bez wdrażania P3.3.
-
-Przed płatnym wywołaniem sprawdzić dostęp konta, sposób rozliczenia i wiarygodną
-rezerwę kosztu. Proponowana zgoda nie obejmuje zakupu kredytów, automatycznych
-doładowań, nowych abonamentów ani wysyłania prawdziwych zdjęć użytkowników.
-Jeśli potrzebne będzie zasilenie konta, przedstawić konkretną kwotę i poprosić
-o odrębną zgodę. Obecna tura jedynie proponuje P3.2 — nie uruchomiła płatnego AI.
-
-Ponownie sprawdzono oficjalne opisy [Sunburst](https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst),
-[Flare](https://developers.openai.com/api/docs/models/gpt-image-2.5-flare) i
-[rozliczania obrazów](https://developers.openai.com/api/docs/guides/image-generation)
-(2026-10-24). Modele obsługują obrazy wejściowe; równe stawki tokenów nie oznaczają
-równego kosztu obrazu. Dostęp do panelu następnie sprawdzono; przygotowanie
-lokalnego klucza opisano wyżej. Płatna próba nadal wymaga osobnej zgody, a jej
-proponowane 25 PLN pozostaje oddzielne od konfiguracji limitu miesięcznego.
+Kasia i Aleksy oceniają sześć porównań w [galerii P3.2](https://ubranka.vercel.app/p32/).
+Po ocenie proponujemy przygotowanie konkretnego planu P3.3: zakres pierwszej
+wizualizacji w aplikacji, zasady danych AI i kontrola kosztów. Sam plan i późniejsza
+implementacja wymagają osobnego zatwierdzenia. W ramach P3.2 nie wykonujemy
+kolejnych płatnych prób ani nie wysyłamy rzeczywistych zdjęć użytkowników do AI.
 
 Równolegle pozostaje krótki test Google Kasi według [checklisty](P31-ACCEPTANCE.md).
-Nie blokuje przygotowania próby na danych sztucznych, ale nie wolno przedstawiać
-go jako zaliczonego. P3.3 (profil sylwetki, rozpoznawanie, własne zestawy) pozostaje
-osobnym etapem po ocenie P3.2. Podział środowisk ustalimy przed premierą komercyjną.
+Nie przedstawiamy go jako zaliczonego. Podział środowisk ustalimy przed premierą
+komercyjną; obecna galeria jest publicznym zestawem wyłącznie syntetycznych przykładów.

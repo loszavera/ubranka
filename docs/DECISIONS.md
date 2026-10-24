@@ -55,6 +55,11 @@ Nowe wpisy z 2026-10-24:
 | D-041 | 2026-10-24 | Pozytywny ponowny test użytkownika | Aleksy potwierdził zadowolenie po teście poprawki usuwania; zgłoszenie zamknięte (P31-DELETION-FIX.md). Wcześniej potwierdził większość funkcji P3.1 poza logowaniem Kasi. Nie jest to potwierdzenie tego logowania, pełnej macierzy urządzeń ani zgoda na P3.2/P3.3. Następny proponowany zakres to ograniczona próba P3.2 z planu V1.4; nadal czeka na akceptację. |
 | D-042 | 2026-10-24 | Zatwierdzone przygotowanie OpenAI | Użytkownik utworzył projekt Ubranka, zlecił konfigurację limitu i osobny klucz zapisany bezpiecznie lokalnie do P3.2. Parametry konta i sekret DPAPI pozostają poza Git/aplikacją/hostingiem. Brak zgody na płatne wywołania, zakupy lub zmianę rozliczeń. Proponowany budżet próby pozostaje osobny od limitu miesięcznego. |
 
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-043 | 2026-10-25 | Zatwierdzenie P3.2 i wyjątek od estymacji | Aktualizuje D-041/D-042: użytkownik zatwierdził syntetyczną próbę do 12 płatnych wywołań i 25 PLN łącznie, bez automatycznych ponowień i zmian abonamentów. Po preflight jawnie polecił rozpocząć test bez pełnej estymacji, zachowując te limity. Szczegóły finansowania pozostają prywatne. |
+| D-044 | 2026-10-25 | Próba wykonana, odbiór użytkowników oczekuje | 12/12 udanych wywołań, 0,432032 USD API i 2,92269648 PLN z rezerwą. Technicznie użyteczne 10/12; oba W-ELEGANT zmieniają krój spodni. Flare jest kandydatem, nie zatwierdzonym dostawcą aplikacji. Raport P32-REPORT.md i galeria /p32/ służą odbiorowi. Zgoda wyczerpana liczbą wywołań; P3.3 nie rozpoczęto. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

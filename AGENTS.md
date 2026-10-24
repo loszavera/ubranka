@@ -38,15 +38,35 @@ Użytkownik następnie zatwierdził przeniesienie P3.1 na main i testowanie tam 
 premierą (2026-10-24). Publikacja i kontrola logowania/odczytu zdjęcia przeszły;
 raport: docs/P31-MAIN.md. Adres odbioru to
 https://ubranka.vercel.app. Dev pozostaje warsztatem. Ta zgoda nie oznacza odbioru
-funkcji. P3.2 (próba AI), P3.3 i nowe zakresy nadal wymagają osobnego uzgodnienia.
-Nie aktywuj płatnego AI ani nowych abonamentów.
+funkcji. Na tym etapie P3.2 (próba AI), P3.3 i nowe zakresy wymagały osobnego
+uzgodnienia. Późniejsza zgoda na P3.2 jest opisana poniżej; P3.3 pozostaje otwarte.
 Następnie użytkownik osobno zatwierdził konfigurację limitu projektu OpenAI
 i lokalny klucz do P3.2. Klucz DPAPI CurrentUser pozostaje w ignorowanym
 `.local/p32-openai/`, z ACL użytkownik Windows + SYSTEM. Parametry dostępu
 i instrukcja użycia są w lokalnym README oraz metadata.json; nie wypisuj sekretu.
-To przygotowanie dostępu, bez zgody na płatne wywołania. Limit miesięczny nie
+Samo przygotowanie dostępu nie było zgodą na płatne wywołania. Limit miesięczny nie
 zastępuje osobnego budżetu próby. Klucza nie dodawaj do aplikacji, EXPO_PUBLIC,
 Git ani hostingu. Bieżących danych konta i rozliczeń nie publikuj w repozytorium.
+2026-10-25 użytkownik zatwierdził P3.2: maks. 12 płatnych wywołań i 25 PLN łącznie,
+wliczając przygotowanie, kalibrację i błędy; bez automatycznych ponowień,
+zmian rozliczeń i abonamentów. Wyłącznie syntetyczne obrazy fikcyjnych dorosłych.
+Sposób finansowania zatwierdzono osobno; szczegóły pozostają w prywatnych notatkach.
+Aktualne wymagania i plan: V1.5. Preflight zatrzymał płatne wywołania (0/12,
+0 PLN), ponieważ nie ustalono wiarygodnej górnej estymacji kosztu obrazów wejściowych
+dla modeli 2.5. Następnie użytkownik rozstrzygnął: „nieważne jaki jest szacunek.
+po prostu testuj I zobaczymy”. To jawny wyjątek pozwalający rozpocząć pomiar bez
+wcześniejszej pełnej estymacji, nie zniesienie limitów 12/25 PLN ani zgoda na retry.
+Nie pytaj ponownie o rozwiązany warunek estymacji. Wykonuj po jednym żądaniu,
+zapisuj rzeczywiste usage/koszt i zatrzymaj kolejne przy nieznanym rozliczeniu.
+Historyczny preflight: docs/P32-PREFLIGHT.md; przypadki: docs/p32/cases.json.
+Nie zastępuj pomiarów założeniami historycznych modeli. Po raporcie i przykładach
+zatrzymaj się przed P3.3.
+Próba została zakończona: 12/12 udanych wywołań bez ponowień, koszt API
+0,432032 USD, budżetowo 2,92269648 PLN z rezerwą. Nie pozostały żadne wywołania
+w tej zgodzie. Nie uruchamiaj ponownie runnera ani nie traktuj pozostałych PLN
+jako zgody na następne generacje. Raport: docs/P32-REPORT.md; galeria /p32/.
+10/12 wyników spełnia próg techniczny; odbiór Kasi i Aleksego pozostaje otwarty.
+P3.3 nie rozpoczęto i wymaga osobnego zatwierdzenia.
 Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,
 podał prywatnie oba konta oraz wyraźnie zaakceptował Google API Services User
 Data Policy z upoważnieniem do zaznaczenia zgody. Nie pytaj o to ponownie.

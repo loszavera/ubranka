@@ -1,0 +1,224 @@
+{
+  "date": "2026-10-25",
+  "method": "Manual visual technical assessment of source images, full PNG outputs and comparison boards. Not user acceptance.",
+  "scale": {
+    "0": "failure",
+    "1": "visible deviation, potentially useful",
+    "2": "visually satisfactory on visible areas"
+  },
+  "criteria": [
+    "person",
+    "garments",
+    "completeness",
+    "visibleAnatomyAndArtifacts",
+    "usefulness"
+  ],
+  "technicalPassRule": "total >= 8 and no critical error; 10/10 is not a guarantee of exact product reproduction or fit",
+  "userAcceptance": "pending",
+  "results": [
+    {
+      "number": 1,
+      "scores": {
+        "person": 2,
+        "garments": 1,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 9,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Jeansy są dłuższe niż na zdjęciu referencyjnym; zakrywają więcej kostki. Kolory i wszystkie elementy zestawu zachowane."
+      ]
+    },
+    {
+      "number": 2,
+      "scores": {
+        "person": 2,
+        "garments": 1,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 9,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Niewielka zmiana szerokości i długości nogawek. Długość jeansów jest bliższa referencji niż w Sunburst."
+      ]
+    },
+    {
+      "number": 3,
+      "scores": {
+        "person": 2,
+        "garments": 1,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 9,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Rękawy oliwkowej koszuli zostały podwinięte do przedramion; referencja ma pełne rękawy do nadgarstków."
+      ]
+    },
+    {
+      "number": 4,
+      "scores": {
+        "person": 2,
+        "garments": 2,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 10,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Pełna długość rękawów i wszystkie elementy zachowane. Dłonie w kieszeniach ograniczają ocenę anatomii palców."
+      ]
+    },
+    {
+      "number": 5,
+      "scores": {
+        "person": 2,
+        "garments": 0,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 1
+      },
+      "total": 7,
+      "maximum": 10,
+      "criticalError": true,
+      "technicallyUseful": false,
+      "notes": [
+        "Istotny błąd kroju: spodnie są znacznie szersze niż w referencji. Model zachował szerokie nogawki ze zdjęcia bazowego. Wynik odrzucony jako wierne odwzorowanie tego zestawu."
+      ]
+    },
+    {
+      "number": 6,
+      "scores": {
+        "person": 2,
+        "garments": 0,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 1
+      },
+      "total": 7,
+      "maximum": 10,
+      "criticalError": true,
+      "technicallyUseful": false,
+      "notes": [
+        "Istotny błąd kroju: spodnie są znacznie szersze niż w referencji. Ten sam problem co w Sunburst; wynik odrzucony jako wierne odwzorowanie tego zestawu."
+      ]
+    },
+    {
+      "number": 7,
+      "scores": {
+        "person": 2,
+        "garments": 2,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 10,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Kompletny zestaw, zachowana osoba i poza. Drobne różnice faktury i fałd materiału; dłonie pozostają w kieszeniach."
+      ]
+    },
+    {
+      "number": 8,
+      "scores": {
+        "person": 2,
+        "garments": 2,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 10,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Kompletny zestaw i zachowana poza. Faktura garnituru nieco mocniejsza; brak widocznego błędu krytycznego."
+      ]
+    },
+    {
+      "number": 9,
+      "scores": {
+        "person": 1,
+        "garments": 1,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 8,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Dół sukienki jest niżej niż w referencji, a ustawienie nóg i stóp nieco zmienione. Kolor, ogólny fason i oba buty zachowane."
+      ]
+    },
+    {
+      "number": 10,
+      "scores": {
+        "person": 1,
+        "garments": 1,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 8,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Niewielka zmiana ustawienia stóp i długości sukienki. Pełny, czytelny zestaw; wymaga oceny wierności detali przez użytkowników."
+      ]
+    },
+    {
+      "number": 11,
+      "scores": {
+        "person": 2,
+        "garments": 2,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 10,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Kompletny granatowy garnitur, koszula, krawat i buty. Naturalnie zmienione fałdy marynarki przy dłoniach w kieszeniach."
+      ]
+    },
+    {
+      "number": 12,
+      "scores": {
+        "person": 2,
+        "garments": 2,
+        "completeness": 2,
+        "visibleAnatomyAndArtifacts": 2,
+        "usefulness": 2
+      },
+      "total": 10,
+      "maximum": 10,
+      "criticalError": false,
+      "technicallyUseful": true,
+      "notes": [
+        "Kompletny zestaw i zachowana poza. Drobne różnice odcienia i faktury granatu; brak oczywistej deformacji."
+      ]
+    }
+  ]
+}

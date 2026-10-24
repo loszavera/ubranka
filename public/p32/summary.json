@@ -1,0 +1,216 @@
+{
+  "status": "complete",
+  "date": "2026-10-25",
+  "totals": {
+    "calls": 12,
+    "apiUsd": 0.43203199999999997,
+    "budgetedPln": 2.92269648
+  },
+  "budgetMethod": "Koszt API w USD; PLN z rezerwą: 5 PLN/USD × 1,23 × 1,10. To konserwatywne rozliczenie budżetu, nie kwota pobrana z karty.",
+  "technicalNotes": [
+    "12 udanych wywołań; bez ponowień. Każdy model otrzymał te same obrazy i prompt dla danego przypadku.",
+    "Obrazy przedstawiają fikcyjne dorosłe osoby. Nie przesłano zdjęć użytkowników ani prywatnej szafy.",
+    "Wynik pomaga ocenić wygląd stylizacji; nie potwierdza rozmiaru ani fizycznego dopasowania.",
+    "Dwie podobne syntetyczne osoby i studyjne zdjęcia to mała próba. Nie sprawdzono różnych sylwetek, zdjęć domowych ani trzech osobnych zdjęć ubrań.",
+    "Kopie WebP są bezstratne: porównano piksele z oryginałami PNG.",
+    "10 z 12 wyników uznano za technicznie użyteczne. Oba eleganckie zestawy damskie odrzucono z powodu zmienionego kroju spodni.",
+    "Ocena 10/10 oznacza brak widocznego problemu w tej małej próbie, nie gwarancję dokładnego odwzorowania produktu. Odbiór Kasi i Aleksego pozostaje otwarty.",
+    "Kandydatem do dalszego etapu jest Flare: ten sam koszt, krótszy średni czas i lepsze rękawy w jednym przypadku. Nie jest to dowód ogólnej przewagi modelu."
+  ],
+  "models": [
+    {
+      "label": "Sunburst",
+      "id": "gpt-image-2.5-sunburst-2026-09-08",
+      "apiUsd": 0.21601599999999999,
+      "averageSeconds": 14.7749836
+    },
+    {
+      "label": "Flare",
+      "id": "gpt-image-2.5-flare-2026-09-08",
+      "apiUsd": 0.21601599999999999,
+      "averageSeconds": 12.297029483333334
+    }
+  ],
+  "cases": [
+    {
+      "id": "W-CASUAL",
+      "label": "Kobieta / na co dzień",
+      "results": [
+        {
+          "model": "Sunburst",
+          "src": "images/01-W-CASUAL-sunburst.webp",
+          "apiUsd": 0.036006,
+          "budgetedPln": 0.24358059000000004,
+          "seconds": 14.5755534,
+          "score": "9/10 — ocena techniczna",
+          "issues": [
+            "Jeansy są dłuższe niż na zdjęciu referencyjnym; zakrywają więcej kostki. Kolory i wszystkie elementy zestawu zachowane."
+          ]
+        },
+        {
+          "model": "Flare",
+          "src": "images/02-W-CASUAL-flare.webp",
+          "apiUsd": 0.036006,
+          "budgetedPln": 0.24358059000000004,
+          "seconds": 11.8657304,
+          "score": "9/10 — ocena techniczna",
+          "issues": [
+            "Niewielka zmiana szerokości i długości nogawek. Długość jeansów jest bliższa referencji niż w Sunburst."
+          ]
+        }
+      ],
+      "person": "images/source-w1.webp",
+      "reference": "images/source-w3.webp"
+    },
+    {
+      "id": "M-CASUAL",
+      "label": "Mężczyzna / na co dzień",
+      "results": [
+        {
+          "model": "Sunburst",
+          "src": "images/03-M-CASUAL-sunburst.webp",
+          "apiUsd": 0.036001,
+          "budgetedPln": 0.243546765,
+          "seconds": 14.8659732,
+          "score": "9/10 — ocena techniczna",
+          "issues": [
+            "Rękawy oliwkowej koszuli zostały podwinięte do przedramion; referencja ma pełne rękawy do nadgarstków."
+          ]
+        },
+        {
+          "model": "Flare",
+          "src": "images/04-M-CASUAL-flare.webp",
+          "apiUsd": 0.036001,
+          "budgetedPln": 0.243546765,
+          "seconds": 12.430911,
+          "score": "10/10 — ocena techniczna",
+          "issues": [
+            "Pełna długość rękawów i wszystkie elementy zachowane. Dłonie w kieszeniach ograniczają ocenę anatomii palców."
+          ]
+        }
+      ],
+      "person": "images/source-m1.webp",
+      "reference": "images/source-m3.webp"
+    },
+    {
+      "id": "W-ELEGANT",
+      "label": "Kobieta / elegancko",
+      "results": [
+        {
+          "model": "Sunburst",
+          "src": "images/05-W-ELEGANT-sunburst.webp",
+          "apiUsd": 0.036001,
+          "budgetedPln": 0.243546765,
+          "seconds": 13.1491053,
+          "score": "7/10 — ocena techniczna · błąd kroju",
+          "issues": [
+            "Istotny błąd kroju: spodnie są znacznie szersze niż w referencji. Model zachował szerokie nogawki ze zdjęcia bazowego. Wynik odrzucony jako wierne odwzorowanie tego zestawu."
+          ]
+        },
+        {
+          "model": "Flare",
+          "src": "images/06-W-ELEGANT-flare.webp",
+          "apiUsd": 0.036001,
+          "budgetedPln": 0.243546765,
+          "seconds": 13.5885802,
+          "score": "7/10 — ocena techniczna · błąd kroju",
+          "issues": [
+            "Istotny błąd kroju: spodnie są znacznie szersze niż w referencji. Ten sam problem co w Sunburst; wynik odrzucony jako wierne odwzorowanie tego zestawu."
+          ]
+        }
+      ],
+      "person": "images/source-w1.webp",
+      "reference": "images/source-w4.webp"
+    },
+    {
+      "id": "M-ELEGANT",
+      "label": "Mężczyzna / elegancko",
+      "results": [
+        {
+          "model": "Sunburst",
+          "src": "images/07-M-ELEGANT-sunburst.webp",
+          "apiUsd": 0.035996,
+          "budgetedPln": 0.24351294,
+          "seconds": 14.555574400000001,
+          "score": "10/10 — ocena techniczna",
+          "issues": [
+            "Kompletny zestaw, zachowana osoba i poza. Drobne różnice faktury i fałd materiału; dłonie pozostają w kieszeniach."
+          ]
+        },
+        {
+          "model": "Flare",
+          "src": "images/08-M-ELEGANT-flare.webp",
+          "apiUsd": 0.035996,
+          "budgetedPln": 0.24351294,
+          "seconds": 11.7950037,
+          "score": "10/10 — ocena techniczna",
+          "issues": [
+            "Kompletny zestaw i zachowana poza. Faktura garnituru nieco mocniejsza; brak widocznego błędu krytycznego."
+          ]
+        }
+      ],
+      "person": "images/source-m1.webp",
+      "reference": "images/source-m4.webp"
+    },
+    {
+      "id": "W-WEDDING",
+      "label": "Kobieta / wesele jako gość",
+      "results": [
+        {
+          "model": "Sunburst",
+          "src": "images/09-W-WEDDING-sunburst.webp",
+          "apiUsd": 0.035991,
+          "budgetedPln": 0.24347911500000002,
+          "seconds": 14.105557899999999,
+          "score": "8/10 — ocena techniczna",
+          "issues": [
+            "Dół sukienki jest niżej niż w referencji, a ustawienie nóg i stóp nieco zmienione. Kolor, ogólny fason i oba buty zachowane."
+          ]
+        },
+        {
+          "model": "Flare",
+          "src": "images/10-W-WEDDING-flare.webp",
+          "apiUsd": 0.035991,
+          "budgetedPln": 0.24347911500000002,
+          "seconds": 11.514978500000002,
+          "score": "8/10 — ocena techniczna",
+          "issues": [
+            "Niewielka zmiana ustawienia stóp i długości sukienki. Pełny, czytelny zestaw; wymaga oceny wierności detali przez użytkowników."
+          ]
+        }
+      ],
+      "person": "images/source-w1.webp",
+      "reference": "images/source-w5.webp"
+    },
+    {
+      "id": "M-WEDDING",
+      "label": "Mężczyzna / wesele jako gość",
+      "results": [
+        {
+          "model": "Sunburst",
+          "src": "images/11-M-WEDDING-sunburst.webp",
+          "apiUsd": 0.036021,
+          "budgetedPln": 0.243682065,
+          "seconds": 17.3981374,
+          "score": "10/10 — ocena techniczna",
+          "issues": [
+            "Kompletny granatowy garnitur, koszula, krawat i buty. Naturalnie zmienione fałdy marynarki przy dłoniach w kieszeniach."
+          ]
+        },
+        {
+          "model": "Flare",
+          "src": "images/12-M-WEDDING-flare.webp",
+          "apiUsd": 0.036021,
+          "budgetedPln": 0.243682065,
+          "seconds": 12.5869731,
+          "score": "10/10 — ocena techniczna",
+          "issues": [
+            "Kompletny zestaw i zachowana poza. Drobne różnice odcienia i faktury granatu; brak oczywistej deformacji."
+          ]
+        }
+      ],
+      "person": "images/source-m1.webp",
+      "reference": "images/source-m5.webp"
+    }
+  ]
+}
