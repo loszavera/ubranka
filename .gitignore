@@ -37,6 +37,8 @@ yarn-error.*
 !.env.example
 .vercel/
 .local/
+# Private files attached to this chat must never enter the public repository.
+/.codex-remote-attachments/
 supabase/.temp/
 artifacts/
 dist-all/

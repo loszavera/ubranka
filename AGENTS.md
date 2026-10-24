@@ -133,6 +133,9 @@ Ustalenie użytkownika z 2026-10-24:
   Tych testów nie przedstawiaj jako dowodu rzeczywistego Google/Supabase.
   Test hosted: supabase/tests/live.test.mjs, tylko osobne środowisko/dane sztuczne.
   Nie publikuj artifacts/private-web ani testowych kluczy do Vercel.
+  Eksporty build:web/build:all czyszczą cache Metro: po syntetycznym E2E cache
+  może zachować testowe EXPO_PUBLIC mimo innego .env. Sprawdź adres projektu
+  w przeznaczonym do wdrożenia pakiecie; nie usuwaj flagi --clear.
 - AsyncStorage zawiera wyłącznie stan demo. Nie przesłaniaj błędu odczytu
   domyślnym profilem z możliwością zapisu; retry nie może utracić nowych zmian.
 - Mock nie dowodzi działania katalogu, AI, zakupu ani synchronizacji.

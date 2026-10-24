@@ -19,6 +19,11 @@ po usunięciu naprawiono odczytem przez Edge. Konto Kasi i rzeczywisty wybór
 pliku na telefonach wymagają odbioru. Na main sprawdzono rzeczywiste logowanie
 właściciela, odczyt istniejącego zdjęcia i wylogowanie. [Raport](P31-MAIN.md).
 
+Użytkownik następnie zgłosił udany test większości funkcji na telefonie, poza
+logowaniem Kasi, oraz pozostającą kartę „Usuwanie w toku”. Potwierdzono przyczynę:
+odświeżenie przywracało rekord oczekujący na bezpieczne czyszczenie plików.
+Poprawka prezentacji i regresja są w toku; [raport](P31-DELETION-FIX.md).
+
 ## P3.1 — bieżący wynik
 
 - Osobny ekran prywatnej szafy PL/EN, profile, selektywny import P2, zdjęcia

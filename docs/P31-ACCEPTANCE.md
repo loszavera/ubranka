@@ -7,6 +7,10 @@ i wylogowanie przeszły [kontrolę głównego adresu](P31-MAIN.md).
 Dev pozostaje warsztatem; publikacja na main nie oznacza odbioru funkcji.
 Każda osoba używa swojego wcześniej wskazanego konta Google.
 
+Wynik zgłoszony przez Aleksego 2026-10-24: większość funkcji działa na telefonie;
+Google Kasi pozostaje nieprzetestowane. Zgłoszenie karty pozostającej po usunięciu
+jest opisane wraz z poprawką w [P31-DELETION-FIX.md](P31-DELETION-FIX.md).
+
 Main i dev korzystają z tego samego Supabase Free `ubranka-test` we Frankfurcie
 i tych samych dwóch zaproszonych kont. Prywatna szafa jest wspólna dla obu adresów;
 zapis lokalnego demo pozostaje osobny. Nie zmieniamy limitów ani retencji.
