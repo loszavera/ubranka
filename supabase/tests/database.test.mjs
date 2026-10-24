@@ -17,7 +17,8 @@ const receipt = '30000000-0000-4000-8000-000000000001';
 await db.exec(`
   create role anon; create role authenticated; create role service_role bypassrls; create role supabase_auth_admin;
   create schema auth; create schema storage;
-  grant usage on schema auth,public,storage to anon,authenticated,service_role,supabase_auth_admin;
+  revoke usage on schema public from public;
+  grant usage on schema auth,public,storage to anon,authenticated,service_role;
   create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
   create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
   create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
@@ -25,6 +26,8 @@ await db.exec(`
   alter table storage.objects enable row level security;
   grant select,insert,update,delete on storage.objects to authenticated;
 `);
+assert.equal((await db.query("select has_schema_privilege('supabase_auth_admin','public','usage') permitted")).rows[0].permitted,false,
+  'Auth role starts without public schema USAGE, like a hosted project before hook setup');
 await db.exec(await readFile(new URL('../migrations/202610240001_private_wardrobe.sql', import.meta.url), 'utf8'));
 await db.query('insert into auth.users values ($1,$2,now()),($3,$4,now()),($5,$6,now())', [A,'a@example.invalid',B,'b@example.invalid',C,'c@example.invalid']);
 await db.exec("insert into wardrobe_private.invites(email) values('a@example.invalid'),('b@example.invalid')");
@@ -43,6 +46,17 @@ async function adminRpc(name,args,values) {
   finally { await db.exec('reset role'); }
 }
 const fields={name:'Synthetic shirt',category:'top',color:'blue',occasions:['casual'],size:'M',photoKind:'garment'};
+
+test('Auth hook is callable by its hosted Auth role and unavailable to application users',async()=>{
+  await db.exec('set role supabase_auth_admin');
+  try {
+    const allowed=await db.query("select public.wardrobe_before_user_created('{\"user\":{\"email\":\"a@example.invalid\"}}') result");
+    assert.deepEqual(allowed.rows[0].result,{});
+    const denied=await db.query("select public.wardrobe_before_user_created('{\"user\":{\"email\":\"c@example.invalid\"}}') result");
+    assert.equal(denied.rows[0].result.error.http_code,403);
+  }finally{await db.exec('reset role');}
+  await assert.rejects(user(A,()=>db.query("select public.wardrobe_before_user_created('{}')")),/permission denied/);
+});
 
 test('invitation gate, owner RLS, direct write denial, and CAS/import', async () => {
   const denied=await db.query("select public.wardrobe_before_user_created('{\"user\":{\"email\":\"c@example.invalid\"}}') result");

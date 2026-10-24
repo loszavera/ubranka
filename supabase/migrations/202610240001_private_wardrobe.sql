@@ -70,6 +70,7 @@ begin
 end;
 $$;
 revoke all on function public.wardrobe_before_user_created(jsonb) from public, anon, authenticated;
+grant usage on schema public to supabase_auth_admin;
 grant execute on function public.wardrobe_before_user_created(jsonb) to supabase_auth_admin;
 
 create or replace function public.wardrobe_is_active(p_id uuid)
