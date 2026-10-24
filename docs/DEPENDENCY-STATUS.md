@@ -52,7 +52,8 @@ należy ponownie ocenić przy rozbudowie routingu, parametrów URL i linków apl
   na tej stacji: opcjonalny `@unrs/resolver-binding-win32-x64-msvc@1.12.2` jest
   zainstalowany, bezpośredni `require('unrs-resolver')` działa i udostępnia
   `ResolverFactory`. Lint również przechodzi. Nie uruchamiano pominiętego skryptu.
-  Wynik dotyczy Windows; instalacja i lint na runnerze CI wymagają osobnego wyniku.
+  Dodatkowo czysta instalacja i lint na runnerze Ubuntu przeszły w
+  [CI dla 289480f](https://github.com/loszavera/ubranka/actions/runs/40090246634).
 
 ## Następny przegląd
 

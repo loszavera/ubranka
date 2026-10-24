@@ -31,6 +31,8 @@ Aktualizacja: 2026-10-24. Etap P0 — lokalna infrastruktura gotowa.
 | `npm run build:all` | PASS: eksport WWW oraz bytecode Hermes dla iOS i Androida |
 | `npm run build:web` | PASS: samodzielny eksport WWW do dist/ |
 | Przeglądarka lokalna | PASS: ekran, styl i kliknięcie przycisku; widoczne potwierdzenie działania |
+| Konsola przeglądarki | Brak przechwyconych błędów i ostrzeżeń |
+| GitHub Actions, Ubuntu | PASS: instalacja, typy/lint, zgodność SDK i eksport trzech platform |
 | Fizyczne urządzenia iOS/Android | Nie sprawdzono aplikacji w Expo Go |
 | Zdalny Codex | Użytkownik potwierdził działanie przez internet mobilny |
 
@@ -49,14 +51,18 @@ Pozostają nierozwiązane; zakres, źródła i plan opisuje
 
 Pierwszy wspólny commit infrastruktury przeznaczony jest dla `main` i `dev`;
 pracujemy dalej na `dev`. Workflow `Project checks` jest zapisany w repozytorium.
-Wynik wykonania na GitHubie należy odczytać dla aktualnego SHA w zakładce Actions;
-lokalna weryfikacja nie zastępuje zdalnego wyniku CI.
+Pierwsza synchronizacja potwierdziła ten sam SHA lokalnie i zdalnie dla obu gałęzi:
+`289480fed88da1ca9960edb9ed3b35e34d3da7af`.
+[Jednorazowy run CI dla tego commita](https://github.com/loszavera/ubranka/actions/runs/40090246634)
+zakończył się powodzeniem. Dla kolejnych commitów należy sprawdzać ich własne runy.
 
 ## Pozostaje do potwierdzenia przez użytkownika
 
 - Otwarcie ekranu na fizycznym iPhone/Androidzie w Expo Go.
-- Decyzja o utworzeniu pierwszego wdrożenia Vercel. Konfiguracja istnieje,
-  ale nie ma jeszcze projektu Ubranka w Vercelu ani zweryfikowanego URL.
+- Użytkownik zatwierdził utworzenie podglądu Vercel w zespole Risk Every Asset.
+  Import repozytorium został zablokowany przez brak GitHub Login Connection
+  w koncie Vercel. Konieczne: Account Settings → Authentication → GitHub.
+  Nie powstał jeszcze projekt Ubranka w Vercelu ani zweryfikowany URL.
 
 ## Następny krok
 
