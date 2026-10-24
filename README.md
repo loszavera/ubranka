@@ -17,13 +17,17 @@ Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeni
 Demo używa 37 fikcyjnych ubrań i 12 ilustracji. AI, sklepy i lista zakupowa
 należą do kolejnych etapów.
 
-**W realizacji na dev: P3.1**, zatwierdzone zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
+**Do odbioru na dev: P3.1**, zatwierdzone zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
 Zaimplementowano prywatną szafę PL/EN, zdjęcia, konta Google, synchronizację,
 eksport i usuwanie. Lokalne testy opisuje [raport P3.1](docs/P31-VERIFICATION.md).
-**Konfiguracja usług jest częściowa:** Supabase Free Frankfurt ma wdrożoną bazę
-i funkcje. Ustawienia Auth, sekrety, harmonogram i Google OAuth wymagają dokończenia
-zdalnego dostępu. Podgląd jawnie informuje o braku konfiguracji; nie pozwala
-pozornie logować ani wysyłać zdjęć. [Dokończenie konfiguracji](docs/P31-SETUP.md).
+**Usługi są skonfigurowane:** Supabase Free Frankfurt, Google OAuth dla dwóch
+zaproszonych kont, prywatny magazyn i harmonogram usuwania. Logowanie Google
+sprawdzono na dev. Testy ujawniły cache bezpośrednich odczytów Storage; poprawka
+przenosi pobieranie zdjęć do autoryzowanego POST przez Edge i przeszła retest.
+Testy chmury, fizyczne usunięcie fixture przez harmonogram oraz CI: PASS.
+Pozostaje [odbiór Kasi i Aleksego na telefonach](docs/P31-ACCEPTANCE.md).
+Bieżące dowody:
+[raport P3.1](docs/P31-VERIFICATION.md), [konfiguracja](docs/P31-SETUP.md).
 P3.2/P3.3 i nowe abonamenty nie zostały zatwierdzone.
 Dane zapisane na podglądzie dev pozostają pod tamtym adresem; publikacja main
 nie kopiuje lokalnego zapisu między adresami. [Odbiór produkcji](docs/P21-PRODUCTION.md).

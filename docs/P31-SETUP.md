@@ -7,29 +7,47 @@ Kod można weryfikować lokalnie bez kont usług. Taki test nie potwierdza chmur
 ## Stan dostępu
 
 - Vercel/GitHub są połączone; projekt `ubranka`, istniejący podgląd gałęzi dev.
-- Utworzono osobny projekt Google Cloud `ubranka-2026` (nazwa Ubranka).
-  Nie utworzono jeszcze klienta OAuth ani nie podłączono rozliczeń.
+- Google Cloud `ubranka-2026` (nazwa Ubranka), bez rozliczeń. Utworzono klienta
+  WWW dla testowego Supabase z dokładnym callbackiem `/auth/v1/callback`.
+  Google Auth pozostaje External/Testing, dwa wskazane konta na liście test users.
+  Zapisano wyłącznie podstawowe zakresy email/profile/openid; brak Gmail/Drive/Photos.
 - Użytkownik podał prywatnie oba konta Google i wyraźnie zaakceptował Google API
   Services User Data Policy wraz z upoważnieniem do zaznaczenia zgody. Wcześniejsza
-  przeszkoda zgody jest rozwiązana. Formularz Google Auth nie został jeszcze zapisany:
-  sterowanie Chrome jest technicznie zablokowane, a właściciel jest poza domem.
+  przeszkoda zgody jest rozwiązana. Sterowanie Google odzyskano przez nową kartę;
+  formularz i klient są zapisane. Logowanie właściciela przez Google na dev oraz
+  powrót do prywatnej szafy i wylogowanie sprawdzono w przeglądarce.
 - Połączenie Supabase potwierdzone. W wybranej organizacji Risk Every Asset
   (Free) utworzono `ubranka-test`, Frankfurt `eu-central-1`. Wdrożono migrację
-  `private_wardrobe` oraz Edge `wardrobe` i `wardrobe-cleanup` (obie wersja 1).
+  `private_wardrobe`, harmonogram oraz poprawkę `private_photo_edge_reads`.
+  Edge `wardrobe` obsługuje teraz również POST `downloadPhoto` ze świeżą kontrolą RLS;
+  `wardrobe-cleanup` odpowiada HTTP 200. Szczegóły odbioru w raporcie weryfikacji.
   Prywatna allowlista zawiera dwa wskazane konta; adresów nie zapisano w repozytorium.
-- RLS trzech tabel i prywatny bucket potwierdzone w chmurze. Brak użytkowników
-  Auth i zdjęć. Projekt pilotażowy/main pozostaje na później.
-- Ustawienia Auth, aktywacja hooka, sekrety Edge/Vault i harmonogram nadal oczekują
-  konfiguracji. Wtyczka nie udostępnia tych operacji. Uruchomiono oficjalne CLI
-  z `login --no-browser`, aby właściciel mógł autoryzować je linkiem na telefonie.
+- RLS trzech tabel i prywatny bucket potwierdzone w chmurze. Nowe odczyty klienta
+  nie używają bezpośrednich GET Storage, które w teście zachowały odpowiedź CDN po
+  zmianie reguły dostępu. Istniejące kopie testowe/cache oceniono oddzielnie.
+  Projekt pilotażowy/main pozostaje na później.
+- Właściciel autoryzował oficjalne CLI 2.122.0 przez link i kod z telefonu.
+  Ustawiono Google, hook Before User Created, dokładne redirecty, sekrety Edge/Vault
+  i cron co 10 minut. Email/password, SMS, konta anonimowe i manual linking są
+  wyłączone. Różnice zadeklarowanej konfiguracji sprawdzono przez `config diff`.
+  Email włączono wyłącznie na czas przygotowania syntetycznych sesji testowych,
+  po czym wyłączono; te sesje nie są przedstawiane jako logowanie Google.
   Jednorazowego linku, kodu ani stałego tokenu nie zapisujemy w repozytorium.
-- Zmienne Supabase w Vercel nadal nie są ustawione. Ekran dev poprawnie informuje
-  o braku konfiguracji; nie jest to jeszcze działający odbiór prywatnej szafy.
+- Vercel ma URL i nowoczesny klucz publiczny Supabase wyłącznie w Preview dla
+  gałęzi `dev`. Main nie ma tej konfiguracji. `.env.local` zawiera te same publiczne
+  wartości; sekrety administracyjne i OAuth są poza kodem i repozytorium.
+- Poprawka zdjęć i sprzątanie przeszły testy chmury; CI i podgląd są gotowe.
+  Pozostaje [scenariusz użytkowników na telefonach](P31-ACCEPTANCE.md).
+  Aktualne wyniki i ograniczenia: [P31-VERIFICATION.md](P31-VERIFICATION.md).
 
 Ten stan trzeba odświeżyć po odpowiedzi użytkownika, a nie ponownie żądać zgód,
 których już udzielił. Użytkownik może potwierdzić połączenie i warunki zdalnie.
 
-## Dokończenie już zatwierdzonej konfiguracji
+## Procedura konfiguracji i odtworzenia środowiska
+
+Poniższe kroki wykonano dla testowego projektu. Nie są poleceniem ponownego
+utworzenia usług ani wdrożenia na main. Osobny pilot i test fizycznych telefonów
+pozostają do uzgodnionego odbioru.
 
 1. Sprawdzić połączenie Supabase i istniejące organizacje/projekty. Utworzyć
    osobne projekty test/pilot wyłącznie w dostępnych miejscach Free, region

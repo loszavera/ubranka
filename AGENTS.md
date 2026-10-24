@@ -28,8 +28,9 @@ P2.1 zostało następnie odebrane przez użytkownika i jawnie dopuszczone do mai
 na dev. Aktualne wymagania i plan V1.4 zawierają propozycję P3, koszty V1.3 i
 P3-DATA-POLICY-V1.0.md. Użytkownik **zatwierdził implementację P3.1** (2026-10-24):
 Supabase Free/Frankfurt, Google OAuth, limity zdjęć i zasady danych V1.0,
-konfigurację darmowych usług, testy i podgląd dev. P3.1 jest w realizacji;
-faktyczną dostępność usług i wyniki weryfikacji zapisuj w statusie.
+konfigurację darmowych usług, testy i podgląd dev. Usługi i kod P3.1 są wdrożone
+na dev, testy chmury i CI przeszły. Odbiór obu osób na telefonach pozostaje otwarty:
+docs/P31-ACCEPTANCE.md. Faktyczne wyniki i ograniczenia zapisuj w statusie.
 P3.2 (próba AI), P3.3 i publikacja nowego zakresu main wymagają osobnego uzgodnienia.
 Nie aktywuj płatnego AI ani nowych abonamentów.
 Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,

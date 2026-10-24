@@ -42,12 +42,21 @@ JWT nie zawsze przestaje działać natychmiast, a plik może oczekiwać na usuni
 [Storage delete](https://supabase.com/docs/guides/storage/management/delete-objects),
 [konto Auth](https://supabase.com/docs/guides/auth/managing-user-data).
 
-Implementacja P3.1 używa autoryzowanego odczytu JWT, `no-store` i zwalnianych
-lokalnych adresów blob; nie wydaje podpisanych linków. Podpisany URL, gdy potrzebny w przyszłości,
+Implementacja P3.1 używa POST przez Edge, świeżej kontroli JWT/RLS, `no-store`
+i zwalnianych lokalnych adresów blob; nie wydaje podpisanych linków ani nie pozwala
+klientowi czytać plików bezpośrednio ze Storage. Test w chmurze wykazał, że
+bezpośrednia odpowiedź Storage może pozostawać w CDN po zmianie uprawnień;
+sam nagłówek `no-store` i zmiana RLS nie wystarczyły. Nowy przepływ sprawdza
+dostęp przed każdym nowym pobraniem. Nie odwołuje kopii wcześniej pobranych
+ani odpowiedzi rozpoczętej przed zatwierdzeniem usunięcia.
+Podpisany URL, gdy potrzebny w przyszłości,
 ma krótki czas ważności (propozycja 5 minut); jego termin nie daje gwarancji wyczyszczenia
-już pobranej/buforowanej kopii. Smart CDN unieważnia usunięty obiekt z opóźnieniem
-do około 60 s, a cache przeglądarki jest oddzielny.
-[Zasady CDN](https://supabase.com/docs/guides/storage/cdn/smart-cdn).
+już pobranej/buforowanej kopii. Smart CDN i ręczne purge wymagają Pro lub wyższego
+planu; dokumentowane opóźnienie propagacji nie jest gwarancją dla naszego Free.
+Cache przeglądarki pozostaje oddzielny. Jest to doprecyzowanie techniczne V1.0
+po teście 2026-10-24, bez zmiany dostawców, retencji lub zakresu zgody.
+[Zasady CDN](https://supabase.com/docs/guides/storage/cdn/smart-cdn),
+[ręczne purge](https://supabase.com/docs/guides/storage/cdn/purge-cdn-cache).
 
 ## Kopie bezpieczeństwa
 

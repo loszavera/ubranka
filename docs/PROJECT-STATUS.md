@@ -8,11 +8,12 @@ jest opublikowana i sprawdzona. Następnie użytkownik **zatwierdził P3.1**:
 Supabase Free/Frankfurt, Google, zdjęcia, synchronizacja, limity i zasady danych
 V1.0, testy i podgląd dev. Bez płatnego AI i nowych abonamentów.
 
-**P3.1 jest częściowo wykonane:** kod i testy lokalne są gotowe, integracja
-z chmurą pozostaje otwarta. Nie odebrano jeszcze rzeczywistego logowania,
-Storage, synchronizacji dwóch urządzeń ani serwerowego usuwania w Supabase.
+**P3.1 jest gotowe do odbioru na telefonach:** usługi są skonfigurowane,
+Google właściciela działa, testy chmury i CI przeszły. Wykryty cache zdjęcia
+po usunięciu naprawiono odczytem przez Edge. Konto Kasi i rzeczywisty wybór
+pliku na telefonach wymagają odbioru; main nadal zawiera P2.1.
 
-## P3.1 — bieżący wynik i brakująca konfiguracja
+## P3.1 — bieżący wynik
 
 - Osobny ekran prywatnej szafy PL/EN, profile, selektywny import P2, zdjęcia
   z galerii/aparatu, edycja, wymiana, eksport ZIP i potwierdzane usuwanie.
@@ -24,25 +25,38 @@ Storage, synchronizacji dwóch urządzeń ani serwerowego usuwania w Supabase.
   250 MB/konto; niedokończone operacje nadal zajmują limit.
 - Projekt Google Cloud `ubranka-2026` pozostaje bez rozliczeń. Użytkownik podał
   oba konta i wyraźnie zaakceptował User Data Policy; nie wymaga to ponownej zgody.
-  Klient OAuth nie jest utworzony: sterowanie Chrome blokuje otwarty panel rozszerzenia.
+  Klient OAuth jest utworzony, ma dokładny callback Supabase i dwa test users.
+  Zakres wyłącznie email/profile/openid. Na podglądzie dev sprawdzono rzeczywiste
+  logowanie właściciela, odczyt pustej prywatnej szafy i wylogowanie.
 - Supabase połączony: organizacja Risk Every Asset, Free, projekt `ubranka-test`
   we Frankfurcie. Migracja, prywatny bucket, RLS i obie Edge wdrożone. Dwa konta
   wpisane na prywatną listę dostępu. Pięć anonimowych prób API poprawnie odrzuconych.
-- Auth/hook, sekrety Edge/Vault i cron oczekują dodatkowego dostępu administracyjnego.
-  Oficjalne CLI uruchomiono z linkiem logowania na telefonie; brak jeszcze potwierdzenia
-  autoryzacji. Nie publikowano sekretów ani adresów kont. Podgląd Vercel nie ma jeszcze
-  zmiennych Supabase. Szczegóły: [P31-SETUP.md](P31-SETUP.md).
-- Bez prawdziwych zmiennych usług podgląd pokazuje brak konfiguracji i blokuje
-  logowanie. Nie publikujemy testowego backendu ani syntetycznych kluczy.
+- Właściciel autoryzował CLI z telefonu. Auth/hook, sekrety Edge/Vault oraz
+  harmonogram co 10 minut są skonfigurowane. Faktyczny wywołany przez cron
+  request HTTP zakończył się 200. Email/SMS, anonymous i manual linking wyłączone.
+- URL i klucz publiczny Supabase są ustawione wyłącznie w Vercel Preview/dev.
+  Wdrożenie `dpl_ErgZM7GMGy8wMrxcYH5DHDqNsFvk` READY, kod `2cc3a0e`,
+  zawiera konfigurację i poprawiony transport zdjęć. Nie ujawniono kluczy
+  serwerowych, sekretu Google ani adresów kont w repozytorium.
+- Hosted test ujawnił bezpośredni Storage GET z CDN po odebraniu dostępu w RLS.
+  Nowa migracja usuwa odczyt Storage użytkowników, a Edge POST `downloadPhoto`
+  wykonuje świeżą kontrolę Auth/RLS przed pobraniem bajtów. Backend 14/14 PASS;
+  niezależny przegląd backendu i klienta bez uwag blokujących. Hosted live 30
+  kontroli PASS; raport rozszerzony 90 kontroli. Naturalny cron 20:00 UTC
+  usunął syntetyczne pliki i konta. Nie pozostały syntetyczne zaproszenia.
+- TypeScript/ESLint, 34 testy domeny, 14 backendu, 15 regresji WWW, 8 prywatnego UI
+  i eksport trzech platform PASS. [Końcowe CI SUCCESS](https://github.com/loszavera/ubranka/actions/runs/40127417984).
+  Upload przez automat Chrome wymaga niedostępnego uprawnienia rozszerzenia;
+  realny wybór pliku i OAuth Kasi sprawdzą użytkownicy. API zdjęć sprawdzono w chmurze.
 - Szczegóły: [konfiguracja](P31-SETUP.md), [backend](P31-BACKEND.md),
   [wyniki i ograniczenia testów](P31-VERIFICATION.md).
-- Dev `a9ec29a`: kod opublikowany. Vercel `dpl_DwRjKYjq8fJwcf429RC3FmKhd2vk`
+- Historyczny etap bez usług, dev `a9ec29a`: Vercel `dpl_DwRjKYjq8fJwcf429RC3FmKhd2vk`
   READY; kontrola online 18:06 UTC PASS (demo, zachowanie zapisu, jawny brak
   konfiguracji usług w PL/EN). Lokalnie: 34 testy logiki, 11 backendu,
   15 regresji WWW i 7 prywatnego UI PASS. Eksport trzech platform PASS.
   [CI dla a9ec29a: SUCCESS](https://github.com/loszavera/ubranka/actions/runs/40119015249),
   wraz z testami na Ubuntu/Chromium. Następny commit zapisuje wyłącznie raport.
-  Odbiór chmury nadal niewykonany; ten wynik go nie zastępuje.
+  Ten wcześniejszy wynik nie zastępował późniejszych testów chmury opisanych wyżej.
 
 ## Aktualne dokumenty
 
@@ -121,12 +135,11 @@ P1/V1.1 i V1.2 przeszły przeglądy dokumentacji; wersje historyczne zachowano.
 
 ## Następny krok
 
-Dokończyć **już zatwierdzone P3.1** po zdalnej autoryzacji CLI Supabase i
-zakończeniu konfiguracji Google. Zgoda na politykę i konta zostały już podane.
-Ustawić Auth/hook, sekrety i harmonogram, skonfigurować dokładny adres dev,
-przetestować rzeczywistą izolację kont,
-zdjęcia, eksport i usuwanie. Dopiero potem odbiór użytkowników na telefonach.
-Nie prosić ponownie o zatwierdzenie implementacji P3.1. Main pozostaje P2.1.
+**Odbiór P3.1 przez Kasię i Aleksego na telefonach**, według krótkiej
+[checklisty](P31-ACCEPTANCE.md): oba logowania, testowy obraz, synchronizacja,
+prywatność, eksport i usuwanie. Dev pozostaje środowiskiem syntetycznych danych.
+Nie prosić ponownie o zatwierdzenie implementacji P3.1. Publikacja main i środowisko
+pilotażu z własnymi zdjęciami wymagają uzgodnionego odbioru; main pozostaje P2.1.
 
 P3.2: późniejsza osobno zatwierdzona próba AI na danych sztucznych, maks. 12
 wywołań / 25 PLN. P3.3: docelowy profil sylwetki, rozpoznawanie, zestawy z własnych
