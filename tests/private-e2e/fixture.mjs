@@ -4,7 +4,8 @@ export const ACCOUNT_A = '11111111-1111-4111-8111-111111111111';
 export const ACCOUNT_B = '22222222-2222-4222-8222-222222222222';
 export const ITEM_ID = '33333333-3333-4333-8333-333333333333';
 const PHOTO_ID = '44444444-4444-4444-8444-444444444444';
-export const authKey = 'ubranka:private:auth';
+// Matches the project-scoped storageKey in the real Supabase client.
+export const authKey = 'ubranka:private:ubranka-test.supabase.co:auth';
 export const demoKey = 'ubranka:p2:v1';
 export const button = (page, name) => page.getByRole('button', { name, exact: true });
 
