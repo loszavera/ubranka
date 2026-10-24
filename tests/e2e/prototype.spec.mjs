@@ -11,7 +11,9 @@ async function start(page, budget = '500', occasion) {
   await button(page, 'Odkryj swój styl').click();
 }
 async function noOverflow(page) {
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  // React Native's window dimensions update after the browser resize event.
+  // Poll the actual geometry without relaxing the no-overflow condition.
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 }
 test.beforeEach(async ({ page }) => {
   page.on('pageerror', error => { throw error; });
@@ -179,15 +181,19 @@ test('responsive PL/EN layout and keyboard access', async ({ page }, info) => {
   await page.screenshot({ path: info.outputPath('outfits-desktop-pl.png') });
   for (const width of [320, 360, 390, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
-    await noOverflow(page);
-    const boxes = await cards(page).evaluateAll(nodes => nodes.map(n => ({ x: n.getBoundingClientRect().x, width: n.getBoundingClientRect().width, height: n.getBoundingClientRect().height })));
-    expect(boxes.every(b => b.x >= 0 && b.x + b.width <= width && b.height > 350)).toBe(true);
-    if (width === 320) {
-      await cards(page).first().scrollIntoViewIfNeeded();
-      await page.screenshot({ path: info.outputPath('outfits-small-pl.png') });
+    for (const locale of ['pl', 'en']) {
+      await button(page, width >= 800 ? (locale === 'pl' ? 'Polski' : 'English') : locale.toUpperCase()).click();
+      await expect(page.getByRole('heading', { name: locale === 'pl' ? 'Dwa zestawy dla Ciebie' : 'Two outfits, just for you', exact: true })).toBeVisible();
+      await noOverflow(page);
+      await expect.poll(async () => {
+        const boxes = await cards(page).evaluateAll(nodes => nodes.map(n => ({ x: n.getBoundingClientRect().x, width: n.getBoundingClientRect().width, height: n.getBoundingClientRect().height })));
+        return boxes.length === 2 && boxes.every(b => b.x >= 0 && b.x + b.width <= width && b.height > 350);
+      }).toBe(true);
+      if (width === 320 && locale === 'pl') {
+        await cards(page).first().scrollIntoViewIfNeeded();
+        await page.screenshot({ path: info.outputPath('outfits-small-pl.png') });
+      }
     }
-    await button(page, width >= 800 ? 'English' : 'EN').click();
-    await noOverflow(page);
   }
   await page.setViewportSize({ width: 390, height: 1000 });
   await button(page, 'Wardrobe').click();

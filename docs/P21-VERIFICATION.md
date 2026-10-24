@@ -38,9 +38,27 @@ Nie dodano zależności. Historyczny audyt i ograniczenia opisano w
 
 ## Publikacja
 
-Lokalne kontrole zakończone. Commit, GitHub Actions i wynik sprawdzenia Vercel
-zostaną dopisane po publikacji. Stały adres dev:
-https://ubranka-git-dev-risk-every-asset.vercel.app (logowanie Vercel).
+- Implementacja aplikacji: `b74e22c59bebd78e8aeeadb2cba28a100d3eb002` na dev.
+- Vercel Preview `dpl_kKpgbeYGGDEYT25R1SRMUKx4keoZ`: READY, źródło dev/b74e22c.
+  Test online 2026-10-24 16:23 UTC: HTTP 200, wszystkie cztery nowe ilustracje,
+  damskie/męskie wesele, oba tryby, praca/randka/impreza, PL/EN, migracja V1
+  i zapis nowej opinii po reload — PASS, zero błędów JavaScript.
+  Dowód: `artifacts/p21-vercel-verification.json`, `artifacts/p21-vercel-wedding-*.png`.
+- Sprawdzony adres: https://ubranka-git-dev-risk-every-asset.vercel.app.
+  Ochrona logowaniem Vercel zachowana; do testu użyto tymczasowego dostępu.
+- Pierwsze [CI dla b74e22c](https://github.com/loszavera/ubranka/actions/runs/40111085233)
+  przeszło wszystkie kroki i 12/13 scenariuszy WWW, lecz test responsywności
+  zmierzył układ przed renderem po resize. Diagnostyka odtworzyła przejściowy
+  stan w 20 próbach; wszystkie końcowe rozmiary poprawne. Poprawiono oczekiwanie
+  na geometrię (bez tolerancji przepełnienia) oraz kontrolę obu języków przy
+  każdej szerokości. Wynik ponownego CI zostanie dopisany po wykonaniu.
+  Log pierwszej próby: `artifacts/p21-ci-first.log`; diagnostyka:
+  `artifacts/p21-layout-diagnostic.json`.
+
+Bundle z Linux/Vercel ma inną nazwę niż lokalny Windows. Potwierdzono nazwę
+załadowanego skryptu względem logu Vercel właściwego commita;
+CI na Linuxie wygenerowało ten sam bundle co Vercel. Nie zakładamy identyczności
+plików między różnymi systemami budowania.
 
 ## Odbiór przez Kasię i Aleksego
 
