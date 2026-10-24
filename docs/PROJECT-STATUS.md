@@ -2,11 +2,14 @@
 
 Aktualizacja: 2026-10-24. P2 zatwierdzono do implementacji na dev, testów
 i podglądu Vercel. Interaktywny prototyp jest wdrożony i sprawdzony online.
-Odbiór Kasi i Aleksego pozostaje do wykonania.
+Kasia i Aleksy potwierdzili własny test: potrzebne są dodatkowe okazje, np.
+„wesele”. Chcą kontynuować budowę i proszą o propozycję następnego zakresu.
+Nie jest to potwierdzenie wszystkich kryteriów technicznych ani testu Expo Go.
 
 ## Aktualne dokumenty
 
-- [Wymagania V1.2](REQUIREMENTS-V1.2.md) i [plan V1.2](IMPLEMENTATION-PLAN-V1.2.md).
+- [Wymagania V1.3](REQUIREMENTS-V1.3.md) i [plan V1.3](IMPLEMENTATION-PLAN-V1.3.md)
+  uzupełniają zachowaną bazę V1.2 o feedback i propozycję P2.1.
 - [Weryfikacja i scenariusz odbioru P2](P2-VERIFICATION.md).
 - [Kontrakty danych P2 i szkice P3/P4](DATA-CONTRACTS-P2.md).
 - [Wybrany wygląd A](design/DESIGN-DIRECTION-V1.2.md), [pochodzenie ilustracji](design/P2-ASSETS.md).
@@ -72,8 +75,13 @@ Wyniki historyczne nie zastępują kontroli P2.
 
 ## Rekomendowany następny krok do akceptacji
 
-Odbiór P2 przez Kasię i Aleksego w podglądzie z telefonu (około 10 minut):
-krótki start, dwa tryby, opinie, zmiana języka/profilu i koszt własnych rzeczy.
-[Scenariusz](P2-VERIFICATION.md#odbiór-przez-kasię-i-aleksego) określa oczekiwane
-zachowanie i format uwag. Po feedbacku ustalimy poprawki albo zaproponujemy P3.
-Nie rozpoczynać P3 ani przenoszenia do main automatycznie.
+P2.1 — dodatkowe okazje i dobór do sytuacji: wesele jako gość, praca, randka,
+impreza; wybór przed rundą, pasujące przykłady i filtrowanie, zachowanie danych P2,
+testy i podgląd dev. Pełny proponowany zakres: [plan V1.3](IMPLEMENTATION-PLAN-V1.3.md).
+Potwierdzona potrzeba to więcej okazji, w tym wesele; pozostała lista i sposób
+realizacji są propozycją. Nie rozpoczęto implementacji.
+
+Gotowa odpowiedź: „Zatwierdzam P2.1. Dodaj opisane okazje i dobór zestawów,
+zachowaj dane P2, wykonaj testy i udostępnij podgląd z dev na Vercel”.
+Późniejszy P3 wymaga konkretnej propozycji usług, danych i kosztów. Nie rozpoczynać
+go ani przenoszenia do main automatycznie.

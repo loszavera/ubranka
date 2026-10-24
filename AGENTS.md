@@ -16,8 +16,10 @@ przed dawnymi rozmowami. Odróżniaj propozycje od przyjętych wymagań.
 P2 zatwierdzono do implementacji, testów i podglądu Vercel z dev (2026-10-24).
 Powstał prototyp A — Krem i śliwka: PL/EN, krótki start, profile, szafa demo,
 dwa tryby propozycji, opinie i zapis lokalny. Wyniki i stan publikacji:
-docs/PROJECT-STATUS.md oraz docs/P2-VERIFICATION.md. Odbiór Kasi i Aleksego
-pozostaje osobnym krokiem. Q21–Q23 i Q25 są rozstrzygnięte; Q24 określa wstępny
+docs/PROJECT-STATUS.md oraz docs/P2-VERIFICATION.md. Kasia i Aleksy potwierdzili
+test P2 i zgłosili dodatkowe okazje, np. wesele. Wymagania/plan V1.3 zapisują
+feedback i propozycję P2.1; implementacja nowego zakresu czeka na akceptację.
+Nie dopisuj na tej podstawie testu natywnego. Q21–Q23 i Q25 są rozstrzygnięte; Q24 określa wstępny
 kierunek zdjęć, szczegóły dostawcy wymagają wyjaśnienia przed realnym uploadem.
 Zapisuj otwarte decyzje; nie uznawaj propozycji za zatwierdzone ani nie rozpoczynaj
 samodzielnie następnego etapu tylko dlatego, że opisano go w planie.

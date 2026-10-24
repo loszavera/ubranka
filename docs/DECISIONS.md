@@ -38,6 +38,8 @@ Stan początkowy: 2026-10-24. Decyzje produktowe wymagające doprecyzowania nie 
 | D-030 | 2026-10-24 | Zatwierdzone przez użytkownika | Rozpoczęcie P2 zgodnie z V1.2 na dev, wykonanie testów i udostępnienie podglądu Vercel. Zgoda obejmuje prototyp demo, nie kolejny etap P3 ani publikację main. |
 | D-031 | 2026-10-24 | Realizacja P2 | Zapis lokalny AsyncStorage, 28 fikcyjnych rzeczy i 8 ilustracji, ranking regułowy z opiniami per profil. Oba języki zachowują PLN. Przyszłe kontrakty konta, oferty i wizualizacji opisuje DATA-CONTRACTS-P2.md. |
 
+| D-032 | 2026-10-24 | Feedback użytkowników | Kasia i Aleksy przetestowali P2; potrzebne dodatkowe okazje, np. wesele. Wymagania V1.3 rozszerzają R-19. Proszą o propozycję dalszej pracy; lista okazji i wykonanie P2.1 czekają na akceptację. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

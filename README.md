@@ -7,8 +7,9 @@ Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki
 (logowanie Vercel; stan wdrożenia w dokumencie statusu).
 **Stabilny fundament main:** https://ubranka.vercel.app
 
-**Etap:** P2 — interaktywny prototyp zgodny z dokumentacją V1.2, do odbioru
-przez Kasię i Aleksego. Wygląd A — Krem i śliwka, PL/EN, krótki start,
+**Etap:** P2 — interaktywny prototyp z V1.2, przetestowany przez Kasię i Aleksego.
+Zgłoszono potrzebę dodatkowych okazji, np. wesela. V1.3 opisuje feedback
+i proponowany P2.1 do akceptacji. Wygląd A — Krem i śliwka, PL/EN, krótki start,
 edytowalne profile, szafa demo i najwyżej dwa zestawy w obu trybach.
 Budżet obejmuje nowe rzeczy z dostawą; posiadane rzeczy kosztują 0 PLN.
 Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeniu.
@@ -17,8 +18,8 @@ własne zdjęcia, AI, sklepy i lista zakupowa należą do kolejnych etapów.
 
 ## Dokumenty
 
-- [Wymagania V1.2](docs/REQUIREMENTS-V1.2.md)
-- [Plan implementacji V1.2](docs/IMPLEMENTATION-PLAN-V1.2.md)
+- [Wymagania V1.3 — aktualizacja bazy V1.2](docs/REQUIREMENTS-V1.3.md)
+- [Plan implementacji V1.3 — propozycja P2.1](docs/IMPLEMENTATION-PLAN-V1.3.md)
 - [Odpowiedzi uzupełniające](docs/INTERVIEW-V1.2.md) i [pierwsze 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
 - [Wybrany wygląd A](docs/design/DESIGN-DIRECTION-V1.2.md)
 - [Budżet przy 30 wizualizacjach na osobę](docs/COST-PLAN-V1.2.md)
