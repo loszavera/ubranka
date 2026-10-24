@@ -104,6 +104,32 @@ test('photo reservations, ownership, active read gate, and durable delete',async
   assert.equal((await db.query('select id from public.wardrobe_items where id=$1',[itemA])).rows.length,0);
 });
 
+test('staged upload retry follows acknowledged edits but rejects stale or intervening revisions',async()=>{
+  const retryItem='10000000-0000-4000-8000-000000000003';
+  const retryPhoto='20000000-0000-4000-8000-000000000003';
+  await user(A,()=>rpc('createItem',{itemId:retryItem,...fields}));
+  await adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,retryItem,retryPhoto,'d'.repeat(64)]);
+  await user(A,()=>rpc('updateItem',{itemId:retryItem,expectedRevision:1,...fields,name:'Edited after interrupted upload'}));
+  await db.query("update public.wardrobe_photos set cleanup_after=now()-interval '1 minute' where id=$1",[retryPhoto]);
+  const oldLease=(await db.query('select cleanup_after::text lease from public.wardrobe_photos where id=$1',[retryPhoto])).rows[0].lease;
+  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,retryItem,retryPhoto,'d'.repeat(64)]),/CONFLICT/);
+  assert.equal((await db.query('select cleanup_after::text lease from public.wardrobe_photos where id=$1',[retryPhoto])).rows[0].lease,oldLease,'stale retries do not extend the lease');
+  const resumed=await adminRpc('wardrobe_reserve_photo','$1,$2,$3,2,100,50,$4',[A,retryItem,retryPhoto,'d'.repeat(64)]);
+  assert.equal(resumed.expected_revision,2);
+  await db.query('insert into storage.objects(bucket_id,name) values ($1,$2),($1,$3)',['wardrobe-private',resumed.main_path,resumed.thumb_path]);
+  await user(A,()=>rpc('updateItem',{itemId:retryItem,expectedRevision:2,...fields,name:'Concurrent device edit'}));
+  await assert.rejects(adminRpc('wardrobe_commit_photo','$1,$2',[A,retryPhoto]),/CONFLICT/,'intervening edit still prevents stale commit');
+  await adminRpc('wardrobe_reserve_photo','$1,$2,$3,3,100,50,$4',[A,retryItem,retryPhoto,'d'.repeat(64)]);
+  const committed=await adminRpc('wardrobe_commit_photo','$1,$2',[A,retryPhoto]);
+  assert.equal(committed.revision,4);
+  assert.equal(committed.name,'Concurrent device edit');
+  await user(A,()=>rpc('deleteItem',{itemId:retryItem,expectedRevision:4}));
+  await db.query("update public.wardrobe_photos set cleanup_after=now()-interval '1 minute' where id=$1",[retryPhoto]);
+  await db.query('delete from storage.objects where name in ($1,$2)',[resumed.main_path,resumed.thumb_path]);
+  await adminRpc('wardrobe_finish_photo_delete','$1',[retryPhoto]);
+  await adminRpc('wardrobe_finish_item_deletes','',[]);
+});
+
 test('abandoned uploads expire and pending bytes count against account quota',async()=>{
   const orphanItem='10000000-0000-4000-8000-000000000002';
   const orphanPhoto='20000000-0000-4000-8000-000000000002';

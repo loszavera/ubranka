@@ -250,7 +250,13 @@ begin
   select * into p from public.wardrobe_photos where id=p_id;
   if found then
     if p.account_id<>p_account or p.item_id<>p_item or p.fingerprint<>p_fingerprint or p.status='deleting' then raise exception 'CONFLICT'; end if;
-    if p.status='staged' then update public.wardrobe_photos set cleanup_after=now()+interval '5 minutes' where id=p.id returning * into p; end if;
+    if p.status='staged' then
+      if i.revision is distinct from p_revision then raise exception 'CONFLICT'; end if;
+      -- An explicit retry can follow an acknowledged metadata save. Rebind the
+      -- same bytes to that current version; a later edit still fails at commit.
+      update public.wardrobe_photos set expected_revision=p_revision,
+        cleanup_after=now()+interval '5 minutes' where id=p.id returning * into p;
+    end if;
     return to_jsonb(p);
   end if;
   if i.revision is distinct from p_revision then raise exception 'CONFLICT'; end if;

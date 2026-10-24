@@ -57,6 +57,9 @@ nie są publicznymi URL. Bucket `wardrobe-private`, odczyt JWT; aplikacja nie wy
 - Upload ma rezerwację, SHA-256 obu wariantów, dwa obiekty i osobne zatwierdzenie.
   Ponowienie operationId jest dopuszczone dla tych samych danych. Nowsza edycja
   rzeczy blokuje commit poprzedniej wersji, zamiast ukrycie ją nadpisać.
+  Po potwierdzonej zmianie opisu jawne ponowienie uploadu z bieżącą wersją może
+  przypiąć te same bajty do nowej wersji. Stare żądanie nie przedłuża dzierżawy;
+  kolejna zmiana między wznowieniem a commit nadal kończy się konfliktem.
 
 ## Usuwanie i sprzątanie
 
