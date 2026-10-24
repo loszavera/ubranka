@@ -117,7 +117,20 @@ AI w UE. Dane AI i wdrożenie w aplikacji należą do osobnego planu P3.3.
 - PASS: galeria z danymi testowymi na 320/390/1024 px, obsługa klawiatury,
   wyboru przypadku i błędu pobrania. Z rzeczywistymi danymi sprawdzono lokalnie
   koszty, oceny, przełączanie i pełne obrazy; brak poziomego przewijania.
-- Publikacja GitHub/Vercel i sprawdzenie publicznego adresu: w toku.
+- PASS: publikacja `66e5e0590e4ba11d3ad97244dbfedda2b0490ad7` na dev/main,
+  zgodne lokalne i zdalne gałęzie, bez przepisywania historii.
+- PASS: Vercel Production `dpl_6VhgLoT8s9cNhvBEv6YvauhN1Xob`, stan READY;
+  [galeria](https://ubranka.vercel.app/p32/) i jej JSON zwróciły HTTP 200.
+  W przeglądarce potwierdzono 12 wyników / 6 przypadków, koszty, wybór W-ELEGANT,
+  obie oceny 7/10 i opis błędu, załadowanie czterech obrazów 1024×1536,
+  brak poziomego przewijania oraz działający powrót do ekranu aplikacji.
+  Brak błędów aplikacji w konsoli; widoczne ostrzeżenia pochodziły z rozszerzenia
+  przeglądarki. Nie jest to nowy test logowania ani fizycznego telefonu.
+- Publiczny odczyt GitHub Actions nie pokazał uruchomienia dla tego commita.
+  Nie przypisujemy mu sukcesu historycznego CI. Lokalne kontrole wymienione
+  powyżej oraz build i test faktycznego wdrożenia przeszły.
+- Końcowy commit dopisuje wyłącznie dowody publikacji w dokumentacji;
+  obrazy, galeria i kod aplikacji pozostają identyczne z przetestowanym wdrożeniem.
 
 ## Następny krok
 

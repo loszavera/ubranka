@@ -10,6 +10,11 @@ krój spodni. Flare jest kandydatem do dalszego projektu: w tej próbie był szy
 przy tym samym koszcie. Ocena Kasi i Aleksego pozostaje oczekująca.
 [Galeria](https://ubranka.vercel.app/p32/), [raport](P32-REPORT.md),
 [koszty V1.4](COST-PLAN-V1.4.md). Limit wywołań wyczerpany; P3.3 nie rozpoczęto.
+Materiały `66e5e05` opublikowano na dev/main. Vercel Production
+`dpl_6VhgLoT8s9cNhvBEv6YvauhN1Xob` READY; publiczny test galerii i powrotu
+do aplikacji PASS. Końcowa zmiana zapisuje dowody bez zmiany galerii/aplikacji.
+Lokalne check/build PASS; brak widocznego uruchomienia nowego CI odnotowano
+w [raporcie](P32-REPORT.md), bez utożsamiania go z historycznym sukcesem CI.
 
 Po przetestowaniu P2 Kasia i Aleksy zgłosili dodatkowe
 okazje. Aleksy zatwierdził P2.1: wesele jako gość, praca, randka i impreza,
