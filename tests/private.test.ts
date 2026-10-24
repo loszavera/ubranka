@@ -174,3 +174,44 @@ test('pending deletion hides item immediately but never claims physical completi
   assert.equal(result.status, 'pending'); assert.equal(store.getSnapshot().deletion?.status, 'pending');
   assert.equal(store.getSnapshot().snapshot?.items.length, 0);
 });
+
+test('authoritative access denial clears loaded private state and photo cache; network failure preserves it', async () => {
+  for (const code of ['UNAUTHENTICATED', 'ACCOUNT_UNAVAILABLE', 'NOT_INVITED', 'SIGNED_OUT', 'NETWORK']) {
+    let failure = false; let clears = 0;
+    const loaded = { ...snapshot(), items: [item] };
+    const store = new PrivateStore(new WardrobeApi(wrap(async () => {
+      if (failure) throw new PrivateError(code);
+      return loaded;
+    })), () => itemId, () => { clears++; });
+    store.setIdentity(userA); await store.refresh();
+    assert.equal(store.getSnapshot().snapshot?.items[0].id, itemId);
+    const before = clears; failure = true;
+    await store.refresh();
+    assert.equal(store.getSnapshot().error, code);
+    assert.equal(store.getSnapshot().loading, false);
+    if (code === 'NETWORK') {
+      assert.equal(store.getSnapshot().identity?.id, userA.id);
+      assert.equal(store.getSnapshot().snapshot?.items[0].id, itemId);
+      assert.equal(clears, before);
+    } else {
+      assert.equal(store.getSnapshot().identity, null);
+      assert.equal(store.getSnapshot().snapshot, null);
+      assert.equal(store.getSnapshot().pendingSave, null);
+      assert.ok(clears > before);
+    }
+  }
+});
+
+test('authoritative denial during a write clears private state without treating an ordinary conflict as revocation', async () => {
+  for (const code of ['ACCOUNT_UNAVAILABLE', 'CONFLICT']) {
+    const store = new PrivateStore(new WardrobeApi(wrap(async action => {
+      if (action === 'bootstrap') return snapshot();
+      throw new PrivateError(code);
+    })), () => itemId);
+    store.setIdentity(userA); await store.refresh();
+    await assert.rejects(store.saveSettings(emptyPrivateSettings(), 0), error => error instanceof PrivateError && error.code === code);
+    assert.equal(store.getSnapshot().error, code);
+    assert.equal(store.getSnapshot().busy, false);
+    assert.equal(store.getSnapshot().snapshot === null, code === 'ACCOUNT_UNAVAILABLE');
+  }
+});

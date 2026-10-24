@@ -16,6 +16,8 @@ export interface PrivateView {
   pendingSave: { itemId: string; baseRevision: number | undefined; revision: number } | null;
 }
 
+const ACCESS_REVOKED = new Set(['UNAUTHENTICATED', 'ACCOUNT_UNAVAILABLE', 'NOT_INVITED', 'SIGNED_OUT']);
+
 export class PrivateStore {
   private view: PrivateView = { identity: null, snapshot: null, loading: false, busy: false, error: null, deletion: null, pendingSave: null };
   private generation = 0;
@@ -45,6 +47,12 @@ export class PrivateStore {
     this.patch({ identity, snapshot: null, loading: false, busy: false, error: null, deletion: null, pendingSave: null });
   }
   clearError = () => this.patch({ error: null });
+  private reportFailure(code: string) {
+    // An authoritative denial invalidates controlled private data on this device.
+    // A network failure is different: preserve the loaded snapshot and draft.
+    if (ACCESS_REVOKED.has(code)) this.setIdentity(null);
+    this.patch({ error: code });
+  }
 
   async refresh(): Promise<void> {
     if (!this.view.identity || this.view.busy) return;
@@ -61,7 +69,7 @@ export class PrivateStore {
         this.patch({ snapshot });
       }
     } catch (error) {
-      if (generation === this.generation && version === this.refreshVersion) this.patch({ error: asPrivateError(error).code });
+      if (generation === this.generation && version === this.refreshVersion) this.reportFailure(asPrivateError(error).code);
     } finally {
       this.controllers.delete(controller);
       if (generation === this.generation && version === this.refreshVersion) this.patch({ loading: false });
@@ -77,7 +85,7 @@ export class PrivateStore {
     try { const result = await work(controller.signal, generation); this.assertCurrent(generation); return result; }
     catch (error) {
       const safe = asPrivateError(error);
-      if (generation === this.generation) this.patch({ error: safe.code });
+      if (generation === this.generation) this.reportFailure(safe.code);
       throw safe;
     } finally {
       this.controllers.delete(controller);
