@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { AppState, Feedback, Locale, Profile } from '../domain/model';
+import type { AppState, Feedback, Locale, Occasion, Profile } from '../domain/model';
 import { OUTFITS } from '../domain/catalog';
 import { recommendOutfits } from '../domain/recommendations';
 import { updateFeedback } from '../domain/state';
@@ -14,10 +14,11 @@ import { ProfileForm } from '../ui/ProfileForm';
 import { Profiles, profileLabel } from '../ui/Profiles';
 import { Wardrobe } from '../ui/Wardrobe';
 import { colors } from '../ui/theme';
+import { OccasionPicker } from '../ui/OccasionPicker';
 
 type Tab = 'outfits'|'wardrobe'|'profile';
-type Session = { active: boolean; ids: string[]; seen: string[]; votes: Record<string, 'like'|'dislike'>; round: number };
-const emptySession = (): Session => ({ active: false, ids: [], seen: [], votes: {}, round: 0 });
+type Session = { active: boolean; ids: string[]; seen: string[]; votes: Record<string, 'like'|'dislike'>; round: number; occasion: Occasion | null };
+const emptySession = (): Session => ({ active: false, ids: [], seen: [], votes: {}, round: 0, occasion: null });
 const nav: { key: Tab; icon: IconName }[] = [{ key: 'outfits', icon: 'hanger' }, { key: 'wardrobe', icon: 'wardrobe' }, { key: 'profile', icon: 'person' }];
 
 export default function Prototype() {
@@ -29,27 +30,40 @@ export default function Prototype() {
   const singleColumn = width < 340 || fontScale > 1.35;
   const [tab, setTab] = useState<Tab>('outfits');
   const [session, setSession] = useState<Session>(emptySession);
+  const [occasionOverride, setOccasionOverride] = useState<Occasion | null>(null);
   const [pendingReason, setPendingReason] = useState<Feedback|null>(null);
   const [editProfile, setEditProfile] = useState(false);
   const [confirmRecovery, setConfirmRecovery] = useState(false);
   const scroll = useRef<ScrollView>(null);
   const profile = state.profiles.find(p => p.id === state.activeProfileId)!;
+  // Derive the default from the loaded profile; initial storage read is asynchronous.
+  const occasion = occasionOverride ?? profile.occasion;
 
   const changeTab = (next: Tab) => { setTab(next); scroll.current?.scrollTo({ y: 0, animated: false }); };
   const changeLanguage = (locale: Locale) => setState(current => ({ ...current, locale }));
-  const begin = (current: AppState = state, seen: string[] = [], round = 1) => {
-    const active = current.profiles.find(p => p.id === current.activeProfileId)!;
-    const results = recommendOutfits({ profile: active, ownedItemIds: current.ownedItemIds, feedback: current.feedback, excludeIds: seen, mode: active.defaultMode });
-    setSession({ active: true, ids: results.map(o => o.id), seen, votes: {}, round });
+  const clearSession = () => { setSession(emptySession()); setPendingReason(null); };
+  const changeOccasion = (selected: Occasion) => {
+    if (selected === occasion) return;
+    setOccasionOverride(selected); clearSession();
   };
-  const nextPair = (current: AppState = state) => begin(current, [...session.seen, ...session.ids], session.round + 1);
-  const selectProfile = (id: string) => { setState(current => ({ ...current, activeProfileId: id })); setSession(emptySession()); };
+  const begin = (current: AppState = state, seen: string[] = [], round = 1, selectedOccasion = occasion) => {
+    const active = current.profiles.find(p => p.id === current.activeProfileId)!;
+    const results = recommendOutfits({ profile: active, occasion: selectedOccasion, ownedItemIds: current.ownedItemIds, feedback: current.feedback, excludeIds: seen, mode: active.defaultMode });
+    setPendingReason(null);
+    setSession({ active: true, ids: results.map(o => o.id), seen, votes: {}, round, occasion: selectedOccasion });
+  };
+  const nextPair = (current: AppState = state) => begin(current, [...session.seen, ...session.ids], session.round + 1, session.occasion ?? occasion);
+  const selectProfile = (id: string) => {
+    if (id === profile.id) return;
+    setState(current => ({ ...current, activeProfileId: id })); setOccasionOverride(null); clearSession();
+  };
   const saveProfile = (updated: Profile) => {
     setState(current => ({ ...current, activeProfileId: updated.id, profiles: current.profiles.some(p => p.id === updated.id) ? current.profiles.map(p => p.id === updated.id ? updated : p) : [...current.profiles, updated] }));
-    setSession(emptySession()); setEditProfile(false);
+    if (updated.id !== profile.id || updated.occasion !== profile.occasion) setOccasionOverride(null);
+    clearSession(); setEditProfile(false);
   };
   const vote = (outfitId: string, value: 'like'|'dislike') => {
-    if (session.votes[outfitId]) return;
+    if (!session.active || !session.ids.includes(outfitId) || session.votes[outfitId]) return;
     const feedback: Feedback = { profileId: profile.id, outfitId, vote: value };
     const updated = updateFeedback(state, feedback);
     const votes = { ...session.votes, [outfitId]: value };
@@ -59,12 +73,13 @@ export default function Prototype() {
   };
   const finishReason = (reason?: string) => {
     if (!pendingReason) return;
+    if (pendingReason.profileId !== profile.id || !session.ids.includes(pendingReason.outfitId)) { setPendingReason(null); return; }
     const updated = reason ? updateFeedback(state, { ...pendingReason, reason }) : state;
     if (reason) setState(updated);
     setPendingReason(null);
-    if (session.ids.every(id => session.votes[id] === 'dislike')) nextPair(updated);
+    if (session.ids.length > 0 && session.ids.every(id => session.votes[id] === 'dislike')) nextPair(updated);
   };
-  const onReset = () => { setSession(emptySession()); changeTab('outfits'); void reset(); };
+  const onReset = () => { clearSession(); setOccasionOverride(null); changeTab('outfits'); void reset(); };
 
   if (!ready) return <SafeAreaView style={[s.screen, s.loading]}><ActivityIndicator color={colors.plum} /><Text style={s.body}>{t.loading}</Text></SafeAreaView>;
 
@@ -74,7 +89,7 @@ export default function Prototype() {
     <View style={[s.promptCard, { maxWidth: 480, width: '100%' }]}>
       <Icon name="wardrobe" size={36} /><Text style={s.logo}>ubranka</Text>
       <Text accessibilityRole="alert" style={s.body}>{storageIssue === 'invalid' ? t.storageInvalid : t.storageReadError}</Text>
-      <Button label={t.retry} onPress={() => { setSession(emptySession()); void retry(); }} />
+      <Button label={t.retry} onPress={() => { clearSession(); setOccasionOverride(null); void retry(); }} />
       <Button kind="quiet" label={t.reset} onPress={() => setConfirmRecovery(true)} />
     </View>
     <Dialog visible={confirmRecovery} title={t.resetConfirm} closeLabel={t.cancel} onClose={() => setConfirmRecovery(false)}>
@@ -117,7 +132,7 @@ export default function Prototype() {
           <View style={s.welcomeForm}>
             <ProfileForm profile={profile} locale={state.locale} welcome onSave={updated => {
               const updatedState: AppState = { ...state, onboarded: true, profiles: state.profiles.map(p => p.id === updated.id ? updated : { ...p, audience: updated.audience }) };
-              setState(updatedState); begin(updatedState); scroll.current?.scrollTo({ y: 0, animated: false });
+              setState(updatedState); setOccasionOverride(null); begin(updatedState, [], 1, updated.occasion); scroll.current?.scrollTo({ y: 0, animated: false });
             }} />
             <Text style={s.caption}>{t.welcomeNote}</Text>
           </View>
@@ -132,6 +147,8 @@ export default function Prototype() {
               <View style={controls.row}>{state.profiles.map(p => <Chip key={p.id} label={profileLabel(p, state.locale)} selected={p.id === profile.id} onPress={() => selectProfile(p.id)} />)}
                 <Chip label={money(profile.budget, state.locale)} icon="bag" onPress={() => setEditProfile(true)} />
               </View>
+              <OccasionPicker scope="round" value={occasion} locale={state.locale} onChange={changeOccasion} />
+              {occasion === 'wedding' ? <Text style={s.caption}>{t.weddingHelp}</Text> : null}
               <View accessibilityLabel={t.comparison} style={s.modes}>{(['best', 'value'] as const).map(mode => <View key={mode} style={{ flex: 1 }}>
                 <Button kind={profile.defaultMode === mode ? 'primary' : 'quiet'} compact selected={profile.defaultMode === mode} label={t[mode]}
                   onPress={() => saveProfile({ ...profile, defaultMode: mode })} />
@@ -145,20 +162,20 @@ export default function Prototype() {
               <Text accessibilityRole="header" style={s.cardTitle}>{session.seen.length ? t.noMore : t.noBudget}</Text>
               <Text style={s.body}>{session.seen.length ? t.noMoreBody : t.noBudgetBody}</Text>
               <Button label={t.restart} onPress={() => begin()} /><Button label={t.editPreferences} kind="secondary" onPress={() => setEditProfile(true)} />
-              <Button label={t.end} kind="quiet" onPress={() => setSession(emptySession())} />
+              <Button label={t.end} kind="quiet" onPress={clearSession} />
             </View> : <>
-              <View style={s.roundRow}><Text style={s.round}>{t.round} {String(session.round).padStart(2, '0')}</Text><View style={s.roundLine} /><Text style={s.round}>{t[profile.audience]}</Text></View>
+              <View style={s.roundRow}><Text style={s.round}>{t.round} {String(session.round).padStart(2, '0')}</Text><View style={s.roundLine} /><Text style={s.round}>{t[session.occasion ?? occasion]} · {t[profile.audience]}</Text></View>
               {session.ids.length === 1 ? <Text style={s.caption}>{t.oneOnly}</Text> : null}
               <View style={[s.outfits, singleColumn && { flexDirection: 'column' }]}>
                 {session.ids.map((id, index) => <OutfitCard key={`${session.round}-${id}`} outfit={OUTFITS.find(o => o.id === id)!} index={index} locale={state.locale} ownedIds={state.ownedItemIds} vote={session.votes[id]} onVote={value => vote(id, value)} />)}
               </View>
               <View style={s.learning}><Icon name="heart" size={17} /><Text style={s.caption}>{t.learning}</Text></View>
               <Button label={t.next} kind="secondary" icon="arrow" onPress={() => nextPair()} />
-              <Button label={t.end} kind="quiet" onPress={() => setSession(emptySession())} />
+              <Button label={t.end} kind="quiet" onPress={clearSession} />
             </>}
             <Text style={s.demoFootnote}>{t.demoNote}</Text>
           </View> : tab === 'wardrobe' ? <Wardrobe state={state} profile={profile} onToggle={id => {
-            setState(current => ({ ...current, ownedItemIds: current.ownedItemIds.includes(id) ? current.ownedItemIds.filter(item => item !== id) : [...current.ownedItemIds, id] })); setSession(emptySession());
+            setState(current => ({ ...current, ownedItemIds: current.ownedItemIds.includes(id) ? current.ownedItemIds.filter(item => item !== id) : [...current.ownedItemIds, id] })); clearSession();
           }} /> : <Profiles state={state} onSelect={selectProfile} onSave={saveProfile} onLanguage={changeLanguage}
             onAskReason={askReason => setState(current => ({ ...current, askReason }))} onReset={onReset} />}
         </>}

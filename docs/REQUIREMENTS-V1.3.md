@@ -1,8 +1,8 @@
 # Wymagania Ubranka — V1.3
 
 Data: 2026-10-24. Aktualizacja po teście P2 przez Kasię i Aleksego.
-Potwierdzona nowa potrzeba: dodatkowe okazje, np. „wesele”. Użytkownicy chcą
-kontynuować budowę i proszą o propozycję następnego etapu.
+Po zgłoszeniu dodatkowych okazji użytkownik zatwierdził P2.1: wesele jako gość,
+praca, randka i impreza, dobór zestawów, zachowanie danych P2, testy i podgląd dev.
 
 Ten dokument jest przyrostową aktualizacją [V1.2](REQUIREMENTS-V1.2.md).
 Wszystkie wymagania, ograniczenia i kryteria V1.2 nadal obowiązują, z poniższym
@@ -12,12 +12,12 @@ rozszerzeniem R-19. V1.2 pozostaje pełną bazą; nie zmieniono jej historycznej
 
 | ID | Aktualizacja | Granica ustalenia |
 | --- | --- | --- |
-| R-19 | Aplikacja obsługuje dodatkowe okazje poza dotychczasowym codziennym/eleganckim ubiorem, w tym wesele. | Feedback po P2. Użytkownicy nie podali zamkniętej listy okazji, roli na weselu ani szczegółowego dress code'u. |
+| R-19 | Poza codziennym/eleganckim ubiorem aplikacja obsługuje wesele jako gość, pracę, randkę i imprezę oraz dobiera zgodne zestawy. | P2.1 zatwierdzony 2026-10-24. Szczegółowy dress code nie jest ustalony; przykłady weselne wymagają uwzględnienia zaproszenia. |
 
 Potwierdzenie wykonania testu nie oznacza przeprowadzenia wszystkich kryteriów
 technicznych ani testu natywnego iOS/Android. Nie zgłoszono innych uwag w tej wiadomości.
 
-## Proponowana realizacja do akceptacji z P2.1
+## Zatwierdzona realizacja P2.1
 
 - Rozszerzyć wybór o wesele (na początek jako gość), pracę, randkę i imprezę.
   Zachować dotychczasowe wybory; nowe etykiety dostępne w PL/EN.
@@ -30,10 +30,11 @@ technicznych ani testu natywnego iOS/Android. Nie zgłoszono innych uwag w tej w
   po 0 PLN, opinie oraz uczciwy stan pusty. Dane nadal demonstracyjne.
 - Zachować zapisane profile, język, własność rzeczy i opinie przy aktualizacji modelu.
 
-Lista nowych okazji, rola gościa i powyższy sposób realizacji są propozycją,
-nie dodatkowymi odpowiedziami użytkowników. P2.1 czeka na akceptację wykonania.
+Lista okazji i powyższy zakres zostały zaakceptowane bezpośrednią wiadomością
+użytkownika. Bieżąca okazja rundy nie jest zapisywana; po odświeżeniu lub zmianie
+profilu wraca jego domyślna okazja. Domyślną okazję można zmienić w edytorze profilu.
 
-## Proponowany odbiór A-12
+## Kryterium odbioru A-12
 
 Po wybraniu „wesele” w PL lub EN użytkownik otrzymuje najwyżej dwa kompletne
 zestawy oznaczone jako odpowiednie na tę okazję i mieszczące się w budżecie,
@@ -43,6 +44,7 @@ i podgląd Vercel; nie są dowodem profesjonalnej porady lub wirtualnej przymiar
 
 ## Historia
 
-V1.3 dodaje feedback po P2 oraz proponowany A-12. Pełna historia wcześniejszych
+V1.3 dodaje feedback po P2 oraz A-12; 2026-10-24 uzupełniono akceptację P2.1.
+Pełna historia wcześniejszych
 ustaleń i kryteriów znajduje się w [V1.2](REQUIREMENTS-V1.2.md).
 Zakres wykonania opisuje [plan V1.3](IMPLEMENTATION-PLAN-V1.3.md).

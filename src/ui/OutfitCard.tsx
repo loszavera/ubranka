@@ -13,6 +13,8 @@ export const outfitImages = {
   w3: require('../../assets/outfits/w3.png'), w4: require('../../assets/outfits/w4.png'),
   m1: require('../../assets/outfits/m1.png'), m2: require('../../assets/outfits/m2.png'),
   m3: require('../../assets/outfits/m3.png'), m4: require('../../assets/outfits/m4.png'),
+  w5: require('../../assets/outfits/w5.png'), w6: require('../../assets/outfits/w6.png'),
+  m5: require('../../assets/outfits/m5.png'), m6: require('../../assets/outfits/m6.png'),
 };
 
 export function OutfitCard({ outfit, locale, ownedIds, vote, onVote, index }: {

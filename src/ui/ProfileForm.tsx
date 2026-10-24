@@ -4,6 +4,7 @@ import type { Locale, Profile } from '../domain/model';
 import { copy } from '../i18n';
 import { Button, Chip, Field, styles } from './Controls';
 import { colors } from './theme';
+import { OccasionPicker } from './OccasionPicker';
 
 export function ProfileForm({ profile, locale, onSave, onCancel, welcome = false }: {
   profile: Profile; locale: Locale; onSave: (profile: Profile) => void; onCancel?: () => void; welcome?: boolean;
@@ -17,16 +18,14 @@ export function ProfileForm({ profile, locale, onSave, onCancel, welcome = false
   const validName = draft.name.trim().length > 0 && draft.name.trim().length <= 40;
   const submit = () => {
     setSubmitted(true);
-    if (validBudget && (welcome || validName)) onSave({ ...draft, name: welcome ? t[draft.occasion] : draft.name.trim(), budget: numericBudget });
+    if (validBudget && (welcome || validName)) onSave({ ...draft, name: draft.name.trim(), budget: numericBudget });
   };
   return <View style={{ gap: 22 }}>
     {!welcome ? <Field label={t.profileName} value={draft.name} onChangeText={name => setDraft({ ...draft, name })} maxLength={40} error={submitted && !validName ? t.nameError : undefined} /> : null}
     <View style={{ gap: 10 }}><Text style={styles.label}>{t.clothing}</Text><View style={styles.row}>
       {(['women', 'men'] as const).map(audience => <Chip key={audience} label={t[audience]} selected={draft.audience === audience} onPress={() => setDraft({ ...draft, audience })} />)}
     </View></View>
-    <View style={{ gap: 10 }}><Text style={styles.label}>{t.occasion}</Text><View style={styles.row}>
-      {(['casual', 'elegant'] as const).map(occasion => <Chip key={occasion} label={t[occasion]} selected={draft.occasion === occasion} onPress={() => setDraft({ ...draft, occasion })} />)}
-    </View></View>
+    <OccasionPicker value={draft.occasion} locale={locale} scope={welcome ? 'onboarding' : 'profile'} onChange={occasion => setDraft({ ...draft, occasion })} />
     <View style={{ gap: 7 }}>
       <Field label={`${t.budget} · PLN`} value={budget} keyboardType="decimal-pad" onChangeText={setBudget} maxLength={8} error={submitted && !validBudget ? t.budgetError : undefined} />
       <Text style={{ color: colors.muted, fontSize: 12, lineHeight: 18 }}>{t.budgetHelp}</Text>

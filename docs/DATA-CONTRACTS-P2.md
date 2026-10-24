@@ -1,7 +1,8 @@
-# Kontrakty danych — prototyp P2
+# Kontrakty danych — prototyp P2 / P2.1
 
 Data: 2026-10-24. Uzupełnienie [planu V1.2](IMPLEMENTATION-PLAN-V1.2.md)
-i [wymagań V1.2](REQUIREMENTS-V1.2.md). Część P2 opisuje kod; szkice P3/P4
+i [wymagań V1.2](REQUIREMENTS-V1.2.md), z aktualizacją okazji i migracji P2.1
+według [V1.3](REQUIREMENTS-V1.3.md). Część P2/P2.1 opisuje kod; szkice P3/P4
 określają przyszłe granice danych, bez wyboru dostawcy ani uruchomienia usług.
 Nie są gotowym API ani potwierdzeniem działania synchronizacji, zdjęć i zakupów.
 
@@ -12,20 +13,30 @@ wyłącznie z [katalogu demonstracyjnego](../src/domain/catalog.ts).
 
 | Kontrakt | Pola i znaczenie |
 | --- | --- |
-| `Profile` | `id`, edytowalne `name`, `audience: women/men`, `occasion: casual/elegant`, `budget`, dodatkowy `priority: comfort/quality/versatility`, zapisany `defaultMode: best/value`. Profile oznaczają style, nie odrębne konta osób. |
-| `WardrobeItem` | `id`, `name: {pl, en}`, `category: top/bottom/layer/shoes`, `color`, `audience`, `price`, `shipping: number/null`, `tier: economy/premium`, `tags`. Są to opisy przykładowych rzeczy, bez prawdziwej oferty sklepu lub zdjęcia użytkownika. |
-| `Outfit` | `id`, lokalizowane `name` i `description`, `audience`, `occasion`, `tier`, referencje `itemIds`, `imageKey` ilustracji demo, `tags`, wagi `priorities`. Pełny zestaw zawiera górę, dół i buty, ewentualnie warstwę. |
+| `Profile` | `id`, edytowalne `name`, `audience: women/men`, domyślne `occasion: casual/elegant/wedding/work/date/party`, `budget`, dodatkowy `priority: comfort/quality/versatility`, zapisany `defaultMode: best/value`. Profile oznaczają style, nie odrębne konta osób. |
+| `WardrobeItem` | `id`, `name: {pl, en}`, `category: top/bottom/layer/shoes/dress`, `color`, `audience`, `price`, `shipping: number/null`, `tier: economy/premium`, `tags`. Są to opisy przykładowych rzeczy, bez prawdziwej oferty sklepu lub zdjęcia użytkownika. |
+| `Outfit` | `id`, lokalizowane `name` i `description`, `audience`, tablica dopuszczalnych `occasions`, `tier`, referencje `itemIds`, `imageKey` ilustracji demo, `tags`, wagi `priorities`. Pełny zestaw zawiera górę i dół albo sukienkę oraz buty, ewentualnie warstwę. |
 | `Feedback` | `profileId`, `outfitId`, `vote: like/dislike`, opcjonalny `reason`. Jedna aktualna ocena dla pary profil–zestaw; ponowna ocena zastępuje poprzednią. Polubienie nie tworzy listy zakupowej ani zamówienia. |
-| `AppState` | `version: 1`, `locale: pl/en`, `onboarded`, `activeProfileId`, `profiles`, `ownedItemIds`, `feedback`, `askReason`. Własność rzeczy jest wspólna dla lokalnych profili stylu. |
+| `AppState` | `version: 2`, `locale: pl/en`, `onboarded`, `activeProfileId`, `profiles`, `ownedItemIds`, `feedback`, `askReason`. Własność rzeczy jest wspólna dla lokalnych profili stylu. |
 
 Zapis jest lokalny dla danej przeglądarki/aplikacji. Nie ma kont, synchronizacji
 ani izolacji dwóch zalogowanych osób. Język zmienia teksty, zachowując dane,
 rynek PL i ceny PLN. Trwająca sesja, kolejność obejrzanych propozycji i otwarte
-okna są stanem interfejsu; po odświeżeniu użytkownik prosi o nową rundę.
+okna oraz okazja wybrana na bieżącą rundę są stanem interfejsu; po odświeżeniu
+użytkownik prosi o nową rundę z domyślną okazją profilu. Zmiana okazji, profilu,
+budżetu, trybu lub własności rzeczy kończy dotychczasową rundę. Zmiana języka
+zachowuje rundę. Zmiana budżetu/trybu zachowuje wybraną okazję rundy.
 
 [restoreState](../src/domain/state.ts) sprawdza wersję, typy i referencje do
 znanych profili/rzeczy/zestawów. Nieczytelny lub nieobsługiwany zapis zwraca
 `null`; aplikacja obsługuje go jako błąd, bez traktowania odczytu jako udanego.
+
+P2.1 czyta V1 i V2 pod dotychczasowym kluczem `ubranka:p2:v1` (nazwa klucza
+celowo nie zmienia się). Odczyt V1 zwraca V2 i zapisuje je w tym samym miejscu;
+zachowuje wszystkie obsługiwane profile, ustawienia, opinie z powodami oraz własność.
+Identyfikatory wszystkich 28 starych rzeczy i 8 zestawów pozostały niezmienione.
+Katalog ma teraz 37 rzeczy i 12 zestawów. Nieczytelnego zapisu nie resetujemy
+automatycznie. Migrację sprawdzają zamrożone dane V1 w testach domeny i WWW.
 
 ## Koszt i wybór w P2
 
@@ -37,9 +48,11 @@ znanych profili/rzeczy/zestawów. Nieczytelny lub nieobsługiwany zapis zwraca
   brak rzeczy lub nieprawidłowa kwota oznaczają `total: null`, a nie koszt 0 PLN.
   Wtedy częściowa suma `shipping` nie potwierdza pełnego kosztu.
 - Rekomendacja wymaga znanego pełnego kosztu mieszczącego się w budżecie.
-  Uwzględnia odbiorcę, okazję, priorytet, własne rzeczy i opinie aktywnego profilu.
+  Najpierw ogranicza kandydatów do odbiorcy i okazji rundy (domyślnie profilu),
+  następnie rankinguje według priorytetu, własnych rzeczy i opinii aktywnego profilu.
   Zwraca najwyżej dwa zestawy; `value` wybiera ekonomiczny i markowy, jeśli oba
-  spełniają warunki. Brak odpowiednika nie pozwala przekroczyć budżetu.
+  spełniają warunki. Brak odpowiednika nie pozwala przekroczyć budżetu ani
+  zastąpić go inną okazją. Wyczerpanie zgodnych przykładów kończy sesję.
 
 Reguły i przykłady graniczne sprawdza [domain.test.ts](../tests/domain.test.ts).
 

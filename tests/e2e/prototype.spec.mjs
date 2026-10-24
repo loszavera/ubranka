@@ -4,9 +4,10 @@ const storageKey = 'ubranka:p2:v1';
 const button = (page, name) => page.getByRole('button', { name, exact: true });
 const cards = page => page.getByTestId(/^outfit-/);
 const saved = page => page.evaluate(key => JSON.parse(localStorage.getItem(key)), storageKey);
-async function start(page, budget = '500') {
+async function start(page, budget = '500', occasion) {
   await page.goto('/');
   await page.getByRole('textbox', { name: 'Budżet zestawu · PLN', exact: true }).fill(budget);
+  if (occasion) await page.getByTestId('occasion-onboarding').getByRole('button', { name: `Na jaką okazję?: ${occasion}`, exact: true }).click();
   await button(page, 'Odkryj swój styl').click();
 }
 async function noOverflow(page) {
@@ -39,7 +40,7 @@ test('onboarding, two choices, likes, PL/EN and preferences survive reload', asy
 });
 
 test('passing both advances, reasons are optional and can be disabled', async ({ page }) => {
-  await start(page);
+  await start(page, '500', 'Elegancko');
   const firstPair = await cards(page).evaluateAll(nodes => nodes.map(n => n.dataset.testid));
   await cards(page).first().getByRole('button', { name: 'Nie dla mnie', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Co Ci nie pasuje?' })).toBeVisible();
@@ -68,7 +69,7 @@ test('create and edit a men’s profile, persist comparison mode, isolate feedba
   await button(page, 'Nowy profil').click();
   await page.getByRole('textbox', { name: 'Nazwa profilu', exact: true }).fill('Do pracy');
   await button(page, 'Męskie').click();
-  await button(page, 'Elegancko').click();
+  await page.getByTestId('occasion-profile').getByRole('button', { name: 'Domyślna okazja profilu: Praca', exact: true }).click();
   await button(page, 'Ekonomiczny / markowy').click();
   await button(page, 'Zapisz profil').click();
   await expect(page.getByText('Zapisane opinie w tym profilu: 0', { exact: true })).toBeVisible();
@@ -91,7 +92,7 @@ test('create and edit a men’s profile, persist comparison mode, isolate feedba
 
 test('owned wardrobe pieces cost zero and hard budget gives an honest empty state', async ({ page }) => {
   await start(page, '0');
-  await expect(page.getByRole('heading', { name: 'Nie znaleźliśmy zestawu w tym budżecie.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Brak zestawów na tę okazję w tym budżecie.' })).toBeVisible();
   await button(page, 'Szafa').click();
   for (const id of ['w-knit', 'w-wide-trousers']) {
     await page.getByTestId(`wardrobe-${id}`).getByRole('button', { name: 'Mam tę rzecz', exact: true }).click();

@@ -5,6 +5,7 @@ import { addNetworkStateListener, getNetworkStateAsync, type NetworkState } from
 import type { AppState } from '../domain/model';
 import { createInitialState, restoreState } from '../domain/state';
 
+// Keep the original key: restoreState migrates its versioned payload in place.
 const STORAGE_KEY = 'ubranka:p2:v1';
 
 export function usePrototype() {

@@ -3,29 +3,31 @@
 Wirtualny stylista: mniej przeglądania, prostsze decyzje i ubrania dopasowane do osoby.
 Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki.
 
-**Podgląd P2 z dev:** https://ubranka-git-dev-risk-every-asset.vercel.app
+**Podgląd dev:** https://ubranka-git-dev-risk-every-asset.vercel.app
 (logowanie Vercel; stan wdrożenia w dokumencie statusu).
 **Stabilny fundament main:** https://ubranka.vercel.app
 
-**Etap:** P2 — interaktywny prototyp z V1.2, przetestowany przez Kasię i Aleksego.
-Zgłoszono potrzebę dodatkowych okazji, np. wesela. V1.3 opisuje feedback
-i proponowany P2.1 do akceptacji. Wygląd A — Krem i śliwka, PL/EN, krótki start,
+**Etap:** P2.1 — zatwierdzone rozszerzenie o wesele jako gość, pracę, randkę
+i imprezę. Okazję wybierasz przed rundą; propozycje muszą do niej pasować.
+Zachowano dane P2, a domyślną okazję profilu można edytować. Wyniki testów
+i publikacji znajdują się w statusie oraz raporcie P2.1. Wygląd A — Krem i śliwka, PL/EN, krótki start,
 edytowalne profile, szafa demo i najwyżej dwa zestawy w obu trybach.
 Budżet obejmuje nowe rzeczy z dostawą; posiadane rzeczy kosztują 0 PLN.
 Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeniu.
-Prototyp używa 28 fikcyjnych ubrań i 8 ilustracji. Konta, synchronizacja,
+Prototyp używa 37 fikcyjnych ubrań i 12 ilustracji. Konta, synchronizacja,
 własne zdjęcia, AI, sklepy i lista zakupowa należą do kolejnych etapów.
 
 ## Dokumenty
 
 - [Wymagania V1.3 — aktualizacja bazy V1.2](docs/REQUIREMENTS-V1.3.md)
-- [Plan implementacji V1.3 — propozycja P2.1](docs/IMPLEMENTATION-PLAN-V1.3.md)
+- [Plan implementacji V1.3 — P2.1](docs/IMPLEMENTATION-PLAN-V1.3.md)
 - [Odpowiedzi uzupełniające](docs/INTERVIEW-V1.2.md) i [pierwsze 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
 - [Wybrany wygląd A](docs/design/DESIGN-DIRECTION-V1.2.md)
 - [Budżet przy 30 wizualizacjach na osobę](docs/COST-PLAN-V1.2.md)
 - [Możliwości integracji sklepów](docs/RETAILER-FEASIBILITY-V1.1.md)
 - [Stan projektu i następny krok](docs/PROJECT-STATUS.md)
-- [Weryfikacja i scenariusz odbioru P2](docs/P2-VERIFICATION.md)
+- [Weryfikacja i scenariusz odbioru P2.1](docs/P21-VERIFICATION.md)
+- [Historyczna weryfikacja P2](docs/P2-VERIFICATION.md)
 - [Kontrakty danych P2 i granice dalszych etapów](docs/DATA-CONTRACTS-P2.md)
 - [Decyzje](docs/DECISIONS.md)
 - [Uruchamianie, telefon i hosting](docs/SETUP.md)

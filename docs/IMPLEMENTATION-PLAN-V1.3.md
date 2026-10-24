@@ -1,6 +1,6 @@
 # Plan implementacji Ubranka — V1.3
 
-Data: 2026-10-24. Propozycja po teście P2 i zgłoszeniu dodatkowych okazji.
+Data: 2026-10-24. Zakres P2.1 zatwierdzony po teście P2 i zgłoszeniu dodatkowych okazji.
 Ten dokument uzupełnia [plan V1.2](IMPLEMENTATION-PLAN-V1.2.md) o P2.1.
 Pozostałe etapy P0–P5 i ich zależności pozostają bez zmian. Aktualne wymagania:
 [V1.3](REQUIREMENTS-V1.3.md), dziedziczące pełną bazę V1.2.
@@ -9,16 +9,16 @@ Pozostałe etapy P0–P5 i ich zależności pozostają bez zmian. Aktualne wymag
 
 P2 jest zaimplementowany i sprawdzony zgodnie z [raportem](P2-VERIFICATION.md).
 Użytkownicy potwierdzili wykonanie własnego testu oraz zgłosili potrzebę
-dodatkowych okazji, np. wesela. Poprosili o propozycję kontynuacji.
-Niniejszy plan nie uruchamia implementacji P2.1 ani usług P3.
+dodatkowych okazji, np. wesela. Następnie Aleksy zatwierdził P2.1, pracę na dev,
+zachowanie danych, testy i podgląd Vercel. Usługi P3 pozostają poza tym upoważnieniem.
 
-## Rekomendowany następny etap: P2.1 — okazje i dobór do sytuacji
+## P2.1 — okazje i dobór do sytuacji
 
 Cel: obsłużyć zgłoszony scenariusz i doprecyzować dobór, zachowując prosty wybór
-dwóch zestawów. W aktualnym kodzie P2 zgodność okazji tylko dodaje punkty rankingu;
+dwóch zestawów. W kodzie P2 zgodność okazji tylko dodawała punkty rankingu;
 nie wyklucza zestawów opisanych inną okazją. Sam nowy przycisk nie wystarczy.
 
-Proponowany zakres do akceptacji:
+Zatwierdzony zakres:
 
 1. Wybór okazji przed rundą, niezależny od profilu gustu. Dotychczasowe wybory
    pozostają; nowe to wesele jako gość, praca, randka i impreza, w PL/EN.
@@ -36,6 +36,9 @@ Proponowany zakres do akceptacji:
 Rezultat do odbioru: „Wybieram wesele i budżet, dostaję najwyżej dwie pasujące
 propozycje albo informację, że brak zestawów”. Odbiór według A-12 z V1.3.
 Jest to nadal prototyp demonstracyjny; P2.1 nie wymaga nowych kont ani usług płatnych.
+
+Stan wykonania i wyniki: [PROJECT-STATUS.md](PROJECT-STATUS.md) oraz
+[raport P2.1](P21-VERIFICATION.md). Odbiór użytkowników poprzedza propozycję P3.
 
 ## Kolejny większy etap po P2.1
 
