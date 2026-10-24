@@ -18,9 +18,10 @@ Nie ufa przesłanemu `accountId`. Odpowiedź: `{data: result}` albo
 | `createItem` | `itemId` UUID + wszystkie pola opisu | rzecz; ponowienie tego UUID nie tworzy drugiej rzeczy |
 | `updateItem` | `itemId,expectedRevision` + wszystkie pola | rzecz z podwyższoną wersją |
 | `uploadPhoto` | `itemId,expectedRevision,operationId` UUID, `mimeType:'image/jpeg',mainBase64,thumbBase64` | rzecz z nowym zdjęciem i wersją |
+| `downloadPhoto` | `path` z manifestu | binarny JPEG (wyjątek od odpowiedzi JSON), po świeżej kontroli RLS |
 | `deletePhoto`, `deleteItem` | `itemId,expectedRevision` | `{status:'deleted'|'pending'}` |
 | `deleteAccount` | brak; UI wymaga świadomego potwierdzenia | `{status:'deleted'|'pending'}` |
-| `export` | brak | snapshot oraz `exportedAt`; pliki pobiera klient z prywatnego Storage |
+| `export` | brak | snapshot oraz `exportedAt`; pliki pobiera klient przez `downloadPhoto` |
 
 Stan: `{revision,data:{locale,profiles,activeProfileId,feedback,askReason}}`.
 Początkowo puste profile/opinie, `activeProfileId:''`, PL, `askReason:true`.
@@ -34,7 +35,21 @@ Rzecz: `{id,name,category,color,occasions,size,photoKind,revision,status,created
 Kategorie: `top,bottom,layer,shoes,dress,accessory`; okazje jak P2.1;
 `photoKind:garment|person`, `size:''` gdy brak. `photo` jest null albo
 `{id,mainPath,thumbPath,mimeType,bytes,thumbBytes}`. Ścieżki mają właściciela na początku;
-nie są publicznymi URL. Bucket `wardrobe-private`, odczyt JWT; aplikacja nie wydaje signed URL.
+nie są publicznymi URL. Bucket `wardrobe-private`; aplikacja nie wydaje signed URL.
+Odczyt zdjęcia odbywa się wyłącznie przez uwierzytelniony POST `downloadPhoto`.
+Edge najpierw odczytuje dokładne `main_path`/`thumb_path` z metadanych jako caller,
+więc RLS sprawdza właściciela, zaproszenie, aktywne konto/rzecz/zdjęcie. Dopiero
+potem rola serwerowa pobiera bajty; odpowiedź ma `private, no-store, max-age=0`
+oraz `CDN-Cache-Control: no-store`. Bezpośredni odczyt Storage przez użytkownika
+jest wyłączony uzupełniającą migracją `private_photo_edge_reads`.
+
+Przyczyna zmiany (test hosted 2026-10-24): wcześniejszy authenticated Storage GET
+zwracał CDN HIT po zmianie zdjęcia na `deleting`, mimo `Cache-Control: private,
+no-store` i odmowy RLS. Świeży URL był blokowany, stary zwracał te same bajty.
+Sam cachebuster nie usuwa wcześniejszego dostępu. Usunięcie polityki nie jest
+też dowodem wyczyszczenia historycznej kopii CDN; stare fixture wymagają
+fizycznego usunięcia i osobnego sprawdzenia. Poprawka lokalna: testy SQL obu
+migracji i protokołu 14/14 PASS; ponowny odbiór hosted zapisuje raport etapu.
 
 ## Ochrona i ograniczenia
 

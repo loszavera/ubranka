@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import test from 'node:test';
 
@@ -28,7 +28,10 @@ await db.exec(`
 `);
 assert.equal((await db.query("select has_schema_privilege('supabase_auth_admin','public','usage') permitted")).rows[0].permitted,false,
   'Auth role starts without public schema USAGE, like a hosted project before hook setup');
-await db.exec(await readFile(new URL('../migrations/202610240001_private_wardrobe.sql', import.meta.url), 'utf8'));
+const migrationDirectory = new URL('../migrations/', import.meta.url);
+for (const filename of (await readdir(migrationDirectory)).filter(name=>name.endsWith('.sql')).sort()) {
+  await db.exec(await readFile(new URL(filename,migrationDirectory),'utf8'));
+}
 await db.query('insert into auth.users values ($1,$2,now()),($3,$4,now()),($5,$6,now())', [A,'a@example.invalid',B,'b@example.invalid',C,'c@example.invalid']);
 await db.exec("insert into wardrobe_private.invites(email) values('a@example.invalid'),('b@example.invalid')");
 
@@ -102,11 +105,13 @@ test('photo reservations, ownership, active read gate, and durable delete',async
   assert.equal((await user(A,()=>db.query('select name from storage.objects'))).rows.length,0,'staged paths unreadable');
   const item=await adminRpc('wardrobe_commit_photo','$1,$2',[A,photoA]);
   assert.equal(item.revision,3);
-  assert.equal((await user(A,()=>db.query('select name from storage.objects'))).rows.length,2);
+  assert.equal((await user(A,()=>db.query('select name from storage.objects'))).rows.length,0,'even owner cannot warm authenticated Storage CDN');
+  assert.equal((await user(A,()=>db.query('select id from public.wardrobe_photos'))).rows.length,1,'fresh metadata gate permits owner Edge download');
   assert.equal((await user(B,()=>db.query('select name from storage.objects'))).rows.length,0);
   await assert.rejects(user(A,()=>db.query("insert into storage.objects(bucket_id,name) values('wardrobe-private','forged')")),/row-level security/);
   await user(A,()=>rpc('deleteItem',{itemId:itemA,expectedRevision:3}));
   assert.equal((await user(A,()=>db.query('select name from storage.objects'))).rows.length,0,'pending deletion blocks reads immediately');
+  assert.equal((await user(A,()=>db.query('select id from public.wardrobe_photos'))).rows.length,0,'pending deletion blocks the Edge metadata gate immediately');
   await assert.rejects(adminRpc('wardrobe_finish_photo_delete','$1',[photoA]),/CONFLICT/,'write lease prevents cleanup racing in-flight upload');
   await db.query("update public.wardrobe_photos set cleanup_after=now()-interval '1 minute' where id=$1",[photoA]);
   await assert.rejects(adminRpc('wardrobe_finish_photo_delete','$1',[photoA]),/DELETE_INCOMPLETE/);
@@ -170,8 +175,9 @@ test('new photo selection supersedes a staged upload with CAS and preserves its 
   const committed=await adminRpc('wardrobe_commit_photo','$1,$2',[A,newPhoto]);
   assert.equal(committed.photo.id,newPhoto);
   assert.equal(committed.revision,2);
-  const visible=(await user(A,()=>db.query('select name from storage.objects order by name'))).rows.map(r=>r.name);
-  assert.deepEqual(visible,[replacement.main_path,replacement.thumb_path].sort());
+  const visible=(await user(A,()=>db.query('select id from public.wardrobe_photos'))).rows.map(r=>r.id);
+  assert.deepEqual(visible,[replacement.id],'only replacement authorizes an Edge read');
+  assert.equal((await user(A,()=>db.query('select name from storage.objects'))).rows.length,0);
   // Opposite ordering: once a photo is committed, a selection based on the old
   // revision must conflict instead of superseding the newly active image.
   await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,selectedItem,stalePhoto,'a'.repeat(64)]),/CONFLICT/);

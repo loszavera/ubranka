@@ -37,6 +37,30 @@ export class SupabaseRest {
   rpc(name: string, args: Record<string, unknown> = {}) {
     return this.request(`/rest/v1/rpc/${name}`, { method: 'POST', body: JSON.stringify(args) });
   }
+
+  async binary(path: string, expectedBytes: number): Promise<Uint8Array> {
+    const response = await fetch(`${this.url}${path}`, { signal: AbortSignal.timeout(this.timeoutMs), headers: {
+      apikey: this.key, Authorization: this.authorization, 'Cache-Control': 'no-store',
+    } });
+    if (!response.ok || !response.headers.get('content-type')?.startsWith('image/jpeg') ||
+      Number(response.headers.get('content-length')) > expectedBytes || !response.body) {
+      await response.body?.cancel();
+      throw new WardrobeError('PHOTO_UNAVAILABLE', 503);
+    }
+    const reader = response.body.getReader();
+    const bytes = new Uint8Array(expectedBytes);
+    let offset = 0;
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      if (offset + chunk.value.byteLength > expectedBytes) {
+        await reader.cancel(); throw new WardrobeError('PHOTO_UNAVAILABLE', 503);
+      }
+      bytes.set(chunk.value, offset); offset += chunk.value.byteLength;
+    }
+    if (offset !== expectedBytes) throw new WardrobeError('PHOTO_UNAVAILABLE', 503);
+    return bytes;
+  }
 }
 
 export type PhotoRow = { id: string; account_id: string; item_id: string; status: string;

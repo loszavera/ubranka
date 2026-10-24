@@ -25,6 +25,14 @@ async function storage(token,path,expected){
   const response=await fetch(`${url}/storage/v1/object/authenticated/wardrobe-private/${path}`,{headers:{apikey:key,Authorization:`Bearer ${token}`}});
   assert.equal(response.ok,expected,'private Storage access');checks++;
 }
+async function photo(token,path,expected){
+  const response=await fetch(`${url}/functions/v1/wardrobe`,{method:'POST',headers:{apikey:key,Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({action:'downloadPhoto',path})});
+  assert.equal(response.ok,expected,'fresh Edge photo authorization');checks++;
+  if(expected){
+    assert.equal(response.headers.get('cache-control'),'private, no-store, max-age=0');
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()),main,'exported photo bytes');checks++;
+  }
+}
 const itemId=randomUUID();
 const fields={name:'Synthetic integration fixture',category:'top',color:'blue',occasions:['casual'],size:'M',photoKind:'garment'};
 const original=await call(a,'bootstrap');
@@ -41,8 +49,14 @@ try{
   item=(await call(a,'bootstrap')).items.find(i=>i.id===itemId);
   const uploaded=await call(a,'uploadPhoto',{itemId,expectedRevision:item.revision,operationId:randomUUID(),mimeType:'image/jpeg',mainBase64:main.toString('base64'),thumbBase64:main.toString('base64')});
   item=uploaded;
-  await storage(a,item.photo.mainPath,true);
-  await storage(b,item.photo.mainPath,false);
+  for(const path of [item.photo.mainPath,item.photo.thumbPath]){
+    await photo(a,path,true);
+    await photo(b,path,false);
+    // Warm service-role download must not make the same CDN path readable by
+    // either user. The owner also has no direct Storage SELECT permission.
+    await storage(a,path,false);
+    await storage(b,path,false);
+  }
   await call(a,'updateItem',{itemId,expectedRevision:item.revision-1,...fields},409);
   const exported=await call(a,'export');assert.ok(exported.items.some(i=>i.id===itemId));
   const saved=await call(a,'saveState',{expectedRevision:original.state.revision,data:original.state.data,importId:randomUUID()});
@@ -50,7 +64,11 @@ try{
   await call(a,'saveState',{expectedRevision:original.state.revision,data:original.state.data},409);
   const deletion=await call(a,'deleteItem',{itemId,expectedRevision:item.revision});
   assert.ok(['deleted','pending'].includes(deletion.status));
-  await storage(a,item.photo.mainPath,false);
+  for(const path of [item.photo.mainPath,item.photo.thumbPath]){
+    await photo(a,path,false);
+    await photo(a,path,false); // repeat exact POST after a successful earlier read
+    await storage(a,path,false);
+  }
   item=null;
   console.log(JSON.stringify({passed:true,checks,scope:'hosted test project, two accounts, Storage owner isolation, revision conflicts, export, immediate deletion access block',physicalDeletion:'verify cleanup after the five-minute upload lease and ten-minute worker'}));
 }finally{

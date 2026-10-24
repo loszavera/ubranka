@@ -1,5 +1,6 @@
 import { cors, fingerprint, jpeg, readBody, revision, safeError, uuid, WardrobeError } from '../_shared/protocol.ts';
 import { cleanup, SupabaseRest, type PhotoRow } from '../_shared/rest.ts';
+import { privatePhotoResponse } from '../_shared/photo-read.ts';
 
 Deno.serve(async (request: Request) => {
   let headers: Record<string, string> = { 'Cache-Control': 'no-store' };
@@ -24,6 +25,7 @@ Deno.serve(async (request: Request) => {
     const admin = new SupabaseRest(url, serviceKey);
     const cleanupAdmin = new SupabaseRest(url, serviceKey, undefined, 3000);
     let result: unknown;
+    if (action === 'downloadPhoto') return await privatePhotoResponse(caller, admin, body.path, headers);
     if (action === 'uploadPhoto') {
       const itemId = uuid(body.itemId);
       const operationId = uuid(body.operationId);
