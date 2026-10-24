@@ -1,7 +1,8 @@
 # Stan zależności — 2026-10-24
 
-Zakres: fundament P0, Expo SDK 57; snapshot z bieżącego `package-lock.json`.
-Pakiety nie zostały zmienione w ramach tego przeglądu.
+Zakres: prototyp P2, Expo SDK 57; audyt odświeżony po dodaniu AsyncStorage,
+SVG, expo-network oraz narzędzi testowych. Aktualny raport P2:
+`artifacts/p2-npm-audit.json`; liczba i źródła zgłoszeń pozostają takie jak w P0.
 
 ## Wynik audytu
 
@@ -33,8 +34,8 @@ konkretnego ekranu. Nie należy też traktować udanego builda jako dowodu jej b
 
 ## Obecny zakres i ograniczenie ekspozycji
 
-P0 zawiera ekran techniczny z lokalną zmianą tekstu po naciśnięciu przycisku:
-bez kont, uploadu zdjęć, płatności, API i danych użytkowników.
+P2 zawiera lokalne profile, opinie, szafę demo i ranking fikcyjnych zestawów:
+bez kont, uploadu zdjęć, płatności ani backendu. Ustawienia i opinie są lokalne.
 Do podglądu WWW przygotowany jest eksport statycznych plików SPA; serwera Expo CLI
 nie należy wystawiać jako publicznego backendu. Serwery developerskie uruchamiać
 w kontrolowanym środowisku, a test telefonu traktować jako test techniczny.

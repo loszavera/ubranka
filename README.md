@@ -3,12 +3,17 @@
 Wirtualny stylista: mniej przeglądania, prostsze decyzje i ubrania dopasowane do osoby.
 Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki.
 
-**Działający podgląd WWW:** https://ubranka.vercel.app
+**Podgląd P2 z dev:** https://ubranka-git-dev-risk-every-asset.vercel.app
+(logowanie Vercel; stan wdrożenia w dokumencie statusu).
+**Stabilny fundament main:** https://ubranka.vercel.app
 
-**Etap:** P1 — ustalenia V1.2 po wywiadzie i odpowiedziach uzupełniających.
-Wybrano A — Krem i śliwka. Plan prototypu obejmuje PL/EN, dwa tryby par zestawów
-i listę zakupów z linkami. Aplikacja nadal zawiera tylko ekran startowy P0;
-stylista, konta, zdjęcia i zakupy nie są wdrożone.
+**Etap:** P2 — interaktywny prototyp zgodny z dokumentacją V1.2, do odbioru
+przez Kasię i Aleksego. Wygląd A — Krem i śliwka, PL/EN, krótki start,
+edytowalne profile, szafa demo i najwyżej dwa zestawy w obu trybach.
+Budżet obejmuje nowe rzeczy z dostawą; posiadane rzeczy kosztują 0 PLN.
+Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeniu.
+Prototyp używa 28 fikcyjnych ubrań i 8 ilustracji. Konta, synchronizacja,
+własne zdjęcia, AI, sklepy i lista zakupowa należą do kolejnych etapów.
 
 ## Dokumenty
 
@@ -19,6 +24,8 @@ stylista, konta, zdjęcia i zakupy nie są wdrożone.
 - [Budżet przy 30 wizualizacjach na osobę](docs/COST-PLAN-V1.2.md)
 - [Możliwości integracji sklepów](docs/RETAILER-FEASIBILITY-V1.1.md)
 - [Stan projektu i następny krok](docs/PROJECT-STATUS.md)
+- [Weryfikacja i scenariusz odbioru P2](docs/P2-VERIFICATION.md)
+- [Kontrakty danych P2 i granice dalszych etapów](docs/DATA-CONTRACTS-P2.md)
 - [Decyzje](docs/DECISIONS.md)
 - [Uruchamianie, telefon i hosting](docs/SETUP.md)
 - [Stan zależności i znane ograniczenia](docs/DEPENDENCY-STATUS.md)
@@ -48,6 +55,8 @@ Nie potrzeba konta Expo do lokalnego podglądu.
 
 ```powershell
 npm run check
+npm test
+npm run test:e2e
 npm run check:dependencies
 npm run doctor
 npm run build:web
@@ -56,13 +65,16 @@ npm run preview
 
 Eksport jest dostępny pod http://localhost:4173. Polecenie npm run build:all
 sprawdza eksport JavaScript i zasobów dla trzech platform; nie zastępuje testów
-na urządzeniach. Starter nie wymaga pliku .env ani kluczy API.
+na urządzeniach. Prototyp P2 nie wymaga pliku .env ani kluczy API.
+Testy przeglądarkowe używają zainstalowanego Edge na Windows. Na Linuxie
+zainstaluj przeglądarkę testową: `npx playwright install --with-deps chromium`.
 
 ## Gałęzie i współpraca
 
 Pracujemy na dev. main jest stabilną bazą; obie gałęzie startują z tą samą
 infrastrukturą. Vercel jest połączony: main zasila Production, a dev służy podglądom Preview.
-GitHub Actions sprawdza typy, lint, zgodność zależności i eksport platform.
+GitHub Actions sprawdza typy, lint, domenę, zgodność zależności, eksport platform
+i przepływy WWW w Playwright. Wynik należy sprawdzać dla konkretnego commita.
 Początkowo jeden czat zarządza projektem i implementacją; stan zapisujemy w plikach.
 
 Repozytorium jest publiczne. Zdjęcia, sekrety i lokalne logi nie należą do Git.

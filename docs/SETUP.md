@@ -31,7 +31,8 @@ kluczy AI ani danych karty. EAS i development builds konfiguruje się później.
 
 ## Vercel — aktywny projekt
 
-Publiczny adres: https://ubranka.vercel.app
+Stabilny main: https://ubranka.vercel.app
+Prototyp dev: https://ubranka-git-dev-risk-every-asset.vercel.app (logowanie Vercel).
 Panel: https://vercel.com/risk-every-asset/ubranka
 Użytkownik połączył konto GitHub i zaimportował projekt 2026-10-24.
 Pierwsze wdrożenie z main zakończyło się READY; ekran i przycisk sprawdzono online.
@@ -43,7 +44,7 @@ Production Branch: main; zmiany dev powinny tworzyć Preview.
 W integracji GitHub w Vercelu przyznaj dostęp do ubranka, jeżeli import go nie widzi.
 Połączenie wtyczki Vercel z Codexem jest odrębne od połączenia Vercel z GitHubem.
 
-W panelu wybierz Add New → Project → Import Git Repository → ubranka.
+Projekt już istnieje; nie importuj drugiego projektu dla kolejnych zmian.
 Przy nowych wdrożeniach sprawdzaj status READY i zachowanie strony.
 Sam plik vercel.json nie jest dowodem udanego wdrożenia.
 EXPO_PUBLIC_* jest widoczne w kliencie; nie umieszczaj tam sekretów.
@@ -61,12 +62,19 @@ testu sesji zdalnej. Nie zmieniaj ustawień bezpieczeństwa na zapas.
 ## Kontrole
 
 npm run check: TypeScript i ESLint.
+npm test: reguły budżetu, rankingu, opinii i odtwarzania stanu.
+npm run test:e2e: eksport WWW i osiem testów przepływów w Playwright, port 4175.
+Na Windows używa istniejącego Edge. Na Linuxie przed pierwszym uruchomieniem:
+`npx playwright install --with-deps chromium`. Raport JSON i zrzuty w artifacts/.
 npm run check:dependencies: zgodność pakietów z SDK.
 npm run doctor: dodatkowa diagnostyka korzystająca z sieci.
 npm run build:all: eksport iOS/Android/WWW do dist-all/.
 npm run build:web: eksport WWW do dist/.
 Lokalne logi: ignorowany artifacts/; podsumowanie w statusie projektu.
-CI wykonuje czystą instalację i kontrole (bez sieciowego doctor).
+CI wykonuje czystą instalację i powyższe kontrole wraz z testami Chromium
+(bez sieciowego doctor). P2 zapisuje dane tylko na urządzeniu przez AsyncStorage,
+klucz `ubranka:p2:v1`. Profil → Wyczyść dane demonstracyjne przywraca start
+po potwierdzeniu. Wyczyszczenie danych przeglądarki także usuwa lokalne wybory.
 
 ## Źródła
 

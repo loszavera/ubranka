@@ -35,6 +35,9 @@ Stan początkowy: 2026-10-24. Decyzje produktowe wymagające doprecyzowania nie 
 | D-028 | 2026-10-24 | Ustalenie wolumenu | Rozstrzyga Q25 i aktualizuje D-019: 30 wizualizacji/osobę/mies., czyli 60 dla dwóch osób. Konwencja planistyczna to jeden obraz zestawu na osobie; para obrazów liczy się jako dwa. Nie jest to twardy limit ani gwarancja zmieszczenia w 150 PLN. |
 | D-029 | 2026-10-24 | Aktualizacja dokumentacji | Wymagania i plan V1.2 zapisują odpowiedzi uzupełniające. V1.0/V1.1 są zachowane. Kolejny proponowany zakres to prototyp A PL/EN; nie rozpoczęto implementacji ani podłączenia usług. |
 
+| D-030 | 2026-10-24 | Zatwierdzone przez użytkownika | Rozpoczęcie P2 zgodnie z V1.2 na dev, wykonanie testów i udostępnienie podglądu Vercel. Zgoda obejmuje prototyp demo, nie kolejny etap P3 ani publikację main. |
+| D-031 | 2026-10-24 | Realizacja P2 | Zapis lokalny AsyncStorage, 28 fikcyjnych rzeczy i 8 ilustracji, ranking regułowy z opiniami per profil. Oba języki zachowują PLN. Przyszłe kontrakty konta, oferty i wizualizacji opisuje DATA-CONTRACTS-P2.md. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

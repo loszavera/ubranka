@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { ITEMS, OUTFITS } from '../src/domain/catalog.ts';

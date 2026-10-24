@@ -13,11 +13,12 @@ przed dawnymi rozmowami. Odróżniaj propozycje od przyjętych wymagań.
 
 ## Bieżący etap
 
-P1: wywiad i odpowiedzi uzupełniające zapisane w dokumentacji V1.2. Wybrany
-wygląd A — Krem i śliwka. Q21–Q23 i Q25 rozstrzygnięte; Q24 określa wstępny
+P2 zatwierdzono do implementacji, testów i podglądu Vercel z dev (2026-10-24).
+Powstał prototyp A — Krem i śliwka: PL/EN, krótki start, profile, szafa demo,
+dwa tryby propozycji, opinie i zapis lokalny. Wyniki i stan publikacji:
+docs/PROJECT-STATUS.md oraz docs/P2-VERIFICATION.md. Odbiór Kasi i Aleksego
+pozostaje osobnym krokiem. Q21–Q23 i Q25 są rozstrzygnięte; Q24 określa wstępny
 kierunek zdjęć, szczegóły dostawcy wymagają wyjaśnienia przed realnym uploadem.
-Ekran aplikacji nadal jest testem technicznym P0. Następny proponowany zakres
-to prototyp A z PL/EN, profilami, szafą demo, dwiema propozycjami i opiniami.
 Zapisuj otwarte decyzje; nie uznawaj propozycji za zatwierdzone ani nie rozpoczynaj
 samodzielnie następnego etapu tylko dlatego, że opisano go w planie.
 
@@ -85,6 +86,10 @@ Ustalenie użytkownika z 2026-10-24:
 - Eksport JavaScript nie jest testem aplikacji na fizycznym telefonie.
 - Dodawaj testy istotnych reguł biznesowych, budżetów i integracji, gdy powstaną.
   Nie pisz testów pustych atrap tylko dla liczby testów.
+- P2: `npm test` sprawdza reguły domeny, `npm run test:e2e` buduje WWW i sprawdza
+  przepływy Playwright (Edge na Windows, Chromium w CI). Raporty w artifacts/.
+- AsyncStorage zawiera wyłącznie stan demo. Nie przesłaniaj błędu odczytu
+  domyślnym profilem z możliwością zapisu; retry nie może utracić nowych zmian.
 - Mock nie dowodzi działania katalogu, AI, zakupu ani synchronizacji.
 - Raportuj zmiany, dowód weryfikacji, link do wyniku i ograniczenia.
 
