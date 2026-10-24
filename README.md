@@ -5,18 +5,26 @@ Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki
 
 **Działający podgląd WWW:** https://ubranka.vercel.app
 
-**Etap:** infrastruktura P0. Aplikacja zawiera tylko ekran startowy z przyciskiem
-sprawdzającym podgląd. Stylista, konta, zdjęcia i zakupy nie są wdrożone.
+**Etap:** P1 — ustalenia po pierwszym wywiadzie i wybór wyglądu. Dokumentacja V1.1
+zapisuje 20 odpowiedzi oraz pięć pozostałych doprecyzowań. Aplikacja nadal zawiera
+tylko ekran startowy P0; stylista, konta, zdjęcia i zakupy nie są wdrożone.
 
 ## Dokumenty
 
-- [Wymagania V1.0](docs/REQUIREMENTS-V1.0.md)
-- [Plan implementacji V1.0](docs/IMPLEMENTATION-PLAN-V1.0.md)
+- [Wymagania V1.1](docs/REQUIREMENTS-V1.1.md)
+- [Plan implementacji V1.1](docs/IMPLEMENTATION-PLAN-V1.1.md)
+- [Zapis 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
+- [Trzy propozycje wyglądu A/B/C](docs/design/DESIGN-CONCEPTS-V1.1.md)
+- [Budżet i tańsze warianty](docs/COST-PLAN-V1.1.md)
+- [Możliwości integracji sklepów](docs/RETAILER-FEASIBILITY-V1.1.md)
 - [Stan projektu i następny krok](docs/PROJECT-STATUS.md)
 - [Decyzje](docs/DECISIONS.md)
 - [Uruchamianie, telefon i hosting](docs/SETUP.md)
 - [Stan zależności i znane ograniczenia](docs/DEPENDENCY-STATUS.md)
 - [Instrukcje dla agentów](AGENTS.md)
+
+Baza historyczna: [wymagania V1.0](docs/REQUIREMENTS-V1.0.md)
+i [plan V1.0](docs/IMPLEMENTATION-PLAN-V1.0.md), zachowane bez zmian.
 
 ## Pierwsze uruchomienie
 

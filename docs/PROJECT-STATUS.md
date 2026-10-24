@@ -1,11 +1,17 @@
 # Stan projektu Ubranka
 
-Aktualizacja: 2026-10-24. Etap P0 — infrastruktura i podgląd WWW gotowe.
+Aktualizacja: 2026-10-24. Etap P1 — otrzymano 20 odpowiedzi; przygotowano
+dokumentację V1.1 i trzy koncepcje wyglądu. Infrastruktura i podgląd P0 działają;
+kod aplikacji pozostaje starterem. Dalsze funkcje nie są jeszcze wdrożone.
 
 ## Aktualne dokumenty
 
-- [Wymagania V1.0](REQUIREMENTS-V1.0.md)
-- [Plan implementacji V1.0](IMPLEMENTATION-PLAN-V1.0.md)
+- [Wymagania V1.1](REQUIREMENTS-V1.1.md)
+- [Plan implementacji V1.1](IMPLEMENTATION-PLAN-V1.1.md)
+- [Zapis wywiadu](INTERVIEW-V1.1.md)
+- [Kierunki wyglądu A/B/C](design/DESIGN-CONCEPTS-V1.1.md)
+- [Plan kosztów](COST-PLAN-V1.1.md)
+- [Rozpoznanie sklepów](RETAILER-FEASIBILITY-V1.1.md)
 - [Rejestr decyzji](DECISIONS.md)
 - [Środowisko i testowanie](SETUP.md)
 
@@ -19,8 +25,21 @@ Aktualizacja: 2026-10-24. Etap P0 — infrastruktura i podgląd WWW gotowe.
 - Git i integracja GitHub działają; integracja Vercel odczytuje konto/zespoły.
 - Użytkownik potwierdził dostęp do tego czatu przez Codex na telefonie przy
   połączeniu komórkowym (poza domową siecią).
+- Użytkownik potwierdził działanie podglądu po uruchomieniu Vercel.
+- Zapisano 20 odpowiedzi w wywiadzie, wymaganiach i planie V1.1; zachowano V1.0.
+- Wygenerowano i obejrzano trzy koncepcje UI z przyciskami oraz zapisano PNG
+  i prompty. Żaden wariant nie jest jeszcze zatwierdzony ani zaimplementowany.
+- Sprawdzono oficjalne źródła kosztów usług i możliwości sklepów. Nie uruchomiono
+  płatnych usług/API ani integracji zakupowych; jakość przymiarki pozostaje nieznana.
 
 ## Weryfikacja
+
+Poniższe wyniki dotyczą fundamentu P0. Bieżąca zmiana zawiera dokumentację
+i makiety, bez zmian kodu lub zależności; nie dopisujemy nowych wyników testów aplikacji.
+Kontrola P1: sprawdzono zgodność z oryginalnymi pytaniami i 20 odpowiedziami,
+47 lokalnych odsyłaczy (0 błędnych), diff bez błędów białych znaków oraz trzy
+wygenerowane plansze. Wymagania i plan przeszły także niezależny przegląd agenta;
+doprecyzowano obowiązkowe dane do dobierania ubrań bez narzucania momentu ich zebrania.
 
 | Kontrola | Wynik |
 | --- | --- |
@@ -67,12 +86,26 @@ Adres: https://ubranka.vercel.app. Zrzut w `artifacts/vercel-preview.png`.
 Kod aplikacji jest identyczny z pierwszym commitem zweryfikowanym w CI;
 późniejsze commity aktualizują tylko dokumentację infrastruktury.
 
+Późniejsza weryfikacja przed wywiadem potwierdziła automatyczne wdrożenia commita
+`0203382a7581124006cbe88a607d1b9a0b5ae2f2`: Production
+`dpl_DLD5ParVFW3tLeAJSv6m3JihMmvW` i Preview
+`dpl_DuR8WEszXwe96wYFjbweqoURtb22`, oba READY.
+Adres podglądu `dev`: https://ubranka-git-dev-risk-every-asset.vercel.app
+wymaga logowania Vercel; ochrona pozostaje włączona. To dowód dla wskazanego
+commita, nie dla późniejszych zmian dokumentacji.
+
 ## Pozostaje do sprawdzenia na urządzeniach
 
 - Otwarcie ekranu na fizycznym iPhone/Androidzie w Expo Go.
 
 ## Następny krok
 
-Po zakończeniu P0 i na kolejną prośbę użytkownika: seria pytań doprecyzowujących
-produkt z Aleksym i Kasią. Potem aktualizacja wymagań/planu i zakres P1.
+Wybór wyglądu A/B/C i pięć doprecyzowań Q21–Q25: domyślny tryb pary,
+liczenie budżetu, znaczenie koszyka, zasady zdjęć oraz wielkość pilotażu i liczba
+wizualizacji. Potem uzgodnienie konkretnego zakresu pierwszego prototypu.
+
+Rekomendacja projektu: B — Szałwia i porcelana. Proponowany kolejny przepływ
+stawia profile i własną szafę przed integracjami sklepów. Około 150 PLN/mies.
+pozostaje celem do sprawdzenia rzeczywistym zużyciem; nie gwarancją kosztu.
 Nie rozpoczynać samodzielnie funkcji stylisty, backendu, AI ani płatności.
+Zmiany P1 powstają na `dev`; `main` pozostaje odebranym fundamentem.

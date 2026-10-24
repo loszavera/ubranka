@@ -13,9 +13,11 @@ przed dawnymi rozmowami. Odróżniaj propozycje od przyjętych wymagań.
 
 ## Bieżący etap
 
-P0: infrastruktura i dokumentacja V1.0. Ekran startowy jest testem technicznym.
-Wywiad produktowy i funkcje aplikacji dopiero w kolejnym kroku z użytkownikiem.
-Zapisuj otwarte decyzje; nie inicjuj samodzielnie kolejnych etapów.
+P1: pierwszy wywiad (20 odpowiedzi) zapisany w dokumentacji V1.1, przygotowane
+trzy kierunki wyglądu oraz rozpoznanie kosztów i sklepów. Ekran aplikacji nadal
+jest testem technicznym P0. Oczekujemy wyboru A/B/C i odpowiedzi Q21–Q25.
+Zapisuj otwarte decyzje; nie uznawaj propozycji za zatwierdzone ani nie rozpoczynaj
+samodzielnie następnego etapu tylko dlatego, że opisano go w planie.
 
 ## Współpraca
 
@@ -68,11 +70,25 @@ Zapisuj otwarte decyzje; nie inicjuj samodzielnie kolejnych etapów.
 
 - Projektuj na telefon: czytelność, duże cele dotykowe, kontrast, dostępne etykiety,
   klawiatura na WWW i spokojna oprawa graficzna.
-- Podstawowy wybór to maksymalnie dwie propozycje z prostym tak/nie.
+- Odbiorcy: kobiety i mężczyźni bez sprecyzowanego stylu lub czasu na zakupy,
+  najpierw użytek własny, docelowo komercyjny rynek polski.
+- Priorytety: poznanie gustu, zestawy z własnej szafy, pomoc w zakupach.
+- Podstawowy wybór to maksymalnie dwie propozycje z prostym tak/nie, na prośbę.
+  Kasia preferuje dwa pełne zestawy; Aleksy porównanie tanie/markowe. Domyślny
+  sposób połączenia potrzeb pozostaje otwarty w Q21.
+- Polubienie uczy gustu; nie dodaje do koszyka ani nie zatwierdza zakupu.
+  Powód odrzucenia jest opcjonalny; pytanie o niego można wyłączyć w ustawieniach.
+- Szafa przyjmuje zdjęcie rzeczy i zdjęcie na osobie. Wymagana wizualizacja
+  na osobie nie jest dowodem fizycznego dopasowania rozmiaru.
+- Sklepy Vinted, Zara, Zalando, Reserved i H&M to oczekiwane źródła; dostęp
+  do katalogów i koszyków nie został potwierdzony. Nie deklaruj integracji na podstawie mocka.
+- Około 150 PLN/mies. to cel kosztowy pilotażu, nie uruchomiony limit ani zgoda
+  na aktywację rozliczeń. Sprawdzaj rzeczywiste zużycie przed obietnicą kosztu.
 - Zachowaj przyszły cel automatycznych zakupów. Wdrożenie wymaga doprecyzowania
-  zgód, limitów, anulowania i integracji. Aktualny etap nie uruchamia zakupów.
+  zgód, limitów, anulowania i integracji. Pierwszy etap zakupowy ma koszyk
+  do zatwierdzenia; jego dokładne znaczenie wymaga Q23.
 - Zdjęcia wymagają świadomego przesłania, kontroli dostępu, zasad przechowywania
-  i usuwania. W P0 używaj tylko danych sztucznych.
+  i usuwania. Do ustalenia zasad Q24 i wdrożenia prywatnego zapisu używaj danych sztucznych.
 - Sekrety AI/płatności tylko na serwerze. EXPO_PUBLIC_* jest publiczne.
   Nie przechowuj numerów kart ani CVV.
 - Realne płatności, płatne usługi, publikacja i zmiany kont muszą mieścić się

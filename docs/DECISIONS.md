@@ -15,6 +15,17 @@ Stan początkowy: 2026-10-24. Decyzje produktowe wymagające doprecyzowania nie 
 | D-008 | 2026-10-24 | Rekomendacja organizacyjna | Na początku jeden czat łączy zarządzanie i implementację; pomocniczy agenci mogą wykonywać rozdzielne zadania. Drugi stały czat ma sens przy większej liczbie równoległych prac. |
 | D-009 | 2026-10-24 | Roboczo | Dokumenty V1.0 stanowią bazę po inicjalizacji. Istotne zmiany tworzą V1.1 itd.; README i bieżący status wskazują aktualne wersje. |
 | D-010 | 2026-10-24 | Cel produktu do doprecyzowania | Samodzielne zakupy pozostają w wizji produktu. Limity, potwierdzenia, operator i obsługa wyjątków wymagają osobnych ustaleń przed implementacją realnych płatności. |
+| D-011 | 2026-10-24 | Wykonane po upoważnieniu użytkownika | Aktualizuje stan D-005: Vercel jest połączony z repozytorium, `main` zasila Production, a `dev` Preview. Adres `https://ubranka.vercel.app` działa; użytkownik potwierdził podgląd. |
+| D-012 | 2026-10-24 | Ustalenie użytkowników | Odbiorcy: kobiety i mężczyźni bez sprecyzowanego stylu lub czasu na zakupy. Najpierw użytek własny, docelowo komercyjny rynek polski. |
+| D-013 | 2026-10-24 | Ustalenie użytkowników | Priorytety: poznanie gustu, zestawy z posiadanych rzeczy, pomoc w zakupach; ubrania codzienne i eleganckie, krótki start oraz stopniowe poznawanie preferencji. |
+| D-014 | 2026-10-24 | Ustalenie z otwartym szczegółem | Budżet na cały zestaw. Kasia preferuje dwa kompletne zestawy, Aleksy wariant tani/markowy. Sposób połączenia i liczenie wydatku wymagają Q21–Q22; 500 PLN to scenariusz przykładowy. |
+| D-015 | 2026-10-24 | Ustalenie użytkowników | „Podoba mi się” uczy gustu, nie kupuje ani nie dodaje do koszyka. Odrzucenie obu prowadzi do kolejnej pary; powód można pominąć, pytanie wyłączyć. Propozycje na prośbę użytkownika. |
+| D-016 | 2026-10-24 | Ustalenie z otwartymi szczegółami | Profil wykorzystuje wymiary/rozmiary i zdjęcia; szafa przyjmuje zdjęcia rzeczy oraz zdjęcia na osobie. Zestawy mają być wizualizowane na osobie/zdjęciu użytkownika. Szczegóły danych i Q24 pozostają otwarte. |
+| D-017 | 2026-10-24 | Ustalenie z otwartą realizacją | Pierwszy zakres zakupowy to koszyk do zatwierdzenia (Q23), doprecyzowujący D-010. Vinted, Zara, Zalando, Reserved i H&M to preferowane źródła; dostęp projektu do ich katalogów i zakupów nie jest potwierdzony. |
+| D-018 | 2026-10-24 | Ustalenie użytkowników | Spokojny wygląd; przygotować kilka propozycji do wyboru. A/B/C są makietami, żadna nie jest zatwierdzona. Rekomendacja projektowa: B — Szałwia i porcelana. |
+| D-019 | 2026-10-24 | Cel kosztowy | Około 150 PLN miesięcznie, możliwie mniej. Wolumen Q25 i rzeczywisty koszt wizualizacji wymagają pomiaru. Cel nie jest aktywowanym rozliczeniem ani gwarancją ceny. |
+| D-020 | 2026-10-24 | Propozycja techniczna | Rozwija D-006: Supabase Free jest kandydatem na mały pilotaż. Wykonalność przymiarki sprawdzić ograniczoną próbą, a sklepy integrować po uzyskaniu dostępu. Nie wybrano ani nie uruchomiono backendu/AI. |
+| D-021 | 2026-10-24 | Wykonane | Aktualizuje D-007/D-009: otrzymano 20 odpowiedzi, zapisano wymagania i plan V1.1, analizy i trzy makiety. V1.0 zachowano; pozostało pięć pytań Q21–Q25 i wybór wyglądu. |
 
 ## Konsekwencje wyboru Expo
 
