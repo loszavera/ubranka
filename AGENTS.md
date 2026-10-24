@@ -31,7 +31,11 @@ Supabase Free/Frankfurt, Google OAuth, limity zdjęć i zasady danych V1.0,
 konfigurację darmowych usług, testy i podgląd dev. Usługi i kod P3.1 są wdrożone
 na dev, testy chmury i CI przeszły. Odbiór obu osób na telefonach pozostaje otwarty:
 docs/P31-ACCEPTANCE.md. Faktyczne wyniki i ograniczenia zapisuj w statusie.
-P3.2 (próba AI), P3.3 i publikacja nowego zakresu main wymagają osobnego uzgodnienia.
+Użytkownik następnie zatwierdził przeniesienie P3.1 na main i testowanie tam przed
+premierą (2026-10-24). Publikacja i kontrola logowania/odczytu zdjęcia przeszły;
+raport: docs/P31-MAIN.md. Adres odbioru to
+https://ubranka.vercel.app. Dev pozostaje warsztatem. Ta zgoda nie oznacza odbioru
+funkcji. P3.2 (próba AI), P3.3 i nowe zakresy nadal wymagają osobnego uzgodnienia.
 Nie aktywuj płatnego AI ani nowych abonamentów.
 Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,
 podał prywatnie oba konta oraz wyraźnie zaakceptował Google API Services User
@@ -39,7 +43,12 @@ Data Policy z upoważnieniem do zaznaczenia zgody. Nie pytaj o to ponownie.
 Jest poza domem: potrzebne czynności właściciela przygotowuj do wykonania na
 telefonie; nie zakładaj dostępu do lokalnej klawiatury. Stan dostępu i usług:
 docs/P31-SETUP.md. Linków/kodów logowania CLI i adresów kont nie commituj.
-Zapis P2 na adresie dev i main jest osobny; publikacja kodu nie przenosi localStorage.
+Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
+we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatne dane w chmurze są
+wspólne dla obu adresów; nie powstaje nowa usługa, migracja danych ani zmiana retencji.
+Docelowy podział środowisk pilotażu i produkcji ustalimy przed premierą komercyjną.
+Lokalny zapis demo P2 na adresie dev i main jest osobny; publikacja kodu nie
+przenosi localStorage.
 Nie dopisuj na tej podstawie testu natywnego. Q21–Q23 i Q25 są rozstrzygnięte; Q24 określa wstępny
 kierunek zdjęć, szczegóły dostawcy wymagają wyjaśnienia przed realnym uploadem.
 Zapisuj otwarte decyzje; nie uznawaj propozycji za zatwierdzone ani nie rozpoczynaj
@@ -79,9 +88,11 @@ Ustalenie użytkownika z 2026-10-24:
 ## Git
 
 - Repozytorium: https://github.com/loszavera/ubranka.
-- dev jest gałęzią codziennej pracy; main zawiera stabilny punkt publikacji.
-- Początkowa infrastruktura trafia na obie gałęzie. Późniejsze wydania do main
-  wymagają uzgodnionego odbioru zakresu; rozpoczęcie prac nie oznacza publikacji.
+- dev jest gałęzią codziennej pracy; main zasila adres odbioru https://ubranka.vercel.app.
+- Przed premierą komercyjną można publikować zatwierdzony zakres na main i tam
+  go testować, bez osobnej zgody lub odbioru wyłącznie z powodu zmiany gałęzi.
+  Nadal wykonuj wymagane testy i sprawdzaj wdrożenie. Publikacja nie oznacza
+  odbioru funkcji ani zgody na nowy etap, usługę płatną lub abonament.
 - Nie używaj force push, nie usuwaj cudzych zmian, zachowuj historię.
 - Przed push sprawdź diff i zakres plików, po push zgodność lokalnego i zdalnego SHA.
 - Repozytorium jest publiczne. Nie commituj zdjęć użytkowników, danych osobowych,

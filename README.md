@@ -3,11 +3,12 @@
 Wirtualny stylista: mniej przeglądania, prostsze decyzje i ubrania dopasowane do osoby.
 Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki.
 
-**Podgląd dev:** https://ubranka-git-dev-risk-every-asset.vercel.app
+**Docelowy adres odbioru:** https://ubranka.vercel.app
+(P3.1 na main; [wdrożenie i kontrola](docs/P31-MAIN.md) przeszły).
+**Warsztat dev:** https://ubranka-git-dev-risk-every-asset.vercel.app
 (logowanie Vercel; stan wdrożenia w dokumencie statusu).
-**Odebrana wersja P2.1 na main:** https://ubranka.vercel.app
 
-**Etap:** P2.1 — odebrane i opublikowane rozszerzenie o wesele jako gość, pracę, randkę
+**Odebrane demo P2.1:** rozszerzenie o wesele jako gość, pracę, randkę
 i imprezę. Okazję wybierasz przed rundą; propozycje muszą do niej pasować.
 Zachowano dane P2, a domyślną okazję profilu można edytować. Wyniki testów
 i publikacji znajdują się w statusie oraz raporcie P2.1. Wygląd A — Krem i śliwka, PL/EN, krótki start,
@@ -17,20 +18,25 @@ Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeni
 Demo używa 37 fikcyjnych ubrań i 12 ilustracji. AI, sklepy i lista zakupowa
 należą do kolejnych etapów.
 
-**Do odbioru na dev: P3.1**, zatwierdzone zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
+**Do odbioru: P3.1**, zatwierdzone zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
 Zaimplementowano prywatną szafę PL/EN, zdjęcia, konta Google, synchronizację,
 eksport i usuwanie. Lokalne testy opisuje [raport P3.1](docs/P31-VERIFICATION.md).
 **Usługi są skonfigurowane:** Supabase Free Frankfurt, Google OAuth dla dwóch
 zaproszonych kont, prywatny magazyn i harmonogram usuwania. Logowanie Google
-sprawdzono na dev. Testy ujawniły cache bezpośrednich odczytów Storage; poprawka
+sprawdzono na dev i main. Testy ujawniły cache bezpośrednich odczytów Storage; poprawka
 przenosi pobieranie zdjęć do autoryzowanego POST przez Edge i przeszła retest.
 Testy chmury, fizyczne usunięcie fixture przez harmonogram oraz CI: PASS.
-Pozostaje [odbiór Kasi i Aleksego na telefonach](docs/P31-ACCEPTANCE.md).
+P3.1 przeniesiono na main i sprawdzono logowanie, odczyt zdjęcia oraz wylogowanie. Pozostaje
+[odbiór Kasi i Aleksego na telefonach](docs/P31-ACCEPTANCE.md) pod głównym adresem.
 Bieżące dowody:
 [raport P3.1](docs/P31-VERIFICATION.md), [konfiguracja](docs/P31-SETUP.md).
 P3.2/P3.3 i nowe abonamenty nie zostały zatwierdzone.
-Dane zapisane na podglądzie dev pozostają pod tamtym adresem; publikacja main
-nie kopiuje lokalnego zapisu między adresami. [Odbiór produkcji](docs/P21-PRODUCTION.md).
+Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
+we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
+jest wspólna dla obu adresów. Lokalny zapis demo pozostaje osobny — publikacja
+nie kopiuje localStorage. Nie tworzymy nowej usługi ani nie zmieniamy retencji.
+Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą komercyjną.
+[Historyczny odbiór P2.1 na main](docs/P21-PRODUCTION.md).
 
 ## Dokumenty
 
@@ -101,8 +107,11 @@ zainstaluj przeglądarkę testową: `npx playwright install --with-deps chromium
 
 ## Gałęzie i współpraca
 
-Pracujemy na dev. main jest stabilną bazą; obie gałęzie startują z tą samą
-infrastrukturą. Vercel jest połączony: main zasila Production, a dev służy podglądom Preview.
+Pracujemy na dev. Main zasila główny adres odbioru; przed premierą komercyjną
+zatwierdzony zakres można publikować i testować na main bez osobnej akceptacji
+wyłącznie z powodu gałęzi. Publikacja nie oznacza odbioru funkcji ani zgody na
+kolejny etap lub opłaty. Vercel nazywa ten cel Production; dev służy podglądom
+Preview. Nazwa środowiska Vercel nie oznacza premiery komercyjnej.
 GitHub Actions sprawdza typy, lint, domenę, zgodność zależności, eksport platform
 i przepływy WWW w Playwright. Wynik należy sprawdzać dla konkretnego commita.
 Początkowo jeden czat zarządza projektem i implementacją; stan zapisujemy w plikach.

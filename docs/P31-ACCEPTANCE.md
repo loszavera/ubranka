@@ -1,15 +1,21 @@
 # P3.1 — odbiór na telefonach
 
-Data: 2026-10-24. Podgląd testowy:
-https://ubranka-git-dev-risk-every-asset.vercel.app/?wardrobe=1.
-Może być potrzebne istniejące logowanie Vercel. Nie zmieniamy ochrony podglądu.
+Data: 2026-10-24. Docelowy adres odbioru:
+https://ubranka.vercel.app/?wardrobe=1.
+P3.1 jest wdrożone na main. Logowanie właściciela, odczyt istniejącego zdjęcia
+i wylogowanie przeszły [kontrolę głównego adresu](P31-MAIN.md).
+Dev pozostaje warsztatem; publikacja na main nie oznacza odbioru funkcji.
 Każda osoba używa swojego wcześniej wskazanego konta Google.
 
-Dev korzysta z oddzielnego projektu testowego Supabase. Na tym etapie wybierzcie
-obraz syntetyczny, bez zdjęć osób lub innych prywatnych danych. Własne zdjęcia
-przewidziano dla późniejszego środowiska pilotażu po odbiorze.
+Main i dev korzystają z tego samego Supabase Free `ubranka-test` we Frankfurcie
+i tych samych dwóch zaproszonych kont. Prywatna szafa jest wspólna dla obu adresów;
+zapis lokalnego demo pozostaje osobny. Nie zmieniamy limitów ani retencji.
+Na ten test wybierzcie obraz syntetyczny, bez zdjęć osób lub innych prywatnych
+danych. Docelowy podział środowisk pilotażu i produkcji ustalimy ponownie przed
+premierą komercyjną.
 
-1. **Oba konta:** Kasia i Aleksy logują się osobno. Pojawia się własna pusta szafa.
+1. **Oba konta:** Kasia i Aleksy logują się osobno. Pojawia się własna szafa:
+   pusta dla nowego konta lub z jego wcześniejszymi danymi z dev.
    Aleksy może przełączyć język na EN. Konto niewskazane w konfiguracji nie ma dostępu.
 2. **Zdjęcie:** dodaj obraz JPG/PNG/WebP, nazwę, kolor i okazję. Sprawdź podgląd,
    zapis, miniaturę, edycję i wymianę. HEIC powinien pokazać jasną odmowę.

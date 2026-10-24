@@ -8,10 +8,16 @@ jest opublikowana i sprawdzona. Następnie użytkownik **zatwierdził P3.1**:
 Supabase Free/Frankfurt, Google, zdjęcia, synchronizacja, limity i zasady danych
 V1.0, testy i podgląd dev. Bez płatnego AI i nowych abonamentów.
 
-**P3.1 jest gotowe do odbioru na telefonach:** usługi są skonfigurowane,
+**P3.1 jest na main, wdrożenie i kontrola przeszły:** użytkownik zatwierdził przeniesienie
+P3.1 i testowanie przed premierą pod https://ubranka.vercel.app. Dev pozostaje
+warsztatem. Zgoda zastępuje wcześniejszy warunek „main po odbiorze” w planie V1.4;
+nie oznacza odbioru funkcji ani zgody na P3.2/P3.3 lub opłaty.
+
+Usługi są skonfigurowane dla dev i main,
 Google właściciela działa, testy chmury i CI przeszły. Wykryty cache zdjęcia
 po usunięciu naprawiono odczytem przez Edge. Konto Kasi i rzeczywisty wybór
-pliku na telefonach wymagają odbioru; main nadal zawiera P2.1.
+pliku na telefonach wymagają odbioru. Na main sprawdzono rzeczywiste logowanie
+właściciela, odczyt istniejącego zdjęcia i wylogowanie. [Raport](P31-MAIN.md).
 
 ## P3.1 — bieżący wynik
 
@@ -34,10 +40,19 @@ pliku na telefonach wymagają odbioru; main nadal zawiera P2.1.
 - Właściciel autoryzował CLI z telefonu. Auth/hook, sekrety Edge/Vault oraz
   harmonogram co 10 minut są skonfigurowane. Faktyczny wywołany przez cron
   request HTTP zakończył się 200. Email/SMS, anonymous i manual linking wyłączone.
-- URL i klucz publiczny Supabase są ustawione wyłącznie w Vercel Preview/dev.
-  Wdrożenie `dpl_ErgZM7GMGy8wMrxcYH5DHDqNsFvk` READY, kod `2cc3a0e`,
+- URL i klucz publiczny Supabase są ustawione w Vercel Preview/dev i Production/main.
+  Wdrożenie dev `dpl_ErgZM7GMGy8wMrxcYH5DHDqNsFvk` READY, kod `2cc3a0e`,
   zawiera konfigurację i poprawiony transport zdjęć. Nie ujawniono kluczy
   serwerowych, sekretu Google ani adresów kont w repozytorium.
+- Konfiguracja main korzysta z tego samego istniejącego
+  Supabase Free `ubranka-test` we Frankfurcie i tych samych dwóch zaproszonych
+  kont. Prywatne dane w chmurze są wspólne dla dev/main; lokalny zapis demo jest
+  osobny. Nie powstaje nowa usługa, migracja danych ani zmiana retencji.
+  Podział pilotażu i produkcji zostanie ponownie ustalony przed premierą komercyjną.
+- Supabase Site URL wskazuje main; dodano dokładny callback aplikacji main,
+  zachowując powroty dev. `config diff` nie wykazał różnic zadeklarowanej
+  konfiguracji. CORS main/dev: HTTP 204 z dokładnym originem; obcy origin: HTTP 403.
+  Callback klienta Google do tego samego Supabase nie zmienił się.
 - Hosted test ujawnił bezpośredni Storage GET z CDN po odebraniu dostępu w RLS.
   Nowa migracja usuwa odczyt Storage użytkowników, a Edge POST `downloadPhoto`
   wykonuje świeżą kontrolę Auth/RLS przed pobraniem bajtów. Backend 14/14 PASS;
@@ -115,11 +130,20 @@ Szczegóły: [DEPENDENCY-STATUS.md](DEPENDENCY-STATUS.md).
 
 - Praca na `dev`. Podgląd: https://ubranka-git-dev-risk-every-asset.vercel.app.
   Chroni go logowanie Vercel. Projekt `ubranka`, zespół Risk Every Asset.
-- `main` przeniesiono fast-forward z fundamentu `0203382` do odebranego P2.1
+- Docelowy adres odbioru: https://ubranka.vercel.app (`main`, Vercel Production).
+  P3.1 jest wdrożone i sprawdzone. Przed premierą zatwierdzony zakres można publikować
+  i testować na main bez osobnego odbioru wyłącznie z powodu gałęzi; testy oraz
+  jawne ograniczenia pozostają wymagane. To nie jest premiera komercyjna.
+- Kod P3.1 `115b765` przeniesiono fast-forward na main; lokalne i zdalne
+  gałęzie main/dev były zgodne po push. Vercel `dpl_2obmzhuWFReCHZWSaFNdX9z1U8BD`
+  READY, target Production. HTTP 200, Google OAuth → szafa/zdjęcie → logout PASS,
+  zero błędów konsoli. Końcowy commit zapisuje wyłącznie dokumentację.
+- Historycznie `main` przeniesiono fast-forward z fundamentu `0203382` do odebranego P2.1
   `9bc50acef56f7b41525bfd9fb0cbb682e04fe26a`. Produkcja: https://ubranka.vercel.app.
   Vercel `dpl_21XuJzQigJzLn6Y39NKA9taZ1rvM` READY; test online PASS 16:44 UTC,
   HTTP 200, 0 błędów JavaScript. Kolejny commit aktualizuje wyłącznie dokumentację.
-  Dane lokalne dev/main są osobne; publikacja kodu ich nie synchronizuje.
+  Lokalny zapis demo dev/main jest osobny; publikacja kodu go nie synchronizuje.
+  Prywatna szafa P3.1 korzysta ze wspólnego backendu obu adresów.
 - Implementacja, CI i wdrożenie P2: `04ea37775515240e45b2001614dbfccb103e1105`,
   [run SUCCESS](https://github.com/loszavera/ubranka/actions/runs/40102781826),
   Vercel `dpl_Bc6PBTM8s9EU6kS13Si4Zw2dPJuQ` READY i test online PASS.
@@ -135,11 +159,12 @@ P1/V1.1 i V1.2 przeszły przeglądy dokumentacji; wersje historyczne zachowano.
 
 ## Następny krok
 
-**Odbiór P3.1 przez Kasię i Aleksego na telefonach**, według krótkiej
+**Odbiór P3.1 przez Kasię i Aleksego na telefonach pod głównym adresem**, według krótkiej
 [checklisty](P31-ACCEPTANCE.md): oba logowania, testowy obraz, synchronizacja,
-prywatność, eksport i usuwanie. Dev pozostaje środowiskiem syntetycznych danych.
-Nie prosić ponownie o zatwierdzenie implementacji P3.1. Publikacja main i środowisko
-pilotażu z własnymi zdjęciami wymagają uzgodnionego odbioru; main pozostaje P2.1.
+prywatność, eksport i usuwanie. Oba adresy korzystają z obecnego środowiska
+testowego; w tym scenariuszu nadal używamy danych syntetycznych. Nie prosić
+ponownie o zgodę na implementację lub publikację P3.1. Docelowy podział pilotażu
+i produkcji wymaga ponownego ustalenia przed premierą komercyjną.
 
 P3.2: późniejsza osobno zatwierdzona próba AI na danych sztucznych, maks. 12
 wywołań / 25 PLN. P3.3: docelowy profil sylwetki, rozpoznawanie, zestawy z własnych
