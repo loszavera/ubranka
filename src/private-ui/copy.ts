@@ -10,7 +10,7 @@ const pl = {
   add: 'Dodaj ubranie', edit: 'Edytuj', remove: 'Usuń', cancel: 'Anuluj', save: 'Zapisz', saving: 'Zapisuję…',
   emptyTitle: 'Zacznij od jednej rzeczy', emptyBody: 'Ulubiona koszula, wygodne buty, sukienka na wesele. Zdjęcie i krótki opis wystarczą na początek.',
   count: 'rzeczy', limit: 'Do 100 rzeczy · jedno zdjęcie na rzecz',
-  future: 'Dobór zestawów z Twoich rzeczy i wizualizacje pojawią się w kolejnym etapie. Obecne propozycje pozostają demonstracją.',
+  future: 'W zakładce Zestawy dobierzesz własne ubrania. Generowanie wizualizacji AI jest wyłączone.',
   name: 'Nazwa ubrania', category: 'Kategoria', color: 'Kolor', size: 'Rozmiar (opcjonalnie)', occasions: 'Na jakie okazje?',
   photoKind: 'Co przedstawia zdjęcie?', garment: 'Samo ubranie', person: 'Ubranie na mnie',
   library: 'Wybierz zdjęcie', camera: 'Zrób zdjęcie', photo: 'Zdjęcie ubrania', preparing: 'Przygotowuję zdjęcie…',
@@ -35,6 +35,11 @@ const pl = {
   localUnavailable: 'Nie udało się odczytać danych demo. Wróć do demo i rozwiąż problem odczytu przed importem.',
   reasonSetting: 'Pytaj o powód odrzucenia', retry: 'Spróbuj ponownie', photoFailure: 'Nie udało się wczytać zdjęcia.',
   errors: {
+    invalid_body_fit: 'Podaj wymiary większe od 0 i nie większe niż 300 cm, z najwyżej jednym miejscem po przecinku. Rozmiar może mieć do 30 znaków.',
+    storage_consent_required: 'Przed zapisem potwierdź zgodę na przechowywanie wybranego zdjęcia sylwetki.',
+    ai_disabled: 'Generowanie AI jest wyłączone na tym etapie.',
+    result_unavailable: 'Ten wynik nie jest już dostępny. Odśwież historię.',
+    invalid_outfit: 'Zestaw lub zamiana nie pasuje już do aktualnych rzeczy, okazji albo etykiety rozmiaru. Dobierz zestawy ponownie.',
     generic: 'Operacja nie została potwierdzona. Sprawdź połączenie i spróbuj ponownie.',
     not_invited: 'To konto nie ma dostępu do pilotażu. Wybierz zaproszone konto Google.',
     unauthenticated: 'Sesja wygasła. Zaloguj się ponownie.',
@@ -60,7 +65,7 @@ const en: typeof pl = {
   add: 'Add clothing', edit: 'Edit', remove: 'Delete', cancel: 'Cancel', save: 'Save', saving: 'Saving…',
   emptyTitle: 'Start with one favourite', emptyBody: 'A favourite shirt, comfortable shoes, a wedding dress. A photo and a short description are enough to start.',
   count: 'items', limit: 'Up to 100 items · one photo per item',
-  future: 'Outfits from your clothes and visualisations will follow in a later stage. Current outfit suggestions remain a demo.',
+  future: 'Use Outfits to combine your own clothes. AI visualisation generation is switched off.',
   name: 'Item name', category: 'Category', color: 'Colour', size: 'Size (optional)', occasions: 'Which occasions?',
   photoKind: 'What is in the photo?', garment: 'Clothing only', person: 'Clothing on me',
   library: 'Choose a photo', camera: 'Take a photo', photo: 'Clothing photo', preparing: 'Preparing photo…',
@@ -85,6 +90,11 @@ const en: typeof pl = {
   localUnavailable: 'The demo data could not be read. Return to the demo and resolve the read issue before importing.',
   reasonSetting: 'Ask why I rejected a suggestion', retry: 'Try again', photoFailure: 'The photo could not be loaded.',
   errors: {
+    invalid_body_fit: 'Enter measurements above 0 and up to 300 cm, with at most one decimal place. Sizes can have up to 30 characters.',
+    storage_consent_required: 'Confirm photo storage consent before saving the selected body photo.',
+    ai_disabled: 'AI generation is switched off at this stage.',
+    result_unavailable: 'This result is no longer available. Refresh the history.',
+    invalid_outfit: 'This outfit or replacement no longer matches the current items, occasion or size label. Find outfits again.',
     generic: 'The operation was not confirmed. Check your connection and try again.',
     not_invited: 'This account has no pilot access. Choose an invited Google account.',
     unauthenticated: 'Your session expired. Please sign in again.',
@@ -104,6 +114,6 @@ export function privateCopy(locale: Locale) { return locale === 'en' ? en : pl; 
 export function privateError(locale: Locale, error: unknown) {
   const errors = privateCopy(locale).errors;
   const code = (typeof error === 'string' ? error : error && typeof error === 'object' && 'code' in error ? String(error.code) : 'generic').toLowerCase();
-  const aliases: Record<string, keyof typeof errors> = { forbidden: 'not_invited', signed_out: 'unauthenticated', session: 'unauthenticated', item_limit: 'limit_exceeded', storage_limit: 'limit_exceeded', photo_too_large: 'too_large', development_build_required: 'native_development_build_required' };
+  const aliases: Record<string, keyof typeof errors> = { forbidden: 'not_invited', signed_out: 'unauthenticated', session: 'unauthenticated', item_limit: 'limit_exceeded', storage_limit: 'limit_exceeded', photo_too_large: 'too_large', development_build_required: 'native_development_build_required', invalid_body: 'invalid_body_fit', invalid_replacement: 'invalid_outfit', stale_outfit: 'invalid_outfit', styling_limit: 'limit_exceeded' };
   return errors[aliases[code] ?? code as keyof typeof errors] ?? errors.generic;
 }

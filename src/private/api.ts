@@ -1,4 +1,4 @@
-import { PrivateError, type CloudState, type ExportManifest, type ItemFields, type PrivateItem, type PrivateSettings, type PrivateSnapshot } from './model.ts';
+import { PrivateError, type VisualizationJob, type BodyFit, type BodyFitData, type StylingData, type StylingState, type CloudState, type ExportManifest, type ItemFields, type PrivateItem, type PrivateSettings, type PrivateSnapshot } from './model.ts';
 
 export type WardrobeCall = <T>(action: string, payload?: Record<string, unknown>, signal?: AbortSignal) => Promise<T>;
 export interface DeleteResult { status: 'deleted' | 'pending' }
@@ -24,6 +24,22 @@ export class WardrobeApi {
   deletePhoto(itemId: string, expectedRevision: number, signal?: AbortSignal) {
     return this.call<DeleteResult>('deletePhoto', { itemId, expectedRevision }, signal);
   }
+  saveBodyFit(data: BodyFitData, expectedRevision: number, signal?: AbortSignal) {
+    return this.call<BodyFit>('saveBodyFit', { data, expectedRevision }, signal);
+  }
+  uploadBodyPhoto(expectedRevision: number, operationId: string, photo: PhotoUpload, storageConsentVersion: string, signal?: AbortSignal) {
+    return this.call<BodyFit>('uploadBodyPhoto', { expectedRevision, operationId, ...photo, storageConsentVersion }, signal);
+  }
+  deleteBodyPhoto(expectedRevision: number, signal?: AbortSignal) {
+    return this.call<DeleteResult>('deleteBodyPhoto', { expectedRevision }, signal);
+  }
+  saveStyling(data: StylingData, expectedRevision: number, signal?: AbortSignal) {
+    return this.call<StylingState>('saveStyling', { data, expectedRevision }, signal);
+  }
+  getVisualization(jobId: string, signal?: AbortSignal) { return this.call<VisualizationJob>('getVisualization', { jobId }, signal); }
+  cancelVisualization(jobId: string, expectedRevision: number, signal?: AbortSignal) { return this.call<VisualizationJob>('cancelVisualization', { jobId, expectedRevision }, signal); }
+  deleteVisualization(jobId: string, expectedRevision: number, signal?: AbortSignal) { return this.call<DeleteResult>('deleteVisualization', { jobId, expectedRevision }, signal); }
+  deleteAiData(expectedRevision: number, signal?: AbortSignal) { return this.call<DeleteResult>('deleteAiData', { expectedRevision }, signal); }
   deleteAccount(signal?: AbortSignal) { return this.call<DeleteResult>('deleteAccount', {}, signal); }
   export(signal?: AbortSignal) { return this.call<ExportManifest>('export', {}, signal); }
 }

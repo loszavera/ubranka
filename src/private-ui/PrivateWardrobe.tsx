@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Switch, Text, View, useWindowDimensions } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Switch, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { AppState, Locale, Profile } from '../domain/model';
 import { copy } from '../i18n';
@@ -11,27 +11,14 @@ import { ProfileForm } from '../ui/ProfileForm';
 import { colors } from '../ui/theme';
 import { privateCopy, privateError } from './copy';
 import { ItemEditor } from './ItemEditor';
+import { BodyFitPanel } from './BodyFitPanel';
+import { OutfitsPanel } from './OutfitsPanel';
+import { VisualizationPanel } from './VisualizationPanel';
+import { PrivatePhoto } from './PrivatePhoto';
+import { p33Copy } from './p33copy';
 
 type PrivateApi = ReturnType<typeof usePrivateWardrobe>;
-type Tab = 'wardrobe' | 'profiles' | 'account';
-
-function Photo({ path, api, locale }: { path: string; api: PrivateApi; locale: Locale }) {
-  const getPhoto = api.getPhoto;
-  const [result, setResult] = useState<{ path: string; loader: typeof getPhoto; uri?: string; error?: boolean }>();
-  const current = result?.path === path && result.loader === getPhoto ? result : undefined;
-  useEffect(() => {
-    let active = true; let release: (() => void) | undefined;
-    void getPhoto(path).then(photo => {
-      if (!active) { photo.release(); return; }
-      release = photo.release; setResult({ path, loader: getPhoto, uri: photo.uri });
-    }).catch(() => { if (active) setResult({ path, loader: getPhoto, error: true }); });
-    return () => { active = false; release?.(); };
-  }, [path, getPhoto]);
-  return <View style={s.photo}>
-    {current?.uri ? <Image source={{ uri: current.uri }} style={s.image} resizeMode="contain" accessibilityLabel={privateCopy(locale).photo} />
-      : current?.error ? <Text style={s.note}>{privateCopy(locale).photoFailure}</Text> : <ActivityIndicator color={colors.plum} />}
-  </View>;
-}
+type Tab = 'wardrobe' | 'profiles' | 'fit' | 'outfits' | 'visuals' | 'account';
 
 function AccountContent({ api, locale, onDelete }: { api: PrivateApi; locale: Locale; onDelete: () => void }) {
   const t = privateCopy(locale);
@@ -57,7 +44,7 @@ export default function PrivateWardrobe(props: PrivateWardrobeProps) {
 function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: PrivateWardrobeProps & { api: PrivateApi }) {
   const [localLocale, setLocalLocale] = useState<Locale>(demoState.locale);
   const locale = api.snapshot?.state.data.locale ?? localLocale;
-  const t = privateCopy(locale); const common = copy(locale);
+  const t = privateCopy(locale); const common = copy(locale); const p33 = p33Copy(locale);
   const { width } = useWindowDimensions();
   const [tab, setTab] = useState<Tab>('wardrobe');
   const [editor, setEditor] = useState<SaveItemInput | null>(null);
@@ -119,7 +106,7 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
         {api.identity && !api.snapshot && api.status !== 'loading' ? <Button label={t.signOut} kind="secondary" onPress={() => { void api.signOut().catch(() => {}); }} /> : null}
         {api.snapshot && settings ? <>
           <View style={s.accountLine}><Text style={s.note}>{api.identity?.email}</Text><Button label={t.refresh} kind="quiet" compact disabled={api.busy} onPress={() => { void api.refresh(); }} /></View>
-          <View style={s.nav}>{(['wardrobe', 'profiles', 'account'] as const).map(key => <View key={key} style={{ flex: 1 }}><Button label={t[key]} selected={tab === key} kind={tab === key ? 'primary' : 'quiet'} compact onPress={() => { setTab(key); setNotice(''); }} /></View>)}</View>
+          <View style={s.nav}>{(['wardrobe', 'profiles', 'fit', 'outfits', 'visuals', 'account'] as const).map(key => <View key={key} style={{ flexGrow: 1, flexBasis: width < 450 ? '45%' : '30%' }}><Button label={key === 'fit' || key === 'outfits' || key === 'visuals' ? p33[key] : t[key]} selected={tab === key} kind={tab === key ? 'primary' : 'quiet'} compact disabled={api.busy} onPress={() => { setTab(key); setNotice(''); }} /></View>)}</View>
           {tab === 'wardrobe' ? <>
             <View style={s.accountLine}><Text style={s.note}>{activeItems.length}/100 {t.count}</Text><Button label={t.add} icon="plus" disabled={api.busy || api.snapshot.items.length >= 100} onPress={() => openEditor()} /></View>
             {pendingItemCount > 0 ? <View style={s.warning} accessibilityLiveRegion="polite">
@@ -127,7 +114,7 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
             </View> : null}
             {activeItems.length === 0 ? <View style={s.card}><Icon name="wardrobe" size={42} /><Text style={s.cardTitle}>{t.emptyTitle}</Text><Text style={s.body}>{t.emptyBody}</Text></View> : null}
             <View style={s.grid}>{activeItems.map(item => <View key={item.id} style={[s.item, { width: width >= 650 ? '48%' : '100%' }]}>
-              {item.photo ? <Photo path={item.photo.thumbPath} api={api} locale={locale} /> : <View style={s.photo}><Icon name="hanger" size={38} /></View>}
+              {item.photo ? <PrivatePhoto path={item.photo.thumbPath} api={api} locale={locale} height={210} /> : <View style={s.photo}><Icon name="hanger" size={38} /></View>}
               <Text style={s.cardTitle}>{item.name}</Text><Text style={s.body}>{t.categories[item.category]} · {item.color}{item.size ? ` · ${item.size}` : ''}</Text>
               <Text style={s.note}>{item.occasions.map(occasion => common[occasion]).join(' · ')}</Text>
               <View style={controls.row}>
@@ -149,7 +136,10 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
             <View style={s.accountLine}><Text style={s.body}>{t.reasonSetting}</Text><Switch accessibilityLabel={t.reasonSetting} value={settings.askReason} disabled={api.busy} onValueChange={askReason => { void saveSettings({ ...settings, askReason }, api.snapshot!.state.revision); }} /></View>
             <Button label={t.import} kind="secondary" disabled={api.busy || !demoAvailable} onPress={showImport} />
             {!demoAvailable ? <Text style={s.note}>{t.localUnavailable}</Text> : null}
-          </> : <AccountContent api={api} locale={locale} onDelete={() => { api.clearError(); setConfirmAccount(true); }} />}
+          </> : tab === 'fit' ? <BodyFitPanel api={api} locale={locale} />
+            : tab === 'outfits' ? <OutfitsPanel api={api} locale={locale} />
+              : tab === 'visuals' ? <VisualizationPanel api={api} locale={locale} />
+                : <AccountContent api={api} locale={locale} onDelete={() => { api.clearError(); setConfirmAccount(true); }} />}
         </> : null}
       </View>
     </ScrollView>
@@ -201,7 +191,7 @@ const s = StyleSheet.create({
   card: { borderRadius: 22, backgroundColor: colors.surface, padding: 22, gap: 16, borderWidth: 1, borderColor: colors.line },
   cardTitle: { color: colors.ink, fontSize: 21, lineHeight: 28, fontWeight: '600' },
   symbol: { padding: 20, borderRadius: 20, backgroundColor: colors.faint, alignSelf: 'flex-start' },
-  nav: { flexDirection: 'row', gap: 4, borderRadius: 16, backgroundColor: colors.faint, padding: 4 },
+  nav: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, borderRadius: 16, backgroundColor: colors.faint, padding: 4 },
   accountLine: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' },
   grid: { flexDirection: 'row', gap: 18, flexWrap: 'wrap' },
   item: { padding: 16, borderWidth: 1, borderColor: colors.line, borderRadius: 22, backgroundColor: colors.surface, gap: 12 },

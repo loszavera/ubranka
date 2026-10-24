@@ -1,5 +1,6 @@
 import type { AppState, Feedback, Locale, Occasion, Profile } from '../domain/model.ts';
 import { OCCASIONS } from '../domain/model.ts';
+import type { SavedPrivateOutfit, PrivateOutfitFeedback } from './outfits.ts';
 
 export const PRIVATE_CATEGORIES = ['top', 'bottom', 'layer', 'shoes', 'dress', 'accessory'] as const;
 export type PrivateCategory = typeof PRIVATE_CATEGORIES[number];
@@ -37,14 +38,45 @@ export interface PrivateItem extends ItemFields {
   createdAt: string;
   updatedAt: string;
 }
-export interface PrivateSnapshot { accountId: string; state: CloudState; items: PrivateItem[] }
-export interface ExportManifest { exportedAt: string; state: CloudState; items: PrivateItem[] }
+export interface BodyFitData {
+  heightCm: number | null; chestCm: number | null; waistCm: number | null; hipsCm: number | null;
+  sizeSystem: 'EU' | 'UK' | 'US' | 'other'; topSize: string; bottomSize: string; shoeSize: string;
+}
+export interface BodyFit { revision: number; data: BodyFitData; photo: PrivatePhoto | null; photoDeletion: 'pending' | null }
+export interface StylingData { outfits: SavedPrivateOutfit[]; feedback: PrivateOutfitFeedback[] }
+export interface StylingState { revision: number; data: StylingData }
+export type VisualizationStatus = 'reserved' | 'sent' | 'succeeded' | 'failed' | 'outcome_unknown' | 'cancelled' | 'expired';
+export interface VisualizationJob {
+  id: string; revision: number; outfitId: string; status: VisualizationStatus; createdAt: string; completedAt: string | null;
+  expiresAt: string; errorCode: string | null; reservedPln: number; spentPln: number | null; result: PrivatePhoto | null;
+}
+export interface VisualizationState {
+  mode: 'off'; jobs: VisualizationJob[]; consent: { accepted: false; version: string };
+  limits: { results: number; attempts: number; dailyAttempts: number; usedResults: number; usedAttempts: number; usedDailyAttempts: number;
+    reservedPln: number; spentPln: number; budgetPln: number; trialEndsAt: string | null; monthResetsAt: string; dayResetsAt: string };
+}
+export interface PrivateSnapshot { accountId: string; state: CloudState; items: PrivateItem[]; bodyFit?: BodyFit; styling?: StylingState; visualization?: VisualizationState }
+export interface ExportManifest { exportedAt: string; state: CloudState; items: PrivateItem[]; bodyFit?: BodyFit; styling?: StylingState; visualization?: VisualizationState }
 export interface SaveItemInput extends ItemFields { id: string; expectedRevision?: number }
 export interface PrivateIdentity { id: string; email: string }
 
 export class PrivateError extends Error {
   readonly code: string;
   constructor(code: string) { super(code); this.name = 'PrivateError'; this.code = code; }
+}
+
+export const BODY_STORAGE_CONSENT = 'p33a-body-v1';
+export function emptyBodyFitData(): BodyFitData {
+  return { heightCm: null, chestCm: null, waistCm: null, hipsCm: null, sizeSystem: 'EU', topSize: '', bottomSize: '', shoeSize: '' };
+}
+export function normalizeBodyFitData(data: BodyFitData): BodyFitData {
+  for (const key of ['heightCm', 'chestCm', 'waistCm', 'hipsCm'] as const) {
+    const value = data[key];
+    if (value !== null && (!Number.isFinite(value) || value <= 0 || value > 300 || Number(value.toFixed(1)) !== value)) throw new PrivateError('INVALID_BODY_FIT');
+  }
+  if (!['EU', 'UK', 'US', 'other'].includes(data.sizeSystem)) throw new PrivateError('INVALID_BODY_FIT');
+  for (const key of ['topSize', 'bottomSize', 'shoeSize'] as const) if (typeof data[key] !== 'string' || data[key].trim().length > 30) throw new PrivateError('INVALID_BODY_FIT');
+  return { ...data, topSize: data.topSize.trim(), bottomSize: data.bottomSize.trim(), shoeSize: data.shoeSize.trim() };
 }
 
 export function emptyPrivateSettings(): PrivateSettings {

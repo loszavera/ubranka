@@ -10,7 +10,7 @@ import { PrivateError } from './model';
 import { PrivatePhotoAccess } from './photoAccess';
 import { getPrivateServices } from './supabase';
 import { PrivateStore } from './store';
-import { downloadPrivateExport } from './export';
+import { downloadPrivateExport, downloadPrivateFile } from './export';
 
 export const newPrivateId = () => randomUUID();
 WebBrowser.maybeCompleteAuthSession();
@@ -132,13 +132,26 @@ export function usePrivateWardrobe() {
 
   const exportData = useCallback(async () => {
     if (!photos || exporting) throw new PrivateError(exporting ? 'BUSY' : 'NOT_CONFIGURED');
-    const accountId = store.getSnapshot().identity?.id;
-    if (!accountId) throw new PrivateError('SIGNED_OUT');
+    const identity = store.getSnapshot().identity;
+    if (!identity) throw new PrivateError('SIGNED_OUT');
     setExporting(true); setAuthError(null);
     try {
       const manifest = await store.exportManifest();
-      await downloadPrivateExport(manifest, path => photos.download(path), () => store.getSnapshot().identity?.id === accountId);
+      await downloadPrivateExport(manifest, path => photos.download(path), () => store.getSnapshot().identity === identity);
     } catch (error) { const safe = asPrivateError(error); setAuthError(safe.code); throw safe; }
+    finally { setExporting(false); }
+  }, [photos, store, exporting]);
+
+  const downloadVisualization = useCallback(async (jobId: string) => {
+    if (!photos || exporting) throw new PrivateError(exporting ? 'BUSY' : 'NOT_CONFIGURED');
+    const identity = store.getSnapshot().identity;
+    const job = store.getSnapshot().snapshot?.visualization?.jobs.find(value => value.id === jobId);
+    if (!identity || !job?.result || job.status !== 'succeeded' || !(Date.parse(job.expiresAt) > Date.now())) throw new PrivateError('RESULT_UNAVAILABLE');
+    const result = job.result;
+    const isCurrent = () => store.getSnapshot().identity === identity && store.getSnapshot().snapshot?.visualization?.jobs.some(value => value.id === jobId && value.result?.id === result.id && value.status === 'succeeded' && Date.parse(value.expiresAt) > Date.now()) === true;
+    setExporting(true); setAuthError(null);
+    try { await downloadPrivateFile(await photos.download(result.mainPath), result.mimeType, 'ubranka-visualization.jpg', isCurrent); }
+    catch (error) { const safe = asPrivateError(error); setAuthError(safe.code); throw safe; }
     finally { setExporting(false); }
   }, [photos, store, exporting]);
 
@@ -150,6 +163,8 @@ export function usePrivateWardrobe() {
     pendingSave: view.pendingSave,
     signIn, signOut, refresh: () => { store.clearError(); return store.refresh(); }, clearError: () => { setAuthError(null); store.clearError(); },
     saveSettings: store.saveSettings, saveItem: store.saveItem, deleteItem: store.deleteItem, deletePhoto: store.deletePhoto,
-    deleteAccount, importP2: store.importP2, getPhoto, exportData,
+    saveBodyFit: store.saveBodyFit, uploadBodyPhoto: store.uploadBodyPhoto, deleteBodyPhoto: store.deleteBodyPhoto, saveStyling: store.saveStyling,
+    cancelVisualization: store.cancelVisualization, deleteVisualization: store.deleteVisualization, deleteAiData: store.deleteAiData,
+    deleteAccount, importP2: store.importP2, getPhoto, exportData, downloadVisualization,
   };
 }

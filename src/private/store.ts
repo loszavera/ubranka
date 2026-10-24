@@ -1,6 +1,6 @@
 import type { AppState } from '../domain/model.ts';
 import { WardrobeApi, asPrivateError, type DeleteResult } from './api.ts';
-import { bytesToBase64, importReceiptId, mergeP2Import, normalizeItemFields, PrivateError, type PrivateIdentity, type PrivateItem, type PrivateSettings, type PrivateSnapshot, type SaveItemInput } from './model.ts';
+import { BODY_STORAGE_CONSENT, bytesToBase64, importReceiptId, mergeP2Import, normalizeBodyFitData, normalizeItemFields, PrivateError, type BodyFitData, type StylingData, type PrivateIdentity, type PrivateItem, type PrivateSettings, type PrivateSnapshot, type SaveItemInput } from './model.ts';
 
 export interface UploadPhoto {
   main: { bytes: Uint8Array; mimeType: 'image/jpeg' };
@@ -65,7 +65,7 @@ export class PrivateStore {
       if (version !== this.refreshVersion) return;
       if (snapshot.accountId !== this.view.identity?.id) throw new PrivateError('INVALID_RESPONSE');
       if (JSON.stringify(snapshot) !== JSON.stringify(this.view.snapshot)) {
-        const paths = (value: PrivateSnapshot | null) => value?.items.map(item => item.photo?.id ?? '').join('|');
+        const paths = (value: PrivateSnapshot | null) => `${value?.items.map(item => item.photo?.id ?? '').join('|')}|${value?.bodyFit?.photo?.id ?? ''}|${value?.visualization?.jobs.map(job => job.result?.id ?? '').join('|')}`;
         if (paths(snapshot) !== paths(this.view.snapshot)) this.clearPhotos();
         this.patch({ snapshot });
       }
@@ -98,6 +98,17 @@ export class PrivateStore {
     if (!snapshot) return;
     this.clearPhotos();
     this.patch({ snapshot: { ...snapshot, items: [...snapshot.items.filter(existing => existing.id !== item.id), item] } });
+    this.hideVisualizationResults(item.id);
+  }
+
+  private hideVisualizationResults(itemId?: string) {
+    const snapshot = this.view.snapshot;
+    if (!snapshot?.visualization) return;
+    const affected = itemId ? new Set(snapshot.styling?.data.outfits.filter(outfit => outfit.itemIds.includes(itemId)).map(outfit => outfit.id) ?? []) : null;
+    // The server invalidates dependent jobs. Hide controlled result copies as
+    // soon as a mutation is acknowledged, even if the follow-up refresh fails.
+    // Preserve ledger/status until the authoritative snapshot arrives.
+    this.patch({ snapshot: { ...snapshot, visualization: { ...snapshot.visualization, jobs: snapshot.visualization.jobs.map(job => !affected || affected.has(job.outfitId) ? { ...job, result: null } : job) } } });
   }
 
   saveSettings = (data: PrivateSettings, expectedRevision: number) => this.mutate(async (signal, generation) => {
@@ -140,6 +151,7 @@ export class PrivateStore {
   deleteItem = (item: PrivateItem) => this.mutate(async (signal, generation) => {
     const result = await this.api.deleteItem(item.id, item.revision, signal); this.assertCurrent(generation);
     this.clearPhotos();
+    this.hideVisualizationResults(item.id);
     // Keep the reserved slot until the server confirms physical cleanup. The
     // next bootstrap also includes this tombstone, so reload cannot restore a
     // deleted card or temporarily make an occupied quota slot look available.
@@ -152,8 +164,70 @@ export class PrivateStore {
   deletePhoto = (item: PrivateItem) => this.mutate(async (signal, generation) => {
     const result = await this.api.deletePhoto(item.id, item.revision, signal); this.assertCurrent(generation);
     this.clearPhotos();
+    this.hideVisualizationResults(item.id);
+    if (this.view.snapshot) this.patch({ snapshot: { ...this.view.snapshot, items: this.view.snapshot.items.map(existing => existing.id === item.id ? { ...existing, photo: null } : existing) } });
     const snapshot = await this.api.bootstrap(signal); this.assertCurrent(generation);
     this.patch({ snapshot, deletion: result }); return result;
+  });
+
+  saveBodyFit = (data: BodyFitData, expectedRevision: number) => this.mutate(async (signal, generation) => {
+    const bodyFit = await this.api.saveBodyFit(normalizeBodyFitData(data), expectedRevision, signal); this.assertCurrent(generation);
+    if (this.view.snapshot) this.patch({ snapshot: { ...this.view.snapshot, bodyFit } });
+    this.clearPhotos(); this.hideVisualizationResults();
+    return bodyFit;
+  });
+
+  uploadBodyPhoto = (expectedRevision: number, photo: UploadPhoto, consent: boolean) => this.mutate(async (signal, generation) => {
+    if (!consent) throw new PrivateError('STORAGE_CONSENT_REQUIRED');
+    if (!photo.main.bytes.length || !photo.thumbnail.bytes.length || photo.main.bytes.length > 1_000_000 || photo.thumbnail.bytes.length > 100_000) throw new PrivateError('PHOTO_TOO_LARGE');
+    let operationId = this.photoOperations.get(photo);
+    if (!operationId) { operationId = this.newId(); this.photoOperations.set(photo, operationId); }
+    const bodyFit = await this.api.uploadBodyPhoto(expectedRevision, operationId, {
+      mainBase64: bytesToBase64(photo.main.bytes), thumbBase64: bytesToBase64(photo.thumbnail.bytes), mimeType: 'image/jpeg',
+    }, BODY_STORAGE_CONSENT, signal); this.assertCurrent(generation);
+    this.clearPhotos();
+    if (this.view.snapshot) this.patch({ snapshot: { ...this.view.snapshot, bodyFit } });
+    this.hideVisualizationResults();
+    return bodyFit;
+  });
+
+  deleteBodyPhoto = (expectedRevision: number) => this.mutate(async (signal, generation) => {
+    const result = await this.api.deleteBodyPhoto(expectedRevision, signal); this.assertCurrent(generation);
+    this.clearPhotos();
+    this.hideVisualizationResults();
+    const current = this.view.snapshot;
+    if (current?.bodyFit) this.patch({ snapshot: { ...current, bodyFit: { ...current.bodyFit, photo: null, photoDeletion: result.status === 'pending' ? 'pending' : null } } });
+    const snapshot = await this.api.bootstrap(signal); this.assertCurrent(generation);
+    this.patch({ snapshot }); return result;
+  });
+
+  saveStyling = (data: StylingData, expectedRevision: number) => this.mutate(async (signal, generation) => {
+    const styling = await this.api.saveStyling(data, expectedRevision, signal); this.assertCurrent(generation);
+    if (this.view.snapshot) this.patch({ snapshot: { ...this.view.snapshot, styling } });
+    return styling;
+  });
+
+  cancelVisualization = (jobId: string, expectedRevision: number) => this.mutate(async (signal, generation) => {
+    const job = await this.api.cancelVisualization(jobId, expectedRevision, signal); this.assertCurrent(generation);
+    const current = this.view.snapshot;
+    if (current?.visualization) this.patch({ snapshot: { ...current, visualization: { ...current.visualization, jobs: current.visualization.jobs.map(existing => existing.id === job.id ? job : existing) } } });
+    return job;
+  });
+  deleteVisualization = (jobId: string, expectedRevision: number) => this.mutate(async (signal, generation) => {
+    const result = await this.api.deleteVisualization(jobId, expectedRevision, signal); this.assertCurrent(generation);
+    this.clearPhotos();
+    const current = this.view.snapshot;
+    if (current?.visualization) this.patch({ snapshot: { ...current, visualization: { ...current.visualization, jobs: current.visualization.jobs.filter(job => job.id !== jobId) } } });
+    const snapshot = await this.api.bootstrap(signal); this.assertCurrent(generation);
+    this.patch({ snapshot }); return result;
+  });
+  deleteAiData = (expectedRevision: number) => this.mutate(async (signal, generation) => {
+    const result = await this.api.deleteAiData(expectedRevision, signal); this.assertCurrent(generation);
+    this.clearPhotos();
+    const current = this.view.snapshot;
+    if (current?.bodyFit) this.patch({ snapshot: { ...current, bodyFit: { ...current.bodyFit, photo: null, photoDeletion: result.status === 'pending' ? 'pending' : null }, visualization: current.visualization ? { ...current.visualization, jobs: [] } : undefined } });
+    const snapshot = await this.api.bootstrap(signal); this.assertCurrent(generation);
+    this.patch({ snapshot }); return result;
   });
 
   importP2 = (local: AppState, selectedProfileIds: string[], includeFeedback: boolean) => this.mutate(async (signal, generation) => {
