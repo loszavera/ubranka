@@ -64,7 +64,7 @@ export function VisualizationPanel({ api, locale }: { api: Api; locale: Locale }
       <Text style={s.title}>{t.jobStates[job.status]}</Text><Text style={s.note}>{new Date(job.createdAt).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-GB')}</Text>
       <Text style={s.body}>{t.spent}: {money(job.spentPln)} · {t.reserved}: {money(job.reservedPln)}</Text>
       {job.status === 'outcome_unknown' || job.status === 'sent' ? <Text style={s.body}>{t.reservationHelp}</Text> : null}
-      {job.status === 'succeeded' && job.result && Date.parse(job.expiresAt) > now ? <><PrivatePhoto path={job.result.thumbPath} api={api} locale={locale} /><Text style={s.note}>{t.visualCaveat}</Text><Button label={t.download} kind="secondary" disabled={api.busy} onPress={() => run(api.downloadVisualization(job.id))} /></> : null}
+      {job.status === 'succeeded' && job.result && Date.parse(job.expiresAt) > now ? <><PrivatePhoto path={job.result.thumbPath} api={api} locale={locale} /><Text style={s.note}>{t.visualCaveat}</Text><Button label={t.download} kind="secondary" disabled={api.busy} onPress={() => run(api.downloadVisualization(job.id))} /></> : job.status === 'succeeded' ? <Text style={s.note}>{t.noResult}</Text> : null}
       {job.status === 'reserved' ? <Button label={t.cancelJob} disabled={api.busy} kind="secondary" onPress={() => run(api.cancelVisualization(job.id, job.revision))} /> : null}
       {['succeeded', 'failed', 'outcome_unknown', 'cancelled', 'expired'].includes(job.status) ? <Button label={t.deleteJob} disabled={api.busy} kind="quiet" onPress={() => { api.clearError(); setDeleting(job); }} /> : null}
     </View>)}

@@ -7,7 +7,7 @@ import type { PreparedPhoto } from '../private/photos.types';
 import type { usePrivateWardrobe } from '../private/usePrivateWardrobe';
 import { Button, Chip, Dialog, Field, styles } from '../ui/Controls';
 import { colors } from '../ui/theme';
-import { privateError } from './copy';
+import { privateCopy, privateError } from './copy';
 import { p33Copy } from './p33copy';
 import { p33Styles as s } from './p33styles';
 import { PrivatePhoto } from './PrivatePhoto';
@@ -39,6 +39,7 @@ function FitForm({ initial, latest, api, locale, onClose }: { initial: BodyFit; 
       <Text style={s.note}>{t.current}: {measurements.map(key => `${t[key]}: ${latest.data[key] ?? t.missing}`).join(' · ')} · {latest.data.sizeSystem} · {sizes.map(key => `${t[key]}: ${latest.data[key] || t.missing}`).join(' · ')}</Text>
       <Button label={t.rebase} kind="secondary" disabled={api.busy} onPress={() => { setRevision(latest.revision); setError(''); api.clearError(); }} /></View> : null}
     {error ? <Text style={s.error} accessibilityRole="alert">{error}</Text> : null}
+    {api.conflict ? <Button label={privateCopy(locale).reload} kind="secondary" disabled={api.busy} onPress={() => { void api.refresh(); }} /> : null}
     <Button label={t.save} disabled={api.busy || stale} onPress={() => { void save(); }} />
   </View>;
 }
@@ -101,6 +102,7 @@ export function BodyFitPanel({ api, locale }: { api: Api; locale: Locale }) {
     <Dialog visible={deleteRevision !== null} title={t.removePhoto} closeLabel={t.cancel} onClose={() => { if (!api.busy) setDeleteRevision(null); }}>
       <Text style={s.body}>{t.removePhotoBody}</Text>{deleteRevision !== body.revision ? <Text style={s.error}>{t.stale}</Text> : null}
       {error ? <Text style={s.error} accessibilityRole="alert">{error}</Text> : null}
+      {api.conflict ? <Button label={privateCopy(locale).reload} kind="secondary" disabled={api.busy} onPress={() => { void api.refresh(); }} /> : null}
       <Button label={t.removePhoto} disabled={api.busy || deleteRevision !== body.revision} onPress={() => { if (deleteRevision !== null) void api.deleteBodyPhoto(deleteRevision).then(() => setDeleteRevision(null)).catch(issue => setError(privateError(locale, issue))); }} />
     </Dialog>
   </View>;

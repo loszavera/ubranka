@@ -150,7 +150,7 @@ export function usePrivateWardrobe() {
     const result = job.result;
     const isCurrent = () => store.getSnapshot().identity === identity && store.getSnapshot().snapshot?.visualization?.jobs.some(value => value.id === jobId && value.result?.id === result.id && value.status === 'succeeded' && Date.parse(value.expiresAt) > Date.now()) === true;
     setExporting(true); setAuthError(null);
-    try { await downloadPrivateFile(await photos.download(result.mainPath), result.mimeType, 'ubranka-visualization.jpg', isCurrent); }
+    try { await downloadPrivateFile(await photos.download(result.mainPath), result.mimeType, result.mimeType === 'image/png' ? 'ubranka-visualization.png' : 'ubranka-visualization.jpg', isCurrent); }
     catch (error) { const safe = asPrivateError(error); setAuthError(safe.code); throw safe; }
     finally { setExporting(false); }
   }, [photos, store, exporting]);

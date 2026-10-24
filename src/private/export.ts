@@ -16,7 +16,7 @@ export async function downloadPrivateExport(manifest: ExportManifest, download: 
     if (!job.result || job.status !== 'succeeded' || !(Date.parse(job.expiresAt) > Date.now())) continue;
     if (!isCurrent()) throw new PrivateError('SESSION_CHANGED');
     if (!/^[\da-f-]{36}$/i.test(job.id)) throw new PrivateError('INVALID_RESPONSE');
-    files[`visualizations/${job.id}.png`] = await download(job.result.mainPath);
+    files[`visualizations/${job.id}.${job.result.mimeType === 'image/png' ? 'png' : 'jpg'}`] = await download(job.result.mainPath);
     files[`visualizations/${job.id}-thumbnail.jpg`] = await download(job.result.thumbPath);
   }
   for (const item of manifest.items) {

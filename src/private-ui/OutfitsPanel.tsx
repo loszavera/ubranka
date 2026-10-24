@@ -33,7 +33,7 @@ export function OutfitsPanel({ api, locale }: { api: Api; locale: Locale }) {
   const currentRound = round?.key === key ? round : undefined;
   const getCurrent = (saved: SavedPrivateOutfit) => {
     const ownerProfile = snapshot.state.data.profiles.find(value => value.id === saved.profileId);
-    return ownerProfile ? rehydratePrivateOutfit({ savedOutfit: saved, accountId: snapshot.accountId, items: snapshot.items, profile: ownerProfile, bodyFit: snapshot.bodyFit?.data }).outfit : null;
+    return ownerProfile ? rehydratePrivateOutfit({ savedOutfit: saved, accountId: snapshot.accountId, items: snapshot.items, profile: ownerProfile, bodyFit: snapshot.bodyFit?.data, feedback: styling.data.feedback }).outfit : null;
   };
   const find = () => {
     if (!profile || api.busy) return;
@@ -75,7 +75,13 @@ export function OutfitsPanel({ api, locale }: { api: Api; locale: Locale }) {
     </View>;
   };
   const replacementSource = swap ? snapshot.items.find(item => item.id === swap.itemId) : null;
-  const replacements = swap && replacementSource ? snapshot.items.filter(item => item.status === 'active' && item.category === replacementSource.category && item.occasions.includes(swap.outfit.occasion) && !swap.outfit.itemIds.includes(item.id)) : [];
+  const replacements = swap && replacementSource ? snapshot.items.filter(item => {
+    if (item.status !== 'active' || item.category !== replacementSource.category || !item.occasions.includes(swap.outfit.occasion) || swap.outfit.itemIds.includes(item.id)) return false;
+    const targetProfile = snapshot.state.data.profiles.find(value => value.id === swap.outfit.profileId);
+    if (!targetProfile) return false;
+    try { swapPrivateOutfitItem({ ...swap, replacementId: item.id, items: snapshot.items, profile: targetProfile, feedback: styling.data.feedback, bodyFit: snapshot.bodyFit?.data }); return true; }
+    catch { return false; }
+  }) : [];
   return <View style={s.stack}>
     <View style={s.card}><Text accessibilityRole="header" style={s.title}>{t.outfits}</Text><Text style={s.body}>{t.outfitIntro}</Text>
       <Text style={styles.label}>{t.chooseProfile}</Text><View style={styles.row}>{snapshot.state.data.profiles.map(value => <Chip key={value.id} label={value.name} selected={profileId === value.id} disabled={api.busy} onPress={() => { setProfileId(value.id); setOccasion(value.occasion); setRound(undefined); setVisual(null); setNotice(''); }} />)}</View>
