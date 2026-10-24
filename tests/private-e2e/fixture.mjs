@@ -48,7 +48,7 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
   const photoRequests = [];
   const unexpected = [];
   const operations = new Map();
-  const control = { state, second, objects, logs, photoRequests, unexpected, failPhoto: 0, holdPhoto: null, holdDownload: null, completedDownloads: 0, pendingDelete: false, pendingAccountDelete: false, deny: false };
+  const control = { state, second, objects, logs, photoRequests, unexpected, failPhoto: 0, holdPhoto: null, holdDownload: null, completedDownloads: 0, pendingDelete: false, failDelete: false, pendingAccountDelete: false, deny: false };
   if (existingItem) {
     const mainPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/thumb.jpg`;
     objects.set(mainPath, image); objects.set(thumbPath, image);
@@ -124,10 +124,17 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
         item.revision++; operations.set(body.operationId, structuredClone(item)); return json({ data: item });
       }
       case 'deleteItem':
+        if (control.failDelete) return fail('SERVICE_UNAVAILABLE', 503);
         if (!item || item.revision !== body.expectedRevision) return fail('CONFLICT');
+        if (control.pendingDelete) {
+          // Match the real backend: access is revoked but files and the quota
+          // tombstone remain until the cleanup worker confirms deletion.
+          Object.assign(item, { status: 'deleting', photo: null, revision: item.revision + 1 });
+          return json({ data: { status: 'pending' } });
+        }
         if (item.photo) { objects.delete(item.photo.mainPath); objects.delete(item.photo.thumbPath); }
         current.items = current.items.filter(value => value.id !== body.itemId);
-        return json({ data: { status: control.pendingDelete ? 'pending' : 'deleted' } });
+        return json({ data: { status: 'deleted' } });
       case 'export': return json({ data: { exportedAt: new Date().toISOString(), state: current.state, items: current.items } });
       case 'deleteAccount': current.items = []; objects.clear(); return json({ data: { status: control.pendingAccountDelete ? 'pending' : 'deleted' } });
       default: unexpected.push(body.action); return fail('UNSUPPORTED', 400);

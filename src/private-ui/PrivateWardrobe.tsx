@@ -69,6 +69,8 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
   const [includeFeedback, setIncludeFeedback] = useState(true);
   const [notice, setNotice] = useState('');
   const settings = api.snapshot?.state.data;
+  const activeItems = api.snapshot?.items.filter(item => item.status === 'active') ?? [];
+  const pendingItemCount = api.snapshot?.items.filter(item => item.status === 'deleting').length ?? 0;
   const profileStale = !!profileEditor && !!api.snapshot && profileEditor.revision !== api.snapshot.state.revision;
   const newerProfile = settings?.profiles.find(profile => profile.id === profileEditor?.profile.id);
   const saveSettings = async (updated: PrivateSettings, revision: number) => {
@@ -119,16 +121,19 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
           <View style={s.accountLine}><Text style={s.note}>{api.identity?.email}</Text><Button label={t.refresh} kind="quiet" compact disabled={api.busy} onPress={() => { void api.refresh(); }} /></View>
           <View style={s.nav}>{(['wardrobe', 'profiles', 'account'] as const).map(key => <View key={key} style={{ flex: 1 }}><Button label={t[key]} selected={tab === key} kind={tab === key ? 'primary' : 'quiet'} compact onPress={() => { setTab(key); setNotice(''); }} /></View>)}</View>
           {tab === 'wardrobe' ? <>
-            <View style={s.accountLine}><Text style={s.note}>{api.snapshot.items.length}/100 {t.count}</Text><Button label={t.add} icon="plus" disabled={api.busy || api.snapshot.items.length >= 100} onPress={() => openEditor()} /></View>
-            {api.snapshot.items.length === 0 ? <View style={s.card}><Icon name="wardrobe" size={42} /><Text style={s.cardTitle}>{t.emptyTitle}</Text><Text style={s.body}>{t.emptyBody}</Text></View> : null}
-            <View style={s.grid}>{api.snapshot.items.map(item => <View key={item.id} style={[s.item, { width: width >= 650 ? '48%' : '100%' }]}>
-              {item.photo && item.status === 'active' ? <Photo path={item.photo.thumbPath} api={api} locale={locale} /> : <View style={s.photo}><Icon name="hanger" size={38} /></View>}
+            <View style={s.accountLine}><Text style={s.note}>{activeItems.length}/100 {t.count}</Text><Button label={t.add} icon="plus" disabled={api.busy || api.snapshot.items.length >= 100} onPress={() => openEditor()} /></View>
+            {pendingItemCount > 0 ? <View style={s.warning} accessibilityLiveRegion="polite">
+              <Text style={s.cardTitle}>{t.cleanupTitle}</Text><Text style={s.body}>{t.cleanupCount}: {pendingItemCount}</Text><Text style={s.body}>{t.cleanupHelp}</Text>
+            </View> : null}
+            {activeItems.length === 0 ? <View style={s.card}><Icon name="wardrobe" size={42} /><Text style={s.cardTitle}>{t.emptyTitle}</Text><Text style={s.body}>{t.emptyBody}</Text></View> : null}
+            <View style={s.grid}>{activeItems.map(item => <View key={item.id} style={[s.item, { width: width >= 650 ? '48%' : '100%' }]}>
+              {item.photo ? <Photo path={item.photo.thumbPath} api={api} locale={locale} /> : <View style={s.photo}><Icon name="hanger" size={38} /></View>}
               <Text style={s.cardTitle}>{item.name}</Text><Text style={s.body}>{t.categories[item.category]} · {item.color}{item.size ? ` · ${item.size}` : ''}</Text>
               <Text style={s.note}>{item.occasions.map(occasion => common[occasion]).join(' · ')}</Text>
-              {item.status === 'deleting' ? <Text style={s.note}>{t.pending}</Text> : <View style={controls.row}>
+              <View style={controls.row}>
                 <Button label={`${t.edit}: ${item.name}`} compact kind="secondary" disabled={api.busy} onPress={() => openEditor(item)} />
-                <Button label={`${t.remove}: ${item.name}`} compact kind="quiet" disabled={api.busy} onPress={() => { api.clearError(); setDeleting(item); }} />
-              </View>}
+                <Button label={`${t.remove}: ${item.name}`} compact kind="quiet" disabled={api.busy} onPress={() => { api.clearError(); setNotice(''); setDeleting(item); }} />
+              </View>
             </View>)}</View>
             <Text style={s.note}>{t.limit}</Text><Text style={s.note}>{t.future}</Text>
           </> : tab === 'profiles' ? <>
@@ -170,7 +175,7 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
     </Dialog>
     <Dialog visible={!!deleting} title={t.removeTitle} closeLabel={t.cancel} onClose={() => { if (!api.busy) setDeleting(null); }}>
       <Text style={s.cardTitle}>{deleting?.name}</Text><Text style={s.body}>{t.removeBody}</Text>{formError}
-      <Button label={t.confirmRemove} disabled={api.busy} onPress={() => { if (deleting) void api.deleteItem(deleting).then(() => setDeleting(null)).catch(() => {}); }} />
+      <Button label={t.confirmRemove} disabled={api.busy} onPress={() => { if (deleting) void api.deleteItem(deleting).then(result => { setDeleting(null); setNotice(result.status === 'deleted' ? t.itemRemoved : ''); }).catch(() => {}); }} />
     </Dialog>
     <Dialog visible={confirmAccount} title={t.deleteAccountTitle} closeLabel={t.cancel} onClose={() => { if (!api.busy) setConfirmAccount(false); }}>
       <Text style={s.body}>{t.deleteAccountBody}</Text>{formError}

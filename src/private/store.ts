@@ -12,6 +12,7 @@ export interface PrivateView {
   loading: boolean;
   busy: boolean;
   error: string | null;
+  // Photo-only/account notices. Item cleanup is represented by snapshot tombstones.
   deletion: DeleteResult | null;
   pendingSave: { itemId: string; baseRevision: number | undefined; revision: number } | null;
 }
@@ -139,7 +140,12 @@ export class PrivateStore {
   deleteItem = (item: PrivateItem) => this.mutate(async (signal, generation) => {
     const result = await this.api.deleteItem(item.id, item.revision, signal); this.assertCurrent(generation);
     this.clearPhotos();
-    if (this.view.snapshot) this.patch({ snapshot: { ...this.view.snapshot, items: this.view.snapshot.items.filter(existing => existing.id !== item.id) }, deletion: result });
+    // Keep the reserved slot until the server confirms physical cleanup. The
+    // next bootstrap also includes this tombstone, so reload cannot restore a
+    // deleted card or temporarily make an occupied quota slot look available.
+    if (this.view.snapshot) this.patch({ snapshot: { ...this.view.snapshot, items: result.status === 'pending'
+      ? this.view.snapshot.items.map(existing => existing.id === item.id ? { ...existing, status: 'deleting', photo: null } : existing)
+      : this.view.snapshot.items.filter(existing => existing.id !== item.id) } });
     return result;
   });
 

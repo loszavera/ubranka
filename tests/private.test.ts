@@ -167,12 +167,58 @@ test('logout during creation does not continue to photo upload or repopulate pri
   assert.deepEqual(calls, ['bootstrap', 'createItem']);
 });
 
-test('pending deletion hides item immediately but never claims physical completion', async () => {
-  const store = new PrivateStore(new WardrobeApi(wrap(async action => action === 'bootstrap' ? { ...snapshot(), items: [item] } : { status: 'pending' })), () => itemId);
+test('pending deletion keeps the quota tombstone through refresh and restart until confirmed cleanup', async () => {
+  let items: PrivateItem[] = [item]; let offline = false;
+  const api = new WardrobeApi(wrap(async action => {
+    if (action === 'bootstrap') {
+      if (offline) throw new PrivateError('NETWORK');
+      return { ...snapshot(), items: structuredClone(items) };
+    }
+    items = [{ ...item, status: 'deleting', photo: null, revision: 2 }];
+    return { status: 'pending' };
+  }));
+  const store = new PrivateStore(api, () => itemId);
   store.setIdentity(userA); await store.refresh();
   const result = await store.deleteItem(item);
-  assert.equal(result.status, 'pending'); assert.equal(store.getSnapshot().deletion?.status, 'pending');
+  assert.equal(result.status, 'pending');
+  assert.equal(store.getSnapshot().snapshot?.items.length, 1);
+  assert.equal(store.getSnapshot().snapshot?.items[0].status, 'deleting');
+  assert.equal(store.getSnapshot().deletion, null); // No stale global item-deletion notice.
+  await store.refresh();
+  assert.equal(store.getSnapshot().snapshot?.items[0].status, 'deleting');
+  offline = true; await store.refresh();
+  assert.equal(store.getSnapshot().snapshot?.items.length, 1);
+  assert.equal(store.getSnapshot().error, 'NETWORK');
+  offline = false;
+  const restarted = new PrivateStore(api, () => itemId);
+  restarted.setIdentity(userA); await restarted.refresh();
+  assert.equal(restarted.getSnapshot().snapshot?.items[0].status, 'deleting');
+  items = []; await store.refresh(); await restarted.refresh();
   assert.equal(store.getSnapshot().snapshot?.items.length, 0);
+  assert.equal(restarted.getSnapshot().snapshot?.items.length, 0);
+  assert.equal(store.getSnapshot().deletion, null);
+});
+
+test('rejected deletion keeps the active item and does not claim removal or clear its photo cache', async () => {
+  let clears = 0;
+  const store = new PrivateStore(new WardrobeApi(wrap(async action => {
+    if (action === 'bootstrap') return { ...snapshot(), items: [item] };
+    throw new PrivateError('NETWORK');
+  })), () => itemId, () => { clears++; });
+  store.setIdentity(userA); await store.refresh(); const before = clears;
+  await assert.rejects(store.deleteItem(item), /NETWORK/);
+  assert.deepEqual(store.getSnapshot().snapshot?.items, [item]);
+  assert.equal(store.getSnapshot().deletion, null);
+  assert.equal(clears, before);
+});
+
+test('photo-only pending deletion remains pending when an active item has no current photo', async () => {
+  const store = new PrivateStore(new WardrobeApi(wrap(async action => action === 'bootstrap' ? { ...snapshot(), items: [item] } : { status: 'pending' })), () => itemId);
+  store.setIdentity(userA); await store.refresh();
+  await store.deletePhoto(item); await store.refresh();
+  assert.equal(store.getSnapshot().snapshot?.items[0].status, 'active');
+  assert.equal(store.getSnapshot().snapshot?.items[0].photo, null);
+  assert.equal(store.getSnapshot().deletion?.status, 'pending');
 });
 
 test('authoritative access denial clears loaded private state and photo cache; network failure preserves it', async () => {

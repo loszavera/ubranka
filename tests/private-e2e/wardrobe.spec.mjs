@@ -155,14 +155,30 @@ test('failed photo upload resumes a staged save and preserves edits made before 
   expect(backend.unexpected).toEqual([]);
 });
 
-test('pending item/account deletion is visible and account deletion clears the session', async ({ page }) => {
+test('pending item cleanup survives refresh/reload without a card, then clears; account deletion still stays pending', async ({ page }, info) => {
   const backend = await installBackend(page, { existingItem: true });
   backend.pendingDelete = true; backend.pendingAccountDelete = true;
   await openWardrobe(page);
   await button(page, 'Usuń: Koszula testowa').click();
   await button(page, 'Usuń rzecz i zdjęcie').click();
-  await expect(page.getByText('Usuwanie w toku', { exact: true })).toBeVisible();
+  await expect(page.getByText('Usunięto z szafy', { exact: true })).toHaveCount(1);
+  await expect(page.getByText('Rzeczy oczekujące na usunięcie plików: 1', { exact: true })).toBeVisible();
+  await expect(page.getByText('Usuwanie w toku', { exact: true })).toHaveCount(0);
   await expect(button(page, 'Edytuj: Koszula testowa')).toHaveCount(0);
+  await expect(page.getByText('Koszula testowa', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('0/100 rzeczy', { exact: true })).toBeVisible();
+  expect(backend.state.items[0].status).toBe('deleting');
+  expect(backend.objects.size).toBe(2);
+  await button(page, 'Odśwież').click();
+  await page.reload();
+  await expect(page.getByText('Rzeczy oczekujące na usunięcie plików: 1', { exact: true })).toBeVisible();
+  await expect(page.getByText('Koszula testowa', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('0/100 rzeczy', { exact: true })).toBeVisible();
+  await page.screenshot({ path: info.outputPath('private-cleanup-pending-pl.png') });
+  backend.state.items = []; backend.objects.clear(); // The worker completed its storage/database checks.
+  await button(page, 'Odśwież').click();
+  await expect(page.getByText('Usunięto z szafy', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Usuwanie w toku', { exact: true })).toHaveCount(0);
   await button(page, 'Konto').click();
   await button(page, 'Usuń konto i dane').click();
   await button(page, 'Potwierdzam usunięcie konta').click();
@@ -170,6 +186,46 @@ test('pending item/account deletion is visible and account deletion clears the s
   await expect(page.getByText('Usuwanie w toku', { exact: true })).toBeVisible();
   expect(await page.evaluate(key => localStorage.getItem(key), authKey)).toBeNull();
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).ownedItemIds, demoKey)).toEqual(['w-sneakers']);
+  expect(backend.unexpected).toEqual([]);
+});
+
+test('all 100 pending items still reserve the quota without appearing as active clothes', async ({ page }, info) => {
+  const backend = await installBackend(page, { existingItem: true, locale: 'en' });
+  const base = backend.state.items[0];
+  backend.state.items = Array.from({ length: 100 }, (_, index) => ({ ...base, id: `33333333-3333-4333-8333-${String(index).padStart(12, '0')}`, status: 'deleting', photo: null }));
+  await openWardrobe(page);
+  await expect(page.getByText('0/100 items', { exact: true })).toBeVisible();
+  await expect(page.getByText('Items awaiting file deletion: 100', { exact: true })).toBeVisible();
+  await expect(page.getByText('Removed from your wardrobe', { exact: true })).toHaveCount(1);
+  await expect(page.getByText('Koszula testowa', { exact: true })).toHaveCount(0);
+  await expect(button(page, 'Add clothing')).toBeDisabled();
+  await page.reload();
+  await expect(button(page, 'Add clothing')).toBeDisabled();
+  await page.screenshot({ path: info.outputPath('private-cleanup-quota-en.png') });
+  backend.state.items.pop();
+  await button(page, 'Refresh').click();
+  await expect(page.getByText('Items awaiting file deletion: 99', { exact: true })).toBeVisible();
+  await expect(button(page, 'Add clothing')).toBeEnabled();
+  expect(backend.photoRequests).toHaveLength(0);
+  expect(backend.unexpected).toEqual([]);
+});
+
+test('a rejected delete keeps the item and photo without a false success message', async ({ page }) => {
+  const backend = await installBackend(page, { existingItem: true }); backend.failDelete = true;
+  await openWardrobe(page);
+  await button(page, 'Usuń: Koszula testowa').click();
+  await button(page, 'Usuń rzecz i zdjęcie').click();
+  await expect(page.getByText('Operacja nie została potwierdzona. Sprawdź połączenie i spróbuj ponownie.').last()).toBeVisible();
+  await expect(button(page, 'Usuń rzecz i zdjęcie')).toBeEnabled();
+  await button(page, 'Anuluj').click();
+  await expect(button(page, 'Edytuj: Koszula testowa')).toBeVisible();
+  await expect(page.getByText('1/100 rzeczy', { exact: true })).toBeVisible();
+  await expect(page.getByRole('img', { name: 'Zdjęcie ubrania', exact: true })).toBeVisible();
+  await expect(page.getByText('Usunięto z szafy', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Usunięto z szafy.', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Usuwanie w toku', { exact: true })).toHaveCount(0);
+  expect(backend.state.items[0].status).toBe('active');
+  expect(backend.objects.size).toBe(2);
   expect(backend.unexpected).toEqual([]);
 });
 
