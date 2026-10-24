@@ -23,8 +23,14 @@ impreza, dopasowanie do okazji, zachowanie danych P2, testy i podgląd dev.
 Okazja bieżącej rundy jest niezależna od domyślnej okazji profilu. Najpierw
 filtruj dopuszczalne okazje, potem oceniaj gust; nie wypełniaj pary niepasującym
 zestawem. Stan V2 odczytuje V1 pod niezmienionym kluczem `ubranka:p2:v1`.
-Wyniki P2.1 zapisuj w docs/P21-VERIFICATION.md. Akceptacja P2.1 nie uruchamia P3
-ani publikacji do main.
+P2.1 zostało następnie odebrane przez użytkownika i jawnie dopuszczone do main
+(2026-10-24). Publikacja i test produkcyjny: docs/P21-PRODUCTION.md. Praca pozostaje
+na dev. Aktualne wymagania i plan V1.4 zawierają propozycję P3, koszty V1.3 i
+P3-DATA-POLICY-V1.0.md. Użytkownik zlecił **tylko plan P3 do zatwierdzenia**.
+Supabase Free/Frankfurt, Google OAuth, limity zdjęć i retencja są propozycją;
+nie utworzono backendu ani nie rozpoczęto P3.1. P3.2 (próba AI) i P3.3 wymagają
+osobnego uzgodnienia. Nie aktywuj usług ani opłat na podstawie samej dokumentacji.
+Zapis P2 na adresie dev i main jest osobny; publikacja kodu nie przenosi localStorage.
 Nie dopisuj na tej podstawie testu natywnego. Q21–Q23 i Q25 są rozstrzygnięte; Q24 określa wstępny
 kierunek zdjęć, szczegóły dostawcy wymagają wyjaśnienia przed realnym uploadem.
 Zapisuj otwarte decyzje; nie uznawaj propozycji za zatwierdzone ani nie rozpoczynaj

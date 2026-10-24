@@ -5,9 +5,9 @@ Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki
 
 **Podgląd dev:** https://ubranka-git-dev-risk-every-asset.vercel.app
 (logowanie Vercel; stan wdrożenia w dokumencie statusu).
-**Stabilny fundament main:** https://ubranka.vercel.app
+**Odebrana wersja P2.1 na main:** https://ubranka.vercel.app
 
-**Etap:** P2.1 — zatwierdzone rozszerzenie o wesele jako gość, pracę, randkę
+**Etap:** P2.1 — odebrane i opublikowane rozszerzenie o wesele jako gość, pracę, randkę
 i imprezę. Okazję wybierasz przed rundą; propozycje muszą do niej pasować.
 Zachowano dane P2, a domyślną okazję profilu można edytować. Wyniki testów
 i publikacji znajdują się w statusie oraz raporcie P2.1. Wygląd A — Krem i śliwka, PL/EN, krótki start,
@@ -17,16 +17,24 @@ Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeni
 Prototyp używa 37 fikcyjnych ubrań i 12 ilustracji. Konta, synchronizacja,
 własne zdjęcia, AI, sklepy i lista zakupowa należą do kolejnych etapów.
 
+**Następny etap:** [propozycja P3 / plan V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md)
+do zatwierdzenia: prywatna szafa, koszty i zasady zdjęć. Nie rozpoczęto implementacji.
+Dane zapisane na podglądzie dev pozostają pod tamtym adresem; publikacja main
+nie kopiuje lokalnego zapisu między adresami. [Odbiór produkcji](docs/P21-PRODUCTION.md).
+
 ## Dokumenty
 
-- [Wymagania V1.3 — aktualizacja bazy V1.2](docs/REQUIREMENTS-V1.3.md)
-- [Plan implementacji V1.3 — P2.1](docs/IMPLEMENTATION-PLAN-V1.3.md)
+- [Wymagania V1.4 — P2.1 odebrane, P3 proponowane](docs/REQUIREMENTS-V1.4.md)
+- [Plan implementacji V1.4 — propozycja P3](docs/IMPLEMENTATION-PLAN-V1.4.md)
+- [Proponowane zasady zdjęć i usuwania](docs/P3-DATA-POLICY-V1.0.md)
+- [Aktualne koszty usług i scenariusze AI](docs/COST-PLAN-V1.3.md)
 - [Odpowiedzi uzupełniające](docs/INTERVIEW-V1.2.md) i [pierwsze 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
 - [Wybrany wygląd A](docs/design/DESIGN-DIRECTION-V1.2.md)
-- [Budżet przy 30 wizualizacjach na osobę](docs/COST-PLAN-V1.2.md)
+- [Założenia budżetu przy 30 wizualizacjach na osobę](docs/COST-PLAN-V1.2.md)
 - [Możliwości integracji sklepów](docs/RETAILER-FEASIBILITY-V1.1.md)
 - [Stan projektu i następny krok](docs/PROJECT-STATUS.md)
-- [Weryfikacja i scenariusz odbioru P2.1](docs/P21-VERIFICATION.md)
+- [Publikacja P2.1 do main i test produkcyjny](docs/P21-PRODUCTION.md)
+- [Weryfikacja P2.1](docs/P21-VERIFICATION.md)
 - [Historyczna weryfikacja P2](docs/P2-VERIFICATION.md)
 - [Kontrakty danych P2 i granice dalszych etapów](docs/DATA-CONTRACTS-P2.md)
 - [Decyzje](docs/DECISIONS.md)

@@ -36,6 +36,9 @@ Prototyp dev: https://ubranka-git-dev-risk-every-asset.vercel.app (logowanie Ver
 Panel: https://vercel.com/risk-every-asset/ubranka
 Użytkownik połączył konto GitHub i zaimportował projekt 2026-10-24.
 Pierwsze wdrożenie z main zakończyło się READY; ekran i przycisk sprawdzono online.
+2026-10-24 po odbiorze P2.1 przeniesiono całość do main; [test produkcji](P21-PRODUCTION.md)
+przeszedł. LocalStorage dev i main jest osobny — publikacja nie kopiuje ustawień.
+Supabase/Google/AI w planie P3 pozostają propozycją; nie są częścią zainstalowanego środowiska.
 
 Repo: loszavera/ubranka. Framework: Other. Root: katalog główny.
 Node: 24.x. Install: npm ci. Build: npm run build:web. Output: dist.
@@ -63,7 +66,7 @@ testu sesji zdalnej. Nie zmieniaj ustawień bezpieczeństwa na zapas.
 
 npm run check: TypeScript i ESLint.
 npm test: reguły budżetu, rankingu, opinii i odtwarzania stanu.
-npm run test:e2e: eksport WWW i osiem testów przepływów w Playwright, port 4175.
+npm run test:e2e: eksport WWW i 13 testów przepływów w Playwright, port 4175.
 Na Windows używa istniejącego Edge. Na Linuxie przed pierwszym uruchomieniem:
 `npx playwright install --with-deps chromium`. Raport JSON i zrzuty w artifacts/.
 npm run check:dependencies: zgodność pakietów z SDK.

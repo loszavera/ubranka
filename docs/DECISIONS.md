@@ -40,6 +40,15 @@ Stan początkowy: 2026-10-24. Decyzje produktowe wymagające doprecyzowania nie 
 
 | D-032 | 2026-10-24 | Feedback użytkowników | Kasia i Aleksy przetestowali P2; potrzebne dodatkowe okazje, np. wesele. Wymagania V1.3 rozszerzają R-19. Proszą o propozycję dalszej pracy; lista okazji i wykonanie P2.1 czekają na akceptację. |
 
+Nowe wpisy z 2026-10-24:
+
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-033 | 2026-10-24 | Zatwierdzone i wykonane | Aktualizuje D-032: P2.1 obejmuje wesele jako gość, pracę, randkę i imprezę, twardy filtr okazji i zachowanie P2. Wykonano testy i podgląd. |
+| D-034 | 2026-10-24 | Odbiór i zgoda na main | Użytkownik zaakceptował P2.1 i polecił przenieść całość do main. Publikacja zachowała historię; produkcja sprawdzona w P21-PRODUCTION.md. |
+| D-035 | 2026-10-24 | Zlecona wyłącznie dokumentacja | Przygotować P3: usługi, koszty, zdjęcia i ich usuwanie. Bez implementacji, tworzenia backendu lub nowych opłat. |
+| D-036 | 2026-10-24 | Propozycja do akceptacji | V1.4 dzieli P3 na P3.1 prywatną szafę, P3.2 ograniczoną próbę AI i P3.3 docelowe zestawy/wizualizacje. Supabase Free/Frankfurt + Google OAuth i polityka danych są rekomendacją, nie przyjętą decyzją użytkownika. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

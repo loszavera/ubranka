@@ -3,19 +3,22 @@
 Aktualizacja: 2026-10-24. Po przetestowaniu P2 Kasia i Aleksy zgłosili dodatkowe
 okazje. Aleksy zatwierdził P2.1: wesele jako gość, praca, randka i impreza,
 dobór do okazji, zachowanie danych P2, pracę na dev, testy i podgląd Vercel.
-Implementacja jest wdrożona na dev, podgląd online sprawdzony, a końcowe CI
-zakończyło się sukcesem. P2.1 jest gotowy do odbioru przez Kasię i Aleksego.
+Użytkownik odebrał P2.1 i polecił przenieść całość do main. Wersja produkcyjna
+jest opublikowana i sprawdzona. Zlecił także **tylko plan P3 do zatwierdzenia**;
+propozycja jest gotowa, nie uruchomiono implementacji ani nowych usług.
 
 ## Aktualne dokumenty
 
-- [Wymagania V1.3](REQUIREMENTS-V1.3.md) i [plan V1.3](IMPLEMENTATION-PLAN-V1.3.md)
-  uzupełniają zachowaną bazę V1.2 o zatwierdzony P2.1.
+- [Wymagania V1.4](REQUIREMENTS-V1.4.md) i [plan V1.4](IMPLEMENTATION-PLAN-V1.4.md):
+  odebrane P2.1 i proponowany P3. Wersje V1.2/V1.3 zachowano.
+- [Proponowana polityka zdjęć](P3-DATA-POLICY-V1.0.md), [koszty V1.3](COST-PLAN-V1.3.md).
+- [Publikacja main i test produkcyjny P2.1](P21-PRODUCTION.md).
 - [Weryfikacja i scenariusz odbioru P2.1](P21-VERIFICATION.md).
 - [Historyczna weryfikacja P2](P2-VERIFICATION.md).
 - [Kontrakty danych P2/P2.1 i szkice P3/P4](DATA-CONTRACTS-P2.md).
 - [Wybrany wygląd A](design/DESIGN-DIRECTION-V1.2.md), ilustracje
   [P2](design/P2-ASSETS.md) i [P2.1](design/P21-ASSETS.md).
-- [Koszty](COST-PLAN-V1.2.md), [sklepy](RETAILER-FEASIBILITY-V1.1.md),
+- [Założenia wolumenu AI](COST-PLAN-V1.2.md), [sklepy](RETAILER-FEASIBILITY-V1.1.md),
   [środowisko](SETUP.md), [zależności](DEPENDENCY-STATUS.md), [decyzje](DECISIONS.md).
 
 ## Wykonane
@@ -61,8 +64,11 @@ Szczegóły: [DEPENDENCY-STATUS.md](DEPENDENCY-STATUS.md).
 
 - Praca na `dev`. Podgląd: https://ubranka-git-dev-risk-every-asset.vercel.app.
   Chroni go logowanie Vercel. Projekt `ubranka`, zespół Risk Every Asset.
-- `main` pozostaje przy fundamencie `0203382a7581124006cbe88a607d1b9a0b5ae2f2`;
-  https://ubranka.vercel.app nie jest podglądem P2.1.
+- `main` przeniesiono fast-forward z fundamentu `0203382` do odebranego P2.1
+  `9bc50acef56f7b41525bfd9fb0cbb682e04fe26a`. Produkcja: https://ubranka.vercel.app.
+  Vercel `dpl_21XuJzQigJzLn6Y39NKA9taZ1rvM` READY; test online PASS 16:44 UTC,
+  HTTP 200, 0 błędów JavaScript. Kolejny commit aktualizuje wyłącznie dokumentację.
+  Dane lokalne dev/main są osobne; publikacja kodu ich nie synchronizuje.
 - Implementacja, CI i wdrożenie P2: `04ea37775515240e45b2001614dbfccb103e1105`,
   [run SUCCESS](https://github.com/loszavera/ubranka/actions/runs/40102781826),
   Vercel `dpl_Bc6PBTM8s9EU6kS13Si4Zw2dPJuQ` READY i test online PASS.
@@ -70,7 +76,7 @@ Szczegóły: [DEPENDENCY-STATUS.md](DEPENDENCY-STATUS.md).
   `dpl_kKpgbeYGGDEYT25R1SRMUKx4keoZ` READY, kontrola online PASS na stałym adresie dev.
 - Końcowy kod/testy P2.1: `3c555b56a93067581b312a980896cf5a29a5118d`, CI SUCCESS,
   Vercel `dpl_5rMcGooY9RdwsL4f8vnidys6byA8` READY. Aplikacja i bundle identyczne
-  z wynikiem kontroli online. Następny commit zapisuje tylko niniejszą dokumentację.
+  z wynikiem kontroli online. Commit 9bc50ac zapisał raport bez zmian kodu.
 
 Historycznie P0 przeszedł [CI](https://github.com/loszavera/ubranka/actions/runs/40090246634).
 Użytkownik potwierdził działanie hostingu oraz zdalnego Codex przez internet mobilny.
@@ -78,7 +84,12 @@ P1/V1.1 i V1.2 przeszły przeglądy dokumentacji; wersje historyczne zachowano.
 
 ## Następny krok
 
-Odbiór P2.1 przez Kasię i Aleksego w stałym podglądzie dev według krótkiego
-scenariusza w raporcie. Po uwagach można zaproponować przygotowanie P3:
-konkretnych dostawców, kosztów, zakresu danych, retencji/usuwania i pierwszej
-iteracji prywatnej szafy. Nie rozpoczynać P3 ani przenoszenia do main automatycznie.
+Do akceptacji **P3.1 — prywatna szafa**: Supabase Free/Frankfurt, proponowane
+logowanie Google, dwa osobne konta, zdjęcie rzeczy lub na sobie, ręczny opis,
+edycja/usuwanie, synchronizacja i selektywny import P2. Cel: 0 PLN nowych
+abonamentów w limitach; brak AI w tej iteracji. Plan opisuje limity i retencję.
+
+P3.2: późniejsza osobno zatwierdzona próba AI na danych sztucznych, maks. 12
+wywołań / 25 PLN. P3.3: docelowy profil sylwetki, rozpoznawanie, zestawy z własnych
+rzeczy i wizualizacja po odbiorze jakości/kosztów. Nie uruchamiać tych etapów
+ani płatnych usług przez samo zatwierdzenie planu lub publikację dokumentów.
