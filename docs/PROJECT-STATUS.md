@@ -3,8 +3,8 @@
 Aktualizacja: 2026-10-24. Po przetestowaniu P2 Kasia i Aleksy zgłosili dodatkowe
 okazje. Aleksy zatwierdził P2.1: wesele jako gość, praca, randka i impreza,
 dobór do okazji, zachowanie danych P2, pracę na dev, testy i podgląd Vercel.
-Implementacja jest wdrożona na dev, a podgląd online sprawdzony. Kończy się
-ponowne CI po poprawce synchronizacji testu zmiany szerokości ekranu.
+Implementacja jest wdrożona na dev, podgląd online sprawdzony, a końcowe CI
+zakończyło się sukcesem. P2.1 jest gotowy do odbioru przez Kasię i Aleksego.
 
 ## Aktualne dokumenty
 
@@ -46,9 +46,11 @@ reguły nie uwzględniają rzeczywistych wymiarów ani rozmiarów produktów.
 - Eksport WWW/iOS/Android: PASS. Fizyczne urządzenia z Expo Go nie były testowane.
 - Sprawdzono migrację zamrożonego zapisu V1, oba tryby, budżet, wyczerpanie
   przykładów, PL/EN oraz szerokości 320/360/390/1440 px i klawiaturę WWW.
-- Vercel: READY i test online PASS (16:23 UTC). Pierwsze CI wykazało zbyt
+- Vercel: READY i test online PASS (16:23 UTC). Końcowe CI dla `3c555b5`:
+  [SUCCESS](https://github.com/loszavera/ubranka/actions/runs/40111604543),
+  w tym 13/13 scenariuszy WWW na Ubuntu/Chromium. Pierwsze CI wykazało zbyt
   wczesny pomiar po resize; poprawiono synchronizację testu bez zmiany aplikacji.
-  Wynik ponownego CI zostanie dopisany w [raporcie P2.1](P21-VERIFICATION.md).
+  Dowody i ograniczenia: [raport P2.1](P21-VERIFICATION.md).
 
 Zależności nie zmieniły się w P2.1. W P2 zgodność SDK i Expo Doctor 21/21
 przeszły, a audyt zgłosił 8 wpisów (5 high, 3 moderate) z 3 zgłoszeń źródłowych.
@@ -66,6 +68,9 @@ Szczegóły: [DEPENDENCY-STATUS.md](DEPENDENCY-STATUS.md).
   Vercel `dpl_Bc6PBTM8s9EU6kS13Si4Zw2dPJuQ` READY i test online PASS.
 - P2.1: aplikacja `b74e22c59bebd78e8aeeadb2cba28a100d3eb002`, Vercel
   `dpl_kKpgbeYGGDEYT25R1SRMUKx4keoZ` READY, kontrola online PASS na stałym adresie dev.
+- Końcowy kod/testy P2.1: `3c555b56a93067581b312a980896cf5a29a5118d`, CI SUCCESS,
+  Vercel `dpl_5rMcGooY9RdwsL4f8vnidys6byA8` READY. Aplikacja i bundle identyczne
+  z wynikiem kontroli online. Następny commit zapisuje tylko niniejszą dokumentację.
 
 Historycznie P0 przeszedł [CI](https://github.com/loszavera/ubranka/actions/runs/40090246634).
 Użytkownik potwierdził działanie hostingu oraz zdalnego Codex przez internet mobilny.

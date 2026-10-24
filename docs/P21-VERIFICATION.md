@@ -51,9 +51,18 @@ Nie dodano zależności. Historyczny audyt i ograniczenia opisano w
   zmierzył układ przed renderem po resize. Diagnostyka odtworzyła przejściowy
   stan w 20 próbach; wszystkie końcowe rozmiary poprawne. Poprawiono oczekiwanie
   na geometrię (bez tolerancji przepełnienia) oraz kontrolę obu języków przy
-  każdej szerokości. Wynik ponownego CI zostanie dopisany po wykonaniu.
+  każdej szerokości. Poprawione testy lokalne: 13/13 PASS.
   Log pierwszej próby: `artifacts/p21-ci-first.log`; diagnostyka:
   `artifacts/p21-layout-diagnostic.json`.
+- Końcowy commit kodu/testów: `3c555b56a93067581b312a980896cf5a29a5118d`.
+  [GitHub Actions 40111604543](https://github.com/loszavera/ubranka/actions/runs/40111604543):
+  SUCCESS na Ubuntu/Chromium — czysta instalacja, typy/lint, 15 testów domeny,
+  zgodność SDK, eksporty i 13/13 scenariuszy WWW. `artifacts/p21-ci-result.json`.
+  Ponieważ push nie utworzył runu, istniejący workflow uruchomiono ręcznie na dev.
+- Vercel dla `3c555b5`: `dpl_5rMcGooY9RdwsL4f8vnidys6byA8`, READY.
+  Źródła aplikacji, zasoby, zależności i konfiguracja hostingu są identyczne
+  z wersją sprawdzoną w przeglądarce. Log nowego wdrożenia potwierdza ten sam bundle.
+  Późniejszy commit niniejszego podsumowania zmienia wyłącznie dokumentację.
 
 Bundle z Linux/Vercel ma inną nazwę niż lokalny Windows. Potwierdzono nazwę
 załadowanego skryptu względem logu Vercel właściwego commita;
