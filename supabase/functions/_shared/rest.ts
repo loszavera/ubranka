@@ -2,7 +2,8 @@ import { WardrobeError } from './protocol.ts';
 
 const KNOWN_ERRORS = new Set(['CONFLICT','NOT_FOUND','UNAUTHENTICATED','NOT_INVITED','ACCOUNT_UNAVAILABLE',
   'INVALID_STATE','INVALID_ITEM','INVALID_ACTION','ITEM_LIMIT','STORAGE_LIMIT','UPLOAD_PENDING',
-  'UPLOAD_INCOMPLETE','DELETE_INCOMPLETE']);
+  'UPLOAD_INCOMPLETE','DELETE_INCOMPLETE','INVALID_BODY','INVALID_STYLING','STORAGE_CONSENT_REQUIRED',
+  'AI_DISABLED','AI_UNAVAILABLE','AI_BUSY','AI_CONSENT_REQUIRED','AI_ATTEMPT_LIMIT','AI_BUDGET_LIMIT','INVALID_USAGE']);
 
 export class SupabaseRest {
   private url: string;
@@ -25,7 +26,7 @@ export class SupabaseRest {
     if (!response.ok) {
       const message = data && typeof data === 'object' && 'message' in data ? String(data.message) : '';
       if (KNOWN_ERRORS.has(message)) throw new WardrobeError(message, message === 'CONFLICT' ? 409 :
-        ['NOT_INVITED','ACCOUNT_UNAVAILABLE'].includes(message) ? 403 : message === 'NOT_FOUND' ? 404 : 400);
+        ['NOT_INVITED','ACCOUNT_UNAVAILABLE','AI_DISABLED'].includes(message) ? 403 : message === 'NOT_FOUND' ? 404 : 400);
       if (path === '/auth/v1/user') throw new WardrobeError('UNAUTHENTICATED', 401);
       if (response.status === 409) throw new WardrobeError('CONFLICT', 409);
       if (response.status >= 400 && response.status < 500) throw new WardrobeError('INVALID_REQUEST');
@@ -63,7 +64,7 @@ export class SupabaseRest {
   }
 }
 
-export type PhotoRow = { id: string; account_id: string; item_id: string; status: string;
+export type PhotoRow = { id: string; account_id: string; item_id: string | null; status: string;
   main_path: string; thumb_path: string; cleanup_attempts: number };
 
 export async function cleanup(admin: SupabaseRest, accountId?: string): Promise<{ pending: number; failed: number }> {

@@ -206,8 +206,8 @@ test('abandoned uploads expire and pending bytes count against account quota',as
   // Administrative fixture represents a pre-existing deletion backlog. User
   // requests cannot insert these rows or lie about byte counts.
   await db.query(`insert into public.wardrobe_photos(id,account_id,item_id,expected_revision,main_path,thumb_path,bytes,thumb_bytes,mime_type,fingerprint,status)
-    select gen_random_uuid(),$1,$2,1,'quota/'||n||'/main.jpg','quota/'||n||'/thumb.jpg',1000000,100000,'image/jpeg',repeat('c',64),'deleting' from generate_series(1,228) n`,[A,orphanItem]);
-  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,orphanItem,orphanPhoto,'b'.repeat(64)]),/STORAGE_LIMIT/);
+    select gen_random_uuid(),$1,$2,1,'quota/'||n||'/main.jpg','quota/'||n||'/thumb.jpg',1000000,100000,'image/jpeg',repeat('c',64),'deleting' from generate_series(1,227) n`,[A,orphanItem]);
+  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,1000000,100000,$4',[A,orphanItem,orphanPhoto,'b'.repeat(64)]),/STORAGE_LIMIT/);
   await db.query('delete from public.wardrobe_photos where account_id=$1',[A]);
   await user(A,()=>rpc('deleteItem',{itemId:orphanItem,expectedRevision:1}));
   await adminRpc('wardrobe_finish_item_deletes','',[]);
