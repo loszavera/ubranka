@@ -22,7 +22,10 @@ właściciela, odczyt istniejącego zdjęcia i wylogowanie. [Raport](P31-MAIN.md
 Użytkownik następnie zgłosił udany test większości funkcji na telefonie, poza
 logowaniem Kasi, oraz pozostającą kartę „Usuwanie w toku”. Potwierdzono przyczynę:
 odświeżenie przywracało rekord oczekujący na bezpieczne czyszczenie plików.
-Poprawka prezentacji i regresja są w toku; [raport](P31-DELETION-FIX.md).
+Poprawka prezentacji jest na main (`1b342e0`): usunięta rzecz nie wraca po
+odświeżeniu, a informacja o czyszczeniu wynika ze stanu serwera. Testy klienta
+36/36 i prywatnego UI 10/10 PASS. Naturalny cron o 21:00 UTC usunął zgłoszoną
+rzecz i oba pliki; bez błędów oraz ręcznej ingerencji. [Raport](P31-DELETION-FIX.md).
 
 ## P3.1 — bieżący wynik
 

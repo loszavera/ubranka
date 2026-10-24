@@ -50,4 +50,16 @@ Załącznik użytkownika jest wyłączony z publicznego Git przez `.gitignore`.
   oraz `private-e2e-results.json` w artifacts. Screenshoty PL/EN zawierają
   wyłącznie syntetyczne dane; sprawdzono czytelność komunikatu na 390×844.
 
-Publikacja na dev/main i jej końcowy wynik zostaną dopisane po wdrożeniu.
+## Publikacja
+
+- Poprawka klienta `8dff24d`; eksporty i raport `1b342e06c7184a87ff8ee3afbcbac6a1c5a95bed`.
+  Dev i main zsynchronizowane bez force push.
+- Vercel `dpl_FMniHUKKEhZdc3V2RMkYA74MnMg7`: **READY**, Production/main.
+  Kontrola https://ubranka.vercel.app/?wardrobe=1 o 21:06:38 UTC: HTTP 200,
+  pakiet zawiera nowy komunikat sprzątania i właściwy projekt Supabase, bez
+  konfiguracji syntetycznej. Ekran logowania uruchamia się; zero błędów konsoli.
+- Dowód lokalny: `artifacts/p31-delete-main-verification.json`.
+  [CI 40132615564](https://github.com/loszavera/ubranka/actions/runs/40132615564)
+  dla `1b342e0`: **SUCCESS**, także pełna regresja WWW i backendu na Ubuntu.
+  Kolejny commit zapisuje wyłącznie wyniki w dokumentacji, bez zmian aplikacji.
+  Odbiór ponownego usunięcia na telefonie pozostaje po stronie użytkownika.

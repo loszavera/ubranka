@@ -4,6 +4,8 @@ Aktualizacja po poniższym odbiorze technicznym: użytkownik zatwierdził testow
 na main. P3.1 jest wdrożone i sprawdzone na głównym adresie; bieżący raport:
 [P31-MAIN.md](P31-MAIN.md). Dawne zapisy „main pozostaje P2.1” poniżej opisują
 stan sprzed tej decyzji, nie aktualną blokadę publikacji.
+Późniejszy test użytkownika i naprawa karty powracającej po usunięciu:
+[P31-DELETION-FIX.md](P31-DELETION-FIX.md), 36 testów klienta i 10 prywatnego UI.
 
 Data: 2026-10-24. Gałąź dev. Dokument odróżnia testy lokalne, testy w chmurze
 i scenariusz użytkowników na telefonach. **Google OAuth i konfiguracja usług
