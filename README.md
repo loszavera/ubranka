@@ -40,7 +40,7 @@ dwa zmieniają krój spodni. [Galeria porównawcza](https://ubranka.vercel.app/p
 i [raport jakości oraz kosztów](docs/P32-REPORT.md) zostały odebrane przez Kasię
 i Aleksego z opisanymi ograniczeniami (2026-10-25).
 Użytkownik pozwolił rozpocząć pomiar bez pełnej estymacji, zachowując limity.
-**P3.3A: zatwierdzone i zaimplementowane z płatnym AI wyłączonym.** Profil
+**P3.3A: wdrożone na main, z płatnym AI wyłączonym; oczekuje na Wasz test.** Profil
 sylwetki, prywatne zdjęcie w Supabase, maksymalnie dwa zestawy z własnej szafy,
 zapis/opinie i przygotowanie wizualizacji PL/EN. [Raport oraz instrukcja odbioru](docs/P33A-VERIFICATION.md).
 Próba kilku osobnych zdjęć ubrań w P3.3B i pilotaż prywatnych zdjęć w C

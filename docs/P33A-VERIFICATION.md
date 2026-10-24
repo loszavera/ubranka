@@ -1,8 +1,8 @@
 # P3.3A — wdrożenie i weryfikacja
 
 Data: 2026-10-25. Zakres zatwierdzony: [plan V1.6](IMPLEMENTATION-PLAN-V1.6.md).
-Kod i backend przeszły kontrole; publikacja main i końcowe czyszczenie fixture
-są w toku. Poniżej oddzielono wykonane kontrole od oczekujących.
+Kod, backend, CI, podgląd main i fizyczne usunięcie danych syntetycznych:
+**PASS**. Odbiór użytkowników pozostaje osobnym krokiem. P3.3B nie rozpoczęto.
 
 ## Granica etapu
 
@@ -28,6 +28,8 @@ fizycznego dopasowania. Brak zdjęcia nie blokuje doboru zestawu.
   Pierwszy przebieg miał 17/18: formularz zasłaniał globalne odświeżenie.
   Przycisk przeniesiono także do formularza. Następnie doprecyzowano oczekiwanie
   testu na koniec zamykania okna przed wyborem zdjęcia; bez automatycznych retry.
+  Następnie pełny workflow GitHub, w tym wszystkie 18 prywatnych scenariuszy,
+  przeszedł na tym samym kodzie.
   Sprawdzono PL/EN, 320/390 px, eksport, usuwanie, zmianę konta, brak kompletu,
   ręczną zamianę, opcjonalny powód i jawnie wyłączone AI.
 - Eksport WWW/iOS/Android: **PASS**. Nie zastępuje fizycznych urządzeń.
@@ -46,7 +48,30 @@ fizycznego dopasowania. Brak zdjęcia nie blokuje doboru zestawu.
   ostrzeżenia o celowo udostępnionych RPC SECURITY DEFINER oraz ostrzeżenie
   ochrony wyciekłych haseł przy wyłączonym logowaniu hasłem. Właściciel i
   aktywność są kontrolowane w RPC/RLS; nie rozszerzono grantów użytkowników.
-- GitHub, Vercel main, kontrola wdrożonego UI i fizyczne usunięcie fixture: oczekuje.
+- GitHub dev/main: `4b34a00526f814804735fb8a6221193608f15372`, publikacja
+  bez przepisywania historii. Vercel Production
+  `dpl_4SVbhXLb7aH5VsTW8ex8dXJv8VHH`: **READY**, alias
+  https://ubranka.vercel.app przypisany do tego kodu.
+- Wdrożony main z rzeczywistym Supabase: **5 kontroli PASS** na dedykowanej
+  syntetycznej sesji. Zapis rozmiarów i zdjęcia po świadomym potwierdzeniu,
+  odczyt po odświeżeniu, własny zestaw/opinia, przygotowanie z wyłączonym AI,
+  PL/EN przy 320/390 px oraz wylogowanie. Zero błędów JavaScript i połączeń
+  poza adresem aplikacji oraz istniejącym Supabase. Zero wywołań generacji.
+- CI uruchomiono ręcznie na main; automatyczne uruchomienia repozytorium są
+  wyłączone. Nie zmieniano ustawień Actions.
+  [Przebieg 40143086234](https://github.com/loszavera/ubranka/actions/runs/40143086234): **SUCCESS**
+  dla dokładnego SHA `4b34a00526f814804735fb8a6221193608f15372`.
+  Obejmuje check, logikę, backend, Deno, zależności, eksporty i obie grupy E2E.
+- Oba konta syntetyczne usunięto przez aplikację i istniejący harmonogram.
+  Kontrola o 23:40:21 UTC (01:40:21 czasu polskiego) potwierdziła **zero**
+  rekordów kont/rzeczy/zdjęć/sylwetki/stylizacji/zleceń, zero wpisów Storage
+  pod oboma prefiksami oraz brak obu użytkowników Auth. Usunięto dwa testowe
+  zaproszenia i lokalny plik sesji. Bez ręcznego globalnego czyszczenia
+  ani skracania zabezpieczenia świeżego uploadu.
+- Niezależny przegląd końcowy: bez blokujących uwag; zachowano granicę A/B.
+
+Końcowy commit po `4b34a00` zapisuje wyłącznie dokumentację, bez zmian
+kodu, konfiguracji usług i zależności. Wynik CI dotyczy wskazanego SHA kodu.
 
 Koordynator generacji jest lokalnie testowanym kontraktem, a adapter syntetyczny
 istnieje wyłącznie w testach. Nie wdrożono klienta OpenAI, workera generacji,
@@ -57,7 +82,9 @@ Ocena błędu faktycznego wyniku oraz pomiar CPU/RAM/latencji wymagają tej dals
 Dowody lokalne w ignorowanym `artifacts/`: `p33a-check-final.log`, `p33a-unit.log`,
 `p33a-backend.log`, `p33a-deno.log`, `p33a-private-e2e-retest.log`,
 `p33a-private-new-retest.log`, `p33a-demo-e2e.log`, `p33a-build-all.log`,
-`p33a-hosted-report.json`. Nie publikujemy sesji Auth ani prywatnych logów.
+`p33a-hosted-report.json`, `p33a-main-ui.json`, `p33a-main-*.png`,
+`p33a-cleanup-report.json`, `p33a-ci-report.json`.
+Nie publikujemy sesji Auth ani prywatnych logów.
 
 Testy syntetyczne nie potwierdzają logowania Google Kasi ani zachowania aparatu
 i selektora plików na fizycznym iPhonie/Androidzie. To pozostaje do odbioru.

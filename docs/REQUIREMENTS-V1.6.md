@@ -5,6 +5,8 @@ Data: 2026-10-25. Dodatek do [V1.5](REQUIREMENTS-V1.5.md).
 zatwierdzono implementację P3.3A: fundament z płatnym AI wyłączonym.**
 Aktualizacja statusu zgody 2026-10-25 nie zmienia zakresu V1.6. Fazy B–D
 pozostają propozycją, bez zgody na wydatki ani nowe abonamenty.
+P3.3A wdrożono na main; [raport](P33A-VERIFICATION.md) oddziela testy wykonane
+od otwartego odbioru użytkowników i późniejszych integracji AI.
 [Plan V1.6](IMPLEMENTATION-PLAN-V1.6.md), [dane AI](P33-AI-DATA-POLICY-V1.0.md),
 [koszty V1.5](COST-PLAN-V1.5.md).
 
@@ -37,8 +39,9 @@ filtrować oczywiste rozbieżności, ale nie dowodzą fizycznego dopasowania.
 
 ## Etapy i odbiór
 
-- **P3.3A — zatwierdzone do wykonania:** profil, własne zestawy, ekrany i trwałe
-  zadania z testowym dostawcą; płatne AI wyłączone na serwerze, bez klucza AI.
+- **P3.3A — wdrożone, czeka na odbiór:** profil, własne zestawy, ekrany i schemat
+  trwałych zadań; dostawca testowy tylko lokalnie/CI, płatne AI wyłączone na serwerze,
+  bez klucza AI.
   Przykład syntetyczny jest podpisany jako przykład, nigdy jako wynik zdjęć użytkownika.
 - **P3.3B — osobna zgoda:** krótka próba rzeczywistych wywołań na syntetycznych
   zdjęciach osobnych ubrań, do 6 wywołań / 10 PLN łącznie, bez ponowień.

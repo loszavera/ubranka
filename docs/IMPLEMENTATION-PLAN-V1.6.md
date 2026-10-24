@@ -4,6 +4,8 @@ Data: 2026-10-25. **P3.2 odebrane z ograniczeniami. P3.3A zatwierdzone do
 implementacji, testów syntetycznych i podglądu na main.** Aktualizacja statusu
 zgody: bez zmiany zakresu V1.6. Płatne AI pozostaje wyłączone; bez klucza AI
 w chmurze i nowych abonamentów. Fazy B–D wymagają osobnych zgód.
+Realizacja A jest wdrożona na main; dowody i granice przygotowania backendu:
+[raport P3.3A](P33A-VERIFICATION.md). Odbiór użytkowników pozostaje otwarty.
 [Wymagania V1.6](REQUIREMENTS-V1.6.md), [zasady danych AI V1.0](P33-AI-DATA-POLICY-V1.0.md),
 [koszty V1.5](COST-PLAN-V1.5.md). Starsze wersje zachowujemy jako historię.
 
@@ -28,7 +30,7 @@ P3.2 nie oznacza zatwierdzenia nowego dostawcy danych, klucza serwerowego i bud�
 
 | Faza | Dostarczony rezultat | Granica |
 | --- | --- | --- |
-| **P3.3A — zatwierdzona do implementacji** | Profil sylwetki, własne zestawy, zapis/oceny, ekrany wizualizacji, trwałe zlecenia i testy kontroli danych/kosztów. Lokalny/CI adapter syntetyczny; na hostingu płatne AI wyłączone. Testy wyłącznie syntetyczne, podgląd main. | Bez klucza OpenAI na serwerze, płatnych wywołań i przesyłania zdjęć do OpenAI. |
+| **P3.3A — wdrożona, czeka na odbiór** | Profil sylwetki, własne zestawy, zapis/oceny, ekrany wizualizacji, schemat trwałych zleceń i testy kontroli danych/kosztów. Lokalny/CI adapter syntetyczny; na hostingu płatne AI wyłączone. Testy wyłącznie syntetyczne, podgląd main. | Bez klucza OpenAI na serwerze, płatnych wywołań i przesyłania zdjęć do OpenAI. |
 | **P3.3B — późniejsza osobna zgoda** | Do 6 wywołań / 10 PLN łącznie na syntetycznych wejściach, przez rzeczywisty worker Supabase. Raport jakości, kosztu i czasu. | Wlicza przygotowanie/błędy, brak retry. Nie zużywa starej zgody P3.2 i nie uruchamia C. |
 | **P3.3C — późniejsza osobna zgoda po B** | Pilotaż dwóch kont na 30 dni, prywatne zdjęcia wyłącznie po zgodzie każdego użytkownika, 25 PLN AI łącznie i proponowane limity V1.5. | Koniec po terminie/limicie; bez automatycznego przedłużenia, nowych abonamentów i nieuzgodnionych doładowań. |
 | **P3.3D — zachowane wymaganie na później** | Rozpoznawanie zdjęć z możliwością korekty. | Wymaga osobnego modelu, testu, zasad danych i budżetu. Ręczne opisy w A nie zamykają tego wymagania. |

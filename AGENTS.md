@@ -78,6 +78,9 @@ Bez klucza AI w chmurze, płatnych wywołań i nowych abonamentów. Odmowa gener
 musi obowiązywać na serwerze, także przy ręcznym wywołaniu API/RPC.
 P3.3B (próba syntetyczna), C (pilotaż prywatnych zdjęć) i D (rozpoznawanie)
 nadal wymagają osobnej zgody. Po wdrożeniu i raporcie A zatrzymaj się przed B.
+P3.3A jest wdrożone na main, z wynikiem testów i checklistą w
+docs/P33A-VERIFICATION.md. Zgoda na wykonanie nie jest odbiorem użytkowników;
+następnym krokiem jest ich test na https://ubranka.vercel.app.
 Poprzednia zgoda na finansowanie P3.2 nie przechodzi na dalsze fazy. Proponowane
 25 PLN pilotażu C jest odrębnym budżetem, nie bieżącym ustawieniem konta.
 Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,

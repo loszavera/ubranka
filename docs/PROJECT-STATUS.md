@@ -7,10 +7,17 @@ Zakres: profil sylwetki i prywatne zdjęcie w Supabase, zestawy z własnej szafy
 przygotowanie wizualizacji z serwerowym AI OFF, testy syntetyczne i podgląd main.
 Praca na dev. Bez klucza AI w chmurze, płatnych wywołań i nowych abonamentów.
 P3.3B/C/D pozostają niezlecone. 62 testy logiki/klienta, 41 backendu, 15 regresji
-demo oraz 8 nowych scenariuszy prywatnego UI i 10 dotychczasowych: PASS po
-poprawce konfliktu formularza. Supabase: migracja i funkcje wdrożone, 40 kontroli
+demo oraz wszystkie 18 scenariuszy prywatnego UI: PASS w zakończonym CI
+(lokalnie wcześniej poprawiono obsługę konfliktu formularza). Supabase: migracja i funkcje wdrożone, 40 kontroli
 dwóch syntetycznych kont PASS. Hashe wcześniejszych danych pozostają zgodne.
-Publikacja main i końcowe czyszczenie fixture są w toku. Szczegóły i granice:
+Kod `4b34a00` jest na dev/main; Vercel Production READY pod
+https://ubranka.vercel.app. Pięć kontroli wdrożonego UI z rzeczywistym Supabase
+na koncie syntetycznym: PASS. CI 40143086234: SUCCESS dla kodu `4b34a00`.
+Oba konta syntetyczne, ich rekordy i pliki zostały całkowicie usunięte przez
+aplikację oraz istniejący harmonogram; kontrola 01:40 czasu polskiego PASS.
+Usunięto testowe zaproszenia i lokalne sesje. Końcowy commit zapisuje tylko
+dokumentację wyników; odbiór użytkowników i P3.3B pozostają otwarte.
+Szczegóły i granice:
 [P33A-VERIFICATION.md](P33A-VERIFICATION.md), [backend](P33A-BACKEND.md).
 
 ## Historia P3.2 i przygotowania planu
@@ -232,7 +239,7 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-Po publikacji **test i odbiór P3.3A na main** według [krótkiej checklisty](P33A-VERIFICATION.md).
+**Test i odbiór P3.3A na main** według [krótkiej checklisty](P33A-VERIFICATION.md).
 Sprawdzić sylwetkę, zestawy z własnej szafy, PL/EN oraz przygotowanie wizualizacji
 z AI wyłączonym. Nie potrzeba ponownej zgody na wykonany zakres A.
 Zatrzymanie przed P3.3B; nowa płatna próba wymaga osobnej zgody.
