@@ -60,6 +60,11 @@ Nowe wpisy z 2026-10-24:
 | D-043 | 2026-10-25 | Zatwierdzenie P3.2 i wyjątek od estymacji | Aktualizuje D-041/D-042: użytkownik zatwierdził syntetyczną próbę do 12 płatnych wywołań i 25 PLN łącznie, bez automatycznych ponowień i zmian abonamentów. Po preflight jawnie polecił rozpocząć test bez pełnej estymacji, zachowując te limity. Szczegóły finansowania pozostają prywatne. |
 | D-044 | 2026-10-25 | Próba wykonana, odbiór użytkowników oczekuje | 12/12 udanych wywołań, 0,432032 USD API i 2,92269648 PLN z rezerwą. Technicznie użyteczne 10/12; oba W-ELEGANT zmieniają krój spodni. Flare jest kandydatem, nie zatwierdzonym dostawcą aplikacji. Raport P32-REPORT.md i galeria /p32/ służą odbiorowi. Zgoda wyczerpana liczbą wywołań; P3.3 nie rozpoczęto. |
 
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-045 | 2026-10-25 | Odbiór P3.2 i zlecone tylko planowanie | Kasia i Aleksy zaakceptowali wyniki P3.2 z ograniczeniami. Zlecili plan P3.3: wizualizacje w aplikacji, zasady danych AI i kontrola kosztów, bez implementacji oraz nowych płatnych wywołań. Aktualizuje D-044; nie odnawia limitu ani finansowania próby. |
+| D-046 | 2026-10-25 | Propozycja do zatwierdzenia | V1.6 dzieli P3.3 na A: fundament z AI OFF, B: syntetyczna próba 6 wywołań / 10 PLN, C: osobno zatwierdzany pilot 30 dni / 25 PLN AI łącznie, D: późniejsze rozpoznawanie. Kandydat Flare, Supabase Edge i prywatny Storage; zasady danych AI V1.0 oraz koszty V1.5 są propozycją, nie wdrożoną konfiguracją. Rekomendowany następny zakres to wyłącznie A. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

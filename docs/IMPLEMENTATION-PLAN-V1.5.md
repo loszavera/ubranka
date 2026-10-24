@@ -1,5 +1,10 @@
 # Plan implementacji Ubranka — V1.5
 
+**Aktualizacja odbioru 2026-10-25:** użytkownicy zaakceptowali P3.2 z ograniczeniami.
+Poniższy dokument zachowuje warunki i stan próby przed odbiorem; wzmianki o
+oczekującej ocenie są historyczne. Bieżące ustalenia: [V1.6](REQUIREMENTS-V1.6.md)
+i [plan V1.6](IMPLEMENTATION-PLAN-V1.6.md), wyłącznie planowanie P3.3.
+
 Data: 2026-10-25 (Europe/Warsaw). Dodatek do
 [planu V1.4](IMPLEMENTATION-PLAN-V1.4.md), zgodny z
 [wymaganiami V1.5](REQUIREMENTS-V1.5.md). Użytkownik zatwierdził P3.2;

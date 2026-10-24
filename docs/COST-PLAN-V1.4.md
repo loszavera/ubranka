@@ -73,8 +73,8 @@ z uwzględnieniem kosztu dwóch odrzuconych obrazów, wyniósł:
 ```
 
 To około **0,29 PLN z rezerwą za technicznie użyteczny wynik w tej próbie**.
-Ocena Kasi i Aleksego pozostaje oczekująca; koszt wyniku zaakceptowanego przez
-użytkowników nadal jest nieustalony. Techniczny sukces próby nie jest pełnym
+Odbiór całej próby z ograniczeniami potwierdzono 2026-10-25; nie zebrano osobnych
+ocen każdego obrazu, więc koszt indywidualnie zaakceptowanego wyniku jest nieustalony. Techniczny sukces próby nie jest pełnym
 odbiorem jakości ani gwarancją podobnego odsetka użytecznych wyników w przyszłości.
 
 ## Projekcja wyłącznie dla takich samych warunków
@@ -95,8 +95,8 @@ także koszt odrzuconych obrazów i wszystkich ponowień.
 
 Przegląd techniczny wskazał zmianę kroju spodni w W-ELEGANT dla obu modeli
 oraz podwinięte rękawy w M-CASUAL dla Sunburst. Udane żądanie API nie oznacza
-wiernego przeniesienia ubrania. Oceny techniczne są zapisane; odbiór użytkowników
-pozostaje oczekujący. Szczegóły ograniczeń opisuje [raport P3.2](P32-REPORT.md).
+wiernego przeniesienia ubrania. Oceny techniczne są zapisane; użytkownicy odebrali
+całą próbę z ograniczeniami (2026-10-25). Szczegóły ograniczeń opisuje [raport P3.2](P32-REPORT.md).
 
 Projekcja nie obejmuje innych zdjęć, dodatkowych obrazów wejściowych, większej
 jakości lub rozdzielczości, rozpoznawania szafy, rekomendacji, infrastruktury,

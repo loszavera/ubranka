@@ -37,9 +37,14 @@ wyłącznie na syntetycznych obrazach fikcyjnych dorosłych, bez automatycznych 
 **Próba zakończona: 12/12 udanych wywołań, koszt API 0,432032 USD**, około 2,92 PLN
 z konserwatywną rezerwą. Dziesięć wyników uznano za technicznie użyteczne;
 dwa zmieniają krój spodni. [Galeria porównawcza](https://ubranka.vercel.app/p32/)
-i [raport jakości oraz kosztów](docs/P32-REPORT.md) czekają na ocenę Kasi i Aleksego.
+i [raport jakości oraz kosztów](docs/P32-REPORT.md) zostały odebrane przez Kasię
+i Aleksego z opisanymi ograniczeniami (2026-10-25).
 Użytkownik pozwolił rozpocząć pomiar bez pełnej estymacji, zachowując limity.
-P3.3 oraz nowe abonamenty nie są zatwierdzone. Aplikacja nie generuje jeszcze obrazów AI.
+**P3.3: przygotowany plan do akceptacji, bez implementacji i nowych wywołań.**
+Rekomendowany następny zakres to P3.3A: profil sylwetki, zestawy z własnej szafy
+i przygotowanie przepływu wizualizacji z płatnym AI wyłączonym. Próba kilku
+osobnych zdjęć ubrań i pilotaż prywatnych zdjęć wymagają późniejszych zgód.
+Aplikacja nie generuje jeszcze obrazów AI; nie uruchomiono nowych abonamentów.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
 jest wspólna dla obu adresów. Lokalny zapis demo pozostaje osobny — publikacja
@@ -49,15 +54,17 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 ## Dokumenty
 
-- [Wymagania V1.5 — zatwierdzona próba P3.2](docs/REQUIREMENTS-V1.5.md)
-- [Plan implementacji V1.5](docs/IMPLEMENTATION-PLAN-V1.5.md)
+- [Wymagania V1.6 — odebrane P3.2, propozycja P3.3](docs/REQUIREMENTS-V1.6.md)
+- [Plan implementacji V1.6 — fazy P3.3A–D](docs/IMPLEMENTATION-PLAN-V1.6.md)
+- [Proponowane zasady danych AI V1.0](docs/P33-AI-DATA-POLICY-V1.0.md)
+- [Proponowana kontrola kosztów V1.5](docs/COST-PLAN-V1.5.md)
 - [P3.2 — raport jakości, kosztów i weryfikacji](docs/P32-REPORT.md)
 - [P3.2 — historyczny preflight i późniejsze rozstrzygnięcie użytkownika](docs/P32-PREFLIGHT.md)
 - [Przypadki P3.2, prompty i hashe wejść](docs/p32/cases.json)
 - [Przyjęte zasady zdjęć i usuwania](docs/P3-DATA-POLICY-V1.0.md)
 - [Konfiguracja usług P3.1](docs/P31-SETUP.md) i [backend](docs/P31-BACKEND.md)
 - [Weryfikacja P3.1 i jej ograniczenia](docs/P31-VERIFICATION.md)
-- [Aktualne pomiary kosztów AI V1.4](docs/COST-PLAN-V1.4.md) i [usługi V1.3](docs/COST-PLAN-V1.3.md)
+- [Pomiary P3.2 V1.4](docs/COST-PLAN-V1.4.md) i [usługi V1.3](docs/COST-PLAN-V1.3.md)
 - [Odpowiedzi uzupełniające](docs/INTERVIEW-V1.2.md) i [pierwsze 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
 - [Wybrany wygląd A](docs/design/DESIGN-DIRECTION-V1.2.md)
 - [Założenia budżetu przy 30 wizualizacjach na osobę](docs/COST-PLAN-V1.2.md)

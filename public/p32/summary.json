@@ -14,7 +14,7 @@
     "Dwie podobne syntetyczne osoby i studyjne zdjęcia to mała próba. Nie sprawdzono różnych sylwetek, zdjęć domowych ani trzech osobnych zdjęć ubrań.",
     "Kopie WebP są bezstratne: porównano piksele z oryginałami PNG.",
     "10 z 12 wyników uznano za technicznie użyteczne. Oba eleganckie zestawy damskie odrzucono z powodu zmienionego kroju spodni.",
-    "Ocena 10/10 oznacza brak widocznego problemu w tej małej próbie, nie gwarancję dokładnego odwzorowania produktu. Odbiór Kasi i Aleksego pozostaje otwarty.",
+    "Ocena 10/10 oznacza brak widocznego problemu w tej małej próbie, nie gwarancję dokładnego odwzorowania produktu. Kasia i Aleksy zaakceptowali próbę z ograniczeniami 2026-10-25; nie nadali osobnych ocen każdemu obrazowi.",
     "Kandydatem do dalszego etapu jest Flare: ten sam koszt, krótszy średni czas i lepsze rękawy w jednym przypadku. Nie jest to dowód ogólnej przewagi modelu."
   ],
   "models": [
@@ -212,5 +212,9 @@
       "person": "images/source-m1.webp",
       "reference": "images/source-m5.webp"
     }
-  ]
+  ],
+  "userAcceptance": {
+    "date": "2026-10-25",
+    "scope": "P3.2 trial accepted with documented limitations; no further paid calls authorized."
+  }
 }

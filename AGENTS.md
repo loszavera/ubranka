@@ -25,7 +25,7 @@ filtruj dopuszczalne okazje, potem oceniaj gust; nie wypełniaj pary niepasując
 zestawem. Stan V2 odczytuje V1 pod niezmienionym kluczem `ubranka:p2:v1`.
 P2.1 zostało następnie odebrane przez użytkownika i jawnie dopuszczone do main
 (2026-10-24). Publikacja i test produkcyjny: docs/P21-PRODUCTION.md. Praca pozostaje
-na dev. Aktualne wymagania i plan V1.4 zawierają propozycję P3, koszty V1.3 i
+na dev. Ówczesne wymagania i plan V1.4 zawierały propozycję P3, koszty V1.3 i
 P3-DATA-POLICY-V1.0.md. Użytkownik **zatwierdził implementację P3.1** (2026-10-24):
 Supabase Free/Frankfurt, Google OAuth, limity zdjęć i zasady danych V1.0,
 konfigurację darmowych usług, testy i podgląd dev. Usługi i kod P3.1 są wdrożone
@@ -51,7 +51,7 @@ Git ani hostingu. Bieżących danych konta i rozliczeń nie publikuj w repozytor
 wliczając przygotowanie, kalibrację i błędy; bez automatycznych ponowień,
 zmian rozliczeń i abonamentów. Wyłącznie syntetyczne obrazy fikcyjnych dorosłych.
 Sposób finansowania zatwierdzono osobno; szczegóły pozostają w prywatnych notatkach.
-Aktualne wymagania i plan: V1.5. Preflight zatrzymał płatne wywołania (0/12,
+Ówczesne wymagania i plan: V1.5. Preflight zatrzymał płatne wywołania (0/12,
 0 PLN), ponieważ nie ustalono wiarygodnej górnej estymacji kosztu obrazów wejściowych
 dla modeli 2.5. Następnie użytkownik rozstrzygnął: „nieważne jaki jest szacunek.
 po prostu testuj I zobaczymy”. To jawny wyjątek pozwalający rozpocząć pomiar bez
@@ -65,8 +65,16 @@ Próba została zakończona: 12/12 udanych wywołań bez ponowień, koszt API
 0,432032 USD, budżetowo 2,92269648 PLN z rezerwą. Nie pozostały żadne wywołania
 w tej zgodzie. Nie uruchamiaj ponownie runnera ani nie traktuj pozostałych PLN
 jako zgody na następne generacje. Raport: docs/P32-REPORT.md; galeria /p32/.
-10/12 wyników spełnia próg techniczny; odbiór Kasi i Aleksego pozostaje otwarty.
-P3.3 nie rozpoczęto i wymaga osobnego zatwierdzenia.
+10/12 wyników spełnia próg techniczny. Następnie 2026-10-25 Kasia i Aleksy
+zaakceptowali P3.2 z opisanymi ograniczeniami i zlecili WYŁĄCZNIE plan P3.3.
+Aktualne wymagania/plan: V1.6; propozycja zasad danych AI V1.0 i kosztów V1.5.
+Nie pytaj ponownie o odbiór P3.2. Nie interpretuj odbioru całej próby jako oceny
+każdego obrazu ani potwierdzenia jakości dla osobnych zdjęć ubrań.
+P3.3A (fundament z AI OFF), B (syntetyczna próba), C (pilotaż prywatnych zdjęć)
+i D (rozpoznawanie) są propozycjami, bez zgody na implementację lub wydatki.
+Bieżąca tura: dokumentacja, bez kodu aplikacji, migracji i zmian usług/kluczy.
+Poprzednia zgoda na finansowanie P3.2 nie przechodzi na dalsze fazy. Proponowane
+25 PLN pilotażu C jest odrębnym budżetem, nie bieżącym ustawieniem konta.
 Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,
 podał prywatnie oba konta oraz wyraźnie zaakceptował Google API Services User
 Data Policy z upoważnieniem do zaznaczenia zgody. Nie pytaj o to ponownie.

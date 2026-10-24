@@ -2,8 +2,10 @@
 
 Data: 2026-10-25, Europe/Warsaw. **Wykonano 12/12 wywołań, bez błędów i ponowień.
 Koszt API: 0,432032 USD; rozliczenie budżetu z rezerwą: 2,92269648 PLN z 25 PLN.**
-Próba i przegląd techniczny zakończone. Ocena Kasi i Aleksego jest oczekująca.
-P3.3 nie rozpoczęto; aplikacja nie otrzymała funkcji płatnego generowania.
+Próba i przegląd techniczny zakończone. **Aktualizacja 2026-10-25: Kasia i Aleksy
+zaakceptowali wyniki z opisanymi ograniczeniami.** Odbiór dotyczy próby jako
+całości, nie osobnych ocen wszystkich obrazów. Zlecono wyłącznie plan P3.3;
+aplikacja nie otrzymała funkcji płatnego generowania.
 
 [Galeria do sprawdzenia na telefonie](https://ubranka.vercel.app/p32/)
 zawiera wszystkie wejścia i 12 wyników, z ocenami, kosztami i możliwością
@@ -20,7 +22,7 @@ Sunburst podwinął rękawy, choć zdjęcie referencyjne pokazywało pełną dł
 **Flare jest rekomendowanym kandydatem do dalszego projektu**: miał identyczny
 koszt, krótszy średni czas i lepsze odtworzenie rękawów w jednym przypadku.
 To wynik tej małej próby, nie ogólny ranking modeli. Wybór do aplikacji i P3.3
-wymagają odbioru przykładów i osobnego zatwierdzenia zakresu.
+wymagają osobnego zatwierdzenia zakresu; odbiór próby został już zapisany.
 
 ## Co faktycznie wykonano
 
@@ -73,8 +75,9 @@ podatkami i opłatami. Szczegóły oraz projekcje 60/75 wywołań:
 
 Koszt na technicznie użyteczny wynik, z uwzględnieniem dwóch odrzuconych:
 0,432032 / 10 = **0,0432032 USD**, budżetowo około **0,29 PLN**.
-Nie jest to koszt wyniku zaakceptowanego przez użytkowników — ich ocena jest
-jeszcze przed nami. Limit wywołań został wyczerpany; pozostały budżet nie uruchamia
+Nie jest to koszt wyniku zaakceptowanego przez użytkowników — odbiór całej próby
+nie określa liczby indywidualnie zaakceptowanych obrazów. Limit wywołań został
+wyczerpany; pozostały budżet nie uruchamia
 następnych prób. Panel rozliczeń może aktualizować dane z opóźnieniem; pomiar
 tokenowy nie jest końcową fakturą ani potwierdzeniem operacji na karcie.
 
@@ -97,7 +100,8 @@ w tym obrazie, nie idealną reprodukcję produktu lub potwierdzenie dopasowania.
 Nie zaobserwowano rażących deformacji na widocznych fragmentach. Męskie dłonie
 są w kieszeniach, więc ich anatomia praktycznie nie została przetestowana.
 Użyto podobnych fikcyjnych twarzy i kontrolowanego studia; wynik oceny zachowania
-osoby ma ograniczoną moc. To ocena techniczna agentów, nie odbiór Kasi/Aleksego.
+osoby ma ograniczoną moc. Punktacja pochodzi od agentów; późniejszy odbiór
+całej próby przez Kasię/Aleksego nie zmienia jej w indywidualne oceny użytkowników.
 
 ## Czego próba nie dowodzi
 
@@ -134,7 +138,7 @@ AI w UE. Dane AI i wdrożenie w aplikacji należą do osobnego planu P3.3.
 
 ## Następny krok
 
-Kasia i Aleksy porównują sześć par w galerii i wskazują, czy taka wierność
-wystarcza do orientacyjnej oceny stylizacji. Po ich ocenie przygotować do
-zatwierdzenia konkretny zakres P3.3 z zasadami danych AI i kontrolą kosztu.
-Bez nowych płatnych prób ani wdrażania P3.3 w ramach tego raportu.
+Po odbiorze P3.2 przygotowano [plan V1.6](IMPLEMENTATION-PLAN-V1.6.md),
+[zasady danych AI](P33-AI-DATA-POLICY-V1.0.md) i [koszty V1.5](COST-PLAN-V1.5.md).
+Rekomendowany do zatwierdzenia P3.3A buduje fundament z AI wyłączonym.
+Nie uruchomiono nowych płatnych prób ani implementacji P3.3.

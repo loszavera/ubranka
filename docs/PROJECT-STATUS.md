@@ -7,9 +7,19 @@ Sześć przypadków × dwa modele na istniejących obrazach fikcyjnych dorosłyc
 Koszt API **0,432032 USD**, rozliczenie budżetu z rezerwą **2,92269648 PLN / 25 PLN**.
 10/12 wyników spełnia próg techniczny; oba eleganckie zestawy damskie zmieniają
 krój spodni. Flare jest kandydatem do dalszego projektu: w tej próbie był szybszy
-przy tym samym koszcie. Ocena Kasi i Aleksego pozostaje oczekująca.
+przy tym samym koszcie. **Kasia i Aleksy zaakceptowali wyniki P3.2 z opisanymi
+ograniczeniami (2026-10-25).** Nie nadali ocen poszczególnym obrazom.
 [Galeria](https://ubranka.vercel.app/p32/), [raport](P32-REPORT.md),
 [koszty V1.4](COST-PLAN-V1.4.md). Limit wywołań wyczerpany; P3.3 nie rozpoczęto.
+**Przygotowano plan P3.3 V1.6**, zgodnie ze zleceniem wyłącznie dokumentacyjnym:
+prywatne zestawy i profil, wizualizacja na prośbę, zasady danych oraz koszty.
+Rekomendacja: P3.3A z AI wyłączonym, później osobno próba syntetyczna B i pilotaż C.
+Automatyczne rozpoznawanie pozostaje w D. Wszystkie fazy czekają na zatwierdzenie.
+W tej turze nie zmieniano kodu, bazy, usług ani kluczy i nie wywoływano modeli.
+Weryfikacja dokumentacji: spójność faz/limitów/zgód, lokalne odnośniki, JSON
+odbioru i niezmienione pomiary P3.2 PASS; niezależny przegląd architektury oraz
+zasad danych. Testów runtime aplikacji nie powtarzano przy zmianie wyłącznie
+dokumentów i metadanych odbioru.
 Materiały `66e5e05` opublikowano na dev/main. Vercel Production
 `dpl_6VhgLoT8s9cNhvBEv6YvauhN1Xob` READY; publiczny test galerii i powrotu
 do aplikacji PASS. Końcowa zmiana zapisuje dowody bez zmiany galerii/aplikacji.
@@ -102,9 +112,10 @@ na logowanie Kasi, pełną checklistę urządzeń ani zgodę na P3.2.
 
 ## Aktualne dokumenty
 
-- [Wymagania V1.5](REQUIREMENTS-V1.5.md) i [plan V1.5](IMPLEMENTATION-PLAN-V1.5.md):
-  wykonana próba P3.2 i oczekujący odbiór przykładów przez użytkowników.
-  P3.3 pozostaje propozycją. Wersje V1.2–V1.4 zachowano.
+- [Wymagania V1.6](REQUIREMENTS-V1.6.md) i [plan V1.6](IMPLEMENTATION-PLAN-V1.6.md):
+  odebrane P3.2 i propozycja etapów P3.3A–D. Wersje V1.2–V1.5 zachowano.
+- [Projekt zasad danych AI](P33-AI-DATA-POLICY-V1.0.md)
+  i [projekt kontroli kosztów V1.5](COST-PLAN-V1.5.md): do akceptacji.
 - [Raport P3.2](P32-REPORT.md), [historyczny preflight](P32-PREFLIGHT.md)
   i [manifest przypadków](p32/cases.json).
 - [Przyjęte zasady zdjęć](P3-DATA-POLICY-V1.0.md), [pomiary kosztów V1.4](COST-PLAN-V1.4.md).
@@ -205,12 +216,12 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-Kasia i Aleksy oceniają sześć porównań w [galerii P3.2](https://ubranka.vercel.app/p32/).
-Po ocenie proponujemy przygotowanie konkretnego planu P3.3: zakres pierwszej
-wizualizacji w aplikacji, zasady danych AI i kontrola kosztów. Sam plan i późniejsza
-implementacja wymagają osobnego zatwierdzenia. W ramach P3.2 nie wykonujemy
-kolejnych płatnych prób ani nie wysyłamy rzeczywistych zdjęć użytkowników do AI.
+Do zatwierdzenia **P3.3A według planu V1.6**: profil sylwetki, maksymalnie dwa
+zestawy z własnej szafy, ekrany i zabezpieczenia wizualizacji, testy syntetyczne,
+AI wyłączone na serwerze. Praca dev, podgląd main zgodnie z przyjętym workflow.
+Bez klucza OpenAI w chmurze, płatnych wywołań, wysyłania zdjęć do OpenAI i nowych
+abonamentów. Po raporcie A zatrzymanie przed osobnymi zgodami B/C.
 
-Równolegle pozostaje krótki test Google Kasi według [checklisty](P31-ACCEPTANCE.md).
-Nie przedstawiamy go jako zaliczonego. Podział środowisk ustalimy przed premierą
-komercyjną; obecna galeria jest publicznym zestawem wyłącznie syntetycznych przykładów.
+Logowanie Kasi w P3.1 pozostaje do faktycznego sprawdzenia; odbiór P3.2 go
+nie potwierdza. W tej turze przygotowano tylko dokumentację i zapis odbioru
+w metadanych istniejącej galerii. Nie zmieniono obrazów ani kodu galerii/aplikacji.

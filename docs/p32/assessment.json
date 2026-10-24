@@ -14,7 +14,7 @@
     "usefulness"
   ],
   "technicalPassRule": "total >= 8 and no critical error; 10/10 is not a guarantee of exact product reproduction or fit",
-  "userAcceptance": "pending",
+  "userAcceptance": "trial_accepted_with_documented_limitations",
   "results": [
     {
       "number": 1,
@@ -220,5 +220,7 @@
         "Kompletny zestaw i zachowana poza. Drobne różnice odcienia i faktury granatu; brak oczywistej deformacji."
       ]
     }
-  ]
+  ],
+  "userAcceptanceDate": "2026-10-25",
+  "userAcceptanceScope": "Overall P3.2 trial; not individual ratings of each image and not authorization for further paid calls."
 }

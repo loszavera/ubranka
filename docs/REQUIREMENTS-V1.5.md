@@ -1,5 +1,10 @@
 # Wymagania Ubranka — V1.5
 
+**Aktualizacja odbioru 2026-10-25:** użytkownicy zaakceptowali P3.2 z ograniczeniami.
+Poniższy dokument zachowuje warunki i stan próby przed odbiorem; wzmianki o
+oczekującej ocenie są historyczne. Bieżące ustalenia: [V1.6](REQUIREMENTS-V1.6.md)
+i [plan V1.6](IMPLEMENTATION-PLAN-V1.6.md), wyłącznie planowanie P3.3.
+
 Data: 2026-10-25 (Europe/Warsaw). Dodatek do
 [V1.4](REQUIREMENTS-V1.4.md); wcześniejsze wymagania pozostają aktualne,
 z wyjątkiem zmian opisanych poniżej. Plan wykonania:
