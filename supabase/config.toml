@@ -1,0 +1,10 @@
+project_id = "ubranka"
+
+[functions.wardrobe]
+verify_jwt = false
+
+[functions.wardrobe-cleanup]
+verify_jwt = false
+
+# Both handlers authenticate explicitly. User requests call Auth getUser(); the
+# cleanup handler compares a separately configured secret, never a publishable key.

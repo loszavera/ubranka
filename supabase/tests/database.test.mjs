@@ -1,0 +1,142 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
+import test from 'node:test';
+
+// Real Postgres engine in WASM; only Supabase-owned auth/storage schemas are
+// represented by fixtures. This proves SQL/RLS behavior, not HTTP Storage/OAuth.
+const { PGlite } = await import(process.env.PGLITE_MODULE ? pathToFileURL(process.env.PGLITE_MODULE).href : '@electric-sql/pglite');
+const db = new PGlite();
+const A = '00000000-0000-4000-8000-000000000001';
+const B = '00000000-0000-4000-8000-000000000002';
+const C = '00000000-0000-4000-8000-000000000003';
+const itemA = '10000000-0000-4000-8000-000000000001';
+const photoA = '20000000-0000-4000-8000-000000000001';
+const receipt = '30000000-0000-4000-8000-000000000001';
+
+await db.exec(`
+  create role anon; create role authenticated; create role service_role bypassrls; create role supabase_auth_admin;
+  create schema auth; create schema storage;
+  grant usage on schema auth,public,storage to anon,authenticated,service_role,supabase_auth_admin;
+  create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
+  create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
+  create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
+  create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text,name text,metadata jsonb default '{}');
+  alter table storage.objects enable row level security;
+  grant select,insert,update,delete on storage.objects to authenticated;
+`);
+await db.exec(await readFile(new URL('../migrations/202610240001_private_wardrobe.sql', import.meta.url), 'utf8'));
+await db.query('insert into auth.users values ($1,$2,now()),($3,$4,now()),($5,$6,now())', [A,'a@example.invalid',B,'b@example.invalid',C,'c@example.invalid']);
+await db.exec("insert into wardrobe_private.invites(email) values('a@example.invalid'),('b@example.invalid')");
+
+async function user(id, fn) {
+  await db.query("select set_config('request.jwt.claim.sub',$1,false)", [id]);
+  await db.exec('set role authenticated');
+  try { return await fn(); } finally { await db.exec('reset role'); }
+}
+async function rpc(action,payload={}) {
+  return (await db.query('select public.wardrobe_execute($1,$2) result',[action,JSON.stringify(payload)])).rows[0].result;
+}
+async function adminRpc(name,args,values) {
+  await db.exec('set role service_role');
+  try { return (await db.query(`select public.${name}(${args}) result`,values)).rows[0].result; }
+  finally { await db.exec('reset role'); }
+}
+const fields={name:'Synthetic shirt',category:'top',color:'blue',occasions:['casual'],size:'M',photoKind:'garment'};
+
+test('invitation gate, owner RLS, direct write denial, and CAS/import', async () => {
+  const denied=await db.query("select public.wardrobe_before_user_created('{\"user\":{\"email\":\"c@example.invalid\"}}') result");
+  assert.equal(denied.rows[0].result.error.http_code,403);
+  await assert.rejects(user(C,()=>rpc('bootstrap')),/NOT_INVITED/);
+  const initial=await user(A,()=>rpc('bootstrap'));
+  assert.equal(initial.state.revision,0);
+  await user(B,()=>rpc('bootstrap'));
+  await user(A,()=>rpc('createItem',{itemId:itemA,...fields}));
+  const own=await user(A,()=>db.query('select id from public.wardrobe_items'));
+  assert.deepEqual(own.rows,[{id:itemA}]);
+  assert.equal((await user(B,()=>db.query('select id from public.wardrobe_items'))).rows.length,0);
+  await assert.rejects(user(B,()=>rpc('updateItem',{itemId:itemA,expectedRevision:1,...fields})),/NOT_FOUND/);
+  await assert.rejects(user(A,()=>db.query("update public.wardrobe_items set name='tamper'")),/permission denied/);
+  await assert.rejects(user(A,()=>rpc('updateItem',{itemId:itemA,...fields})),/CONFLICT/);
+  await user(A,()=>rpc('updateItem',{itemId:itemA,expectedRevision:1,...fields,name:'Edited'}));
+  await assert.rejects(user(A,()=>rpc('updateItem',{itemId:itemA,expectedRevision:1,...fields})),/CONFLICT/);
+  const state={locale:'en',profiles:[{id:'p2:everyday',name:'Daily',audience:'women',occasion:'casual',budget:500,priority:'comfort',defaultMode:'best'}],activeProfileId:'p2:everyday',feedback:[{profileId:'p2:everyday',outfitId:'w1',vote:'like'}],askReason:true};
+  const saved=await user(A,()=>rpc('saveState',{expectedRevision:0,data:state,importId:receipt}));
+  assert.equal(saved.revision,1);
+  const repeated=await user(A,()=>rpc('saveState',{expectedRevision:0,data:state,importId:receipt}));
+  assert.deepEqual(repeated,saved);
+  await assert.rejects(user(A,()=>rpc('saveState',{expectedRevision:0,data:state})),/CONFLICT/);
+  await assert.rejects(user(A,()=>rpc('saveState',{expectedRevision:1,data:{...state,ownedItemIds:['demo']}})),/INVALID_STATE/);
+  const malformed=structuredClone(state);delete malformed.profiles[0].budget;
+  await assert.rejects(user(A,()=>rpc('saveState',{expectedRevision:1,data:malformed})),/INVALID_STATE/);
+});
+
+test('server item quota cannot be bypassed by RPC or direct writes',async()=>{
+  await user(B,async()=>{
+    for(let n=1;n<=100;n++)await rpc('createItem',{itemId:`40000000-0000-4000-8000-${String(n).padStart(12,'0')}`,...fields});
+    await assert.rejects(rpc('createItem',{itemId:'40000000-0000-4000-8000-000000000101',...fields}),/ITEM_LIMIT/);
+  });
+});
+
+test('photo reservations, ownership, active read gate, and durable delete',async()=>{
+  await assert.rejects(user(A,()=>db.query('select public.wardrobe_reserve_photo($1,$2,$3,2,5,5,$4)',[A,itemA,photoA,'a'.repeat(64)])),/permission denied/);
+  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,2,1000001,5,$4',[A,itemA,photoA,'a'.repeat(64)]),/check constraint/);
+  const photo=await adminRpc('wardrobe_reserve_photo','$1,$2,$3,2,100,50,$4',[A,itemA,photoA,'a'.repeat(64)]);
+  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,2,100,50,$4',[B,itemA,photoA,'a'.repeat(64)]),/NOT_FOUND/);
+  await assert.rejects(adminRpc('wardrobe_commit_photo','$1,$2',[A,photoA]),/UPLOAD_INCOMPLETE/);
+  await db.query('insert into storage.objects(bucket_id,name) values ($1,$2),($1,$3)',['wardrobe-private',photo.main_path,photo.thumb_path]);
+  assert.equal((await user(A,()=>db.query('select name from storage.objects'))).rows.length,0,'staged paths unreadable');
+  const item=await adminRpc('wardrobe_commit_photo','$1,$2',[A,photoA]);
+  assert.equal(item.revision,3);
+  assert.equal((await user(A,()=>db.query('select name from storage.objects'))).rows.length,2);
+  assert.equal((await user(B,()=>db.query('select name from storage.objects'))).rows.length,0);
+  await assert.rejects(user(A,()=>db.query("insert into storage.objects(bucket_id,name) values('wardrobe-private','forged')")),/row-level security/);
+  await user(A,()=>rpc('deleteItem',{itemId:itemA,expectedRevision:3}));
+  assert.equal((await user(A,()=>db.query('select name from storage.objects'))).rows.length,0,'pending deletion blocks reads immediately');
+  await assert.rejects(adminRpc('wardrobe_finish_photo_delete','$1',[photoA]),/CONFLICT/,'write lease prevents cleanup racing in-flight upload');
+  await db.query("update public.wardrobe_photos set cleanup_after=now()-interval '1 minute' where id=$1",[photoA]);
+  await assert.rejects(adminRpc('wardrobe_finish_photo_delete','$1',[photoA]),/DELETE_INCOMPLETE/);
+  // Storage API is not running in this harness; simulate its completed metadata
+  // removal only here, then verify SQL refuses/accepts the correct lifecycle.
+  await db.exec('delete from storage.objects');
+  await adminRpc('wardrobe_finish_photo_delete','$1',[photoA]);
+  await adminRpc('wardrobe_finish_item_deletes','',[]);
+  assert.equal((await db.query('select id from public.wardrobe_items where id=$1',[itemA])).rows.length,0);
+});
+
+test('abandoned uploads expire and pending bytes count against account quota',async()=>{
+  const orphanItem='10000000-0000-4000-8000-000000000002';
+  const orphanPhoto='20000000-0000-4000-8000-000000000002';
+  await user(A,()=>rpc('createItem',{itemId:orphanItem,...fields}));
+  await adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,orphanItem,orphanPhoto,'b'.repeat(64)]);
+  await db.query("update public.wardrobe_photos set created_at=now()-interval '2 hours' where id=$1",[orphanPhoto]);
+  await adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,orphanItem,orphanPhoto,'b'.repeat(64)]);
+  await adminRpc('wardrobe_expire_uploads','',[]);
+  assert.equal((await db.query('select status from public.wardrobe_photos where id=$1',[orphanPhoto])).rows[0].status,'staged','retry renewed lease survives expiry worker');
+  await db.query("update public.wardrobe_photos set cleanup_after=now()-interval '1 hour' where id=$1",[orphanPhoto]);
+  await adminRpc('wardrobe_expire_uploads','',[]);
+  assert.equal((await db.query('select status from public.wardrobe_photos where id=$1',[orphanPhoto])).rows[0].status,'deleting');
+  await adminRpc('wardrobe_finish_photo_delete','$1',[orphanPhoto]);
+  // Administrative fixture represents a pre-existing deletion backlog. User
+  // requests cannot insert these rows or lie about byte counts.
+  await db.query(`insert into public.wardrobe_photos(id,account_id,item_id,expected_revision,main_path,thumb_path,bytes,thumb_bytes,mime_type,fingerprint,status)
+    select gen_random_uuid(),$1,$2,1,'quota/'||n||'/main.jpg','quota/'||n||'/thumb.jpg',1000000,100000,'image/jpeg',repeat('c',64),'deleting' from generate_series(1,228) n`,[A,orphanItem]);
+  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,orphanItem,orphanPhoto,'b'.repeat(64)]),/STORAGE_LIMIT/);
+  await db.query('delete from public.wardrobe_photos where account_id=$1',[A]);
+  await user(A,()=>rpc('deleteItem',{itemId:orphanItem,expectedRevision:1}));
+  await adminRpc('wardrobe_finish_item_deletes','',[]);
+});
+
+test('revoked invitation and deleting account invalidate old user JWT access',async()=>{
+  await db.exec("update wardrobe_private.invites set enabled=false where email='b@example.invalid'");
+  assert.equal((await user(B,()=>db.query('select id from public.wardrobe_items'))).rows.length,0);
+  await assert.rejects(user(B,()=>rpc('bootstrap')),/NOT_INVITED/);
+  await db.exec("update wardrobe_private.invites set enabled=true where email='b@example.invalid'");
+  await user(A,()=>rpc('deleteAccount'));
+  await assert.rejects(user(A,()=>rpc('bootstrap')),/ACCOUNT_UNAVAILABLE/);
+  assert.equal((await user(A,()=>db.query('select id from public.wardrobe_accounts'))).rows.length,0);
+  assert.equal(await adminRpc('wardrobe_prepare_auth_delete','$1',[A]),true);
+  assert.equal((await db.query('select count(*) n from wardrobe_private.import_receipts where account_id=$1',[A])).rows[0].n,0);
+});
+
+test.after(async()=>{await db.close();});
