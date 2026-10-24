@@ -3,6 +3,8 @@
 Wirtualny stylista: mniej przeglądania, prostsze decyzje i ubrania dopasowane do osoby.
 Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki.
 
+**Działający podgląd WWW:** https://ubranka.vercel.app
+
 **Etap:** infrastruktura P0. Aplikacja zawiera tylko ekran startowy z przyciskiem
 sprawdzającym podgląd. Stylista, konta, zdjęcia i zakupy nie są wdrożone.
 
@@ -47,7 +49,7 @@ na urządzeniach. Starter nie wymaga pliku .env ani kluczy API.
 ## Gałęzie i współpraca
 
 Pracujemy na dev. main jest stabilną bazą; obie gałęzie startują z tą samą
-infrastrukturą. Po połączeniu Vercela main może zasilać Production, a dev Preview.
+infrastrukturą. Vercel jest połączony: main zasila Production, a dev służy podglądom Preview.
 GitHub Actions sprawdza typy, lint, zgodność zależności i eksport platform.
 Początkowo jeden czat zarządza projektem i implementacją; stan zapisujemy w plikach.
 

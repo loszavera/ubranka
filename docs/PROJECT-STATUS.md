@@ -1,6 +1,6 @@
 # Stan projektu Ubranka
 
-Aktualizacja: 2026-10-24. Etap P0 — lokalna infrastruktura gotowa.
+Aktualizacja: 2026-10-24. Etap P0 — infrastruktura i podgląd WWW gotowe.
 
 ## Aktualne dokumenty
 
@@ -33,6 +33,7 @@ Aktualizacja: 2026-10-24. Etap P0 — lokalna infrastruktura gotowa.
 | Przeglądarka lokalna | PASS: ekran, styl i kliknięcie przycisku; widoczne potwierdzenie działania |
 | Konsola przeglądarki | Brak przechwyconych błędów i ostrzeżeń |
 | GitHub Actions, Ubuntu | PASS: instalacja, typy/lint, zgodność SDK i eksport trzech platform |
+| Vercel Production | READY; https://ubranka.vercel.app — ekran i przycisk działają, brak błędów/ostrzeżeń w konsoli |
 | Fizyczne urządzenia iOS/Android | Nie sprawdzono aplikacji w Expo Go |
 | Zdalny Codex | Użytkownik potwierdził działanie przez internet mobilny |
 
@@ -56,13 +57,19 @@ Pierwsza synchronizacja potwierdziła ten sam SHA lokalnie i zdalnie dla obu ga�
 [Jednorazowy run CI dla tego commita](https://github.com/loszavera/ubranka/actions/runs/40090246634)
 zakończył się powodzeniem. Dla kolejnych commitów należy sprawdzać ich własne runy.
 
-## Pozostaje do potwierdzenia przez użytkownika
+## Hosting
+
+Projekt `ubranka` w zespole Risk Every Asset jest połączony z GitHubem.
+Użytkownik uzupełnił brakujące GitHub Login Connection i uruchomił import.
+Pierwsze wdrożenie Production: `dpl_AaHsdKgbQLwuncD98PZ6dgLYWsRm`,
+źródło `main`, commit `b1fcd6f184d4201ef54d0ffa35527d45494806e4`, status READY.
+Adres: https://ubranka.vercel.app. Zrzut w `artifacts/vercel-preview.png`.
+Kod aplikacji jest identyczny z pierwszym commitem zweryfikowanym w CI;
+późniejsze commity aktualizują tylko dokumentację infrastruktury.
+
+## Pozostaje do sprawdzenia na urządzeniach
 
 - Otwarcie ekranu na fizycznym iPhone/Androidzie w Expo Go.
-- Użytkownik zatwierdził utworzenie podglądu Vercel w zespole Risk Every Asset.
-  Import repozytorium został zablokowany przez brak GitHub Login Connection
-  w koncie Vercel. Konieczne: Account Settings → Authentication → GitHub.
-  Nie powstał jeszcze projekt Ubranka w Vercelu ani zweryfikowany URL.
 
 ## Następny krok
 

@@ -29,7 +29,12 @@ Poprawny eksport nie jest testem urządzenia.
 Nie potrzeba teraz Android Studio, Xcode, kont Apple/Google Developer, bazy,
 kluczy AI ani danych karty. EAS i development builds konfiguruje się później.
 
-## Vercel — konfiguracja gotowa do połączenia
+## Vercel — aktywny projekt
+
+Publiczny adres: https://ubranka.vercel.app
+Panel: https://vercel.com/risk-every-asset/ubranka
+Użytkownik połączył konto GitHub i zaimportował projekt 2026-10-24.
+Pierwsze wdrożenie z main zakończyło się READY; ekran i przycisk sprawdzono online.
 
 Repo: loszavera/ubranka. Framework: Other. Root: katalog główny.
 Node: 24.x. Install: npm ci. Build: npm run build:web. Output: dist.
@@ -39,8 +44,8 @@ W integracji GitHub w Vercelu przyznaj dostęp do ubranka, jeżeli import go nie
 Połączenie wtyczki Vercel z Codexem jest odrębne od połączenia Vercel z GitHubem.
 
 W panelu wybierz Add New → Project → Import Git Repository → ubranka.
-Publikacja i pierwszy adres wdrożenia muszą zostać potwierdzone osobnym wynikiem.
-Sam plik vercel.json nie oznacza aktywnego hostingu.
+Przy nowych wdrożeniach sprawdzaj status READY i zachowanie strony.
+Sam plik vercel.json nie jest dowodem udanego wdrożenia.
 EXPO_PUBLIC_* jest widoczne w kliencie; nie umieszczaj tam sekretów.
 
 ## Codex na telefonie
