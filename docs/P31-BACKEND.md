@@ -60,6 +60,9 @@ nie są publicznymi URL. Bucket `wardrobe-private`, odczyt JWT; aplikacja nie wy
   Po potwierdzonej zmianie opisu jawne ponowienie uploadu z bieżącą wersją może
   przypiąć te same bajty do nowej wersji. Stare żądanie nie przedłuża dzierżawy;
   kolejna zmiana między wznowieniem a commit nadal kończy się konfliktem.
+  Wybór innego zdjęcia z nowym operationId i bieżącą wersją rzeczy zastępuje
+  poprzedni niedokończony upload. Jego pliki pozostają w limicie i kolejce usuwania
+  z niezmienioną dzierżawą; stare żądanie nie może już zatwierdzić zdjęcia.
 
 ## Usuwanie i sprzątanie
 

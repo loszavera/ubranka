@@ -262,7 +262,11 @@ begin
   if i.revision is distinct from p_revision then raise exception 'CONFLICT'; end if;
   if coalesce((select sum(bytes+thumb_bytes) from public.wardrobe_photos where account_id=p_account),0)+p_bytes+p_thumb_bytes > 250000000 then raise exception 'STORAGE_LIMIT'; end if;
   if (select count(*) from public.wardrobe_photos where account_id=p_account) >= 200 then raise exception 'UPLOAD_PENDING'; end if;
-  if exists(select 1 from public.wardrobe_photos where item_id=p_item and status='staged') then raise exception 'UPLOAD_PENDING'; end if;
+  -- A new selection can replace an unfinished upload after the caller confirms
+  -- the current item revision. Keep its bytes and write lease until cleanup;
+  -- an older in-flight request can finish transferring but can no longer commit.
+  update public.wardrobe_photos set status='deleting'
+    where item_id=p_item and account_id=p_account and status='staged';
   insert into public.wardrobe_photos(id,account_id,item_id,expected_revision,main_path,thumb_path,bytes,thumb_bytes,mime_type,fingerprint)
     values(p_id,p_account,p_item,p_revision,p_account||'/'||p_item||'/'||p_id||'/main.jpg',p_account||'/'||p_item||'/'||p_id||'/thumb.jpg',p_bytes,p_thumb_bytes,'image/jpeg',p_fingerprint)
     returning * into p;

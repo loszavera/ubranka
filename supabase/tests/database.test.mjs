@@ -130,6 +130,46 @@ test('staged upload retry follows acknowledged edits but rejects stale or interv
   await adminRpc('wardrobe_finish_item_deletes','',[]);
 });
 
+test('new photo selection supersedes a staged upload with CAS and preserves its cleanup lease and quota',async()=>{
+  const selectedItem='10000000-0000-4000-8000-000000000004';
+  const oldPhoto='20000000-0000-4000-8000-000000000004';
+  const newPhoto='20000000-0000-4000-8000-000000000005';
+  const stalePhoto='20000000-0000-4000-8000-000000000006';
+  await user(A,()=>rpc('createItem',{itemId:selectedItem,...fields}));
+  const original=await adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,selectedItem,oldPhoto,'e'.repeat(64)]);
+  await db.query('insert into storage.objects(bucket_id,name) values ($1,$2)',['wardrobe-private',original.main_path]);
+  const oldLease=(await db.query('select cleanup_after::text lease from public.wardrobe_photos where id=$1',[oldPhoto])).rows[0].lease;
+  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,0,200,50,$4',[A,selectedItem,newPhoto,'f'.repeat(64)]),/CONFLICT/);
+  assert.equal((await db.query('select status from public.wardrobe_photos where id=$1',[oldPhoto])).rows[0].status,'staged','stale new selection does not cancel a current upload');
+  const replacement=await adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,200,50,$4',[A,selectedItem,newPhoto,'f'.repeat(64)]);
+  const previous=(await db.query('select status,cleanup_after::text lease from public.wardrobe_photos where id=$1',[oldPhoto])).rows[0];
+  assert.equal(previous.status,'deleting');
+  assert.equal(previous.lease,oldLease,'superseding does not shorten the in-flight write lease');
+  assert.equal(replacement.status,'staged');
+  assert.equal((await db.query('select sum(bytes+thumb_bytes)::int total from public.wardrobe_photos where item_id=$1',[selectedItem])).rows[0].total,400,'quota still reserves both old and new variants');
+  // The old request completes its transfer after supersession; it must never
+  // become active or make its paths readable, regardless of transfer ordering.
+  await db.query('insert into storage.objects(bucket_id,name) values ($1,$2),($1,$3),($1,$4)',['wardrobe-private',original.thumb_path,replacement.main_path,replacement.thumb_path]);
+  await assert.rejects(adminRpc('wardrobe_commit_photo','$1,$2',[A,oldPhoto]),/NOT_FOUND/);
+  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,selectedItem,oldPhoto,'e'.repeat(64)]),/CONFLICT/);
+  await assert.rejects(adminRpc('wardrobe_finish_photo_delete','$1',[oldPhoto]),/CONFLICT/,'cleanup still respects the old write lease');
+  const committed=await adminRpc('wardrobe_commit_photo','$1,$2',[A,newPhoto]);
+  assert.equal(committed.photo.id,newPhoto);
+  assert.equal(committed.revision,2);
+  const visible=(await user(A,()=>db.query('select name from storage.objects order by name'))).rows.map(r=>r.name);
+  assert.deepEqual(visible,[replacement.main_path,replacement.thumb_path].sort());
+  // Opposite ordering: once a photo is committed, a selection based on the old
+  // revision must conflict instead of superseding the newly active image.
+  await assert.rejects(adminRpc('wardrobe_reserve_photo','$1,$2,$3,1,100,50,$4',[A,selectedItem,stalePhoto,'a'.repeat(64)]),/CONFLICT/);
+  assert.equal((await db.query('select status from public.wardrobe_photos where id=$1',[newPhoto])).rows[0].status,'active');
+  await user(A,()=>rpc('deleteItem',{itemId:selectedItem,expectedRevision:2}));
+  await db.query("update public.wardrobe_photos set cleanup_after=now()-interval '1 minute' where item_id=$1",[selectedItem]);
+  await db.query('delete from storage.objects where name in ($1,$2,$3,$4)',[original.main_path,original.thumb_path,replacement.main_path,replacement.thumb_path]);
+  await adminRpc('wardrobe_finish_photo_delete','$1',[oldPhoto]);
+  await adminRpc('wardrobe_finish_photo_delete','$1',[newPhoto]);
+  await adminRpc('wardrobe_finish_item_deletes','',[]);
+});
+
 test('abandoned uploads expire and pending bytes count against account quota',async()=>{
   const orphanItem='10000000-0000-4000-8000-000000000002';
   const orphanPhoto='20000000-0000-4000-8000-000000000002';
