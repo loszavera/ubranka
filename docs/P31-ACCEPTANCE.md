@@ -10,6 +10,9 @@ Każda osoba używa swojego wcześniej wskazanego konta Google.
 Wynik zgłoszony przez Aleksego 2026-10-24: większość funkcji działa na telefonie;
 Google Kasi pozostaje nieprzetestowane. Zgłoszenie karty pozostającej po usunięciu
 jest opisane wraz z poprawką w [P31-DELETION-FIX.md](P31-DELETION-FIX.md).
+Po wdrożeniu poprawki użytkownik potwierdził: „przeprowadziłem test. jestem
+zadowolony”. Ponowny test usuwania przyjmujemy jako pozytywny, zgłoszenie zamknięte.
+Nie jest to potwierdzenie logowania Kasi ani każdego punktu poniższej checklisty.
 
 Main i dev korzystają z tego samego Supabase Free `ubranka-test` we Frankfurcie
 i tych samych dwóch zaproszonych kont. Prywatna szafa jest wspólna dla obu adresów;
@@ -40,5 +43,7 @@ Dotychczas: Google właściciela, rzeczywiste API dwóch syntetycznych kont,
 zdjęcia, odcięcie dostępu, fizyczne usuwanie i harmonogram sprawdzone. UI przeszedł
 automatyczne testy z kontrolowanymi odpowiedziami usług. Pełny realny wybór pliku
 przez automat Chrome zatrzymało uprawnienie rozszerzenia do plików lokalnych.
-Kasia, Safari/iPhone, Chrome/Android i natywne buildy pozostają nieprzetestowane.
+Logowanie Kasi, Safari/iPhone i natywne buildy pozostają niepotwierdzone.
+Test telefonu Aleksego jest potwierdzeniem użytkownika; nie ustalono modelu
+urządzenia ani pełnej listy sprawdzonych scenariuszy.
 Raport: [P31-VERIFICATION.md](P31-VERIFICATION.md).

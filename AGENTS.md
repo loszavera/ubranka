@@ -29,8 +29,11 @@ na dev. Aktualne wymagania i plan V1.4 zawierają propozycję P3, koszty V1.3 i
 P3-DATA-POLICY-V1.0.md. Użytkownik **zatwierdził implementację P3.1** (2026-10-24):
 Supabase Free/Frankfurt, Google OAuth, limity zdjęć i zasady danych V1.0,
 konfigurację darmowych usług, testy i podgląd dev. Usługi i kod P3.1 są wdrożone
-na dev, testy chmury i CI przeszły. Odbiór obu osób na telefonach pozostaje otwarty:
-docs/P31-ACCEPTANCE.md. Faktyczne wyniki i ograniczenia zapisuj w statusie.
+na dev, testy chmury i CI przeszły. Aleksy potwierdził działanie większości funkcji
+na telefonie, a po poprawce usuwania także pozytywny ponowny test (2026-10-24).
+Zgłoszenie usuwania jest zamknięte; logowanie Kasi pozostaje niepotwierdzone:
+docs/P31-ACCEPTANCE.md. Nie dopisuj niezgłoszonych testów urządzeń ani pełnego odbioru.
+Faktyczne wyniki i ograniczenia zapisuj w statusie.
 Użytkownik następnie zatwierdził przeniesienie P3.1 na main i testowanie tam przed
 premierą (2026-10-24). Publikacja i kontrola logowania/odczytu zdjęcia przeszły;
 raport: docs/P31-MAIN.md. Adres odbioru to

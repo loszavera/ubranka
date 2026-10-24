@@ -18,7 +18,8 @@ Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeni
 Demo używa 37 fikcyjnych ubrań i 12 ilustracji. AI, sklepy i lista zakupowa
 należą do kolejnych etapów.
 
-**Do odbioru: P3.1**, zatwierdzone zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
+**P3.1: pozytywny test Aleksego; logowanie Kasi do sprawdzenia.** Zakres zatwierdzony
+zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
 Zaimplementowano prywatną szafę PL/EN, zdjęcia, konta Google, synchronizację,
 eksport i usuwanie. Lokalne testy opisuje [raport P3.1](docs/P31-VERIFICATION.md).
 **Usługi są skonfigurowane:** Supabase Free Frankfurt, Google OAuth dla dwóch
@@ -26,8 +27,9 @@ zaproszonych kont, prywatny magazyn i harmonogram usuwania. Logowanie Google
 sprawdzono na dev i main. Testy ujawniły cache bezpośrednich odczytów Storage; poprawka
 przenosi pobieranie zdjęć do autoryzowanego POST przez Edge i przeszła retest.
 Testy chmury, fizyczne usunięcie fixture przez harmonogram oraz CI: PASS.
-P3.1 przeniesiono na main i sprawdzono logowanie, odczyt zdjęcia oraz wylogowanie. Pozostaje
-[odbiór Kasi i Aleksego na telefonach](docs/P31-ACCEPTANCE.md) pod głównym adresem.
+P3.1 przeniesiono na main i sprawdzono logowanie, odczyt zdjęcia oraz wylogowanie.
+Aleksy potwierdził działanie większości funkcji i pozytywny ponowny test poprawki
+usuwania. Logowanie Kasi pozostaje otwarte; szczegóły [odbioru](docs/P31-ACCEPTANCE.md).
 Bieżące dowody:
 [raport P3.1](docs/P31-VERIFICATION.md), [konfiguracja](docs/P31-SETUP.md).
 P3.2/P3.3 i nowe abonamenty nie zostały zatwierdzone.

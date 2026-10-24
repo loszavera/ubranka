@@ -62,4 +62,5 @@ Załącznik użytkownika jest wyłączony z publicznego Git przez `.gitignore`.
   [CI 40132615564](https://github.com/loszavera/ubranka/actions/runs/40132615564)
   dla `1b342e0`: **SUCCESS**, także pełna regresja WWW i backendu na Ubuntu.
   Kolejny commit zapisuje wyłącznie wyniki w dokumentacji, bez zmian aplikacji.
-  Odbiór ponownego usunięcia na telefonie pozostaje po stronie użytkownika.
+  Użytkownik następnie potwierdził pozytywny ponowny test: „przeprowadziłem test.
+  jestem zadowolony” (2026-10-24). Zgłoszenie usuwania jest zamknięte.

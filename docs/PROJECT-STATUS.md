@@ -15,8 +15,8 @@ nie oznacza odbioru funkcji ani zgody na P3.2/P3.3 lub opłaty.
 
 Usługi są skonfigurowane dla dev i main,
 Google właściciela działa, testy chmury i CI przeszły. Wykryty cache zdjęcia
-po usunięciu naprawiono odczytem przez Edge. Konto Kasi i rzeczywisty wybór
-pliku na telefonach wymagają odbioru. Na main sprawdzono rzeczywiste logowanie
+po usunięciu naprawiono odczytem przez Edge. Logowanie Kasi pozostaje
+niepotwierdzone. Na main sprawdzono rzeczywiste logowanie
 właściciela, odczyt istniejącego zdjęcia i wylogowanie. [Raport](P31-MAIN.md).
 
 Użytkownik następnie zgłosił udany test większości funkcji na telefonie, poza
@@ -26,6 +26,9 @@ Poprawka prezentacji jest na main (`1b342e0`): usunięta rzecz nie wraca po
 odświeżeniu, a informacja o czyszczeniu wynika ze stanu serwera. Testy klienta
 36/36 i prywatnego UI 10/10 PASS. Naturalny cron o 21:00 UTC usunął zgłoszoną
 rzecz i oba pliki; bez błędów oraz ręcznej ingerencji. [Raport](P31-DELETION-FIX.md).
+Po wdrożeniu poprawki Aleksy potwierdził pozytywny ponowny test i zadowolenie
+z wyniku (2026-10-24). Zgłoszenie usuwania zamknięte. Nie rozszerzamy tej deklaracji
+na logowanie Kasi, pełną checklistę urządzeń ani zgodę na P3.2.
 
 ## P3.1 — bieżący wynik
 
@@ -167,14 +170,27 @@ P1/V1.1 i V1.2 przeszły przeglądy dokumentacji; wersje historyczne zachowano.
 
 ## Następny krok
 
-**Odbiór P3.1 przez Kasię i Aleksego na telefonach pod głównym adresem**, według krótkiej
-[checklisty](P31-ACCEPTANCE.md): oba logowania, testowy obraz, synchronizacja,
-prywatność, eksport i usuwanie. Oba adresy korzystają z obecnego środowiska
-testowego; w tym scenariuszu nadal używamy danych syntetycznych. Nie prosić
-ponownie o zgodę na implementację lub publikację P3.1. Docelowy podział pilotażu
-i produkcji wymaga ponownego ustalenia przed premierą komercyjną.
+**Do zatwierdzenia: P3.2 — mała próba jakości i kosztu wizualizacji**, zgodnie
+z [planem V1.4](IMPLEMENTATION-PLAN-V1.4.md): sześć przypadków na syntetycznych
+obrazach fikcyjnych dorosłych, porównanie Sunburst/Flare, najwyżej 12 płatnych
+wywołań łącznie i 25 PLN z buforem. Wszystkie płatne przygotowania, kalibracje,
+błędy i ponowienia liczą się do limitów; bez automatycznych ponowień.
+Wynik: przykłady do wspólnej oceny, zmierzone koszty/czas, wniosek o wykonalności
+i aktualizacja dokumentacji. Zatrzymanie po raporcie, bez wdrażania P3.3.
 
-P3.2: późniejsza osobno zatwierdzona próba AI na danych sztucznych, maks. 12
-wywołań / 25 PLN. P3.3: docelowy profil sylwetki, rozpoznawanie, zestawy z własnych
-rzeczy i wizualizacja po odbiorze jakości/kosztów. Nie uruchamiać tych etapów
-ani płatnych usług przez samo zatwierdzenie planu lub publikację dokumentów.
+Przed płatnym wywołaniem sprawdzić dostęp konta, sposób rozliczenia i wiarygodną
+rezerwę kosztu. Proponowana zgoda nie obejmuje zakupu kredytów, automatycznych
+doładowań, nowych abonamentów ani wysyłania prawdziwych zdjęć użytkowników.
+Jeśli potrzebne będzie zasilenie konta, przedstawić konkretną kwotę i poprosić
+o odrębną zgodę. Obecna tura jedynie proponuje P3.2 — nie uruchomiła płatnego AI.
+
+Ponownie sprawdzono oficjalne opisy [Sunburst](https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst),
+[Flare](https://developers.openai.com/api/docs/models/gpt-image-2.5-flare) i
+[rozliczania obrazów](https://developers.openai.com/api/docs/guides/image-generation)
+(2026-10-24). Modele obsługują obrazy wejściowe; równe stawki tokenów nie oznaczają
+równego kosztu obrazu. Dostępu i salda konta API jeszcze nie sprawdzono.
+
+Równolegle pozostaje krótki test Google Kasi według [checklisty](P31-ACCEPTANCE.md).
+Nie blokuje przygotowania próby na danych sztucznych, ale nie wolno przedstawiać
+go jako zaliczonego. P3.3 (profil sylwetki, rozpoznawanie, własne zestawy) pozostaje
+osobnym etapem po ocenie P3.2. Podział środowisk ustalimy przed premierą komercyjną.
