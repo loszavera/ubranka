@@ -31,6 +31,13 @@ Storage, synchronizacji dwóch urządzeń ani serwerowego usuwania w Supabase.
   logowanie. Nie publikujemy testowego backendu ani syntetycznych kluczy.
 - Szczegóły: [konfiguracja](P31-SETUP.md), [backend](P31-BACKEND.md),
   [wyniki i ograniczenia testów](P31-VERIFICATION.md).
+- Dev `a9ec29a`: kod opublikowany. Vercel `dpl_DwRjKYjq8fJwcf429RC3FmKhd2vk`
+  READY; kontrola online 18:06 UTC PASS (demo, zachowanie zapisu, jawny brak
+  konfiguracji usług w PL/EN). Lokalnie: 34 testy logiki, 11 backendu,
+  15 regresji WWW i 7 prywatnego UI PASS. Eksport trzech platform PASS.
+  [CI dla a9ec29a: SUCCESS](https://github.com/loszavera/ubranka/actions/runs/40119015249),
+  wraz z testami na Ubuntu/Chromium. Następny commit zapisuje wyłącznie raport.
+  Odbiór chmury nadal niewykonany; ten wynik go nie zastępuje.
 
 ## Aktualne dokumenty
 

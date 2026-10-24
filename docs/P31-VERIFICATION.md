@@ -50,7 +50,21 @@ błędzie sieci. Odmowa dostępu nie jest traktowana jak przejściowy brak sieci
 ## Podgląd i odbiór chmury
 
 Podgląd docelowy: https://ubranka-git-dev-risk-every-asset.vercel.app.
-Publikacja końcowego kodu i wynik CI zostaną zapisane po weryfikacji wdrożenia.
+Kod opublikowano na dev w `a9ec29aefcaecd543e2959cfaacf805982833608`.
+Vercel `dpl_DwRjKYjq8fJwcf429RC3FmKhd2vk`: READY.
+Kontrola online 18:06:17 UTC: PASS, HTTP 200, zero błędów JavaScript.
+Sprawdzono parę weselną/opinię w demo, prywatny ekran PL/EN, nieaktywne logowanie
+bez konfiguracji, brak żądań do Supabase oraz zachowanie danych demo po powrocie
+i przeładowaniu. Dowód: `artifacts/p31-vercel-verification.json` i zrzut
+`p31-vercel-unconfigured-pl.png`. Pierwsze dwie próby skorygowały błędne założenia
+testu: przycisk logowania jest nieaktywny, nie ukryty; JSON porównujemy jako dane,
+nie tekst z ustaloną kolejnością pól. Aplikacja nie wymagała zmiany.
+
+CI: [run 40119015249](https://github.com/loszavera/ubranka/actions/runs/40119015249)
+dla tego samego commita: **SUCCESS**, w tym 15/15 scenariuszy WWW i 7/7 prywatnego
+UI na Ubuntu/Chromium. Uruchomiony przez workflow_dispatch, ponieważ push
+nie utworzył run. Kolejny commit zapisuje wyłącznie niniejszy raport/status,
+bez zmiany aplikacji, testów, zależności lub konfiguracji wdrożenia.
 Main pozostaje odebranym P2.1, commit `270359f128a928aa7459cba623f890d7e1093b8b`.
 
 Do potwierdzenia na osobnym projekcie Free i danych sztucznych:
