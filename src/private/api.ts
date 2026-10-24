@@ -1,0 +1,65 @@
+import { PrivateError, type CloudState, type ExportManifest, type ItemFields, type PrivateItem, type PrivateSettings, type PrivateSnapshot } from './model.ts';
+
+export type WardrobeCall = <T>(action: string, payload?: Record<string, unknown>, signal?: AbortSignal) => Promise<T>;
+export interface DeleteResult { status: 'deleted' | 'pending' }
+export interface PhotoUpload { mainBase64: string; thumbBase64: string; mimeType: 'image/jpeg' }
+
+export class WardrobeApi {
+  readonly call: WardrobeCall;
+  constructor(call: WardrobeCall) { this.call = call; }
+  bootstrap(signal?: AbortSignal) { return this.call<PrivateSnapshot>('bootstrap', {}, signal); }
+  saveState(data: PrivateSettings, expectedRevision: number, importId?: string, signal?: AbortSignal) {
+    return this.call<CloudState>('saveState', { data, expectedRevision, ...(importId ? { importId } : {}) }, signal);
+  }
+  createItem(itemId: string, fields: ItemFields, signal?: AbortSignal) { return this.call<PrivateItem>('createItem', { itemId, ...fields }, signal); }
+  updateItem(itemId: string, expectedRevision: number, fields: ItemFields, signal?: AbortSignal) {
+    return this.call<PrivateItem>('updateItem', { itemId, expectedRevision, ...fields }, signal);
+  }
+  uploadPhoto(itemId: string, expectedRevision: number, operationId: string, photo: PhotoUpload, signal?: AbortSignal) {
+    return this.call<PrivateItem>('uploadPhoto', { itemId, expectedRevision, operationId, ...photo }, signal);
+  }
+  deleteItem(itemId: string, expectedRevision: number, signal?: AbortSignal) {
+    return this.call<DeleteResult>('deleteItem', { itemId, expectedRevision }, signal);
+  }
+  deletePhoto(itemId: string, expectedRevision: number, signal?: AbortSignal) {
+    return this.call<DeleteResult>('deletePhoto', { itemId, expectedRevision }, signal);
+  }
+  deleteAccount(signal?: AbortSignal) { return this.call<DeleteResult>('deleteAccount', {}, signal); }
+  export(signal?: AbortSignal) { return this.call<ExportManifest>('export', {}, signal); }
+}
+
+// Avoid showing raw provider messages, URLs or tokens in the UI/logs.
+export function asPrivateError(error: unknown): PrivateError {
+  if (error instanceof PrivateError) return error;
+  if (error instanceof Error && error.name === 'AbortError') return new PrivateError('CANCELLED');
+  return new PrivateError('NETWORK');
+}
+
+export function createWardrobeCall(options: {
+  url: string;
+  publishableKey: string;
+  accessToken: () => Promise<string | null>;
+  fetch?: typeof fetch;
+}): WardrobeCall {
+  const fetcher = options.fetch ?? fetch;
+  return async <T>(action: string, payload: Record<string, unknown> = {}, signal?: AbortSignal): Promise<T> => {
+    const token = await options.accessToken();
+    if (!token) throw new PrivateError('SIGNED_OUT');
+    try {
+      const response = await fetcher(`${options.url}/functions/v1/wardrobe`, {
+        method: 'POST', signal, cache: 'no-store',
+        headers: { apikey: options.publishableKey, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, ...payload }),
+      });
+      const body: unknown = await response.json().catch(() => null);
+      if (body && typeof body === 'object' && 'error' in body) {
+        const error = body.error;
+        if (error && typeof error === 'object' && 'code' in error && typeof error.code === 'string'
+          && /^[A-Z_]{2,50}$/.test(error.code)) throw new PrivateError(error.code);
+      }
+      if (!response.ok) throw new PrivateError(response.status === 409 ? 'CONFLICT' : response.status === 401 ? 'SIGNED_OUT' : 'SERVICE');
+      if (!body || typeof body !== 'object' || !('data' in body)) throw new PrivateError('INVALID_RESPONSE');
+      return body.data as T;
+    } catch (error) { throw asPrivateError(error); }
+  };
+}
