@@ -5,17 +5,18 @@ Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki
 
 **Działający podgląd WWW:** https://ubranka.vercel.app
 
-**Etap:** P1 — ustalenia po pierwszym wywiadzie i wybór wyglądu. Dokumentacja V1.1
-zapisuje 20 odpowiedzi oraz pięć pozostałych doprecyzowań. Aplikacja nadal zawiera
-tylko ekran startowy P0; stylista, konta, zdjęcia i zakupy nie są wdrożone.
+**Etap:** P1 — ustalenia V1.2 po wywiadzie i odpowiedziach uzupełniających.
+Wybrano A — Krem i śliwka. Plan prototypu obejmuje PL/EN, dwa tryby par zestawów
+i listę zakupów z linkami. Aplikacja nadal zawiera tylko ekran startowy P0;
+stylista, konta, zdjęcia i zakupy nie są wdrożone.
 
 ## Dokumenty
 
-- [Wymagania V1.1](docs/REQUIREMENTS-V1.1.md)
-- [Plan implementacji V1.1](docs/IMPLEMENTATION-PLAN-V1.1.md)
-- [Zapis 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
-- [Trzy propozycje wyglądu A/B/C](docs/design/DESIGN-CONCEPTS-V1.1.md)
-- [Budżet i tańsze warianty](docs/COST-PLAN-V1.1.md)
+- [Wymagania V1.2](docs/REQUIREMENTS-V1.2.md)
+- [Plan implementacji V1.2](docs/IMPLEMENTATION-PLAN-V1.2.md)
+- [Odpowiedzi uzupełniające](docs/INTERVIEW-V1.2.md) i [pierwsze 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
+- [Wybrany wygląd A](docs/design/DESIGN-DIRECTION-V1.2.md)
+- [Budżet przy 30 wizualizacjach na osobę](docs/COST-PLAN-V1.2.md)
 - [Możliwości integracji sklepów](docs/RETAILER-FEASIBILITY-V1.1.md)
 - [Stan projektu i następny krok](docs/PROJECT-STATUS.md)
 - [Decyzje](docs/DECISIONS.md)
@@ -24,7 +25,10 @@ tylko ekran startowy P0; stylista, konta, zdjęcia i zakupy nie są wdrożone.
 - [Instrukcje dla agentów](AGENTS.md)
 
 Baza historyczna: [wymagania V1.0](docs/REQUIREMENTS-V1.0.md)
-i [plan V1.0](docs/IMPLEMENTATION-PLAN-V1.0.md), zachowane bez zmian.
+i [plan V1.0](docs/IMPLEMENTATION-PLAN-V1.0.md), a także
+[wymagania V1.1](docs/REQUIREMENTS-V1.1.md) i [plan V1.1](docs/IMPLEMENTATION-PLAN-V1.1.md).
+Zachowano też [porównanie makiet A/B/C](docs/design/DESIGN-CONCEPTS-V1.1.md)
+oraz [pierwszą analizę kosztów i usług](docs/COST-PLAN-V1.1.md).
 
 ## Pierwsze uruchomienie
 

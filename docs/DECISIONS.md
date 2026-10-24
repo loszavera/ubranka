@@ -26,6 +26,14 @@ Stan początkowy: 2026-10-24. Decyzje produktowe wymagające doprecyzowania nie 
 | D-019 | 2026-10-24 | Cel kosztowy | Około 150 PLN miesięcznie, możliwie mniej. Wolumen Q25 i rzeczywisty koszt wizualizacji wymagają pomiaru. Cel nie jest aktywowanym rozliczeniem ani gwarancją ceny. |
 | D-020 | 2026-10-24 | Propozycja techniczna | Rozwija D-006: Supabase Free jest kandydatem na mały pilotaż. Wykonalność przymiarki sprawdzić ograniczoną próbą, a sklepy integrować po uzyskaniu dostępu. Nie wybrano ani nie uruchomiono backendu/AI. |
 | D-021 | 2026-10-24 | Wykonane | Aktualizuje D-007/D-009: otrzymano 20 odpowiedzi, zapisano wymagania i plan V1.1, analizy i trzy makiety. V1.0 zachowano; pozostało pięć pytań Q21–Q25 i wybór wyglądu. |
+| D-022 | 2026-10-24 | Wybór użytkownika | Zastępuje otwartą decyzję i rekomendację B z D-018: wybrano A — Krem i śliwka. Jest to wybór kierunku wyglądu, nie odbiór działającego UI. |
+| D-023 | 2026-10-24 | Preferencje użytkowników i sposób realizacji | Kasia chce PL, Aleksy EN, dopuszczając późniejsze EN. Plan realizacyjny: PL/EN od pierwszego prototypu, słowniki i wybór per użytkownik, początkowo PL. Język nie zmienia rynku PL, PLN ani dostawy do Polski. |
+| D-024 | 2026-10-24 | Ustalenie użytkownika | Rozstrzyga Q21 i część D-014: oba tryby dwóch pełnych zestawów; początkowo najlepiej dopasowane, opcjonalnie ekonomiczny/markowy. Domyślny tryb ustala użytkownik. |
+| D-025 | 2026-10-24 | Ustalenie użytkownika | Rozstrzyga Q22 i część D-014: budżet obejmuje rzeczy do dokupienia z dostawą; własne rzeczy 0 PLN nowego wydatku. Nieznanych opłat nie traktować jako zera. |
+| D-026 | 2026-10-24 | Ustalenie użytkownika | Rozstrzyga Q23 i aktualizuje D-017: na początek wystarczy lista zakupowa z linkami; zakup kończy użytkownik w sklepach. Dostęp do produktów nadal wymaga weryfikacji; automatyczne zamawianie pozostaje przyszłym celem. |
+| D-027 | 2026-10-24 | Wstępny kierunek z wyjaśnieniem do wykonania | Aktualizuje Q24/D-016: prywatne zdjęcia do usunięcia i wykorzystanie AI przyjęto wstępnie („chyba tak”). Wyjaśniono alternatywę zapisu tylko opisu po analizie. Przed realnym uploadem trzeba wskazać usługę, przekazywane dane i retencję/usuwanie; nie jest to zgoda na dowolnego dostawcę. |
+| D-028 | 2026-10-24 | Ustalenie wolumenu | Rozstrzyga Q25 i aktualizuje D-019: 30 wizualizacji/osobę/mies., czyli 60 dla dwóch osób. Konwencja planistyczna to jeden obraz zestawu na osobie; para obrazów liczy się jako dwa. Nie jest to twardy limit ani gwarancja zmieszczenia w 150 PLN. |
+| D-029 | 2026-10-24 | Aktualizacja dokumentacji | Wymagania i plan V1.2 zapisują odpowiedzi uzupełniające. V1.0/V1.1 są zachowane. Kolejny proponowany zakres to prototyp A PL/EN; nie rozpoczęto implementacji ani podłączenia usług. |
 
 ## Konsekwencje wyboru Expo
 

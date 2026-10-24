@@ -13,9 +13,11 @@ przed dawnymi rozmowami. Odróżniaj propozycje od przyjętych wymagań.
 
 ## Bieżący etap
 
-P1: pierwszy wywiad (20 odpowiedzi) zapisany w dokumentacji V1.1, przygotowane
-trzy kierunki wyglądu oraz rozpoznanie kosztów i sklepów. Ekran aplikacji nadal
-jest testem technicznym P0. Oczekujemy wyboru A/B/C i odpowiedzi Q21–Q25.
+P1: wywiad i odpowiedzi uzupełniające zapisane w dokumentacji V1.2. Wybrany
+wygląd A — Krem i śliwka. Q21–Q23 i Q25 rozstrzygnięte; Q24 określa wstępny
+kierunek zdjęć, szczegóły dostawcy wymagają wyjaśnienia przed realnym uploadem.
+Ekran aplikacji nadal jest testem technicznym P0. Następny proponowany zakres
+to prototyp A z PL/EN, profilami, szafą demo, dwiema propozycjami i opiniami.
 Zapisuj otwarte decyzje; nie uznawaj propozycji za zatwierdzone ani nie rozpoczynaj
 samodzielnie następnego etapu tylko dlatego, że opisano go w planie.
 
@@ -54,6 +56,9 @@ samodzielnie następnego etapu tylko dlatego, że opisano go w planie.
 - Nie twórz ręcznie ios/ i android/. Konfiguruj natywne zachowanie przez Expo config.
   Własne moduły natywne mogą wymagać development build zamiast Expo Go.
 - Backend, dostawca AI, katalogi sklepów i płatności pozostają do ustalenia.
+- Od pierwszego prototypu planuj interfejs PL/EN: teksty w słownikach poza
+  komponentami, zapamiętywany wybór użytkownika. Polski jest początkowy.
+  Język nie zmienia rynku PL, cen PLN ani dostawy do Polski.
 
 ## Kontrola jakości
 
@@ -74,8 +79,10 @@ samodzielnie następnego etapu tylko dlatego, że opisano go w planie.
   najpierw użytek własny, docelowo komercyjny rynek polski.
 - Priorytety: poznanie gustu, zestawy z własnej szafy, pomoc w zakupach.
 - Podstawowy wybór to maksymalnie dwie propozycje z prostym tak/nie, na prośbę.
-  Kasia preferuje dwa pełne zestawy; Aleksy porównanie tanie/markowe. Domyślny
-  sposób połączenia potrzeb pozostaje otwarty w Q21.
+  Oba tryby to dwa pełne zestawy: „Najlepiej dopasowane” i „Ekonomiczny / markowy”.
+  Początkowy domyślny to najlepiej dopasowane; użytkownik może zmienić domyślny.
+- Budżet zestawu obejmuje nowe zakupy i dostawy. Własne rzeczy to 0 PLN nowego
+  wydatku. Brak znanego kosztu dostawy/opłaty nie jest równoznaczny z 0 PLN.
 - Polubienie uczy gustu; nie dodaje do koszyka ani nie zatwierdza zakupu.
   Powód odrzucenia jest opcjonalny; pytanie o niego można wyłączyć w ustawieniach.
 - Szafa przyjmuje zdjęcie rzeczy i zdjęcie na osobie. Wymagana wizualizacja
@@ -83,12 +90,15 @@ samodzielnie następnego etapu tylko dlatego, że opisano go w planie.
 - Sklepy Vinted, Zara, Zalando, Reserved i H&M to oczekiwane źródła; dostęp
   do katalogów i koszyków nie został potwierdzony. Nie deklaruj integracji na podstawie mocka.
 - Około 150 PLN/mies. to cel kosztowy pilotażu, nie uruchomiony limit ani zgoda
-  na aktywację rozliczeń. Sprawdzaj rzeczywiste zużycie przed obietnicą kosztu.
+  na aktywację rozliczeń. Planowane 30 wizualizacji/osobę/mies. daje 60 dla dwóch
+  osób; nie oznacza 30 par ani wdrożonego limitu. Mierz koszt także ponowień.
 - Zachowaj przyszły cel automatycznych zakupów. Wdrożenie wymaga doprecyzowania
-  zgód, limitów, anulowania i integracji. Pierwszy etap zakupowy ma koszyk
-  do zatwierdzenia; jego dokładne znaczenie wymaga Q23.
+  zgód, limitów, anulowania i integracji. Pierwszy etap zakupowy to lista
+  z linkami; użytkownik kończy zakup w sklepach. Zatwierdzenie listy nie składa zamówienia.
 - Zdjęcia wymagają świadomego przesłania, kontroli dostępu, zasad przechowywania
-  i usuwania. Do ustalenia zasad Q24 i wdrożenia prywatnego zapisu używaj danych sztucznych.
+  i usuwania. Q24 jest wstępnym kierunkiem prywatnego zapisu do usunięcia, nie zgodą
+  na dowolnego dostawcę. Przed realnym uploadem wyjaśnij konkretną usługę, dane,
+  retencję i usuwanie oraz wdroż prywatny zapis. Do tego czasu używaj danych sztucznych.
 - Sekrety AI/płatności tylko na serwerze. EXPO_PUBLIC_* jest publiczne.
   Nie przechowuj numerów kart ani CVV.
 - Realne płatności, płatne usługi, publikacja i zmiany kont muszą mieścić się

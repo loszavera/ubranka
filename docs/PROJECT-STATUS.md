@@ -1,16 +1,16 @@
 # Stan projektu Ubranka
 
-Aktualizacja: 2026-10-24. Etap P1 — otrzymano 20 odpowiedzi; przygotowano
-dokumentację V1.1 i trzy koncepcje wyglądu. Infrastruktura i podgląd P0 działają;
+Aktualizacja: 2026-10-24. Etap P1 — wywiad i odpowiedzi uzupełniające zapisane
+w V1.2. Wybrano wygląd A; planujemy interfejs PL/EN. Infrastruktura i podgląd P0 działają;
 kod aplikacji pozostaje starterem. Dalsze funkcje nie są jeszcze wdrożone.
 
 ## Aktualne dokumenty
 
-- [Wymagania V1.1](REQUIREMENTS-V1.1.md)
-- [Plan implementacji V1.1](IMPLEMENTATION-PLAN-V1.1.md)
-- [Zapis wywiadu](INTERVIEW-V1.1.md)
-- [Kierunki wyglądu A/B/C](design/DESIGN-CONCEPTS-V1.1.md)
-- [Plan kosztów](COST-PLAN-V1.1.md)
+- [Wymagania V1.2](REQUIREMENTS-V1.2.md)
+- [Plan implementacji V1.2](IMPLEMENTATION-PLAN-V1.2.md)
+- [Odpowiedzi uzupełniające](INTERVIEW-V1.2.md)
+- [Wybrany wygląd A](design/DESIGN-DIRECTION-V1.2.md)
+- [Plan kosztów V1.2](COST-PLAN-V1.2.md)
 - [Rozpoznanie sklepów](RETAILER-FEASIBILITY-V1.1.md)
 - [Rejestr decyzji](DECISIONS.md)
 - [Środowisko i testowanie](SETUP.md)
@@ -28,18 +28,28 @@ kod aplikacji pozostaje starterem. Dalsze funkcje nie są jeszcze wdrożone.
 - Użytkownik potwierdził działanie podglądu po uruchomieniu Vercel.
 - Zapisano 20 odpowiedzi w wywiadzie, wymaganiach i planie V1.1; zachowano V1.0.
 - Wygenerowano i obejrzano trzy koncepcje UI z przyciskami oraz zapisano PNG
-  i prompty. Żaden wariant nie jest jeszcze zatwierdzony ani zaimplementowany.
+  i prompty. Użytkownik wybrał A — Krem i śliwka; ekran nie został jeszcze zaimplementowany.
 - Sprawdzono oficjalne źródła kosztów usług i możliwości sklepów. Nie uruchomiono
   płatnych usług/API ani integracji zakupowych; jakość przymiarki pozostaje nieznana.
+- V1.2 zapisuje oba tryby dwóch pełnych zestawów, początkowo najlepiej dopasowane,
+  budżet nowych zakupów z dostawą i listę z linkami jako pierwszy etap zakupów.
+- Planowane 30 wizualizacji/osobę/mies. daje 60 dla dwóch osób. Koszt do pomiaru.
+- Q24 zapisano jako wstępny kierunek prywatnych zdjęć; konkretna usługa AI,
+  retencja i usuwanie muszą być wyjaśnione przed realnym użyciem.
 
 ## Weryfikacja
 
-Poniższe wyniki dotyczą fundamentu P0. Bieżąca zmiana zawiera dokumentację
-i makiety, bez zmian kodu lub zależności; nie dopisujemy nowych wyników testów aplikacji.
-Kontrola P1: sprawdzono zgodność z oryginalnymi pytaniami i 20 odpowiedziami,
+Poniższe wyniki dotyczą fundamentu P0. Bieżąca zmiana V1.2 dotyczy dokumentacji,
+bez zmian kodu lub zależności; nie dopisujemy nowych wyników testów aplikacji.
+Poprzednia kontrola P1/V1.1: sprawdzono zgodność z oryginalnymi pytaniami i 20 odpowiedziami,
 47 lokalnych odsyłaczy (0 błędnych), diff bez błędów białych znaków oraz trzy
 wygenerowane plansze. Wymagania i plan przeszły także niezależny przegląd agenta;
 doprecyzowano obowiązkowe dane do dobierania ubrań bez narzucania momentu ich zebrania.
+
+Kontrola V1.2: 75 lokalnych odsyłaczy, 0 błędnych; przegląd zgodności odpowiedzi
+i niezależny przegląd dokumentacji bez istotnych uwag. Zachowano ID wymagań,
+historyczne pliki V1.0/V1.1, kod i zależności. Nie uruchamiano ponownie testów
+aplikacji dla zmiany obejmującej wyłącznie dokumentację.
 
 | Kontrola | Wynik |
 | --- | --- |
@@ -100,12 +110,14 @@ commita, nie dla późniejszych zmian dokumentacji.
 
 ## Następny krok
 
-Wybór wyglądu A/B/C i pięć doprecyzowań Q21–Q25: domyślny tryb pary,
-liczenie budżetu, znaczenie koszyka, zasady zdjęć oraz wielkość pilotażu i liczba
-wizualizacji. Potem uzgodnienie konkretnego zakresu pierwszego prototypu.
+Pierwszy prototyp w kierunku A: PL/EN, krótki start, profile, szafa demo,
+dwie pełne propozycje w obu trybach, preferencja trybu i opinie. Nie potrzeba teraz
+kolejnej rundy pytań produktowych. Aktualizacja dokumentacji nie jest wdrożeniem prototypu.
 
-Rekomendacja projektu: B — Szałwia i porcelana. Proponowany kolejny przepływ
-stawia profile i własną szafę przed integracjami sklepów. Około 150 PLN/mies.
-pozostaje celem do sprawdzenia rzeczywistym zużyciem; nie gwarancją kosztu.
+Q21–Q23 i Q25 są rozstrzygnięte; Q24 daje wstępny kierunek danych i wymaga
+wyjaśnienia konkretnego dostawcy przed realnym przetwarzaniem. Dalsze zależności
+techniczne: jakość i koszt wizualizacji, prywatny backend oraz dostęp do produktów.
+Około 150 PLN/mies. pozostaje celem do sprawdzenia rzeczywistym zużyciem przy
+60 wizualizacjach, nie gwarancją kosztu. Własna szafa ma pierwszeństwo przed sklepami.
 Nie rozpoczynać samodzielnie funkcji stylisty, backendu, AI ani płatności.
 Zmiany P1 powstają na `dev`; `main` pozostaje odebranym fundamentem.
