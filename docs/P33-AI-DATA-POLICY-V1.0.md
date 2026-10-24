@@ -1,6 +1,8 @@
 # P3.3 — proponowane zasady danych AI V1.0
 
-Data: 2026-10-25. **Projekt do akceptacji, jeszcze niewdrożony.** Uzupełnia
+Data: 2026-10-25. **Zatwierdzono część P3.3A: profil i prywatne zdjęcie
+w Supabase; integracja z OpenAI pozostaje wyłączona.** Zasady przekazania zdjęć
+do AI i przyszłego pilotażu wymagają osobnych zgód B/C. Uzupełnia
 [przyjęte zasady P3.1](P3-DATA-POLICY-V1.0.md); nie zmienia obecnej retencji szafy.
 Akceptacja raportu P3.2 ani niniejszego planowania nie jest zgodą na przekazanie
 prywatnych zdjęć OpenAI. To zasady techniczne pilotażu, nie ocena zgodności prawnej

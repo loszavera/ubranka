@@ -27,7 +27,15 @@ export const demo = {
 };
 
 export function snapshot(id = ACCOUNT_A, locale = 'pl') {
-  return { accountId: id, state: { revision: 1, data: { locale, profiles: [], activeProfileId: '', feedback: [], askReason: true } }, items: [] };
+  return { accountId: id, state: { revision: 1, data: { locale, profiles: [], activeProfileId: '', feedback: [], askReason: true } }, items: [],
+    bodyFit: { revision: 1, data: { heightCm: null, chestCm: null, waistCm: null, hipsCm: null, sizeSystem: 'EU', topSize: '', bottomSize: '', shoeSize: '' }, photo: null, photoDeletion: null },
+    styling: { revision: 1, data: { outfits: [], feedback: [] } },
+    visualization: { mode: 'off', jobs: [], consent: { accepted: false, version: 'p33-ai-v1' }, limits: {
+      results: 30, attempts: 40, dailyAttempts: 5, usedResults: 0, usedAttempts: 0, usedDailyAttempts: 0,
+      reservedPln: 0, spentPln: 0, budgetPln: 0, trialEndsAt: null,
+      monthResetsAt: '2027-01-01T00:00:00Z', dayResetsAt: '2026-12-02T00:00:00Z',
+    } },
+  };
 }
 
 export async function syntheticPhoto(page) {
@@ -39,7 +47,7 @@ export async function syntheticPhoto(page) {
   }));
 }
 
-export async function installBackend(page, { existingItem = false, locale = 'pl', noSession = false } = {}) {
+export async function installBackend(page, { existingItem = false, ownedOutfits = false, locale = 'pl', noSession = false } = {}) {
   const image = await syntheticPhoto(page);
   const state = snapshot(ACCOUNT_A, locale);
   const second = snapshot(ACCOUNT_B, locale);
@@ -55,6 +63,25 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
     state.items.push({ id: ITEM_ID, revision: 1, status: 'active', name: 'Koszula testowa', color: 'śliwkowy', category: 'top', occasions: ['casual'], size: 'M', photoKind: 'garment',
       createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z',
       photo: { id: PHOTO_ID, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length } });
+  }
+  if (ownedOutfits) {
+    state.state.data.profiles = [structuredClone(demo.profiles[0])];
+    state.state.data.activeProfileId = demo.profiles[0].id;
+    for (const [index, category, name, occasions] of [
+      [1, 'top', 'Własna koszula', ['casual', 'wedding']],
+      [2, 'bottom', 'Własne spodnie', ['casual', 'wedding']],
+      [3, 'shoes', 'Własne buty', ['casual', 'wedding']],
+      [4, 'top', 'Druga koszula', ['casual']],
+    ]) {
+      const itemId = `55555555-5555-4555-8555-${String(index).padStart(12, '0')}`;
+      const photoId = `66666666-6666-4666-8666-${String(index).padStart(12, '0')}`;
+      const mainPath = `${ACCOUNT_A}/${itemId}/${photoId}/main.jpg`;
+      const thumbPath = `${ACCOUNT_A}/${itemId}/${photoId}/thumb.jpg`;
+      objects.set(mainPath, image); objects.set(thumbPath, image);
+      state.items.push({ id: itemId, revision: 1, status: 'active', name, color: 'granatowy', category,
+        occasions, size: 'M', photoKind: 'garment', createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z',
+        photo: { id: photoId, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length } });
+    }
   }
   await page.addInitScript(({ authKey, demoKey, auth, demo }) => {
     if (!sessionStorage.getItem('private-test-seeded')) {
@@ -93,7 +120,8 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
       case 'bootstrap': return json({ data: current });
       case 'downloadPhoto': {
         photoRequests.push({ url: request.url(), method: request.method(), contentType: request.headers()['content-type'], apikey: request.headers().apikey, accountId: subject, body });
-        const photo = current.items.find(value => value.status === 'active' && value.photo && [value.photo.mainPath, value.photo.thumbPath].includes(body.path))?.photo;
+        const photo = [...current.items.filter(value => value.status === 'active').map(value => value.photo), current.bodyFit.photo]
+          .find(value => value && [value.mainPath, value.thumbPath].includes(body.path));
         if (!photo || !body.path.startsWith(`${subject}/`) || !objects.has(body.path)) return fail('FORBIDDEN', 403);
         // Capture the already-authorized response, then allow tests to deliver it
         // after the client switches accounts and must abort/discard the read.
@@ -106,6 +134,48 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
       case 'saveState':
         if (body.expectedRevision !== current.state.revision) return fail('CONFLICT');
         current.state = { revision: current.state.revision + 1, data: body.data }; return json({ data: current.state });
+      case 'saveBodyFit':
+        if (body.expectedRevision !== current.bodyFit.revision) return fail('CONFLICT');
+        current.bodyFit = { ...current.bodyFit, revision: current.bodyFit.revision + 1, data: body.data };
+        return json({ data: current.bodyFit });
+      case 'uploadBodyPhoto': {
+        if (control.holdPhoto) await control.holdPhoto;
+        if (control.failPhoto > 0) { control.failPhoto--; return fail('STORAGE', 503); }
+        if (operations.has(body.operationId)) return json({ data: operations.get(body.operationId) });
+        if (body.expectedRevision !== current.bodyFit.revision) return fail('CONFLICT');
+        if (body.storageConsentVersion !== 'p33a-body-v1') return fail('CONSENT_REQUIRED', 400);
+        const main = Buffer.from(body.mainBase64, 'base64'); const thumb = Buffer.from(body.thumbBase64, 'base64');
+        const mainPath = `${subject}/${subject}/${body.operationId}/main.jpg`; const thumbPath = `${subject}/${subject}/${body.operationId}/thumb.jpg`;
+        if (current.bodyFit.photo) { objects.delete(current.bodyFit.photo.mainPath); objects.delete(current.bodyFit.photo.thumbPath); }
+        objects.set(mainPath, main); objects.set(thumbPath, thumb);
+        current.bodyFit = { ...current.bodyFit, revision: current.bodyFit.revision + 1, photoDeletion: null,
+          photo: { id: body.operationId, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: main.length, thumbBytes: thumb.length } };
+        operations.set(body.operationId, structuredClone(current.bodyFit)); return json({ data: current.bodyFit });
+      }
+      case 'deleteBodyPhoto':
+        if (body.expectedRevision !== current.bodyFit.revision) return fail('CONFLICT');
+        if (current.bodyFit.photo) { objects.delete(current.bodyFit.photo.mainPath); objects.delete(current.bodyFit.photo.thumbPath); }
+        current.bodyFit = { ...current.bodyFit, revision: current.bodyFit.revision + 1, photo: null, photoDeletion: control.pendingDelete ? 'pending' : null };
+        return json({ data: { status: control.pendingDelete ? 'pending' : 'deleted' } });
+      case 'saveStyling':
+        if (body.expectedRevision !== current.styling.revision) return fail('CONFLICT');
+        current.styling = { revision: current.styling.revision + 1, data: body.data }; return json({ data: current.styling });
+      case 'requestVisualization': return fail('AI_DISABLED', 403);
+      case 'getVisualization': {
+        const job = current.visualization.jobs.find(value => value.id === body.jobId);
+        return job ? json({ data: job }) : fail('NOT_FOUND', 404);
+      }
+      case 'cancelVisualization': {
+        const job = current.visualization.jobs.find(value => value.id === body.jobId);
+        if (!job || job.revision !== body.expectedRevision) return fail('CONFLICT');
+        job.status = 'cancelled'; job.revision++; return json({ data: job });
+      }
+      case 'deleteVisualization':
+        current.visualization.jobs = current.visualization.jobs.filter(value => value.id !== body.jobId);
+        return json({ data: { status: 'deleted' } });
+      case 'deleteAiData':
+        if (body.expectedRevision !== current.bodyFit.revision) return fail('CONFLICT');
+        current.visualization.jobs = []; return json({ data: { status: 'deleted' } });
       case 'createItem':
         if (!item) { item = { id: body.itemId, ...fields, revision: 1, status: 'active', photo: null, createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z' }; current.items.push(item); }
         return json({ data: item });
@@ -135,7 +205,8 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
         if (item.photo) { objects.delete(item.photo.mainPath); objects.delete(item.photo.thumbPath); }
         current.items = current.items.filter(value => value.id !== body.itemId);
         return json({ data: { status: 'deleted' } });
-      case 'export': return json({ data: { exportedAt: new Date().toISOString(), state: current.state, items: current.items } });
+      case 'export': return json({ data: { exportedAt: new Date().toISOString(), state: current.state, items: current.items,
+        bodyFit: current.bodyFit, styling: current.styling, visualization: current.visualization } });
       case 'deleteAccount': current.items = []; objects.clear(); return json({ data: { status: control.pendingAccountDelete ? 'pending' : 'deleted' } });
       default: unexpected.push(body.action); return fail('UNSUPPORTED', 400);
     }

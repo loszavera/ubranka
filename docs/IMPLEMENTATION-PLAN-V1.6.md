@@ -1,8 +1,9 @@
 # Plan implementacji Ubranka — V1.6
 
-Data: 2026-10-25. **P3.2 odebrane z ograniczeniami. P3.3: zatwierdzone wyłącznie
-planowanie, bez implementacji i nowych płatnych wywołań.** Poniższy plan jest
-gotowy do decyzji; żadna z faz A–D nie jest jeszcze zlecona do wykonania.
+Data: 2026-10-25. **P3.2 odebrane z ograniczeniami. P3.3A zatwierdzone do
+implementacji, testów syntetycznych i podglądu na main.** Aktualizacja statusu
+zgody: bez zmiany zakresu V1.6. Płatne AI pozostaje wyłączone; bez klucza AI
+w chmurze i nowych abonamentów. Fazy B–D wymagają osobnych zgód.
 [Wymagania V1.6](REQUIREMENTS-V1.6.md), [zasady danych AI V1.0](P33-AI-DATA-POLICY-V1.0.md),
 [koszty V1.5](COST-PLAN-V1.5.md). Starsze wersje zachowujemy jako historię.
 
@@ -27,7 +28,7 @@ P3.2 nie oznacza zatwierdzenia nowego dostawcy danych, klucza serwerowego i bud�
 
 | Faza | Dostarczony rezultat | Granica |
 | --- | --- | --- |
-| **P3.3A — rekomendowana teraz do zatwierdzenia** | Profil sylwetki, własne zestawy, zapis/oceny, ekrany wizualizacji, trwałe zlecenia i testy kontroli danych/kosztów. Lokalny/CI adapter syntetyczny; na hostingu płatne AI wyłączone. Testy wyłącznie syntetyczne, podgląd main. | Bez klucza OpenAI na serwerze, płatnych wywołań i przesyłania zdjęć do OpenAI. |
+| **P3.3A — zatwierdzona do implementacji** | Profil sylwetki, własne zestawy, zapis/oceny, ekrany wizualizacji, trwałe zlecenia i testy kontroli danych/kosztów. Lokalny/CI adapter syntetyczny; na hostingu płatne AI wyłączone. Testy wyłącznie syntetyczne, podgląd main. | Bez klucza OpenAI na serwerze, płatnych wywołań i przesyłania zdjęć do OpenAI. |
 | **P3.3B — późniejsza osobna zgoda** | Do 6 wywołań / 10 PLN łącznie na syntetycznych wejściach, przez rzeczywisty worker Supabase. Raport jakości, kosztu i czasu. | Wlicza przygotowanie/błędy, brak retry. Nie zużywa starej zgody P3.2 i nie uruchamia C. |
 | **P3.3C — późniejsza osobna zgoda po B** | Pilotaż dwóch kont na 30 dni, prywatne zdjęcia wyłącznie po zgodzie każdego użytkownika, 25 PLN AI łącznie i proponowane limity V1.5. | Koniec po terminie/limicie; bez automatycznego przedłużenia, nowych abonamentów i nieuzgodnionych doładowań. |
 | **P3.3D — zachowane wymaganie na później** | Rozpoznawanie zdjęć z możliwością korekty. | Wymaga osobnego modelu, testu, zasad danych i budżetu. Ręczne opisy w A nie zamykają tego wymagania. |
@@ -36,7 +37,7 @@ Plan świadomie rozwija dawny ogólny P3.3 z V1.4. Pełny etap obejmujący rozpo
 nie zostanie oznaczony jako skończony po samym A, B lub C. Nie obejmujemy zakupów
 ani sklepów P4. Kolejne fazy nie uruchamiają się tylko dlatego, że A przeszło testy.
 
-## P3.3A — kolejność prac po przyszłej zgodzie
+## P3.3A — zatwierdzona kolejność prac
 
 1. **Model i zgodność danych.** Oddzielić profil sylwetki od profili stylu.
    Dodać opcjonalne ręczne rozmiary/system rozmiarów, wzrost i obwody
@@ -191,9 +192,9 @@ kosztów i błędów po okresie; brak samoczynnego zwiększania wolumenu. WWW sp
 na Safari iPhone oraz Chrome Android; bez udawania, że to test natywnego builda.
 Logowanie Kasi z P3.1 nadal trzeba faktycznie potwierdzić przed jej testem C.
 
-## Decyzja do podjęcia teraz
+## Zatwierdzona granica wykonania
 
-Rekomenduję zatwierdzić **tylko P3.3A** z tego dokumentu: implementację fundamentu,
+Użytkownik zatwierdził **tylko P3.3A** z tego dokumentu: implementację fundamentu,
 prywatne zestawy i podgląd, testy syntetyczne, bez płatnego AI, klucza AI w chmurze
 i nowych abonamentów. Po odbiorze A przedstawimy konkretną zgodę B, a po jego
 raporcie zgodę C wraz z aktualnym finansowaniem i zasadami zdjęć. Nie jest

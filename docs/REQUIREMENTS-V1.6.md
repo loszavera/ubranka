@@ -1,9 +1,10 @@
 # Wymagania Ubranka — V1.6
 
 Data: 2026-10-25. Dodatek do [V1.5](REQUIREMENTS-V1.5.md).
-**P3.2 odebrane przez Kasię i Aleksego z opisanymi ograniczeniami. Zatwierdzono
-wyłącznie przygotowanie planu P3.3, bez implementacji i nowych płatnych wywołań.**
-Poniższe rozszerzenia są propozycją do zatwierdzenia, nie działającymi funkcjami.
+**P3.2 odebrane przez Kasię i Aleksego z opisanymi ograniczeniami. Następnie
+zatwierdzono implementację P3.3A: fundament z płatnym AI wyłączonym.**
+Aktualizacja statusu zgody 2026-10-25 nie zmienia zakresu V1.6. Fazy B–D
+pozostają propozycją, bez zgody na wydatki ani nowe abonamenty.
 [Plan V1.6](IMPLEMENTATION-PLAN-V1.6.md), [dane AI](P33-AI-DATA-POLICY-V1.0.md),
 [koszty V1.5](COST-PLAN-V1.5.md).
 
@@ -36,7 +37,7 @@ filtrować oczywiste rozbieżności, ale nie dowodzą fizycznego dopasowania.
 
 ## Etapy i odbiór
 
-- **P3.3A — proponowany następny zakres:** profil, własne zestawy, ekrany i trwałe
+- **P3.3A — zatwierdzone do wykonania:** profil, własne zestawy, ekrany i trwałe
   zadania z testowym dostawcą; płatne AI wyłączone na serwerze, bez klucza AI.
   Przykład syntetyczny jest podpisany jako przykład, nigdy jako wynik zdjęć użytkownika.
 - **P3.3B — osobna zgoda:** krótka próba rzeczywistych wywołań na syntetycznych
@@ -56,8 +57,9 @@ Nieudana próba B nie uruchamia automatycznie następnego testu lub P3.3C.
 
 ## Poza obecną zgodą
 
-Nie rozpoczęto kodowania, migracji, konfiguracji usług, tworzenia/przenoszenia
-kluczy, przesyłania zdjęć do AI ani nowych wywołań. Bez nowych abonamentów,
+Zgoda na A obejmuje kod, testy oraz uzupełnienie istniejącego Supabase i podglądu
+main. Nie obejmuje kluczy AI w chmurze, przesyłania zdjęć do AI ani płatnych wywołań.
+Bez nowych abonamentów,
 automatycznych zakupów, katalogów sklepów, treningu na zdjęciach i zmian rozliczeń.
 Akceptacja P3.2 nie odnawia jej wykorzystanego limitu ani zgody na doładowanie.
 Nie zmienia również niepotwierdzonego statusu logowania Kasi w P3.1.

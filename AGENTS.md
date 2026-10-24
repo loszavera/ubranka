@@ -70,9 +70,14 @@ zaakceptowali P3.2 z opisanymi ograniczeniami i zlecili WYŁĄCZNIE plan P3.3.
 Aktualne wymagania/plan: V1.6; propozycja zasad danych AI V1.0 i kosztów V1.5.
 Nie pytaj ponownie o odbiór P3.2. Nie interpretuj odbioru całej próby jako oceny
 każdego obrazu ani potwierdzenia jakości dla osobnych zdjęć ubrań.
-P3.3A (fundament z AI OFF), B (syntetyczna próba), C (pilotaż prywatnych zdjęć)
-i D (rozpoznawanie) są propozycjami, bez zgody na implementację lub wydatki.
-Bieżąca tura: dokumentacja, bez kodu aplikacji, migracji i zmian usług/kluczy.
+2026-10-25 użytkownik zatwierdził **implementację P3.3A według V1.6**:
+profil sylwetki i prywatne zdjęcie w istniejącym Supabase, zestawy z własnej szafy
+oraz przygotowanie wizualizacji z płatnym AI wyłączonym. Praca na dev, testy
+na danych syntetycznych i publikacja podglądu na main są zatwierdzone.
+Bez klucza AI w chmurze, płatnych wywołań i nowych abonamentów. Odmowa generacji
+musi obowiązywać na serwerze, także przy ręcznym wywołaniu API/RPC.
+P3.3B (próba syntetyczna), C (pilotaż prywatnych zdjęć) i D (rozpoznawanie)
+nadal wymagają osobnej zgody. Po wdrożeniu i raporcie A zatrzymaj się przed B.
 Poprzednia zgoda na finansowanie P3.2 nie przechodzi na dalsze fazy. Proponowane
 25 PLN pilotażu C jest odrębnym budżetem, nie bieżącym ustawieniem konta.
 Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,

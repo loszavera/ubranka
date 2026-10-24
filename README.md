@@ -4,7 +4,7 @@ Wirtualny stylista: mniej przeglądania, prostsze decyzje i ubrania dopasowane d
 Jeden projekt TypeScript / React Native / Expo dla iOS, Androida i przeglądarki.
 
 **Docelowy adres odbioru:** https://ubranka.vercel.app
-(P3.1 na main; [wdrożenie i kontrola](docs/P31-MAIN.md) przeszły).
+(bieżący zakres i dowody: [stan projektu](docs/PROJECT-STATUS.md)).
 **Warsztat dev:** https://ubranka-git-dev-risk-every-asset.vercel.app
 (logowanie Vercel; stan wdrożenia w dokumencie statusu).
 
@@ -40,10 +40,11 @@ dwa zmieniają krój spodni. [Galeria porównawcza](https://ubranka.vercel.app/p
 i [raport jakości oraz kosztów](docs/P32-REPORT.md) zostały odebrane przez Kasię
 i Aleksego z opisanymi ograniczeniami (2026-10-25).
 Użytkownik pozwolił rozpocząć pomiar bez pełnej estymacji, zachowując limity.
-**P3.3: przygotowany plan do akceptacji, bez implementacji i nowych wywołań.**
-Rekomendowany następny zakres to P3.3A: profil sylwetki, zestawy z własnej szafy
-i przygotowanie przepływu wizualizacji z płatnym AI wyłączonym. Próba kilku
-osobnych zdjęć ubrań i pilotaż prywatnych zdjęć wymagają późniejszych zgód.
+**P3.3A: zatwierdzone i zaimplementowane z płatnym AI wyłączonym.** Profil
+sylwetki, prywatne zdjęcie w Supabase, maksymalnie dwa zestawy z własnej szafy,
+zapis/opinie i przygotowanie wizualizacji PL/EN. [Raport oraz instrukcja odbioru](docs/P33A-VERIFICATION.md).
+Próba kilku osobnych zdjęć ubrań w P3.3B i pilotaż prywatnych zdjęć w C
+wymagają późniejszych zgód.
 Aplikacja nie generuje jeszcze obrazów AI; nie uruchomiono nowych abonamentów.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
@@ -54,9 +55,11 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 ## Dokumenty
 
-- [Wymagania V1.6 — odebrane P3.2, propozycja P3.3](docs/REQUIREMENTS-V1.6.md)
+- [Wymagania V1.6 — odebrane P3.2, zatwierdzone P3.3A](docs/REQUIREMENTS-V1.6.md)
 - [Plan implementacji V1.6 — fazy P3.3A–D](docs/IMPLEMENTATION-PLAN-V1.6.md)
-- [Proponowane zasady danych AI V1.0](docs/P33-AI-DATA-POLICY-V1.0.md)
+- [Zasady danych V1.0 — Supabase w A, AI czeka na osobną zgodę](docs/P33-AI-DATA-POLICY-V1.0.md)
+- [P3.3A — weryfikacja i test użytkowników](docs/P33A-VERIFICATION.md)
+- [P3.3A — kontrakty backendu i granice przygotowania AI](docs/P33A-BACKEND.md)
 - [Proponowana kontrola kosztów V1.5](docs/COST-PLAN-V1.5.md)
 - [P3.2 — raport jakości, kosztów i weryfikacji](docs/P32-REPORT.md)
 - [P3.2 — historyczny preflight i późniejsze rozstrzygnięcie użytkownika](docs/P32-PREFLIGHT.md)

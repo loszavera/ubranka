@@ -65,6 +65,10 @@ Nowe wpisy z 2026-10-24:
 | D-045 | 2026-10-25 | Odbiór P3.2 i zlecone tylko planowanie | Kasia i Aleksy zaakceptowali wyniki P3.2 z ograniczeniami. Zlecili plan P3.3: wizualizacje w aplikacji, zasady danych AI i kontrola kosztów, bez implementacji oraz nowych płatnych wywołań. Aktualizuje D-044; nie odnawia limitu ani finansowania próby. |
 | D-046 | 2026-10-25 | Propozycja do zatwierdzenia | V1.6 dzieli P3.3 na A: fundament z AI OFF, B: syntetyczna próba 6 wywołań / 10 PLN, C: osobno zatwierdzany pilot 30 dni / 25 PLN AI łącznie, D: późniejsze rozpoznawanie. Kandydat Flare, Supabase Edge i prywatny Storage; zasady danych AI V1.0 oraz koszty V1.5 są propozycją, nie wdrożoną konfiguracją. Rekomendowany następny zakres to wyłącznie A. |
 
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-047 | 2026-10-25 | Zatwierdzone P3.3A | Aktualizuje D-045/D-046: użytkownik zatwierdził A zgodnie z V1.6: profil sylwetki, prywatny zapis zdjęcia w obecnym Supabase, zestawy z własnej szafy i przygotowanie wizualizacji z płatnym AI wyłączonym. Praca dev, testy syntetyczne, podgląd main. Bez klucza AI w chmurze, płatnych wywołań i nowych abonamentów. Zatrzymanie przed P3.3B; B/C/D nadal osobno. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

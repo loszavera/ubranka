@@ -2,6 +2,19 @@
 
 Aktualizacja: 2026-10-25.
 
+**P3.3A zaimplementowane — zatwierdzone przez użytkownika według planu V1.6.**
+Zakres: profil sylwetki i prywatne zdjęcie w Supabase, zestawy z własnej szafy,
+przygotowanie wizualizacji z serwerowym AI OFF, testy syntetyczne i podgląd main.
+Praca na dev. Bez klucza AI w chmurze, płatnych wywołań i nowych abonamentów.
+P3.3B/C/D pozostają niezlecone. 62 testy logiki/klienta, 41 backendu, 15 regresji
+demo oraz 8 nowych scenariuszy prywatnego UI i 10 dotychczasowych: PASS po
+poprawce konfliktu formularza. Supabase: migracja i funkcje wdrożone, 40 kontroli
+dwóch syntetycznych kont PASS. Hashe wcześniejszych danych pozostają zgodne.
+Publikacja main i końcowe czyszczenie fixture są w toku. Szczegóły i granice:
+[P33A-VERIFICATION.md](P33A-VERIFICATION.md), [backend](P33A-BACKEND.md).
+
+## Historia P3.2 i przygotowania planu
+
 **P3.2 zakończone technicznie: 12/12 udanych wywołań, bez błędów i ponowień.**
 Sześć przypadków × dwa modele na istniejących obrazach fikcyjnych dorosłych.
 Koszt API **0,432032 USD**, rozliczenie budżetu z rezerwą **2,92269648 PLN / 25 PLN**.
@@ -10,12 +23,13 @@ krój spodni. Flare jest kandydatem do dalszego projektu: w tej próbie był szy
 przy tym samym koszcie. **Kasia i Aleksy zaakceptowali wyniki P3.2 z opisanymi
 ograniczeniami (2026-10-25).** Nie nadali ocen poszczególnym obrazom.
 [Galeria](https://ubranka.vercel.app/p32/), [raport](P32-REPORT.md),
-[koszty V1.4](COST-PLAN-V1.4.md). Limit wywołań wyczerpany; P3.3 nie rozpoczęto.
+[koszty V1.4](COST-PLAN-V1.4.md). Limit wywołań P3.2 wyczerpany.
 **Przygotowano plan P3.3 V1.6**, zgodnie ze zleceniem wyłącznie dokumentacyjnym:
 prywatne zestawy i profil, wizualizacja na prośbę, zasady danych oraz koszty.
 Rekomendacja: P3.3A z AI wyłączonym, później osobno próba syntetyczna B i pilotaż C.
-Automatyczne rozpoznawanie pozostaje w D. Wszystkie fazy czekają na zatwierdzenie.
-W tej turze nie zmieniano kodu, bazy, usług ani kluczy i nie wywoływano modeli.
+Automatyczne rozpoznawanie pozostaje w D. W chwili sporządzenia planu wszystkie
+fazy czekały na zatwierdzenie; późniejsza zgoda na A i jej realizacja są powyżej.
+W tamtej turze nie zmieniano kodu, bazy, usług ani kluczy i nie wywoływano modeli.
 Weryfikacja dokumentacji: spójność faz/limitów/zgód, lokalne odnośniki, JSON
 odbioru i niezmienione pomiary P3.2 PASS; niezależny przegląd architektury oraz
 zasad danych. Testów runtime aplikacji nie powtarzano przy zmianie wyłącznie
@@ -113,9 +127,11 @@ na logowanie Kasi, pełną checklistę urządzeń ani zgodę na P3.2.
 ## Aktualne dokumenty
 
 - [Wymagania V1.6](REQUIREMENTS-V1.6.md) i [plan V1.6](IMPLEMENTATION-PLAN-V1.6.md):
-  odebrane P3.2 i propozycja etapów P3.3A–D. Wersje V1.2–V1.5 zachowano.
+  odebrane P3.2, zatwierdzone P3.3A i propozycja etapów B–D. Wersje V1.2–V1.5 zachowano.
 - [Projekt zasad danych AI](P33-AI-DATA-POLICY-V1.0.md)
-  i [projekt kontroli kosztów V1.5](COST-PLAN-V1.5.md): do akceptacji.
+  (część Supabase zatwierdzona w A) i [projekt kontroli kosztów V1.5](COST-PLAN-V1.5.md):
+  aktywacja danych AI i płatnych prób nadal wymaga osobnych zgód.
+- [Raport P3.3A i scenariusz odbioru](P33A-VERIFICATION.md), [backend P3.3A](P33A-BACKEND.md).
 - [Raport P3.2](P32-REPORT.md), [historyczny preflight](P32-PREFLIGHT.md)
   i [manifest przypadków](p32/cases.json).
 - [Przyjęte zasady zdjęć](P3-DATA-POLICY-V1.0.md), [pomiary kosztów V1.4](COST-PLAN-V1.4.md).
@@ -216,12 +232,10 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-Do zatwierdzenia **P3.3A według planu V1.6**: profil sylwetki, maksymalnie dwa
-zestawy z własnej szafy, ekrany i zabezpieczenia wizualizacji, testy syntetyczne,
-AI wyłączone na serwerze. Praca dev, podgląd main zgodnie z przyjętym workflow.
-Bez klucza OpenAI w chmurze, płatnych wywołań, wysyłania zdjęć do OpenAI i nowych
-abonamentów. Po raporcie A zatrzymanie przed osobnymi zgodami B/C.
+Po publikacji **test i odbiór P3.3A na main** według [krótkiej checklisty](P33A-VERIFICATION.md).
+Sprawdzić sylwetkę, zestawy z własnej szafy, PL/EN oraz przygotowanie wizualizacji
+z AI wyłączonym. Nie potrzeba ponownej zgody na wykonany zakres A.
+Zatrzymanie przed P3.3B; nowa płatna próba wymaga osobnej zgody.
 
 Logowanie Kasi w P3.1 pozostaje do faktycznego sprawdzenia; odbiór P3.2 go
-nie potwierdza. W tej turze przygotowano tylko dokumentację i zapis odbioru
-w metadanych istniejącej galerii. Nie zmieniono obrazów ani kodu galerii/aplikacji.
+nie potwierdza. Galeria i pomiary P3.2 pozostają niezmienione.

@@ -65,8 +65,8 @@
     "preview": "expo serve --port 4173",
     "test:e2e": "npm run build:web && playwright test",
     "test:private:e2e": "node scripts/private-e2e.mjs",
-    "test:backend": "node --experimental-strip-types --test supabase/tests/protocol.test.ts supabase/tests/cleanup.test.ts supabase/tests/database.test.mjs",
-    "check:backend": "npx --yes deno@2.9.6 check supabase/functions/wardrobe/index.ts supabase/functions/wardrobe-cleanup/index.ts"
+    "test:backend": "node --experimental-strip-types --test supabase/tests/protocol.test.ts supabase/tests/cleanup.test.ts supabase/tests/database.test.mjs supabase/tests/styling-database.test.mjs supabase/tests/styling-protocol.test.ts",
+    "check:backend": "npx --yes deno@2.9.6 check supabase/functions/wardrobe/index.ts supabase/functions/wardrobe-cleanup/index.ts supabase/functions/_shared/visualization.ts"
   },
   "private": true
 }
