@@ -23,8 +23,12 @@ export class PrivatePhotoAccess {
     if (!path.startsWith(`${data.session.user.id}/`) || path.split('/').some(segment => segment === '..' || segment === '.')) throw new PrivateError('FORBIDDEN');
     const controller = new AbortController(); this.requests.add(controller);
     try {
-      const response = await fetch(`${this.services.config.url}/storage/v1/object/authenticated/wardrobe-private/${path.split('/').map(encodeURIComponent).join('/')}`, {
-        headers: { apikey: this.services.config.publishableKey, Authorization: `Bearer ${data.session.access_token}` },
+      // POST rechecks current ownership before every read; direct Storage GETs
+      // can outlive deletion in the provider CDN, even with a private bucket.
+      const response = await fetch(`${this.services.config.url}/functions/v1/wardrobe`, {
+        method: 'POST',
+        headers: { apikey: this.services.config.publishableKey, Authorization: `Bearer ${data.session.access_token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'downloadPhoto', path }),
         cache: 'no-store', signal: controller.signal,
       });
       if (!response.ok) throw new PrivateError(response.status === 401 ? 'SIGNED_OUT' : 'PHOTO_UNAVAILABLE');

@@ -45,11 +45,12 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
   const second = snapshot(ACCOUNT_B, locale);
   const objects = new Map();
   const logs = [];
+  const photoRequests = [];
   const unexpected = [];
   const operations = new Map();
-  const control = { state, second, objects, logs, unexpected, failPhoto: 0, holdPhoto: null, pendingDelete: false, pendingAccountDelete: false, deny: false };
+  const control = { state, second, objects, logs, photoRequests, unexpected, failPhoto: 0, holdPhoto: null, holdDownload: null, completedDownloads: 0, pendingDelete: false, pendingAccountDelete: false, deny: false };
   if (existingItem) {
-    const mainPath = `${ACCOUNT_A}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${PHOTO_ID}/thumb.jpg`;
+    const mainPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/thumb.jpg`;
     objects.set(mainPath, image); objects.set(thumbPath, image);
     state.items.push({ id: ITEM_ID, revision: 1, status: 'active', name: 'Koszula testowa', color: 'śliwkowy', category: 'top', occasions: ['casual'], size: 'M', photoKind: 'garment',
       createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z',
@@ -78,12 +79,11 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
     const fail = (code, status = 409) => json({ error: { code } }, status);
     if (url.pathname.startsWith('/auth/v1/logout')) return route.fulfill({ status: 204, headers });
     if (url.pathname.startsWith('/auth/v1/user')) return json(session(subject ?? id).user);
-    if (url.pathname.startsWith('/storage/v1/object/authenticated/wardrobe-private/')) {
-      const path = decodeURIComponent(url.pathname.split('/wardrobe-private/')[1]);
-      if (!path.startsWith(`${subject}/`) || !objects.has(path)) return fail('FORBIDDEN', 403);
-      return route.fulfill({ status: 200, headers, contentType: 'image/jpeg', body: objects.get(path) });
-    }
+    // Any direct Storage or signed URL request is a privacy regression. Photos
+    // must use the uncached Edge POST endpoint for fresh access checks.
+    if (url.pathname.startsWith('/storage/')) { unexpected.push(request.url()); return route.abort(); }
     if (url.pathname !== '/functions/v1/wardrobe') { unexpected.push(request.url()); return route.abort(); }
+    if (request.method() !== 'POST') { unexpected.push(`${request.method()} ${request.url()}`); return route.abort(); }
     if (![ACCOUNT_A, ACCOUNT_B].includes(subject)) return fail('SIGNED_OUT', 401);
     const body = request.postDataJSON(); logs.push(structuredClone(body));
     if (control.deny) return fail('NOT_INVITED', 403);
@@ -91,6 +91,18 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
     let item = current.items.find(value => value.id === body.itemId);
     switch (body.action) {
       case 'bootstrap': return json({ data: current });
+      case 'downloadPhoto': {
+        photoRequests.push({ url: request.url(), method: request.method(), contentType: request.headers()['content-type'], apikey: request.headers().apikey, accountId: subject, body });
+        const photo = current.items.find(value => value.status === 'active' && value.photo && [value.photo.mainPath, value.photo.thumbPath].includes(body.path))?.photo;
+        if (!photo || !body.path.startsWith(`${subject}/`) || !objects.has(body.path)) return fail('FORBIDDEN', 403);
+        // Capture the already-authorized response, then allow tests to deliver it
+        // after the client switches accounts and must abort/discard the read.
+        const bytes = objects.get(body.path);
+        if (control.holdDownload) await control.holdDownload;
+        await route.fulfill({ status: 200, headers: { ...headers, 'Cache-Control': 'private, no-store, max-age=0', 'CDN-Cache-Control': 'no-store' }, contentType: 'image/jpeg', body: bytes });
+        control.completedDownloads++;
+        return;
+      }
       case 'saveState':
         if (body.expectedRevision !== current.state.revision) return fail('CONFLICT');
         current.state = { revision: current.state.revision + 1, data: body.data }; return json({ data: current.state });
@@ -106,7 +118,7 @@ export async function installBackend(page, { existingItem = false, locale = 'pl'
         if (operations.has(body.operationId)) return json({ data: operations.get(body.operationId) });
         if (!item || item.revision !== body.expectedRevision) return fail('CONFLICT');
         const main = Buffer.from(body.mainBase64, 'base64'); const thumb = Buffer.from(body.thumbBase64, 'base64');
-        const mainPath = `${subject}/${body.operationId}/main.jpg`; const thumbPath = `${subject}/${body.operationId}/thumb.jpg`;
+        const mainPath = `${subject}/${item.id}/${body.operationId}/main.jpg`; const thumbPath = `${subject}/${item.id}/${body.operationId}/thumb.jpg`;
         objects.set(mainPath, main); objects.set(thumbPath, thumb);
         item.photo = { id: body.operationId, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: main.length, thumbBytes: thumb.length };
         item.revision++; operations.set(body.operationId, structuredClone(item)); return json({ data: item });
