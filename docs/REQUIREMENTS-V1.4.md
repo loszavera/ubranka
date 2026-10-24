@@ -1,7 +1,8 @@
 # Wymagania Ubranka — V1.4
 
 Data: 2026-10-24. **P2.1 odebrany przez użytkownika i dopuszczony do main.
-P3 poniżej jest propozycją do zatwierdzenia, nie rozpoczętą implementacją.**
+P3.1 następnie zatwierdzono do implementacji na dev, konfiguracji darmowych usług,
+testów i podglądu Vercel. P3.2/P3.3 nadal wymagają odrębnej akceptacji.**
 Dokument uzupełnia [V1.3](REQUIREMENTS-V1.3.md) i pełną bazę [V1.2](REQUIREMENTS-V1.2.md).
 
 ## Nowe ustalenia użytkownika
@@ -10,12 +11,14 @@ Dokument uzupełnia [V1.3](REQUIREMENTS-V1.3.md) i pełną bazę [V1.2](REQUIREM
 - „Przenieś całość do main branch” — upoważnienie do publikacji odebranej wersji.
 - Przygotować P3: prywatna szafa ze zdjęciami, wybór usług, koszty, przechowywanie
   i usuwanie danych. **Na razie tylko plan do zatwierdzenia.**
+- Kolejna zgoda przyjmuje P3.1, Supabase Free/Frankfurt, Google OAuth, limity
+  i zasady danych V1.0. Nie obejmuje płatnego AI ani nowych abonamentów.
 - Nie zmieniono celu 150 PLN/mies., 30 wizualizacji/osobę, obu rodzajów zdjęć,
   PL/EN, wymiarów/rozmiarów ani docelowego podglądu zestawu na osobie.
 
-## Proponowane doprecyzowania P3
+## Przyjęte doprecyzowania P3.1
 
-| Obszar | Propozycja; wymaga akceptacji |
+| Obszar | Ustalenie przyjęte dla P3.1 |
 | --- | --- |
 | R-05, R-12, Q-04 | Osobne konta Kasi i Aleksego, wiele profili stylu w koncie. Szafy prywatne; bez wzajemnego udostępniania. |
 | R-12, Q-03 | Dodanie zdjęcia ubrania albo ubrania na sobie, edycja i usunięcie. Pierwsza iteracja: ręczny krótki opis; rozpoznawanie AI później. |
@@ -26,9 +29,10 @@ Dokument uzupełnia [V1.3](REQUIREMENTS-V1.3.md) i pełną bazę [V1.2](REQUIREM
 | R-04, R-13, R-20, R-22 | Pełne P3 obejmuje parametry sylwetki, rozmiary, rozpoznawanie rzeczy, zestawy z własnych ubrań i wizualizację. P3.1 jest fundamentem, nie odbiorem tych funkcji. |
 | R-23, R-25, Q-09 | Darmowy backend w limitach na start; AI dopiero po osobno zatwierdzonej małej próbie jakości/kosztu. Nie gwarantujemy 60 wyników w 150 PLN przed pomiarem. |
 
-Usługi, limity 100 rzeczy/osobę i polityka danych są rekomendacją projektową,
-nie nowymi odpowiedziami z wywiadu. Google wymaga kont obu osób; nie zakładamy,
-że już je mają lub wybrali tę metodę. Alternatywa email jest opisana w planie.
+Usługi, limit 100 rzeczy/osobę i polityka danych zostały przyjęte w zgodzie na P3.1.
+Adresy Google i dostęp administratora do usług wymagają prywatnej konfiguracji;
+nie należy ich wpisywać do publicznego repozytorium. Alternatywa email nie jest
+wybranym wariantem. Oryginalny wywiad pozostaje bez zmian.
 
 ## Proponowany odbiór
 

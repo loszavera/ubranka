@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Image, Platform, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { AppState, Feedback, Locale, Occasion, Profile } from '../domain/model';
 import { OUTFITS } from '../domain/catalog';
@@ -15,6 +15,8 @@ import { Profiles, profileLabel } from '../ui/Profiles';
 import { Wardrobe } from '../ui/Wardrobe';
 import { colors } from '../ui/theme';
 import { OccasionPicker } from '../ui/OccasionPicker';
+import PrivateWardrobe from '../private-ui/PrivateWardrobe';
+import { privateCopy } from '../private-ui/copy';
 
 type Tab = 'outfits'|'wardrobe'|'profile';
 type Session = { active: boolean; ids: string[]; seen: string[]; votes: Record<string, 'like'|'dislike'>; round: number; occasion: Occasion | null };
@@ -34,6 +36,8 @@ export default function Prototype() {
   const [pendingReason, setPendingReason] = useState<Feedback|null>(null);
   const [editProfile, setEditProfile] = useState(false);
   const [confirmRecovery, setConfirmRecovery] = useState(false);
+  const [privateOpen, setPrivateOpen] = useState(() => Platform.OS === 'web' && typeof window !== 'undefined' &&
+    (new URLSearchParams(window.location.search).has('code') || new URLSearchParams(window.location.search).has('error') || new URLSearchParams(window.location.search).get('wardrobe') === '1'));
   const scroll = useRef<ScrollView>(null);
   const profile = state.profiles.find(p => p.id === state.activeProfileId)!;
   // Derive the default from the loaded profile; initial storage read is asynchronous.
@@ -81,6 +85,8 @@ export default function Prototype() {
   };
   const onReset = () => { clearSession(); setOccasionOverride(null); changeTab('outfits'); void reset(); };
 
+  if (privateOpen) return <PrivateWardrobe demoState={state} demoAvailable={ready && storageIssue !== 'read' && storageIssue !== 'invalid'} onClose={() => setPrivateOpen(false)} />;
+
   if (!ready) return <SafeAreaView style={[s.screen, s.loading]}><ActivityIndicator color={colors.plum} /><Text style={s.body}>{t.loading}</Text></SafeAreaView>;
 
   // Do not allow edits over an unread saved profile: a later read could erase them
@@ -112,6 +118,7 @@ export default function Prototype() {
     </View></View>
     <ScrollView ref={scroll} style={{ flex: 1 }} contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
       <View style={[s.content, !state.onboarded && { maxWidth: 980 }]}>
+        <View style={{ marginBottom: 18 }}><Button label={privateCopy(state.locale).entry} kind="secondary" icon="wardrobe" onPress={() => setPrivateOpen(true)} /></View>
         {!online ? <Text accessibilityLiveRegion="polite" style={s.banner}>{t.offline}</Text> : null}
         {storageIssue ? <View style={s.banner}>
           <Text accessibilityRole="alert" style={s.body}>{t.storageError}</Text>

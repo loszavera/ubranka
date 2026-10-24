@@ -1,14 +1,16 @@
 # Plan implementacji Ubranka — V1.4
 
-Data: 2026-10-24. **Propozycja P3 do zatwierdzenia. Nie uruchomiono backendu,
-logowania, uploadu zdjęć, API AI ani nowych rozliczeń.** P2.1 został odebrany
+Data: 2026-10-24. **Aktualizacja: użytkownik zatwierdził P3.1, Supabase Free/Frankfurt,
+Google OAuth oraz politykę danych V1.0. Implementacja trwa na dev; stan usług
+i testów: [PROJECT-STATUS.md](PROJECT-STATUS.md). P3.2/P3.3 pozostają propozycją,
+bez zgody na płatne AI i nowe abonamenty.** P2.1 został odebrany
 i przeniesiony do main. [Wymagania V1.4](REQUIREMENTS-V1.4.md) dziedziczą V1.2/V1.3.
 
 ## Rekomendacja
 
 Pozostawić Expo/TypeScript i Vercel. Dodać **Supabase Auth + Postgres + prywatny
 Storage w regionie Frankfurt `eu-central-1`**, początkowo w planie Free.
-Proponuję **Google do logowania**, aby nie kupować domeny ani uruchamiać poczty
+Przyjęto **Google do logowania**, aby nie kupować domeny ani uruchamiać poczty
 transakcyjnej na start. Konta aplikacji są osobiste; Aleksy administruje projektem,
 Kasia nie potrzebuje dostępu do panelu administracyjnego Supabase.
 
@@ -45,7 +47,7 @@ testowy (adresy zespołu, 2 wiadomości/h), więc nie opieramy na nim pilotażu.
 [SMTP](https://supabase.com/docs/guides/auth/auth-smtp),
 [Resend](https://resend.com/pricing), [domena](https://resend.com/docs/dashboard/domains/introduction).
 
-## P3.1 — prywatna szafa: następny zakres do akceptacji
+## P3.1 — prywatna szafa: zakres zatwierdzony
 
 Rezultat: „Loguję się na telefonie, dodaję swoje ubranie, widzę je na drugim
 urządzeniu i mogę je usunąć; druga osoba nie widzi mojej szafy”.
@@ -58,13 +60,13 @@ urządzeniu i mogę je usunąć; druga osoba nie widzi mojej szafy”.
 3. Dodanie rzeczy z galerii albo aparatu: zdjęcie rzeczy lub na sobie, podgląd
    przed wysłaniem, krótka nazwa, kategoria, kolor, okazje i opcjonalny rozmiar.
    Ręczna korekta danych, wymiana zdjęcia, usunięcie rzeczy i konta.
-4. Proponowany limit: **100 rzeczy/osobę, jedno zdjęcie na rzecz**, do 1 MB kopii
+4. Przyjęty limit: **100 rzeczy/osobę, jedno zdjęcie na rzecz**, do 1 MB kopii
    głównej po przygotowaniu, miniatura do 100 kB; budżet magazynu 250 MB/konto.
    Dłuższy bok do 1600 px, zachowanie orientacji, usunięcie EXIF/GPS przed uploadem.
    JPG/PNG/WebP jako wynik wejściowy; zdjęcie z iPhone'a wymaga obsługiwanej
    konwersji HEIC albo jasnej odmowy bez wysyłania. Nie obiecywać konwersji bez testu.
 5. Zdjęcia prywatne do usunięcia. P3.1 nie wysyła ich do AI. Szczegóły i kopie:
-   [proponowana polityka danych](P3-DATA-POLICY-V1.0.md).
+   [przyjęte zasady danych](P3-DATA-POLICY-V1.0.md).
 6. Dobrowolny import wybranych profili i opinii z P2, po wskazaniu właściciela.
    Demo pozostaje oddzielne. 37 fikcyjnych ubrań nie jest importowane jako
    własne rzeczy. Lokalny zapis zachowany; ponowienie importu bez duplikatów.
@@ -145,4 +147,6 @@ ich ani sekretów do publicznego repozytorium. Jeśli brakuje darmowych miejsc,
 kont Google lub dostępu, przedstawimy konkretną przeszkodę bez aktywacji płatnego planu.
 
 Po odbiorze bezpiecznego przepływu można zaproponować realny pilotaż i P3.2.
-Na dziś powstał wyłącznie plan; żadna z tych czynności nie została rozpoczęta.
+Ta kolejność została zatwierdzona do wykonania. Bieżący status odróżnia gotowy
+kod i lokalne testy od rzeczywiście skonfigurowanej chmury; sam commit nie
+potwierdza uruchomienia Google/Supabase.

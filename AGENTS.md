@@ -26,10 +26,12 @@ zestawem. Stan V2 odczytuje V1 pod niezmienionym kluczem `ubranka:p2:v1`.
 P2.1 zostało następnie odebrane przez użytkownika i jawnie dopuszczone do main
 (2026-10-24). Publikacja i test produkcyjny: docs/P21-PRODUCTION.md. Praca pozostaje
 na dev. Aktualne wymagania i plan V1.4 zawierają propozycję P3, koszty V1.3 i
-P3-DATA-POLICY-V1.0.md. Użytkownik zlecił **tylko plan P3 do zatwierdzenia**.
-Supabase Free/Frankfurt, Google OAuth, limity zdjęć i retencja są propozycją;
-nie utworzono backendu ani nie rozpoczęto P3.1. P3.2 (próba AI) i P3.3 wymagają
-osobnego uzgodnienia. Nie aktywuj usług ani opłat na podstawie samej dokumentacji.
+P3-DATA-POLICY-V1.0.md. Użytkownik **zatwierdził implementację P3.1** (2026-10-24):
+Supabase Free/Frankfurt, Google OAuth, limity zdjęć i zasady danych V1.0,
+konfigurację darmowych usług, testy i podgląd dev. P3.1 jest w realizacji;
+faktyczną dostępność usług i wyniki weryfikacji zapisuj w statusie.
+P3.2 (próba AI), P3.3 i publikacja nowego zakresu main wymagają osobnego uzgodnienia.
+Nie aktywuj płatnego AI ani nowych abonamentów.
 Zapis P2 na adresie dev i main jest osobny; publikacja kodu nie przenosi localStorage.
 Nie dopisuj na tej podstawie testu natywnego. Q21–Q23 i Q25 są rozstrzygnięte; Q24 określa wstępny
 kierunek zdjęć, szczegóły dostawcy wymagają wyjaśnienia przed realnym uploadem.
@@ -91,7 +93,8 @@ Ustalenie użytkownika z 2026-10-24:
   Nie dodawaj zależności na zapas.
 - Nie twórz ręcznie ios/ i android/. Konfiguruj natywne zachowanie przez Expo config.
   Własne moduły natywne mogą wymagać development build zamiast Expo Go.
-- Backend, dostawca AI, katalogi sklepów i płatności pozostają do ustalenia.
+- Backend P3.1: Supabase Auth/Postgres/private Storage Frankfurt, Google OAuth.
+  Dostawca AI, katalogi sklepów i płatności wymagają kolejnego zakresu.
 - Od pierwszego prototypu planuj interfejs PL/EN: teksty w słownikach poza
   komponentami, zapamiętywany wybór użytkownika. Polski jest początkowy.
   Język nie zmienia rynku PL, cen PLN ani dostawy do Polski.
@@ -106,6 +109,12 @@ Ustalenie użytkownika z 2026-10-24:
   Nie pisz testów pustych atrap tylko dla liczby testów.
 - P2: `npm test` sprawdza reguły domeny, `npm run test:e2e` buduje WWW i sprawdza
   przepływy Playwright (Edge na Windows, Chromium w CI). Raporty w artifacts/.
+- P3.1: `npm run test:backend` wykonuje migrację/RLS na Postgresie PGlite;
+  `npm run check:backend` sprawdza Edge w Deno. `npm run test:private:e2e`
+  buduje osobny export z syntetyczną konfiguracją, przechwytuje usługi i sprawdza UI.
+  Tych testów nie przedstawiaj jako dowodu rzeczywistego Google/Supabase.
+  Test hosted: supabase/tests/live.test.mjs, tylko osobne środowisko/dane sztuczne.
+  Nie publikuj artifacts/private-web ani testowych kluczy do Vercel.
 - AsyncStorage zawiera wyłącznie stan demo. Nie przesłaniaj błędu odczytu
   domyślnym profilem z możliwością zapisu; retry nie może utracić nowych zmian.
 - Mock nie dowodzi działania katalogu, AI, zakupu ani synchronizacji.

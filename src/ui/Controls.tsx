@@ -19,12 +19,12 @@ export function Button({ label, onPress, kind = 'primary', icon, disabled = fals
   </Pressable>;
 }
 
-export function Chip({ label, selected, onPress, icon, accessibilityLabel }: { label: string; selected?: boolean; onPress: () => void; icon?: IconName; accessibilityLabel?: string }) {
+export function Chip({ label, selected, onPress, icon, accessibilityLabel, disabled = false }: { label: string; selected?: boolean; onPress: () => void; icon?: IconName; accessibilityLabel?: string; disabled?: boolean }) {
   const [focused, setFocused] = useState(false);
-  return <Pressable accessibilityRole="button" accessibilityLabel={accessibilityLabel ?? label} accessibilityState={{ selected }} onPress={onPress}
+  return <Pressable accessibilityRole="button" accessibilityLabel={accessibilityLabel ?? label} accessibilityState={{ selected, disabled }} disabled={disabled} onPress={onPress}
     {...(Platform.OS === 'web' && selected !== undefined ? { 'aria-pressed': selected } : {})}
     onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-    style={({ pressed }) => [styles.chip, selected && styles.chipSelected, focused && styles.focus, pressed && styles.pressed]}>
+    style={({ pressed }) => [styles.chip, selected && styles.chipSelected, focused && styles.focus, pressed && styles.pressed, disabled && styles.disabled]}>
     {icon ? <Icon name={icon} size={17} color={selected ? colors.white : colors.plum} /> : null}
     <Text style={[styles.chipText, selected && { color: colors.white }]}>{label}</Text>
   </Pressable>;

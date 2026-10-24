@@ -14,19 +14,26 @@ i publikacji znajdują się w statusie oraz raporcie P2.1. Wygląd A — Krem i 
 edytowalne profile, szafa demo i najwyżej dwa zestawy w obu trybach.
 Budżet obejmuje nowe rzeczy z dostawą; posiadane rzeczy kosztują 0 PLN.
 Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeniu.
-Prototyp używa 37 fikcyjnych ubrań i 12 ilustracji. Konta, synchronizacja,
-własne zdjęcia, AI, sklepy i lista zakupowa należą do kolejnych etapów.
+Demo używa 37 fikcyjnych ubrań i 12 ilustracji. AI, sklepy i lista zakupowa
+należą do kolejnych etapów.
 
-**Następny etap:** [propozycja P3 / plan V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md)
-do zatwierdzenia: prywatna szafa, koszty i zasady zdjęć. Nie rozpoczęto implementacji.
+**W realizacji na dev: P3.1**, zatwierdzone zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
+Zaimplementowano prywatną szafę PL/EN, zdjęcia, konta Google, synchronizację,
+eksport i usuwanie. Lokalne testy opisuje [raport P3.1](docs/P31-VERIFICATION.md).
+**Usługi nie są jeszcze połączone:** konfiguracja Supabase i Google czeka na
+dostęp właściciela. Podgląd jawnie informuje o braku konfiguracji; nie pozwala
+pozornie logować ani wysyłać zdjęć. [Dokończenie konfiguracji](docs/P31-SETUP.md).
+P3.2/P3.3 i nowe abonamenty nie zostały zatwierdzone.
 Dane zapisane na podglądzie dev pozostają pod tamtym adresem; publikacja main
 nie kopiuje lokalnego zapisu między adresami. [Odbiór produkcji](docs/P21-PRODUCTION.md).
 
 ## Dokumenty
 
-- [Wymagania V1.4 — P2.1 odebrane, P3 proponowane](docs/REQUIREMENTS-V1.4.md)
-- [Plan implementacji V1.4 — propozycja P3](docs/IMPLEMENTATION-PLAN-V1.4.md)
-- [Proponowane zasady zdjęć i usuwania](docs/P3-DATA-POLICY-V1.0.md)
+- [Wymagania V1.4 — P3.1 zatwierdzone](docs/REQUIREMENTS-V1.4.md)
+- [Plan implementacji V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md)
+- [Przyjęte zasady zdjęć i usuwania](docs/P3-DATA-POLICY-V1.0.md)
+- [Konfiguracja usług P3.1](docs/P31-SETUP.md) i [backend](docs/P31-BACKEND.md)
+- [Weryfikacja P3.1 i jej ograniczenia](docs/P31-VERIFICATION.md)
 - [Aktualne koszty usług i scenariusze AI](docs/COST-PLAN-V1.3.md)
 - [Odpowiedzi uzupełniające](docs/INTERVIEW-V1.2.md) i [pierwsze 20 odpowiedzi](docs/INTERVIEW-V1.1.md)
 - [Wybrany wygląd A](docs/design/DESIGN-DIRECTION-V1.2.md)
@@ -67,7 +74,10 @@ Nie potrzeba konta Expo do lokalnego podglądu.
 ```powershell
 npm run check
 npm test
+npm run test:backend
+npm run check:backend
 npm run test:e2e
+npm run test:private:e2e
 npm run check:dependencies
 npm run doctor
 npm run build:web
@@ -76,7 +86,11 @@ npm run preview
 
 Eksport jest dostępny pod http://localhost:4173. Polecenie npm run build:all
 sprawdza eksport JavaScript i zasobów dla trzech platform; nie zastępuje testów
-na urządzeniach. Prototyp P2 nie wymaga pliku .env ani kluczy API.
+na urządzeniach. Demo P2 nie wymaga pliku .env ani kluczy API.
+Prywatna szafa wymaga usług wskazanych w instrukcji P3.1; wartości publiczne
+opisuje `.env.example`. OAuth natywny wymaga development build; Expo Go służy
+nadal do sprawdzania demo. Syntetyczny eksport testów prywatnej szafy w
+`artifacts/private-web` nie jest przeznaczony do publikacji.
 Testy przeglądarkowe używają zainstalowanego Edge na Windows. Na Linuxie
 zainstaluj przeglądarkę testową: `npx playwright install --with-deps chromium`.
 

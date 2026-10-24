@@ -4,14 +4,39 @@ Aktualizacja: 2026-10-24. Po przetestowaniu P2 Kasia i Aleksy zgłosili dodatkow
 okazje. Aleksy zatwierdził P2.1: wesele jako gość, praca, randka i impreza,
 dobór do okazji, zachowanie danych P2, pracę na dev, testy i podgląd Vercel.
 Użytkownik odebrał P2.1 i polecił przenieść całość do main. Wersja produkcyjna
-jest opublikowana i sprawdzona. Zlecił także **tylko plan P3 do zatwierdzenia**;
-propozycja jest gotowa, nie uruchomiono implementacji ani nowych usług.
+jest opublikowana i sprawdzona. Następnie użytkownik **zatwierdził P3.1**:
+Supabase Free/Frankfurt, Google, zdjęcia, synchronizacja, limity i zasady danych
+V1.0, testy i podgląd dev. Bez płatnego AI i nowych abonamentów.
+
+**P3.1 jest częściowo wykonane:** kod i testy lokalne są gotowe, integracja
+z chmurą pozostaje otwarta. Nie odebrano jeszcze rzeczywistego logowania,
+Storage, synchronizacji dwóch urządzeń ani serwerowego usuwania w Supabase.
+
+## P3.1 — bieżący wynik i brakująca konfiguracja
+
+- Osobny ekran prywatnej szafy PL/EN, profile, selektywny import P2, zdjęcia
+  z galerii/aparatu, edycja, wymiana, eksport ZIP i potwierdzane usuwanie.
+- Prywatne dane nie trafiają do zapisu demo. JWT, RLS i kontrola aktywnego konta
+  chronią dane; serwer sprawdza limity i wersję przed zmianą. Konflikt wymaga
+  świadomego odczytu/porównania nowszego stanu.
+- Zdjęcia JPG/PNG/WebP są ponownie kodowane do JPEG bez EXIF/GPS. HEIC ma
+  czytelną odmowę. Limit 100 rzeczy/konto, 1 MB + miniatura 100 kB, 1600 px,
+  250 MB/konto; niedokończone operacje nadal zajmują limit.
+- Utworzono projekt Google Cloud `ubranka-2026`, bez rozliczeń. Konfiguracja
+  Google Auth czeka na wyraźną akceptację User Data Policy; klient OAuth
+  nie jest utworzony. Potrzebne też dwa prywatnie wskazane adresy Google.
+- Wtyczkę Supabase zaproponowano do połączenia. Brak potwierdzonego dostępu:
+  nie utworzono projektów Free, nie zastosowano migracji ani nie wdrożono Edge.
+- Bez prawdziwych zmiennych usług podgląd pokazuje brak konfiguracji i blokuje
+  logowanie. Nie publikujemy testowego backendu ani syntetycznych kluczy.
+- Szczegóły: [konfiguracja](P31-SETUP.md), [backend](P31-BACKEND.md),
+  [wyniki i ograniczenia testów](P31-VERIFICATION.md).
 
 ## Aktualne dokumenty
 
 - [Wymagania V1.4](REQUIREMENTS-V1.4.md) i [plan V1.4](IMPLEMENTATION-PLAN-V1.4.md):
-  odebrane P2.1 i proponowany P3. Wersje V1.2/V1.3 zachowano.
-- [Proponowana polityka zdjęć](P3-DATA-POLICY-V1.0.md), [koszty V1.3](COST-PLAN-V1.3.md).
+  odebrane P2.1, zatwierdzone P3.1, propozycje P3.2/P3.3. Wersje V1.2/V1.3 zachowano.
+- [Przyjęte zasady zdjęć](P3-DATA-POLICY-V1.0.md), [koszty V1.3](COST-PLAN-V1.3.md).
 - [Publikacja main i test produkcyjny P2.1](P21-PRODUCTION.md).
 - [Weryfikacja i scenariusz odbioru P2.1](P21-VERIFICATION.md).
 - [Historyczna weryfikacja P2](P2-VERIFICATION.md).
@@ -21,7 +46,7 @@ propozycja jest gotowa, nie uruchomiono implementacji ani nowych usług.
 - [Założenia wolumenu AI](COST-PLAN-V1.2.md), [sklepy](RETAILER-FEASIBILITY-V1.1.md),
   [środowisko](SETUP.md), [zależności](DEPENDENCY-STATUS.md), [decyzje](DECISIONS.md).
 
-## Wykonane
+## Odebrane P2/P2.1
 
 - P2: wygląd A — Krem i śliwka; PL/EN, krótki start, profile stylów, budżety,
   priorytety, dwa tryby propozycji, opinie z opcjonalnym powodem i szafa demo.
@@ -38,7 +63,7 @@ propozycja jest gotowa, nie uruchomiono implementacji ani nowych usług.
 - Nadal działa lokalny zapis, obsługa błędów odczytu/zapisu, potwierdzany reset,
   pusty wynik i praca załadowanego interfejsu bez sieci.
 
-Nie ma kont, synchronizacji, własnych zdjęć, AI, prawdziwych ofert sklepów,
+Odebrane demo P2.1 nie ma kont, synchronizacji, własnych zdjęć, AI, prawdziwych ofert sklepów,
 listy zakupowej ani płatności. Ilustracje nie są przymiarką na użytkowniku;
 reguły nie uwzględniają rzeczywistych wymiarów ani rozmiarów produktów.
 
@@ -84,10 +109,11 @@ P1/V1.1 i V1.2 przeszły przeglądy dokumentacji; wersje historyczne zachowano.
 
 ## Następny krok
 
-Do akceptacji **P3.1 — prywatna szafa**: Supabase Free/Frankfurt, proponowane
-logowanie Google, dwa osobne konta, zdjęcie rzeczy lub na sobie, ręczny opis,
-edycja/usuwanie, synchronizacja i selektywny import P2. Cel: 0 PLN nowych
-abonamentów w limitach; brak AI w tej iteracji. Plan opisuje limity i retencję.
+Dokończyć **już zatwierdzone P3.1** po połączeniu Supabase, podaniu dwóch kont
+Google i akceptacji wymaganej polityki Google. Następnie wdrożyć backend,
+skonfigurować dokładny adres dev, przetestować rzeczywistą izolację kont,
+zdjęcia, eksport i usuwanie. Dopiero potem odbiór użytkowników na telefonach.
+Nie prosić ponownie o zatwierdzenie implementacji P3.1. Main pozostaje P2.1.
 
 P3.2: późniejsza osobno zatwierdzona próba AI na danych sztucznych, maks. 12
 wywołań / 25 PLN. P3.3: docelowy profil sylwetki, rozpoznawanie, zestawy z własnych

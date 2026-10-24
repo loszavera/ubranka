@@ -12,6 +12,7 @@
       ]
     }
   },
+  "exclude": ["supabase/functions/**", "node_modules", ".local", "artifacts"],
   "include": [
     "**/*.ts",
     "**/*.tsx",

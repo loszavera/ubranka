@@ -29,7 +29,10 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm test
+      - run: npm run test:backend
+      - run: npm run check:backend
       - run: npm run check:dependencies
       - run: npm run build:all
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+      - run: npm run test:private:e2e

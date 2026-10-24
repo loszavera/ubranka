@@ -1,12 +1,13 @@
-# P3 — proponowane zasady danych V1.0
+# P3 — zasady danych V1.0
 
-Data: 2026-10-24. **Propozycja techniczna do zatwierdzenia, nie wdrożona polityka
-ani potwierdzenie zgodności prawnej.** Dotyczy prywatnego pilotażu dwóch osób.
+Data: 2026-10-24. **Zasady techniczne zaakceptowane przez użytkownika dla P3.1.
+Konfiguracja chmury jest w toku; to nie potwierdzenie zgodności prawnej.**
+Dotyczy prywatnego pilotażu dwóch osób. Aktualny stan: [P31-SETUP.md](P31-SETUP.md).
 Przed komercyjnym startem potrzebne są właściwe dokumenty użytkownika/administratora.
 
 ## Kto otrzymuje dane
 
-| Odbiorca | P3.1 — proponowany zakres |
+| Odbiorca | P3.1 — zaakceptowany zakres |
 | --- | --- |
 | Supabase, projekt Frankfurt `eu-central-1` | Identyfikator/email konta, profile stylów, preferencje, opisy rzeczy, prywatne kopie zdjęć i miniatury. |
 | Google OAuth | Logowanie i podstawowa tożsamość; nie wysyłamy zdjęć szafy, wymiarów ani opinii. Bez uprawnień Gmail/Drive/Photos. |
@@ -18,9 +19,9 @@ logi, podwykonawcy i CDN są wyłącznie w UE. Nie jest to szyfrowanie end-to-en
 operatorzy usług i uprawniony administrator mogą technicznie przetwarzać dane.
 [Regiony](https://supabase.com/docs/guides/platform/regions).
 
-## Przechowywanie i usuwanie — proponowane reguły aplikacji
+## Przechowywanie i usuwanie — przyjęte reguły aplikacji
 
-| Dane | Proponowana reguła |
+| Dane | Reguła |
 | --- | --- |
 | Oryginał zdjęcia na telefonie | Aplikacja go nie kasuje; przygotowuje kopię do wysłania. EXIF/GPS usuwane przed transferem. |
 | Zdjęcie i miniatura w szafie | Do usunięcia przez właściciela albo usunięcia rzeczy/konta. Brak publicznych linków i automatycznego udostępniania drugiej osobie. |
@@ -30,7 +31,7 @@ operatorzy usług i uprawniony administrator mogą technicznie przetwarzać dane
 | Logi własnej aplikacji | Tylko techniczne zdarzenia i niezbędne identyfikatory, do 7 dni; bez zdjęć, podpisanych URL, tokenów i treści profili. Retencja logów usług jest odrębna. |
 | Cache na urządzeniu | Minimalny; czyszczenie widoku i kontrolowanego cache po wylogowaniu, zmianie konta i usunięciu. Kopii pobranej przez użytkownika aplikacja nie potrafi odwołać. |
 
-Terminy 24 h/7 dni są proponowanym zachowaniem aplikacji przy działającej usłudze,
+Terminy 24 h/7 dni są celem działania aplikacji przy działającej usłudze,
 nie gwarancją fizycznego skasowania wszystkich kopii infrastruktury. Darmowy
 projekt może zostać wstrzymany; wtedy operacja nie może pozornie zakończyć się sukcesem.
 
@@ -41,7 +42,8 @@ JWT nie zawsze przestaje działać natychmiast, a plik może oczekiwać na usuni
 [Storage delete](https://supabase.com/docs/guides/storage/management/delete-objects),
 [konto Auth](https://supabase.com/docs/guides/auth/managing-user-data).
 
-Preferować autoryzowany odczyt z JWT i ograniczony cache. Podpisany URL, gdy potrzebny,
+Implementacja P3.1 używa autoryzowanego odczytu JWT, `no-store` i zwalnianych
+lokalnych adresów blob; nie wydaje podpisanych linków. Podpisany URL, gdy potrzebny w przyszłości,
 ma krótki czas ważności (propozycja 5 minut); jego termin nie daje gwarancji wyczyszczenia
 już pobranej/buforowanej kopii. Smart CDN unieważnia usunięty obiekt z opóźnieniem
 do około 60 s, a cache przeglądarki jest oddzielny.

@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import type { Locale, Profile } from '../domain/model';
 import { copy } from '../i18n';
 import { Button, Chip, Field, styles } from './Controls';
 import { colors } from './theme';
 import { OccasionPicker } from './OccasionPicker';
 
-export function ProfileForm({ profile, locale, onSave, onCancel, welcome = false }: {
-  profile: Profile; locale: Locale; onSave: (profile: Profile) => void; onCancel?: () => void; welcome?: boolean;
+export function ProfileForm({ profile, locale, onSave, onCancel, welcome = false, disabled = false }: {
+  profile: Profile; locale: Locale; onSave: (profile: Profile) => void; onCancel?: () => void; welcome?: boolean; disabled?: boolean;
 }) {
   const t = copy(locale);
   const [draft, setDraft] = useState(profile);
@@ -17,17 +17,18 @@ export function ProfileForm({ profile, locale, onSave, onCancel, welcome = false
   const validBudget = budget.trim() !== '' && Number.isFinite(numericBudget) && numericBudget >= 0 && numericBudget <= 10000;
   const validName = draft.name.trim().length > 0 && draft.name.trim().length <= 40;
   const submit = () => {
+    if (disabled) return;
     setSubmitted(true);
     if (validBudget && (welcome || validName)) onSave({ ...draft, name: draft.name.trim(), budget: numericBudget });
   };
-  return <View style={{ gap: 22 }}>
-    {!welcome ? <Field label={t.profileName} value={draft.name} onChangeText={name => setDraft({ ...draft, name })} maxLength={40} error={submitted && !validName ? t.nameError : undefined} /> : null}
+  return <View style={{ gap: 22 }} pointerEvents={disabled ? 'none' : 'auto'} {...(Platform.OS === 'web' && disabled ? { inert: true } : {})}>
+    {!welcome ? <Field label={t.profileName} editable={!disabled} value={draft.name} onChangeText={name => setDraft({ ...draft, name })} maxLength={40} error={submitted && !validName ? t.nameError : undefined} /> : null}
     <View style={{ gap: 10 }}><Text style={styles.label}>{t.clothing}</Text><View style={styles.row}>
       {(['women', 'men'] as const).map(audience => <Chip key={audience} label={t[audience]} selected={draft.audience === audience} onPress={() => setDraft({ ...draft, audience })} />)}
     </View></View>
     <OccasionPicker value={draft.occasion} locale={locale} scope={welcome ? 'onboarding' : 'profile'} onChange={occasion => setDraft({ ...draft, occasion })} />
     <View style={{ gap: 7 }}>
-      <Field label={`${t.budget} · PLN`} value={budget} keyboardType="decimal-pad" onChangeText={setBudget} maxLength={8} error={submitted && !validBudget ? t.budgetError : undefined} />
+      <Field label={`${t.budget} · PLN`} editable={!disabled} value={budget} keyboardType="decimal-pad" onChangeText={setBudget} maxLength={8} error={submitted && !validBudget ? t.budgetError : undefined} />
       <Text style={{ color: colors.muted, fontSize: 12, lineHeight: 18 }}>{t.budgetHelp}</Text>
     </View>
     {!welcome ? <>
@@ -38,7 +39,7 @@ export function ProfileForm({ profile, locale, onSave, onCancel, welcome = false
         {(['best', 'value'] as const).map(defaultMode => <Chip key={defaultMode} label={t[defaultMode]} selected={draft.defaultMode === defaultMode} onPress={() => setDraft({ ...draft, defaultMode })} />)}
       </View></View>
     </> : null}
-    <Button label={welcome ? t.start : t.save} onPress={submit} icon="arrow" />
+    <Button label={welcome ? t.start : t.save} disabled={disabled} onPress={submit} icon="arrow" />
     {onCancel ? <Button label={t.cancel} kind="quiet" onPress={onCancel} /> : null}
   </View>;
 }

@@ -25,6 +25,7 @@ test('photo CRUD, busy lock, ZIP export, confirmed deletion and logout use the r
   expect(uploaded.mimeType).toBe('image/jpeg');
   expect(backend.state.items[0].photo.bytes).toBeLessThanOrEqual(1_000_000);
   expect(backend.state.items[0].photo.thumbBytes).toBeLessThanOrEqual(100_000);
+  await expect(page.getByRole('heading', { name: 'Dodaj ubranie', exact: true })).toBeHidden();
   await page.screenshot({ path: info.outputPath('private-wardrobe-pl.png') });
   await button(page, 'Edytuj: Koszula z aparatu').click();
   await page.getByRole('textbox', { name: 'Nazwa ubrania', exact: true }).fill('Koszula na wesele');

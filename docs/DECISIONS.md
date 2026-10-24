@@ -48,6 +48,8 @@ Nowe wpisy z 2026-10-24:
 | D-034 | 2026-10-24 | Odbiór i zgoda na main | Użytkownik zaakceptował P2.1 i polecił przenieść całość do main. Publikacja zachowała historię; produkcja sprawdzona w P21-PRODUCTION.md. |
 | D-035 | 2026-10-24 | Zlecona wyłącznie dokumentacja | Przygotować P3: usługi, koszty, zdjęcia i ich usuwanie. Bez implementacji, tworzenia backendu lub nowych opłat. |
 | D-036 | 2026-10-24 | Propozycja do akceptacji | V1.4 dzieli P3 na P3.1 prywatną szafę, P3.2 ograniczoną próbę AI i P3.3 docelowe zestawy/wizualizacje. Supabase Free/Frankfurt + Google OAuth i polityka danych są rekomendacją, nie przyjętą decyzją użytkownika. |
+| D-037 | 2026-10-24 | Zatwierdzone P3.1 | Aktualizuje D-035/D-036: użytkownik zatwierdził implementację, darmowe usługi Supabase Free/Frankfurt, Google OAuth, limity i zasady V1.0, testy i Vercel dev. Bez płatnego AI, nowych abonamentów, P3.2/P3.3 i publikacji P3.1 na main. |
+| D-038 | 2026-10-24 | Implementacja lokalna, chmura oczekuje | Prywatny stan jest oddzielony od demo P2. Selektywny import dotyczy wybranych profili/opinii, nie fikcyjnych ubrań. Autoryzowany odczyt zdjęć JWT, brak signed URL; RLS/CAS i trwałe sprzątanie. Wyniki lokalne nie zastępują konfiguracji OAuth/Storage i testów dwóch kont. |
 
 ## Konsekwencje wyboru Expo
 

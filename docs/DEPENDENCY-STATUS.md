@@ -1,15 +1,16 @@
 # Stan zależności — 2026-10-24
 
-Zakres: prototyp P2, Expo SDK 57; audyt odświeżony po dodaniu AsyncStorage,
-SVG, expo-network oraz narzędzi testowych. Aktualny raport P2:
-`artifacts/p2-npm-audit.json`; liczba i źródła zgłoszeń pozostają takie jak w P0.
+Zakres: P3.1, Expo SDK 57. Audyt odświeżony po dodaniu Supabase JS, modułów
+zdjęć/OAuth/eksportu Expo, fflate oraz testowego PGlite. Aktualny raport:
+`artifacts/p31-npm-audit.json`; liczba i źródła zgłoszeń pozostają takie jak w P2.
+Zgodność zależności Expo: PASS; Expo Doctor 21/21 PASS (2026-10-24).
 
 ## Wynik audytu
 
 `npm audit --json` zgłasza **8 wpisów pakietów: 5 high, 3 moderate, 0 critical**.
 Są to **3 źródłowe zgłoszenia bezpieczeństwa** oraz wpisy ich zależności nadrzędnych,
 a nie osiem niezależnych podatności. Surowy raport zapisano lokalnie w
-`artifacts/npm-audit.json` (katalog ignorowany przez Git).
+`artifacts/p31-npm-audit.json` (katalog ignorowany przez Git).
 
 | Pakiet i ścieżka | Zgłoszenie | Zakres i dostępna poprawka |
 | --- | --- | --- |
@@ -34,14 +35,19 @@ konkretnego ekranu. Nie należy też traktować udanego builda jako dowodu jej b
 
 ## Obecny zakres i ograniczenie ekspozycji
 
-P2 zawiera lokalne profile, opinie, szafę demo i ranking fikcyjnych zestawów:
-bez kont, uploadu zdjęć, płatności ani backendu. Ustawienia i opinie są lokalne.
+P2 nadal jest lokalnym demo. P3.1 dodaje klienta Google/Supabase i prywatne zdjęcia;
+chmura pozostaje nieskonfigurowana, więc rzeczywiste logowanie/upload są niedostępne.
 Do podglądu WWW przygotowany jest eksport statycznych plików SPA; serwera Expo CLI
 nie należy wystawiać jako publicznego backendu. Serwery developerskie uruchamiać
 w kontrolowanym środowisku, a test telefonu traktować jako test techniczny.
 
-To ograniczenie zakresu prac, **nie dowód usunięcia podatności**. Zależność dekodera
-należy ponownie ocenić przy rozbudowie routingu, parametrów URL i linków aplikacji.
+To **nie dowód usunięcia podatności**. Przejrzano nowe wejście OAuth:
+`Prototype.tsx` używa URLSearchParams, `usePrivateWardrobe.ts` URL/searchParams,
+Supabase ma `detectSessionInUrl:false`. Nie ma nowych bezpośrednich importów
+query-string/decode-uri-component. Skonfigurowana ścieżka parsera Expo Router 57
+używa URL/searchParams; starszy parser vendored React Navigation nadal zawiera
+queryString.parse. Pakiet pozostaje obecny. Nie wykonano fuzzingu/DoS ani pełnego
+audytu wszystkich ścieżek routera; nie uznajemy ryzyka za usunięte.
 
 ## Pozostałe komunikaty instalacji
 

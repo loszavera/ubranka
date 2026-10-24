@@ -105,14 +105,12 @@ zarządzanych przez Supabase (`auth`, `storage`). Migracja wykonuje się w cało
 a testy uruchamiają RPC/RLS w rolach authenticated/service_role.
 
 ```powershell
-npm install --prefix .local/backend-test-runtime --no-audit --no-fund --ignore-scripts @electric-sql/pglite@0.5.11
-$env:PGLITE_MODULE = Join-Path (Get-Location) '.local/backend-test-runtime/node_modules/@electric-sql/pglite/dist/index.js'
-node --experimental-strip-types --test supabase/tests/protocol.test.ts supabase/tests/cleanup.test.ts supabase/tests/database.test.mjs
-npx --yes deno@2.9.6 check supabase/functions/wardrobe/index.ts supabase/functions/wardrobe-cleanup/index.ts
+npm run test:backend
+npm run check:backend
 ```
 
-Po dodaniu przypiętej zależności developerskiej PGlite do głównego package.json
-nie jest potrzebny lokalny runtime ani `PGLITE_MODULE`; runner importuje pakiet normalnie.
+PGlite 0.5.11 jest przypiętą zależnością developerską. Nie jest potrzebny
+osobny lokalny runtime ani `PGLITE_MODULE`; runner importuje pakiet normalnie.
 
 Test zdalny po konfiguracji dwóch syntetycznych kont: `supabase/tests/live.test.mjs`.
 Lokalny ignorowany plik env zawiera URL, publiczny klucz, dwa JWT, ścieżkę do

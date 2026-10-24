@@ -9,15 +9,24 @@
   "packageManager": "npm@11.16.0",
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@supabase/supabase-js": "^2.118.0",
     "expo": "~57.0.31",
+    "expo-auth-session": "~57.0.16",
     "expo-constants": "~57.0.22",
+    "expo-crypto": "~57.0.4",
+    "expo-file-system": "~57.0.7",
     "expo-font": "~57.0.4",
+    "expo-image-manipulator": "~57.0.21",
+    "expo-image-picker": "~57.0.20",
     "expo-linking": "~57.0.13",
     "expo-network": "~57.0.3",
     "expo-router": "~57.0.29",
+    "expo-sharing": "~57.0.24",
     "expo-splash-screen": "~57.0.10",
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
+    "expo-web-browser": "~57.0.3",
+    "fflate": "^0.8.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
@@ -26,10 +35,12 @@
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0",
     "react-native-svg": "15.15.4",
+    "react-native-url-polyfill": "^4.0.0",
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.10.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.11",
     "@playwright/test": "^1.64.1",
     "@types/node": "^24.19.2",
     "@types/react": "~19.2.2",
@@ -52,7 +63,10 @@
     "build:web": "expo export --platform web",
     "build:all": "expo export --platform all --output-dir dist-all",
     "preview": "expo serve --port 4173",
-    "test:e2e": "npm run build:web && playwright test"
+    "test:e2e": "npm run build:web && playwright test",
+    "test:private:e2e": "node scripts/private-e2e.mjs",
+    "test:backend": "node --experimental-strip-types --test supabase/tests/protocol.test.ts supabase/tests/cleanup.test.ts supabase/tests/database.test.mjs",
+    "check:backend": "npx --yes deno@2.9.6 check supabase/functions/wardrobe/index.ts supabase/functions/wardrobe-cleanup/index.ts"
   },
   "private": true
 }

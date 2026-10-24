@@ -5,7 +5,11 @@ import { randomUUID } from 'node:crypto';
 // Deliberately opt-in. Run only against the separate synthetic TEST project.
 // Tokens are provided in an ignored env file, never command-line arguments.
 if(process.env.WARDROBE_TEST_SYNTHETIC!=='true')throw new Error('Synthetic test project confirmation required');
-const {SUPABASE_URL:url,SUPABASE_ANON_KEY:key,WARDROBE_TEST_TOKEN_A:a,WARDROBE_TEST_TOKEN_B:b,WARDROBE_TEST_PHOTO:photoPath}=process.env;
+const url=process.env.SUPABASE_URL;
+const key=process.env.SUPABASE_ANON_KEY;
+const a=process.env.WARDROBE_TEST_TOKEN_A;
+const b=process.env.WARDROBE_TEST_TOKEN_B;
+const photoPath=process.env.WARDROBE_TEST_PHOTO;
 if(!url||!key||!a||!b||!photoPath)throw new Error('Missing local test configuration');
 const main=await readFile(photoPath);
 if(main.length>100000)throw new Error('Use a synthetic JPEG under 100 kB (also used as thumbnail)');
