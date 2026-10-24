@@ -40,9 +40,13 @@ Ustalenie użytkownika z 2026-10-24:
 
 - Na końcu każdej odpowiedzi kończącej turę zaproponuj jeden rekomendowany
   następny krok do akceptacji. Podaj krótko zakres i oczekiwany rezultat.
-- Dołącz gotową, naturalną odpowiedź do skopiowania lub kliknięcia, np.
-  „Zatwierdzam P2. Rozpocznij implementację opisanego prototypu na dev”.
+- Każdą proponowaną odpowiedź zatwierdzającą podawaj w osobnym bloku kodu
+  Markdown (```text), który można skopiować jednym kliknięciem. W bloku umieść
+  wyłącznie kompletną, naturalną wiadomość użytkownika, gotową do wysłania.
+  Nie zastępuj bloku tekstem w akapicie, cytatem ani przyciskiem codex-followup.
   Użytkownik nie powinien zgadywać, co napisać, aby uruchomić pracę.
+- Przygotowana treść zgody jest propozycją, a nie udzieloną zgodą. Prośba
+  o zmianę jej formatu lub zapamiętanie preferencji nie uruchamia implementacji.
 - Akceptuj także krótkie „tak”, „działaj” lub podobne, gdy jednoznacznie odnoszą
   się do ostatniej propozycji. Nie wymagaj specjalnej formuły ani ponownej zgody.
 - Nowy proponowany zakres rozpocznij po akceptacji użytkownika. Brak odpowiedzi
