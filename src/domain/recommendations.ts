@@ -1,5 +1,5 @@
 import { ITEMS, OUTFITS } from './catalog.ts';
-import type { ComparisonMode, Feedback, Outfit, Profile } from './model.ts';
+import type { ComparisonMode, Feedback, Occasion, Outfit, Profile } from './model.ts';
 
 const money = (amount: number) => Math.round(amount * 100) / 100;
 
@@ -32,18 +32,20 @@ interface RecommendationRequest {
   feedback: Feedback[];
   excludeIds: string[];
   mode: ComparisonMode;
+  // A round can choose another occasion without changing the saved style profile.
+  occasion?: Occasion;
 }
 
-export function recommendOutfits({ profile, ownedItemIds, feedback, excludeIds, mode }: RecommendationRequest): Outfit[] {
+export function recommendOutfits({ profile, ownedItemIds, feedback, excludeIds, mode, occasion = profile.occasion }: RecommendationRequest): Outfit[] {
   if (!Number.isFinite(profile.budget) || profile.budget < 0) return [];
   const excluded = new Set(excludeIds);
   const votes = feedback.filter((entry) => entry.profileId === profile.id);
-  const candidates = OUTFITS.filter((outfit) => outfit.audience === profile.audience && !excluded.has(outfit.id))
+  const candidates = OUTFITS.filter((outfit) => outfit.audience === profile.audience
+    && outfit.occasions.includes(occasion) && !excluded.has(outfit.id))
     .map((outfit) => ({ outfit, cost: costOfOutfit(outfit, ownedItemIds) }))
     .filter(({ cost }) => cost.total !== null && cost.total <= profile.budget)
     .map(({ outfit, cost }) => {
-      let score = (outfit.occasion === profile.occasion ? 20 : 0)
-        + outfit.priorities[profile.priority] * 20 + cost.ownedCount * 0.5;
+      let score = outfit.priorities[profile.priority] * 20 + cost.ownedCount * 0.5;
       for (const vote of votes) {
         const previous = OUTFITS.find((entry) => entry.id === vote.outfitId && entry.audience === profile.audience);
         if (!previous) continue;

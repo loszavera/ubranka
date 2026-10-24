@@ -1,9 +1,9 @@
 import { ITEMS, OUTFITS } from './catalog.ts';
-import type { AppState, Feedback, Profile } from './model.ts';
+import { OCCASIONS, type AppState, type Feedback, type Profile } from './model.ts';
 
 export function createInitialState(): AppState {
   return {
-    version: 1, locale: 'pl', onboarded: false, activeProfileId: 'everyday',
+    version: 2, locale: 'pl', onboarded: false, activeProfileId: 'everyday',
     profiles: [
       { id: 'everyday', name: 'Na co dzień', audience: 'women', occasion: 'casual', budget: 500, priority: 'comfort', defaultMode: 'best' },
       { id: 'elegant', name: 'Elegancko', audience: 'women', occasion: 'elegant', budget: 500, priority: 'quality', defaultMode: 'best' },
@@ -23,7 +23,7 @@ function nonempty(value: unknown): value is string {
 function isProfile(value: unknown): value is Profile {
   return record(value) && nonempty(value.id) && nonempty(value.name)
     && (value.audience === 'women' || value.audience === 'men')
-    && (value.occasion === 'casual' || value.occasion === 'elegant')
+    && OCCASIONS.some((occasion) => occasion === value.occasion)
     && typeof value.budget === 'number' && Number.isFinite(value.budget) && value.budget >= 0
     && (value.priority === 'comfort' || value.priority === 'quality' || value.priority === 'versatility')
     && (value.defaultMode === 'best' || value.defaultMode === 'value');
@@ -38,7 +38,7 @@ function isFeedback(value: unknown): value is Feedback {
 export function restoreState(raw: string): AppState | null {
   try {
     const value: unknown = JSON.parse(raw);
-    if (!record(value) || value.version !== 1 || (value.locale !== 'pl' && value.locale !== 'en')
+    if (!record(value) || (value.version !== 1 && value.version !== 2) || (value.locale !== 'pl' && value.locale !== 'en')
       || typeof value.onboarded !== 'boolean' || typeof value.askReason !== 'boolean'
       || !Array.isArray(value.profiles) || value.profiles.length === 0 || !value.profiles.every(isProfile)
       || !Array.isArray(value.ownedItemIds) || !value.ownedItemIds.every(nonempty)
@@ -51,9 +51,11 @@ export function restoreState(raw: string): AppState | null {
     const outfitIds = new Set(OUTFITS.map((outfit) => outfit.id));
     if (value.ownedItemIds.some((id) => !itemIds.has(id))
       || value.feedback.some((entry) => !profileIds.has(entry.profileId) || !outfitIds.has(entry.outfitId))) return null;
-    // Rebuild only the supported schema; unknown serialized fields are not carried into the app.
+    // V1 profile fields and stable catalog IDs carry forward unchanged. Keep reading
+    // the existing storage key so upgrading never starts an unrelated empty wardrobe.
+    // Rebuild only supported fields; unknown serialized fields are not carried forward.
     const state: AppState = {
-      version: 1, locale: value.locale, onboarded: value.onboarded, askReason: value.askReason,
+      version: 2, locale: value.locale, onboarded: value.onboarded, askReason: value.askReason,
       activeProfileId: value.activeProfileId,
       profiles: profiles.map(({ id, name, audience, occasion, budget, priority, defaultMode }) =>
         ({ id, name, audience, occasion, budget, priority, defaultMode })),
