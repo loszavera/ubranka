@@ -23,8 +23,8 @@ prawdziwych kont pozostają do dokończenia: [P31-SETUP.md](P31-SETUP.md).
 | Kontrola | Wynik |
 | --- | --- |
 | TypeScript strict + ESLint | PASS |
-| Testy domeny, zdjęć i klienta (`npm test`) | 32/32 PASS; końcowa regresja po przeglądzie w toku |
-| SQL/RLS/protokół/cleanup (`test:backend`) | 10/10 PASS; dodatkowa regresja zastąpienia przerwanego uploadu w integracji |
+| Testy domeny, zdjęć i klienta (`npm test`) | 34/34 PASS |
+| SQL/RLS/protokół/cleanup (`test:backend`) | 11/11 PASS |
 | Deno 2.9.6, dwie Edge Functions | PASS |
 | Expo SDK dependency check | PASS |
 | Expo Doctor | 21/21 PASS |
@@ -34,11 +34,18 @@ prawdziwych kont pozostają do dokończenia: [P31-SETUP.md](P31-SETUP.md).
 | npm audit | 8 istniejących wpisów: 5 high, 3 moderate; bez nowych wpisów |
 
 Raporty lokalne (ignorowane w Git): `artifacts/p31-build-all.log`,
-`p31-e2e.log`, `p31-private-e2e.log`, `e2e-results.json`,
+`p31-tests.log`, `p31-backend-tests.log`, `p31-e2e.log`, `p31-private-e2e.log`, `e2e-results.json`,
 `private-e2e-results.json`, `p31-npm-audit.json` i zrzuty w `private-e2e/`.
 Eksport all najpierw trafił na odmowę zapisu Hermes do katalogu tymczasowego
 sandboxa Windows; poza tym ograniczeniem zakończył się powodzeniem.
 Audyt i granice analizy opisuje [DEPENDENCY-STATUS.md](DEPENDENCY-STATUS.md).
+
+Niezależny przegląd znalazł i doprowadził do naprawienia trzech przypadków:
+ponowienie uploadu po zmianie opisu wiąże jawnie aktualną wersję, wybór innego
+zdjęcia zastępuje przerwany upload bez ominięcia limitu lub starej dzierżawy,
+a definitywna odmowa dostępu czyści kontrolowany cache i prywatny widok.
+Regresje obejmują obie kolejności wyścigu oraz zachowanie danych przy zwykłym
+błędzie sieci. Odmowa dostępu nie jest traktowana jak przejściowy brak sieci.
 
 ## Podgląd i odbiór chmury
 
