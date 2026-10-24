@@ -1,8 +1,8 @@
 # Stan projektu Ubranka
 
 Aktualizacja: 2026-10-24. P2 zatwierdzono do implementacji na dev, testów
-i podglądu Vercel. Interaktywny prototyp jest gotowy lokalnie; trwa końcowa
-weryfikacja i publikacja Preview. Odbiór Kasi i Aleksego pozostaje do wykonania.
+i podglądu Vercel. Interaktywny prototyp jest wdrożony i sprawdzony online.
+Odbiór Kasi i Aleksego pozostaje do wykonania.
 
 ## Aktualne dokumenty
 
@@ -41,7 +41,8 @@ Wyniki lokalne: 11/11 testów domeny i 8/8 scenariuszy przeglądarkowych PASS;
 TypeScript/ESLint PASS; zgodność SDK PASS; Expo Doctor 21/21 PASS;
 eksport WWW/iOS/Android PASS. Zakres i lokalne dowody opisuje
 [raport P2](P2-VERIFICATION.md). Sprawdzono ekrany PL/EN przy szerokościach
-320, 360, 390 i 1440 px. Fizyczne iOS/Android w Expo Go nie są sprawdzone.
+320, 360, 390 i 1440 px. CI na Ubuntu/Chromium także zakończyło się SUCCESS.
+Fizyczne iOS/Android w Expo Go nie są sprawdzone.
 
 Audyt npm nadal zgłasza 8 wpisów (5 high, 3 moderate) z 3 zgłoszeń źródłowych.
 Nie zastosowano niesprawdzonych override ani `audit fix --force`.
@@ -54,7 +55,14 @@ Szczegóły i plan: [DEPENDENCY-STATUS.md](DEPENDENCY-STATUS.md).
 - Podgląd dev: https://ubranka-git-dev-risk-every-asset.vercel.app.
   Chroni go logowanie Vercel. Projekt `ubranka`, zespół Risk Every Asset.
 - Stabilny main: https://ubranka.vercel.app. Nie jest podglądem P2.
-- Wynik publikacji P2 i CI zostanie dopisany po sprawdzeniu konkretnego commita.
+- Implementacja P2: `04ea37775515240e45b2001614dbfccb103e1105`, zgodna lokalnie
+  i na GitHubie. Kolejny commit uzupełnia wyłącznie dokumentację odbioru.
+- Vercel Preview `dpl_Bc6PBTM8s9EU6kS13Si4Zw2dPJuQ`, źródło `dev`/`04ea377`,
+  READY. Sprawdzono podgląd przez przeglądarkę: HTTP 200, obrazy, start PL,
+  dwie propozycje, polubienie, EN, reload i zachowanie opinii; 0 błędów JavaScript.
+- [GitHub Actions dla 04ea377](https://github.com/loszavera/ubranka/actions/runs/40102781826):
+  SUCCESS. Ponieważ push nie utworzył runu, jednorazowo uruchomiono istniejący
+  workflow ręcznie dla `dev`. Bez zmian reguł ochrony lub uprawnień kont.
 
 Historycznie P0 przeszedł lokalne kontrole i
 [CI dla 289480f](https://github.com/loszavera/ubranka/actions/runs/40090246634).

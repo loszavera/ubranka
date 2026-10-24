@@ -17,6 +17,8 @@ katalog sklepów, przymiarka AI i składanie zamówienia nie należą do P2.
 | Audyt npm | 8 znanych wpisów (5 high, 3 moderate), 0 critical; `artifacts/p2-npm-audit.json`, omówienie w DEPENDENCY-STATUS.md. |
 | Przegląd wizualny | Obejrzane ekrany powitania, propozycji i szafy, PL/EN, desktop i telefon. 8 ilustracji sprawdzonych względem katalogu. |
 | Niezależny przegląd kodu | Poprawiono retry odczytu, stan aktywnych przycisków dla czytników WWW i natywną obserwację sieci. Dodano brakujące szkice kontraktów P3/P4. |
+| GitHub Actions, Ubuntu/Chromium | SUCCESS dla `04ea37775515240e45b2001614dbfccb103e1105`, [run 40102781826](https://github.com/loszavera/ubranka/actions/runs/40102781826): czysta instalacja, typy/lint, domena, zgodność SDK, eksporty i osiem scenariuszy WWW. |
+| Vercel Preview | READY dla tego samego commita, `dpl_Bc6PBTM8s9EU6kS13Si4Zw2dPJuQ`. Sprawdzenie online 2026-10-24 14:31 UTC: HTTP 200, start PL, obrazy, 2 zestawy, polubienie, EN, reload i zachowany zapis; 0 błędów JavaScript. `artifacts/p2-vercel-verification.json`, `artifacts/p2-vercel-mobile.png`. |
 
 Scenariusze przeglądarkowe obejmują:
 
@@ -34,8 +36,9 @@ Scenariusze przeglądarkowe obejmują:
 
 Raporty, ślady i zrzuty są lokalne, ignorowane w Git. Dane testowe są fikcyjne.
 Testy działają od czystego kontekstu przeglądarki i nie zmieniają danych użytkownika.
-CI instaluje Chromium i wykonuje te same scenariusze; jego wynik i wdrożenie
-Vercel wymagają osobnej kontroli konkretnego commita.
+CI instaluje Chromium i wykonuje te same scenariusze. Wynik online odnosi się
+do wskazanego commita implementacji; późniejszy zapis niniejszego raportu
+zmienia wyłącznie dokumentację. Kolejne zmiany kodu wymagają własnych kontroli.
 
 ## Granice weryfikacji
 
