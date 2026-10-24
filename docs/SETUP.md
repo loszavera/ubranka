@@ -38,7 +38,8 @@ Użytkownik połączył konto GitHub i zaimportował projekt 2026-10-24.
 Pierwsze wdrożenie z main zakończyło się READY; ekran i przycisk sprawdzono online.
 2026-10-24 po odbiorze P2.1 przeniesiono całość do main; [test produkcji](P21-PRODUCTION.md)
 przeszedł. LocalStorage dev i main jest osobny — publikacja nie kopiuje ustawień.
-Supabase/Google/AI w planie P3 pozostają propozycją; nie są częścią zainstalowanego środowiska.
+Supabase/Google są zatwierdzone w P3.1; bieżący stan częściowego wdrożenia
+i zdalnego dostępu opisuje [P31-SETUP.md](P31-SETUP.md). AI pozostaje późniejszą propozycją.
 
 Repo: loszavera/ubranka. Framework: Other. Root: katalog główny.
 Node: 24.x. Install: npm ci. Build: npm run build:web. Output: dist.

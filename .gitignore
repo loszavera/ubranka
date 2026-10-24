@@ -37,6 +37,7 @@ yarn-error.*
 !.env.example
 .vercel/
 .local/
+supabase/.temp/
 artifacts/
 dist-all/
 

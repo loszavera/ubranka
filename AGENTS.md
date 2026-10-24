@@ -32,6 +32,12 @@ konfigurację darmowych usług, testy i podgląd dev. P3.1 jest w realizacji;
 faktyczną dostępność usług i wyniki weryfikacji zapisuj w statusie.
 P3.2 (próba AI), P3.3 i publikacja nowego zakresu main wymagają osobnego uzgodnienia.
 Nie aktywuj płatnego AI ani nowych abonamentów.
+Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,
+podał prywatnie oba konta oraz wyraźnie zaakceptował Google API Services User
+Data Policy z upoważnieniem do zaznaczenia zgody. Nie pytaj o to ponownie.
+Jest poza domem: potrzebne czynności właściciela przygotowuj do wykonania na
+telefonie; nie zakładaj dostępu do lokalnej klawiatury. Stan dostępu i usług:
+docs/P31-SETUP.md. Linków/kodów logowania CLI i adresów kont nie commituj.
 Zapis P2 na adresie dev i main jest osobny; publikacja kodu nie przenosi localStorage.
 Nie dopisuj na tej podstawie testu natywnego. Q21–Q23 i Q25 są rozstrzygnięte; Q24 określa wstępny
 kierunek zdjęć, szczegóły dostawcy wymagają wyjaśnienia przed realnym uploadem.

@@ -9,12 +9,22 @@ Kod można weryfikować lokalnie bez kont usług. Taki test nie potwierdza chmur
 - Vercel/GitHub są połączone; projekt `ubranka`, istniejący podgląd gałęzi dev.
 - Utworzono osobny projekt Google Cloud `ubranka-2026` (nazwa Ubranka).
   Nie utworzono jeszcze klienta OAuth ani nie podłączono rozliczeń.
-- Formularz Google Auth: nazwa Ubranka, External/Testing, kontakt właściciela.
-  Zapis konfiguracji czeka na wyraźną akceptację Google API Services User Data Policy.
-  Automatyczny przegląd odrzucił zaznaczenie tej zgody na podstawie samego upoważnienia OAuth.
-- Zaproponowano wtyczkę Supabase. Podłączenie nie jest jeszcze potwierdzone;
-  nie utworzono projektu Supabase i nie wdrożono migracji, funkcji lub harmonogramu.
-- Dwa adresy kont Google do listy dostępu pozostają do prywatnego wskazania.
+- Użytkownik podał prywatnie oba konta Google i wyraźnie zaakceptował Google API
+  Services User Data Policy wraz z upoważnieniem do zaznaczenia zgody. Wcześniejsza
+  przeszkoda zgody jest rozwiązana. Formularz Google Auth nie został jeszcze zapisany:
+  sterowanie Chrome jest technicznie zablokowane, a właściciel jest poza domem.
+- Połączenie Supabase potwierdzone. W wybranej organizacji Risk Every Asset
+  (Free) utworzono `ubranka-test`, Frankfurt `eu-central-1`. Wdrożono migrację
+  `private_wardrobe` oraz Edge `wardrobe` i `wardrobe-cleanup` (obie wersja 1).
+  Prywatna allowlista zawiera dwa wskazane konta; adresów nie zapisano w repozytorium.
+- RLS trzech tabel i prywatny bucket potwierdzone w chmurze. Brak użytkowników
+  Auth i zdjęć. Projekt pilotażowy/main pozostaje na później.
+- Ustawienia Auth, aktywacja hooka, sekrety Edge/Vault i harmonogram nadal oczekują
+  konfiguracji. Wtyczka nie udostępnia tych operacji. Uruchomiono oficjalne CLI
+  z `login --no-browser`, aby właściciel mógł autoryzować je linkiem na telefonie.
+  Jednorazowego linku, kodu ani stałego tokenu nie zapisujemy w repozytorium.
+- Zmienne Supabase w Vercel nadal nie są ustawione. Ekran dev poprawnie informuje
+  o braku konfiguracji; nie jest to jeszcze działający odbiór prywatnej szafy.
 
 Ten stan trzeba odświeżyć po odpowiedzi użytkownika, a nie ponownie żądać zgód,
 których już udzielił. Użytkownik może potwierdzić połączenie i warunki zdalnie.
@@ -28,7 +38,7 @@ których już udzielił. Użytkownik może potwierdzić połączenie i warunki z
    [konfigurację backendu](P31-BACKEND.md), razem z prywatną allowlistą,
    Before User Created hook, Edge i harmonogramem sprzątania.
 3. Dokończyć [Google Auth](https://console.cloud.google.com/auth/overview?project=ubranka-2026)
-   po akceptacji [warunków Google](https://developers.google.com/terms/api-services-user-data-policy).
+   w ramach udzielonej już akceptacji [warunków Google](https://developers.google.com/terms/api-services-user-data-policy).
    Utworzyć web OAuth client z callbackami konkretnych projektów Supabase.
    Zakres podstawowy: openid/email/profile. Bez Gmail/Drive/Photos, bez Cloud Billing.
    Sekret OAuth wpisać do Supabase, nie do aplikacji/publicznego repozytorium.

@@ -20,8 +20,9 @@ należą do kolejnych etapów.
 **W realizacji na dev: P3.1**, zatwierdzone zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
 Zaimplementowano prywatną szafę PL/EN, zdjęcia, konta Google, synchronizację,
 eksport i usuwanie. Lokalne testy opisuje [raport P3.1](docs/P31-VERIFICATION.md).
-**Usługi nie są jeszcze połączone:** konfiguracja Supabase i Google czeka na
-dostęp właściciela. Podgląd jawnie informuje o braku konfiguracji; nie pozwala
+**Konfiguracja usług jest częściowa:** Supabase Free Frankfurt ma wdrożoną bazę
+i funkcje. Ustawienia Auth, sekrety, harmonogram i Google OAuth wymagają dokończenia
+zdalnego dostępu. Podgląd jawnie informuje o braku konfiguracji; nie pozwala
 pozornie logować ani wysyłać zdjęć. [Dokończenie konfiguracji](docs/P31-SETUP.md).
 P3.2/P3.3 i nowe abonamenty nie zostały zatwierdzone.
 Dane zapisane na podglądzie dev pozostają pod tamtym adresem; publikacja main

@@ -22,11 +22,16 @@ Storage, synchronizacji dwóch urządzeń ani serwerowego usuwania w Supabase.
 - Zdjęcia JPG/PNG/WebP są ponownie kodowane do JPEG bez EXIF/GPS. HEIC ma
   czytelną odmowę. Limit 100 rzeczy/konto, 1 MB + miniatura 100 kB, 1600 px,
   250 MB/konto; niedokończone operacje nadal zajmują limit.
-- Utworzono projekt Google Cloud `ubranka-2026`, bez rozliczeń. Konfiguracja
-  Google Auth czeka na wyraźną akceptację User Data Policy; klient OAuth
-  nie jest utworzony. Potrzebne też dwa prywatnie wskazane adresy Google.
-- Wtyczkę Supabase zaproponowano do połączenia. Brak potwierdzonego dostępu:
-  nie utworzono projektów Free, nie zastosowano migracji ani nie wdrożono Edge.
+- Projekt Google Cloud `ubranka-2026` pozostaje bez rozliczeń. Użytkownik podał
+  oba konta i wyraźnie zaakceptował User Data Policy; nie wymaga to ponownej zgody.
+  Klient OAuth nie jest utworzony: sterowanie Chrome blokuje otwarty panel rozszerzenia.
+- Supabase połączony: organizacja Risk Every Asset, Free, projekt `ubranka-test`
+  we Frankfurcie. Migracja, prywatny bucket, RLS i obie Edge wdrożone. Dwa konta
+  wpisane na prywatną listę dostępu. Pięć anonimowych prób API poprawnie odrzuconych.
+- Auth/hook, sekrety Edge/Vault i cron oczekują dodatkowego dostępu administracyjnego.
+  Oficjalne CLI uruchomiono z linkiem logowania na telefonie; brak jeszcze potwierdzenia
+  autoryzacji. Nie publikowano sekretów ani adresów kont. Podgląd Vercel nie ma jeszcze
+  zmiennych Supabase. Szczegóły: [P31-SETUP.md](P31-SETUP.md).
 - Bez prawdziwych zmiennych usług podgląd pokazuje brak konfiguracji i blokuje
   logowanie. Nie publikujemy testowego backendu ani syntetycznych kluczy.
 - Szczegóły: [konfiguracja](P31-SETUP.md), [backend](P31-BACKEND.md),
@@ -116,9 +121,10 @@ P1/V1.1 i V1.2 przeszły przeglądy dokumentacji; wersje historyczne zachowano.
 
 ## Następny krok
 
-Dokończyć **już zatwierdzone P3.1** po połączeniu Supabase, podaniu dwóch kont
-Google i akceptacji wymaganej polityki Google. Następnie wdrożyć backend,
-skonfigurować dokładny adres dev, przetestować rzeczywistą izolację kont,
+Dokończyć **już zatwierdzone P3.1** po zdalnej autoryzacji CLI Supabase i
+zakończeniu konfiguracji Google. Zgoda na politykę i konta zostały już podane.
+Ustawić Auth/hook, sekrety i harmonogram, skonfigurować dokładny adres dev,
+przetestować rzeczywistą izolację kont,
 zdjęcia, eksport i usuwanie. Dopiero potem odbiór użytkowników na telefonach.
 Nie prosić ponownie o zatwierdzenie implementacji P3.1. Main pozostaje P2.1.
 
