@@ -31,6 +31,23 @@ samodzielnie następnego etapu tylko dlatego, że opisano go w planie.
 - Równoległe zmiany kodu prowadź w osobnych worktree/gałęziach.
 - Aktualizuj status po istotnym kroku. Oddziel wykonane, zweryfikowane i oczekujące.
 
+### Proponowanie następnego kroku
+
+Ustalenie użytkownika z 2026-10-24:
+
+- Na końcu każdej odpowiedzi kończącej turę zaproponuj jeden rekomendowany
+  następny krok do akceptacji. Podaj krótko zakres i oczekiwany rezultat.
+- Dołącz gotową, naturalną odpowiedź do skopiowania lub kliknięcia, np.
+  „Zatwierdzam P2. Rozpocznij implementację opisanego prototypu na dev”.
+  Użytkownik nie powinien zgadywać, co napisać, aby uruchomić pracę.
+- Akceptuj także krótkie „tak”, „działaj” lub podobne, gdy jednoznacznie odnoszą
+  się do ostatniej propozycji. Nie wymagaj specjalnej formuły ani ponownej zgody.
+- Nowy proponowany zakres rozpocznij po akceptacji użytkownika. Brak odpowiedzi
+  nie jest akceptacją; inna wiadomość może zmieniać kierunek lub zakres pracy.
+- Najpierw dokończ już zatwierdzone zadanie. Nie zastępuj wykonania propozycją,
+  nie pytaj ponownie o zgodę na rutynowe czynności w zaakceptowanym zakresie
+  i nie rozbijaj zatwierdzonego etapu na zbędne potwierdzenia.
+
 ## Git
 
 - Repozytorium: https://github.com/loszavera/ubranka.
