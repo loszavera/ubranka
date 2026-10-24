@@ -1,6 +1,6 @@
 import type { Audience, Outfit, Tier, WardrobeItem } from './model.ts';
 
-// All items, prices and shipping costs are illustrative P2 fixtures, not shop offers.
+// All items, prices and shipping costs are illustrative fixtures, not shop offers.
 function item(
   id: string, pl: string, en: string, category: WardrobeItem['category'],
   color: string, audience: Audience, price: number, tier: Tier = 'economy',
@@ -37,63 +37,100 @@ export const ITEMS: WardrobeItem[] = [
   item('m-white-shirt', 'Biała koszula', 'White shirt', 'top', '#F7F5EF', 'men', 69),
   item('m-tailored-trousers', 'Grafitowe spodnie garniturowe', 'Charcoal tailored trousers', 'bottom', '#515358', 'men', 119, 'premium'),
   item('m-black-derby', 'Czarne półbuty derby', 'Black derby shoes', 'shoes', '#302D31', 'men', 99, 'premium'),
+  item('w-blue-midi-dress', 'Przygaszona niebieska sukienka midi', 'Muted blue midi dress', 'dress', '#8099B1', 'women', 179),
+  item('w-nude-pumps', 'Beżowe czółenka', 'Nude closed-toe pumps', 'shoes', '#C7AB92', 'women', 99),
+  item('w-plum-midi-dress', 'Śliwkowa sukienka midi', 'Plum midi dress', 'dress', '#653E59', 'women', 279, 'premium'),
+  item('w-dark-pumps', 'Ciemne czółenka', 'Dark closed-toe pumps', 'shoes', '#30232D', 'women', 149, 'premium'),
+  item('m-navy-suit-blazer', 'Granatowa marynarka garniturowa', 'Navy suit jacket', 'layer', '#263449', 'men', 129),
+  item('m-navy-suit-trousers', 'Granatowe spodnie garniturowe', 'Navy suit trousers', 'bottom', '#263449', 'men', 99),
+  item('m-white-shirt-tie', 'Biała koszula z granatowym krawatem', 'White shirt with navy tie', 'top', '#F7F5EF', 'men', 59),
+  item('m-blue-shirt-tie', 'Błękitna koszula z szarym krawatem', 'Pale blue shirt with grey tie', 'top', '#BCD0DC', 'men', 55),
+  item('m-brown-oxfords', 'Brązowe półbuty sznurowane', 'Brown lace-up dress shoes', 'shoes', '#78523D', 'men', 109, 'premium'),
 ];
 
 export const OUTFITS: Outfit[] = [
   {
-    id: 'w1', imageKey: 'w1', audience: 'women', occasion: 'casual', tier: 'economy',
+    id: 'w1', imageKey: 'w1', audience: 'women', occasions: ['casual', 'date'], tier: 'economy',
     name: { pl: 'Lekko na co dzień', en: 'Everyday ease' },
     description: { pl: 'Miękka dzianina, swobodny krój i Twoje sneakersy.', en: 'Soft knitwear, relaxed trousers and your sneakers.' },
     itemIds: ['w-knit', 'w-wide-trousers', 'w-sneakers'],
     tags: ['minimal', 'navy', 'soft'], priorities: { comfort: 1, quality: 0.6, versatility: 0.9 },
   },
   {
-    id: 'w2', imageKey: 'w2', audience: 'women', occasion: 'elegant', tier: 'premium',
+    id: 'w2', imageKey: 'w2', audience: 'women', occasions: ['elegant', 'work', 'date', 'party'], tier: 'premium',
     name: { pl: 'Spokojna elegancja', en: 'Quiet elegance' },
     description: { pl: 'Wyrazista marynarka i jasne spodnie w równowadze.', en: 'A sharp blazer balanced with light trousers.' },
     itemIds: ['w-black-blazer', 'w-white-top', 'w-beige-trousers', 'w-cream-loafers'],
     tags: ['tailored', 'neutral', 'contrast'], priorities: { comfort: 0.7, quality: 1, versatility: 0.8 },
   },
   {
-    id: 'w3', imageKey: 'w3', audience: 'women', occasion: 'casual', tier: 'economy',
+    id: 'w3', imageKey: 'w3', audience: 'women', occasions: ['casual', 'date', 'party'], tier: 'economy',
     name: { pl: 'Ciepłe odcienie', en: 'Warm tones' },
     description: { pl: 'Kardigan i jeansy, które łatwo połączyć z resztą szafy.', en: 'A cardigan and jeans that mix easily with your wardrobe.' },
     itemIds: ['w-cardigan', 'w-white-top', 'w-jeans', 'w-tan-loafers'],
     tags: ['earth', 'denim', 'layered'], priorities: { comfort: 0.9, quality: 0.7, versatility: 1 },
   },
   {
-    id: 'w4', imageKey: 'w4', audience: 'women', occasion: 'elegant', tier: 'premium',
+    id: 'w4', imageKey: 'w4', audience: 'women', occasions: ['elegant', 'work', 'date', 'party'], tier: 'premium',
     name: { pl: 'Granatowy klasyk', en: 'Navy classic' },
     description: { pl: 'Tonalny zestaw z błękitną koszulą na ważniejszy dzień.', en: 'A tonal outfit with a pale blue shirt for a polished day.' },
     itemIds: ['w-navy-blazer', 'w-blue-shirt', 'w-tailored-trousers', 'w-black-loafers'],
     tags: ['tailored', 'navy', 'minimal'], priorities: { comfort: 0.6, quality: 1, versatility: 0.9 },
   },
   {
-    id: 'm1', imageKey: 'm1', audience: 'men', occasion: 'casual', tier: 'economy',
+    id: 'm1', imageKey: 'm1', audience: 'men', occasions: ['casual', 'date'], tier: 'economy',
     name: { pl: 'Swobodny klasyk', en: 'Relaxed classic' },
     description: { pl: 'Sweter ecru, chinosy i sneakersy na codzienny rytm.', en: 'An ecru knit, chinos and sneakers for your everyday rhythm.' },
     itemIds: ['m-knit', 'm-navy-chinos', 'm-sneakers'],
     tags: ['minimal', 'navy', 'soft'], priorities: { comfort: 1, quality: 0.6, versatility: 0.9 },
   },
   {
-    id: 'm2', imageKey: 'm2', audience: 'men', occasion: 'elegant', tier: 'premium',
+    id: 'm2', imageKey: 'm2', audience: 'men', occasions: ['elegant', 'work', 'date', 'party'], tier: 'premium',
     name: { pl: 'Elegancja bez wysiłku', en: 'Effortless polish' },
     description: { pl: 'Granat i beż z lekką koszulą i mokasynami.', en: 'Navy and beige with a light shirt and loafers.' },
     itemIds: ['m-navy-blazer', 'm-blue-shirt', 'm-beige-chinos', 'm-brown-loafers'],
     tags: ['tailored', 'neutral', 'contrast'], priorities: { comfort: 0.7, quality: 1, versatility: 0.8 },
   },
   {
-    id: 'm3', imageKey: 'm3', audience: 'men', occasion: 'casual', tier: 'economy',
+    id: 'm3', imageKey: 'm3', audience: 'men', occasions: ['casual', 'date', 'party'], tier: 'economy',
     name: { pl: 'Miejski luz', en: 'City ease' },
     description: { pl: 'Oliwkowa warstwa, prosty T-shirt i ciemny denim.', en: 'An olive layer, a simple tee and dark denim.' },
     itemIds: ['m-overshirt', 'm-white-tee', 'm-jeans', 'm-sneakers'],
     tags: ['earth', 'denim', 'layered'], priorities: { comfort: 0.9, quality: 0.7, versatility: 1 },
   },
   {
-    id: 'm4', imageKey: 'm4', audience: 'men', occasion: 'elegant', tier: 'premium',
+    id: 'm4', imageKey: 'm4', audience: 'men', occasions: ['elegant', 'work', 'date', 'party'], tier: 'premium',
     name: { pl: 'Grafitowa pewność', en: 'Charcoal confidence' },
     description: { pl: 'Spójny garniturowy zestaw z białą koszulą.', en: 'A coordinated tailored look with a crisp white shirt.' },
     itemIds: ['m-charcoal-blazer', 'm-white-shirt', 'm-tailored-trousers', 'm-black-derby'],
     tags: ['tailored', 'charcoal', 'minimal'], priorities: { comfort: 0.6, quality: 1, versatility: 0.9 },
+  },
+  {
+    id: 'w5', imageKey: 'w5', audience: 'women', occasions: ['wedding', 'elegant', 'date', 'party'], tier: 'economy',
+    name: { pl: 'Błękit na uroczystość', en: 'Blue for the occasion' },
+    description: { pl: 'Niebieska sukienka midi i beżowe czółenka dla gościni weselnej.', en: 'A muted blue midi dress and nude pumps for a wedding guest.' },
+    itemIds: ['w-blue-midi-dress', 'w-nude-pumps'],
+    tags: ['ceremony', 'blue', 'soft'], priorities: { comfort: 0.8, quality: 0.7, versatility: 0.7 },
+  },
+  {
+    id: 'w6', imageKey: 'w6', audience: 'women', occasions: ['wedding', 'elegant', 'date', 'party'], tier: 'premium',
+    name: { pl: 'Śliwkowy wieczór', en: 'An evening in plum' },
+    description: { pl: 'Śliwkowa sukienka midi i ciemne czółenka na eleganckie przyjęcie.', en: 'A plum midi dress and dark pumps for an elegant celebration.' },
+    itemIds: ['w-plum-midi-dress', 'w-dark-pumps'],
+    tags: ['ceremony', 'plum', 'minimal'], priorities: { comfort: 0.7, quality: 1, versatility: 0.7 },
+  },
+  {
+    id: 'm5', imageKey: 'm5', audience: 'men', occasions: ['wedding', 'elegant', 'work', 'date', 'party'], tier: 'economy',
+    name: { pl: 'Granat na uroczystość', en: 'Navy for the occasion' },
+    description: { pl: 'Granatowy garnitur, biała koszula z krawatem i czarne półbuty dla gościa weselnego.', en: 'A navy suit, white shirt with navy tie and black dress shoes for a wedding guest.' },
+    itemIds: ['m-navy-suit-blazer', 'm-white-shirt-tie', 'm-navy-suit-trousers', 'm-black-derby'],
+    tags: ['ceremony', 'tailored', 'navy'], priorities: { comfort: 0.7, quality: 0.7, versatility: 0.8 },
+  },
+  {
+    id: 'm6', imageKey: 'm6', audience: 'men', occasions: ['wedding', 'elegant', 'work', 'date', 'party'], tier: 'premium',
+    name: { pl: 'Grafit na przyjęcie', en: 'Charcoal celebration' },
+    description: { pl: 'Grafitowy garnitur, błękitna koszula z szarym krawatem i brązowe półbuty.', en: 'A charcoal suit, pale blue shirt with grey tie and brown lace-up dress shoes.' },
+    itemIds: ['m-charcoal-blazer', 'm-blue-shirt-tie', 'm-tailored-trousers', 'm-brown-oxfords'],
+    tags: ['ceremony', 'tailored', 'charcoal'], priorities: { comfort: 0.7, quality: 1, versatility: 0.8 },
   },
 ];
