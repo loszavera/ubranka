@@ -168,6 +168,21 @@ Historycznie P0 przeszedł [CI](https://github.com/loszavera/ubranka/actions/run
 Użytkownik potwierdził działanie hostingu oraz zdalnego Codex przez internet mobilny.
 P1/V1.1 i V1.2 przeszły przeglądy dokumentacji; wersje historyczne zachowano.
 
+## Przygotowanie dostępu OpenAI — bez płatnych wywołań
+
+Użytkownik utworzył projekt Ubranka, a następnie zatwierdził konfigurację jego
+limitu oraz dedykowany lokalny klucz testowy. Parametry konta pozostają w prywatnych
+notatkach, poza repozytorium. Klucz ma uprawnienie wywołań obrazów i odczytu
+informacji o modelach oraz ograniczony okres ważności.
+Klucz zapisano wyłącznie lokalnie, jako DPAPI CurrentUser w ignorowanym katalogu
+`.local/p32-openai/`, z ACL użytkownik Windows + SYSTEM. Nie powstał jawny plik
+klucza; sprawdzono zgodność po zaszyfrowaniu/odszyfrowaniu, ACL i wykluczenie z Git.
+Panel potwierdził utworzenie klucza i brak jego użycia. Nie wykonano
+żądania modelu; poprawność lokalnego zapisu nie jest testem działania API.
+
+Wynik odczytu ustawień konta przekazano użytkownikowi prywatnie. Sama konfiguracja
+dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
+
 ## Następny krok
 
 **Do zatwierdzenia: P3.2 — mała próba jakości i kosztu wizualizacji**, zgodnie
@@ -188,7 +203,9 @@ Ponownie sprawdzono oficjalne opisy [Sunburst](https://developers.openai.com/api
 [Flare](https://developers.openai.com/api/docs/models/gpt-image-2.5-flare) i
 [rozliczania obrazów](https://developers.openai.com/api/docs/guides/image-generation)
 (2026-10-24). Modele obsługują obrazy wejściowe; równe stawki tokenów nie oznaczają
-równego kosztu obrazu. Dostępu i salda konta API jeszcze nie sprawdzono.
+równego kosztu obrazu. Dostęp do panelu następnie sprawdzono; przygotowanie
+lokalnego klucza opisano wyżej. Płatna próba nadal wymaga osobnej zgody, a jej
+proponowane 25 PLN pozostaje oddzielne od konfiguracji limitu miesięcznego.
 
 Równolegle pozostaje krótki test Google Kasi według [checklisty](P31-ACCEPTANCE.md).
 Nie blokuje przygotowania próby na danych sztucznych, ale nie wolno przedstawiać

@@ -40,6 +40,13 @@ raport: docs/P31-MAIN.md. Adres odbioru to
 https://ubranka.vercel.app. Dev pozostaje warsztatem. Ta zgoda nie oznacza odbioru
 funkcji. P3.2 (próba AI), P3.3 i nowe zakresy nadal wymagają osobnego uzgodnienia.
 Nie aktywuj płatnego AI ani nowych abonamentów.
+Następnie użytkownik osobno zatwierdził konfigurację limitu projektu OpenAI
+i lokalny klucz do P3.2. Klucz DPAPI CurrentUser pozostaje w ignorowanym
+`.local/p32-openai/`, z ACL użytkownik Windows + SYSTEM. Parametry dostępu
+i instrukcja użycia są w lokalnym README oraz metadata.json; nie wypisuj sekretu.
+To przygotowanie dostępu, bez zgody na płatne wywołania. Limit miesięczny nie
+zastępuje osobnego budżetu próby. Klucza nie dodawaj do aplikacji, EXPO_PUBLIC,
+Git ani hostingu. Bieżących danych konta i rozliczeń nie publikuj w repozytorium.
 Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,
 podał prywatnie oba konta oraz wyraźnie zaakceptował Google API Services User
 Data Policy z upoważnieniem do zaznaczenia zgody. Nie pytaj o to ponownie.
