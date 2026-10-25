@@ -93,7 +93,9 @@ export function createWardrobeHandler(environment: (key: string) => string | und
           const filter = action === 'deleteAccount' ? `id=eq.${accountId}` : action === 'deleteItem' ? `id=eq.${uuid(body.itemId)}`
             : ['deleteBodyPhoto','deleteAiData'].includes(action) ? `account_id=eq.${accountId}&kind=eq.body` : `account_id=eq.${accountId}&item_id=eq.${uuid(body.itemId)}`;
           const remaining = await admin.request(`/rest/v1/${table}?${filter}&select=id&limit=1`) as unknown[];
-          result = { status: remaining.length ? 'pending' : 'deleted' };
+          const remainingResults=action==='deleteAiData'
+            ? await admin.request(`/rest/v1/wardrobe_visualization_files?account_id=eq.${accountId}&select=id&limit=1`) as unknown[] : [];
+          result = { status: remaining.length || remainingResults.length ? 'pending' : 'deleted' };
         } catch { result = { status: 'pending' }; }
       }
     }

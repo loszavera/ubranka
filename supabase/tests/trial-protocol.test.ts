@@ -125,3 +125,19 @@ test('request creates durable case operation before waking worker and accepts no
     assert.equal((await handler(request({prompt:'replace'}))).status,400);assert.equal(events.filter(x=>x.endsWith('/wardrobe_b_reserve')).length,1);
   }finally{globalThis.fetch=original;}
 });
+test('deleteAiData remains pending while a result manifest awaits physical cleanup after body photo is gone',async()=>{
+  const original=globalThis.fetch;
+  globalThis.fetch=async(input)=>{
+    const url=new URL(String(input)),path=url.pathname;
+    if(path==='/auth/v1/user')return Response.json({id:account,email_confirmed_at:'2026-10-25'});
+    if(path.endsWith('/wardrobe_execute'))return Response.json({status:'pending'});
+    if(path.startsWith('/rest/v1/rpc/'))return Response.json(null);
+    if(path==='/rest/v1/wardrobe_visualization_files')return Response.json(url.searchParams.has('cleanup_after')?[]:[{id:file}]);
+    if(path==='/rest/v1/wardrobe_photos'||path==='/rest/v1/wardrobe_accounts')return Response.json([]);
+    throw new Error('unexpected fixture route');
+  };
+  try{
+    const response=await createWardrobeHandler(env)(new Request('https://wardrobe.invalid',{method:'POST',headers:{Authorization:'Bearer fixture'},body:JSON.stringify({action:'deleteAiData',expectedRevision:1})}));
+    assert.equal(response.status,200);assert.equal((await response.json()).data.status,'pending');
+  }finally{globalThis.fetch=original;}
+});
