@@ -26,10 +26,12 @@ bezpłatnej kontroli usunięto; do płatnej próby odtworzono dwa konta syntetyc
 Końcowy odczyt B01 i zapis oceny z reloadem w rzeczywistym UI: PASS. Oba konta,
 ich rekordy, prywatne pliki, zaproszenia i lokalne sesje usunięto; koszt i sześć
 slotów pozostały niezmienione. Nowa lokalna galeria 320/390 px i `build:web`:
-PASS. Publikacja sześciu nowych obrazów na main i kontrola wdrożenia pozostają
-w toku. Historyczne CI i test WWW nie są nowym odbiorem galerii.
+PASS. Sześć nowych obrazów opublikowano na dev/main jako `b0b84ce`;
+Vercel Production READY. Końcowy test WWW 390/1440 px: 18 kontroli PASS
+(14:40:41 UTC), hashe wszystkich sześciu obrazów zgodne, zero błędów.
+Historia CI dotyczy runtime; nowe dowody galerii zapisano w raporcie B.
 **Odbiór B przez Kasię i Aleksego oczekuje**;
-po publikacji następny krok to obejrzenie wyników i akceptacja albo feedback.
+następny krok to obejrzenie wyników i akceptacja albo feedback.
 Przed ewentualnym C pozostaje poprawa czytelności powiększanej miniatury
 120×180 px (limit 100 kB zachowany); oryginalny PNG B01 jest ostry.
 P3.3C/D nadal niezlecone; prywatne zdjęcia użytkowników pozostają wyłączone z AI.
@@ -273,8 +275,8 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-**Odbiór sześciu wyników B przez Kasię i Aleksego** po dokończeniu już
-zatwierdzonej publikacji galerii na main i kontroli wdrożenia.
+**Odbiór sześciu wyników B przez Kasię i Aleksego** w opublikowanej
+[galerii na main](https://ubranka.vercel.app/p33b/).
 Należy obejrzeć obrazy i przekazać akceptację albo feedback. Sześć wywołań
 wyczerpało zgodę, AI i klucz B są wyłączone. Nie ponawiamy generacji i nie
 rozpoczynamy C ani prywatnych zdjęć na podstawie dobrego wyniku technicznego.

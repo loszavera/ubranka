@@ -109,13 +109,14 @@ Ocena wizualna: 6/6 spełnia próg ≥8/10 bez błędu krytycznego, z uwagami
 o ręce w B05 i drobnych zmianach ubrania w B06. To nie dowód dopasowania rozmiaru.
 Kontrola prywatnego wyniku i zapisu oceny w UI oraz końcowe sprzątanie dwóch
 kont syntetycznych przeszły: rekordy, pliki, Auth, zaproszenia i lokalne sesje
-usunięte, koszty i sloty zachowane. Lokalna galeria i build WWW przeszły;
-publikacja nowych wyników na main i kontrola wdrożenia pozostają w toku.
-Dowody aktualizuj w docs/P33B-REPORT.md.
+usunięte, koszty i sloty zachowane. Lokalna galeria i build WWW przeszły.
+Wyniki opublikowano na dev/main jako b0b84ce; Vercel Production READY.
+Końcowa kontrola WWW 390/1440 px: 18 kontroli PASS, hashe sześciu wyników
+zgodne, zero błędów. Dowody: docs/P33B-REPORT.md. B wykonane, odbiór oczekuje.
 Otwarta uwaga UX przed ewentualnym C: miniatura 120×180 px po powiększeniu
 jest rozmyta; poprawę czytelności przy limicie 100 kB dopiero zaplanuj.
 Nie zmieniaj teraz kodeka ani nie ponawiaj generacji z tego powodu.
-Po publikacji zaproponuj obejrzenie galerii i odbiór B albo feedback.
+Zaproponuj obejrzenie galerii i odbiór B albo feedback.
 Odbiór Kasi i Aleksego nadal oczekuje; nie uruchamia to C/D ani prywatnych zdjęć.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
 po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,

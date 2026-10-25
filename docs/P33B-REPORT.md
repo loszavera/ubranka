@@ -19,11 +19,11 @@ na dalsze generacje ani ponowienie przypadku.
 
 Ocena wizualna: **6/6 wyników spełnia próg ≥8/10 bez błędu krytycznego**,
 więc warunek jakości ≥5/6 został spełniony. Końcowa kontrola UI i sprzątanie
-odtworzonych kont testowych zakończyły się poprawnie; publikacja sześciu wyników
-na main pozostaje w toku.
+odtworzonych kont testowych zakończyły się poprawnie. Sześć wyników jest
+opublikowanych na main; końcowa kontrola wdrożonego WWW przeszła.
 **Odbiór przez Kasię i Aleksego pozostaje
 otwarty.** [Galeria syntetyczna](https://ubranka.vercel.app/p33b/) jest miejscem
-odbioru po zakończeniu publikacji opisanej poniżej.
+odbioru. Dowody publikacji opisano poniżej.
 
 ## Zmierzone wyniki i koszty
 
@@ -157,10 +157,19 @@ autoryzacji. Ten problem wykryto i poprawiono przed płatnym startem.
 
 ## Publikacja i sprzątanie
 
-Poniższe historyczne dowody publikacji dotyczą wcześniejszej integracji z AI
-OFF. Nowe wyniki są przygotowane, lokalna galeria i `build:web` przeszły kontrolę.
-Ich publikacja na main i kontrola wdrożonej galerii pozostają w toku;
-nie przypisujemy im wcześniejszych testów.
+Nowe wyniki i raport opublikowano bez force push na dev/main jako
+`b0b84cef2731d81c876abc3672328c6d810b5497`. Vercel Production
+`dpl_6g4t99iCjvvS6XJPCtXeTdmGjQ8i` jest READY z aliasem
+[ubranka.vercel.app](https://ubranka.vercel.app/p33b/).
+Test tego wdrożenia zakończony 14:40:41 UTC: **18 kontroli PASS**.
+Sprawdzono sześć wyników i ich wejścia w 390/1440 px, zgodność bajtów i SHA
+każdego WebP, nawigację galerii oraz anonimową aplikację PL/EN po reloadzie.
+Zero błędów strony/HTTP i przewijania poziomego; zrzuty przejrzano.
+Dowód: `artifacts/p33b-final-ui.json`. Brak logowania w tym teście nie dowodzi
+serwerowego OFF — ten stan potwierdza osobny snapshot zamknięcia próby.
+Końcowy commit dokumentacyjny zapisuje dowód bez zmiany galerii i runtime.
+
+Poniższe historyczne dowody dotyczą wcześniejszej integracji z AI OFF.
 
 Kod, galerię i raport opublikowano bez force push na dev/main jako
 `32046d051c44994807c14149e35031fefff4644d`. Pełne
@@ -233,7 +242,7 @@ i regresje; nie deklarujemy bezpośredniego porównania bajtów prywatnych rekor
 
 ## Kontynuacja
 
-Po dokończeniu publikacji i kontroli wdrożonej galerii Kasię i Aleksego prosimy o
+Po publikacji i kontroli wdrożonej galerii Kasię i Aleksego prosimy o
 obejrzenie sześciu wyników w galerii i akceptację lub feedback. Wykonanie
 techniczne nie jest odbiorem użytkowników. Nie ponawiać żadnego z sześciu
 wywołań, nie otwierać nowego okna i nie rozpoczynać C ani prywatnych zdjęć.
