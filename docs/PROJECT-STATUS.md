@@ -2,21 +2,35 @@
 
 Aktualizacja: 2026-10-25.
 
-**P3.3A zaimplementowane — zatwierdzone przez użytkownika według planu V1.6.**
+**P3.3A przetestowane i zaakceptowane przez Kasię i Aleksego (2026-10-25).**
+Zlecili wyłącznie przygotowanie propozycji P3.3B do zatwierdzenia,
+bez nowych płatnych wywołań. Aktualne [wymagania V1.7](REQUIREMENTS-V1.7.md),
+[plan V1.7](IMPLEMENTATION-PLAN-V1.7.md) i [koszty V1.6](COST-PLAN-V1.6.md).
+Propozycja: rzeczywista integracja serwerowa, tylko sześć zarejestrowanych
+syntetycznych przypadków, maks. 6 wysłań / 10 PLN, osobny ograniczony klucz
+w Supabase, raport/galeria i powrót do OFF. Finansowanie oraz granice rezerwy
+wymagają jawnej zgody; P3.3B/C/D pozostają niezlecone.
+W tej turze zmieniono tylko dokumentację. Odczytano aktualne źródła i ustawienia
+finansowania, bez sekretów, zmian usług i wywołań modeli. Nie powtarzano testów
+runtime przy zmianie wyłącznie dokumentacji; sprawdzono spójność i odnośniki.
+
+## Odebrane P3.3A — dowody wykonania
+
 Zakres: profil sylwetki i prywatne zdjęcie w Supabase, zestawy z własnej szafy,
 przygotowanie wizualizacji z serwerowym AI OFF, testy syntetyczne i podgląd main.
 Praca na dev. Bez klucza AI w chmurze, płatnych wywołań i nowych abonamentów.
-P3.3B/C/D pozostają niezlecone. 62 testy logiki/klienta, 41 backendu, 15 regresji
+62 testy logiki/klienta, 41 backendu, 15 regresji
 demo oraz wszystkie 18 scenariuszy prywatnego UI: PASS w zakończonym CI
 (lokalnie wcześniej poprawiono obsługę konfliktu formularza). Supabase: migracja i funkcje wdrożone, 40 kontroli
 dwóch syntetycznych kont PASS. Hashe wcześniejszych danych pozostają zgodne.
-Kod `4b34a00` jest na dev/main; Vercel Production READY pod
+Kod `4b34a00`, dokumentacja wykonania `8cd3787`; Vercel Production READY pod
 https://ubranka.vercel.app. Pięć kontroli wdrożonego UI z rzeczywistym Supabase
 na koncie syntetycznym: PASS. CI 40143086234: SUCCESS dla kodu `4b34a00`.
 Oba konta syntetyczne, ich rekordy i pliki zostały całkowicie usunięte przez
 aplikację oraz istniejący harmonogram; kontrola 01:40 czasu polskiego PASS.
 Usunięto testowe zaproszenia i lokalne sesje. Końcowy commit zapisuje tylko
-dokumentację wyników; odbiór użytkowników i P3.3B pozostają otwarte.
+dokumentację wyników. Odbiór A został następnie potwierdzony przez użytkowników.
+Nie dopisano indywidualnych wyników urządzeń ani osobnego testu logowania Kasi.
 Szczegóły i granice:
 [P33A-VERIFICATION.md](P33A-VERIFICATION.md), [backend](P33A-BACKEND.md).
 
@@ -239,10 +253,11 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-**Test i odbiór P3.3A na main** według [krótkiej checklisty](P33A-VERIFICATION.md).
-Sprawdzić sylwetkę, zestawy z własnej szafy, PL/EN oraz przygotowanie wizualizacji
-z AI wyłączonym. Nie potrzeba ponownej zgody na wykonany zakres A.
-Zatrzymanie przed P3.3B; nowa płatna próba wymaga osobnej zgody.
+**Decyzja o propozycji P3.3B według V1.7.** Zgoda powinna obejmować integrację,
+dedykowany klucz serwerowy, syntetyczne dane do OpenAI, limity 6/10 PLN,
+granicę gwarancji pierwszego pomiaru i aktualne finansowanie podane w rozmowie,
+publikację raportu oraz zatrzymanie przed C. Do tej decyzji AI pozostaje OFF.
+Nie pytamy ponownie o odebrane A.
 
-Logowanie Kasi w P3.1 pozostaje do faktycznego sprawdzenia; odbiór P3.2 go
-nie potwierdza. Galeria i pomiary P3.2 pozostają niezmienione.
+Logowanie Kasi w P3.1 nie zostało osobno potwierdzone; ogólny odbiór A nie
+dopisuje takiego wyniku. Galeria i pomiary P3.2 pozostają niezmienione.

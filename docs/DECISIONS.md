@@ -69,6 +69,11 @@ Nowe wpisy z 2026-10-24:
 | --- | --- | --- | --- |
 | D-047 | 2026-10-25 | Zatwierdzone P3.3A | Aktualizuje D-045/D-046: użytkownik zatwierdził A zgodnie z V1.6: profil sylwetki, prywatny zapis zdjęcia w obecnym Supabase, zestawy z własnej szafy i przygotowanie wizualizacji z płatnym AI wyłączonym. Praca dev, testy syntetyczne, podgląd main. Bez klucza AI w chmurze, płatnych wywołań i nowych abonamentów. Zatrzymanie przed P3.3B; B/C/D nadal osobno. |
 
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-048 | 2026-10-25 | Odbiór P3.3A i zlecone planowanie B | Kasia i Aleksy potwierdzili przetestowanie i zaakceptowali P3.3A. Zlecili propozycję P3.3B do zatwierdzenia, bez nowych płatnych wywołań. Aktualizuje D-047; nie oznacza aktywacji B/C, zgody na klucz AI w chmurze, nowe doładowanie ani osobnego potwierdzenia logowania Kasi. |
+| D-049 | 2026-10-25 | Propozycja do zatwierdzenia | V1.7 konkretyzuje B: brakująca integracja workera/Storage/UI, sześć dozwolonych przypadków i ich hashy, 6 wysłań / 10 PLN, pierwszy pomiar z czterema wejściami, wersjonowane rezerwy/koszty, osobny klucz Edge oraz wyłączenie/unieważnienie po raporcie. Finansowanie wymaga jawnej zgody według prywatnego odczytu konta; dane realnych osób i C pozostają wyłączone. Dziś tylko dokumentacja i odczyt. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

@@ -40,11 +40,13 @@ dwa zmieniają krój spodni. [Galeria porównawcza](https://ubranka.vercel.app/p
 i [raport jakości oraz kosztów](docs/P32-REPORT.md) zostały odebrane przez Kasię
 i Aleksego z opisanymi ograniczeniami (2026-10-25).
 Użytkownik pozwolił rozpocząć pomiar bez pełnej estymacji, zachowując limity.
-**P3.3A: wdrożone na main, z płatnym AI wyłączonym; oczekuje na Wasz test.** Profil
+**P3.3A: przetestowane i zaakceptowane przez Kasię i Aleksego, z AI wyłączonym.** Profil
 sylwetki, prywatne zdjęcie w Supabase, maksymalnie dwa zestawy z własnej szafy,
 zapis/opinie i przygotowanie wizualizacji PL/EN. [Raport oraz instrukcja odbioru](docs/P33A-VERIFICATION.md).
 Próba kilku osobnych zdjęć ubrań w P3.3B i pilotaż prywatnych zdjęć w C
-wymagają późniejszych zgód.
+wymagają późniejszych zgód. [Propozycja P3.3B — V1.7](docs/IMPLEMENTATION-PLAN-V1.7.md)
+obejmuje integrację i najwyżej 6 prób / 10 PLN na syntetycznych obrazach;
+przygotowano wyłącznie dokumentację, bez aktywacji AI lub finansowania.
 Aplikacja nie generuje jeszcze obrazów AI; nie uruchomiono nowych abonamentów.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
@@ -55,12 +57,12 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 ## Dokumenty
 
-- [Wymagania V1.6 — odebrane P3.2, zatwierdzone P3.3A](docs/REQUIREMENTS-V1.6.md)
-- [Plan implementacji V1.6 — fazy P3.3A–D](docs/IMPLEMENTATION-PLAN-V1.6.md)
+- [Wymagania V1.7 — odebrane P3.3A, propozycja B](docs/REQUIREMENTS-V1.7.md)
+- [Plan implementacji V1.7 — konkretna propozycja P3.3B](docs/IMPLEMENTATION-PLAN-V1.7.md)
 - [Zasady danych V1.0 — Supabase w A, AI czeka na osobną zgodę](docs/P33-AI-DATA-POLICY-V1.0.md)
 - [P3.3A — weryfikacja i test użytkowników](docs/P33A-VERIFICATION.md)
 - [P3.3A — kontrakty backendu i granice przygotowania AI](docs/P33A-BACKEND.md)
-- [Proponowana kontrola kosztów V1.5](docs/COST-PLAN-V1.5.md)
+- [Proponowana kontrola kosztów V1.6 — próba P3.3B](docs/COST-PLAN-V1.6.md)
 - [P3.2 — raport jakości, kosztów i weryfikacji](docs/P32-REPORT.md)
 - [P3.2 — historyczny preflight i późniejsze rozstrzygnięcie użytkownika](docs/P32-PREFLIGHT.md)
 - [Przypadki P3.2, prompty i hashe wejść](docs/p32/cases.json)

@@ -2,7 +2,10 @@
 
 Data: 2026-10-25. Zakres zatwierdzony: [plan V1.6](IMPLEMENTATION-PLAN-V1.6.md).
 Kod, backend, CI, podgląd main i fizyczne usunięcie danych syntetycznych:
-**PASS**. Odbiór użytkowników pozostaje osobnym krokiem. P3.3B nie rozpoczęto.
+**PASS**. **Aktualizacja 2026-10-25: Kasia i Aleksy potwierdzili przetestowanie
+i zaakceptowali P3.3A.** Zlecili tylko propozycję B, bez nowych płatnych wywołań.
+Ogólna akceptacja nie jest osobnym potwierdzeniem każdego punktu checklisty
+ani konkretnych urządzeń. P3.3B nie rozpoczęto.
 
 ## Granica etapu
 
