@@ -38,17 +38,18 @@ export function snapshot(id = ACCOUNT_A, locale = 'pl') {
   };
 }
 
-export async function syntheticPhoto(page) {
-  return Buffer.from(await page.evaluate(async () => {
+export async function syntheticPhoto(page, mimeType = 'image/jpeg') {
+  return Buffer.from(await page.evaluate(async mimeType => {
     const canvas = document.createElement('canvas'); canvas.width = 80; canvas.height = 120;
     const context = canvas.getContext('2d'); context.fillStyle = '#7d3b66'; context.fillRect(0, 0, 80, 120);
-    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, mimeType, 0.9));
     return Array.from(new Uint8Array(await blob.arrayBuffer()));
-  }));
+  }, mimeType));
 }
 
-export async function installBackend(page, { existingItem = false, ownedOutfits = false, locale = 'pl', noSession = false } = {}) {
+export async function installBackend(page, { existingItem = false, ownedOutfits = false, syntheticTrial = false, locale = 'pl', noSession = false } = {}) {
   const image = await syntheticPhoto(page);
+  const png = syntheticTrial ? await syntheticPhoto(page, 'image/png') : null;
   const state = snapshot(ACCOUNT_A, locale);
   const second = snapshot(ACCOUNT_B, locale);
   const objects = new Map();
@@ -56,7 +57,8 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
   const photoRequests = [];
   const unexpected = [];
   const operations = new Map();
-  const control = { state, second, objects, logs, photoRequests, unexpected, failPhoto: 0, holdPhoto: null, holdDownload: null, completedDownloads: 0, pendingDelete: false, failDelete: false, pendingAccountDelete: false, deny: false };
+  const control = { state, second, objects, logs, photoRequests, unexpected, failPhoto: 0, holdPhoto: null, holdDownload: null, completedDownloads: 0, pendingDelete: false, failDelete: false, pendingAccountDelete: false, deny: false,
+    loseVisualizationResponse: false, holdVisualization: null, autoFinishVisualization: true };
   if (existingItem) {
     const mainPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/thumb.jpg`;
     objects.set(mainPath, image); objects.set(thumbPath, image);
@@ -64,7 +66,7 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
       createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z',
       photo: { id: PHOTO_ID, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length } });
   }
-  if (ownedOutfits) {
+  if (ownedOutfits || syntheticTrial) {
     state.state.data.profiles = [structuredClone(demo.profiles[0])];
     state.state.data.activeProfileId = demo.profiles[0].id;
     for (const [index, category, name, occasions] of [
@@ -83,6 +85,25 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
         photo: { id: photoId, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length } });
     }
   }
+  if (syntheticTrial) {
+    const mainPath = `${ACCOUNT_A}/${ACCOUNT_A}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ACCOUNT_A}/${PHOTO_ID}/thumb.jpg`;
+    objects.set(mainPath, image); objects.set(thumbPath, image);
+    state.bodyFit.photo = { id: PHOTO_ID, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length };
+    state.visualization.mode = 'synthetic_trial';
+    state.visualization.trial = { id: 'synthetic-trial', endsAt: new Date(Date.now() + 3_600_000).toISOString(), budgetPln: 10, spentPln: 0, reservedPln: 0, maxSends: 6, sentCount: 0, blocked: false,
+      cases: ['B01', 'B03', 'B05'].map(id => ({ id, label: `Fikcyjny przypadek ${id}`, personPath: mainPath, itemPaths: state.items.slice(0, 3).map(item => item.photo.mainPath), reservePln: 10, model: 'gpt-image-2.5-flare-2026-09-08', promptVersion: 'p33b-v1', jobId: null, sent: false })) };
+  }
+  control.completeVisualization = (caseId, unknown = false) => {
+    const trial = state.visualization.trial; const chosen = trial.cases.find(value => value.id === caseId);
+    const job = state.visualization.jobs.find(value => value.id === chosen.jobId);
+    job.revision++;
+    if (unknown) { job.status = 'outcome_unknown'; job.errorCode = 'OUTCOME_UNKNOWN'; trial.blocked = true; return; }
+    const mainPath = `${ACCOUNT_A}/${job.id}/${job.id}/main.png`; const thumbPath = `${ACCOUNT_A}/${job.id}/${job.id}/thumb.png`;
+    objects.set(mainPath, png); objects.set(thumbPath, png);
+    Object.assign(job, { status: 'succeeded', spentPln: 0.32, completedAt: new Date().toISOString(), result: { mainPath, thumbPath, mimeType: 'image/png', thumbMimeType: 'image/png', bytes: png.length, thumbBytes: png.length, expiresAt: job.expiresAt } });
+    trial.reservedPln -= job.reservedPln; trial.spentPln += 0.32; job.reservedPln = 0;
+    trial.cases.forEach(value => { value.reservePln = 1; });
+  };
   await page.addInitScript(({ authKey, demoKey, auth, demo }) => {
     if (!sessionStorage.getItem('private-test-seeded')) {
       if (auth) localStorage.setItem(authKey, JSON.stringify(auth));
@@ -120,14 +141,15 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
       case 'bootstrap': return json({ data: current });
       case 'downloadPhoto': {
         photoRequests.push({ url: request.url(), method: request.method(), contentType: request.headers()['content-type'], apikey: request.headers().apikey, accountId: subject, body });
-        const photo = [...current.items.filter(value => value.status === 'active').map(value => value.photo), current.bodyFit.photo]
+        const photo = [...current.items.filter(value => value.status === 'active').map(value => value.photo), current.bodyFit.photo,
+          ...current.visualization.jobs.filter(job => job.status === 'succeeded' && Date.parse(job.expiresAt) > Date.now()).map(job => job.result)]
           .find(value => value && [value.mainPath, value.thumbPath].includes(body.path));
         if (!photo || !body.path.startsWith(`${subject}/`) || !objects.has(body.path)) return fail('FORBIDDEN', 403);
         // Capture the already-authorized response, then allow tests to deliver it
         // after the client switches accounts and must abort/discard the read.
         const bytes = objects.get(body.path);
         if (control.holdDownload) await control.holdDownload;
-        await route.fulfill({ status: 200, headers: { ...headers, 'Cache-Control': 'private, no-store, max-age=0', 'CDN-Cache-Control': 'no-store' }, contentType: 'image/jpeg', body: bytes });
+        await route.fulfill({ status: 200, headers: { ...headers, 'Cache-Control': 'private, no-store, max-age=0', 'CDN-Cache-Control': 'no-store' }, contentType: body.path === photo.thumbPath ? photo.thumbMimeType ?? 'image/jpeg' : photo.mimeType, body: bytes });
         control.completedDownloads++;
         return;
       }
@@ -160,7 +182,28 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
       case 'saveStyling':
         if (body.expectedRevision !== current.styling.revision) return fail('CONFLICT');
         current.styling = { revision: current.styling.revision + 1, data: body.data }; return json({ data: current.styling });
-      case 'requestVisualization': return fail('AI_DISABLED', 403);
+      case 'requestVisualization': {
+        const trial = current.visualization.trial;
+        if (current.visualization.mode !== 'synthetic_trial' || !trial) return fail('AI_DISABLED', 403);
+        const chosen = trial.cases.find(value => value.id === body.caseId);
+        if (!chosen || chosen.jobId || chosen.sent || trial.blocked || trial.sentCount >= 6 || Date.parse(trial.endsAt) <= Date.now()
+          || current.visualization.jobs.some(job => ['reserved', 'sent', 'outcome_unknown'].includes(job.status))) return fail('TRIAL_BLOCKED');
+        if (body.accepted !== true || body.consentVersion !== 'p33b-synthetic-v1') return fail('AI_CONSENT_REQUIRED');
+        chosen.jobId = body.operationId; chosen.sent = true; trial.sentCount++; trial.reservedPln += chosen.reservePln;
+        const job = { id: body.operationId, revision: 1, outfitId: ITEM_ID, status: 'sent', createdAt: new Date().toISOString(), completedAt: null,
+          expiresAt: new Date(Date.now() + 30 * 86_400_000).toISOString(), errorCode: null, reservedPln: chosen.reservePln, spentPln: null, result: null, review: null };
+        current.visualization.jobs.push(job);
+        if (control.holdVisualization) await control.holdVisualization;
+        if (control.loseVisualizationResponse) return route.abort('failed');
+        if (control.autoFinishVisualization) control.completeVisualization(chosen.id);
+        return json({ data: job }, 202);
+      }
+      case 'reviewVisualization': {
+        const job = current.visualization.jobs.find(value => value.id === body.jobId);
+        if (!job || job.revision !== body.expectedRevision) return fail('CONFLICT');
+        job.review = { scores: body.scores, criticalError: body.criticalError, note: body.note }; job.revision++;
+        return json({ data: job });
+      }
       case 'getVisualization': {
         const job = current.visualization.jobs.find(value => value.id === body.jobId);
         return job ? json({ data: job }) : fail('NOT_FOUND', 404);
@@ -170,9 +213,12 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
         if (!job || job.revision !== body.expectedRevision) return fail('CONFLICT');
         job.status = 'cancelled'; job.revision++; return json({ data: job });
       }
-      case 'deleteVisualization':
+      case 'deleteVisualization': {
+        const job = current.visualization.jobs.find(value => value.id === body.jobId);
+        if (job?.result) { objects.delete(job.result.mainPath); objects.delete(job.result.thumbPath); }
         current.visualization.jobs = current.visualization.jobs.filter(value => value.id !== body.jobId);
         return json({ data: { status: 'deleted' } });
+      }
       case 'deleteAiData':
         if (body.expectedRevision !== current.bodyFit.revision) return fail('CONFLICT');
         current.visualization.jobs = []; return json({ data: { status: 'deleted' } });

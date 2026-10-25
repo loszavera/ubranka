@@ -35,6 +35,10 @@ const pl = {
   localUnavailable: 'Nie udało się odczytać danych demo. Wróć do demo i rozwiąż problem odczytu przed importem.',
   reasonSetting: 'Pytaj o powód odrzucenia', retry: 'Spróbuj ponownie', photoFailure: 'Nie udało się wczytać zdjęcia.',
   errors: {
+    ai_consent_required: 'Potwierdź zgodę na pojedyncze wysłanie pokazanych syntetycznych obrazów.',
+    trial_blocked: 'Ta próba nie może być wysłana. Sprawdź stan i limity; nie ponawiamy żądania.',
+    invalid_review: 'Oceń każdą kategorię od 0 do 2. Uwagi mogą mieć do 1000 znaków.',
+    not_found: 'Nie znaleziono dostępnego zadania. Nie wysyłaj próby ponownie; odśwież stan lub sprawdź zgłoszenie z osobą prowadzącą próbę.',
     invalid_body_fit: 'Podaj wymiary większe od 0 i nie większe niż 300 cm, z najwyżej jednym miejscem po przecinku. Rozmiar może mieć do 30 znaków.',
     storage_consent_required: 'Przed zapisem potwierdź zgodę na przechowywanie wybranego zdjęcia sylwetki.',
     ai_disabled: 'Generowanie AI jest wyłączone na tym etapie.',
@@ -90,6 +94,10 @@ const en: typeof pl = {
   localUnavailable: 'The demo data could not be read. Return to the demo and resolve the read issue before importing.',
   reasonSetting: 'Ask why I rejected a suggestion', retry: 'Try again', photoFailure: 'The photo could not be loaded.',
   errors: {
+    ai_consent_required: 'Confirm consent for this single submission of the shown synthetic images.',
+    trial_blocked: 'This attempt cannot be sent. Check its status and limits; the request will not be retried.',
+    invalid_review: 'Rate every category from 0 to 2. Notes can have up to 1000 characters.',
+    not_found: 'No available job was found. Do not resubmit the case; refresh or check with the trial operator.',
     invalid_body_fit: 'Enter measurements above 0 and up to 300 cm, with at most one decimal place. Sizes can have up to 30 characters.',
     storage_consent_required: 'Confirm photo storage consent before saving the selected body photo.',
     ai_disabled: 'AI generation is switched off at this stage.',

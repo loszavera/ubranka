@@ -148,7 +148,7 @@ export function usePrivateWardrobe() {
     const job = store.getSnapshot().snapshot?.visualization?.jobs.find(value => value.id === jobId);
     if (!identity || !job?.result || job.status !== 'succeeded' || !(Date.parse(job.expiresAt) > Date.now())) throw new PrivateError('RESULT_UNAVAILABLE');
     const result = job.result;
-    const isCurrent = () => store.getSnapshot().identity === identity && store.getSnapshot().snapshot?.visualization?.jobs.some(value => value.id === jobId && value.result?.id === result.id && value.status === 'succeeded' && Date.parse(value.expiresAt) > Date.now()) === true;
+    const isCurrent = () => store.getSnapshot().identity === identity && store.getSnapshot().snapshot?.visualization?.jobs.some(value => value.id === jobId && value.result?.mainPath === result.mainPath && value.result?.thumbPath === result.thumbPath && value.status === 'succeeded' && Date.parse(value.expiresAt) > Date.now()) === true;
     setExporting(true); setAuthError(null);
     try { await downloadPrivateFile(await photos.download(result.mainPath), result.mimeType, result.mimeType === 'image/png' ? 'ubranka-visualization.png' : 'ubranka-visualization.jpg', isCurrent); }
     catch (error) { const safe = asPrivateError(error); setAuthError(safe.code); throw safe; }
@@ -161,10 +161,12 @@ export function usePrivateWardrobe() {
     identity: view.identity, snapshot: view.snapshot, busy: view.busy || exporting,
     error: authError ?? view.error, conflict: view.error === 'CONFLICT', deletion: accountDeletion ?? view.deletion,
     pendingSave: view.pendingSave,
+    visualizationAttempt: view.visualizationAttempt,
     signIn, signOut, refresh: () => { store.clearError(); return store.refresh(); }, clearError: () => { setAuthError(null); store.clearError(); },
     saveSettings: store.saveSettings, saveItem: store.saveItem, deleteItem: store.deleteItem, deletePhoto: store.deletePhoto,
     saveBodyFit: store.saveBodyFit, uploadBodyPhoto: store.uploadBodyPhoto, deleteBodyPhoto: store.deleteBodyPhoto, saveStyling: store.saveStyling,
     cancelVisualization: store.cancelVisualization, deleteVisualization: store.deleteVisualization, deleteAiData: store.deleteAiData,
+    requestVisualization: store.requestVisualization, getVisualization: store.getVisualization, reviewVisualization: store.reviewVisualization,
     deleteAccount, importP2: store.importP2, getPhoto, exportData, downloadVisualization,
   };
 }

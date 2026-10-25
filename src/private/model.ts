@@ -46,12 +46,28 @@ export interface BodyFit { revision: number; data: BodyFitData; photo: PrivatePh
 export interface StylingData { outfits: SavedPrivateOutfit[]; feedback: PrivateOutfitFeedback[] }
 export interface StylingState { revision: number; data: StylingData }
 export type VisualizationStatus = 'reserved' | 'sent' | 'succeeded' | 'failed' | 'outcome_unknown' | 'cancelled' | 'expired';
+export interface VisualizationReview {
+  scores: { person: number; garments: number; completeness: number; artifacts: number; usefulness: number };
+  criticalError: boolean; note: string;
+}
+export interface VisualizationResult {
+  mainPath: string; thumbPath: string; bytes: number; thumbBytes: number; mimeType: string; thumbMimeType?: string; expiresAt?: string;
+}
+export interface SyntheticCase {
+  id: string; label: string; personPath: string; itemPaths: string[]; reservePln: number; model: string; promptVersion: string;
+  jobId: string | null; sent: boolean;
+}
+export interface SyntheticTrial {
+  id: string; endsAt: string; budgetPln: number; spentPln: number; reservedPln: number; maxSends: number; sentCount: number;
+  blocked: boolean; cases: SyntheticCase[];
+}
 export interface VisualizationJob {
   id: string; revision: number; outfitId: string; status: VisualizationStatus; createdAt: string; completedAt: string | null;
-  expiresAt: string; errorCode: string | null; reservedPln: number; spentPln: number | null; result: PrivatePhoto | null;
+  expiresAt: string; errorCode: string | null; reservedPln: number; spentPln: number | null; result: VisualizationResult | null;
+  review?: VisualizationReview | null;
 }
 export interface VisualizationState {
-  mode: 'off'; jobs: VisualizationJob[]; consent: { accepted: false; version: string };
+  mode: 'off' | 'synthetic_trial'; jobs: VisualizationJob[]; consent: { accepted: false; version: string }; trial?: SyntheticTrial | null;
   limits: { results: number; attempts: number; dailyAttempts: number; usedResults: number; usedAttempts: number; usedDailyAttempts: number;
     reservedPln: number; spentPln: number; budgetPln: number; trialEndsAt: string | null; monthResetsAt: string; dayResetsAt: string };
 }

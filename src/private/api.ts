@@ -1,4 +1,4 @@
-import { PrivateError, type VisualizationJob, type BodyFit, type BodyFitData, type StylingData, type StylingState, type CloudState, type ExportManifest, type ItemFields, type PrivateItem, type PrivateSettings, type PrivateSnapshot } from './model.ts';
+import { PrivateError, type VisualizationReview, type VisualizationJob, type BodyFit, type BodyFitData, type StylingData, type StylingState, type CloudState, type ExportManifest, type ItemFields, type PrivateItem, type PrivateSettings, type PrivateSnapshot } from './model.ts';
 
 export type WardrobeCall = <T>(action: string, payload?: Record<string, unknown>, signal?: AbortSignal) => Promise<T>;
 export interface DeleteResult { status: 'deleted' | 'pending' }
@@ -37,6 +37,12 @@ export class WardrobeApi {
     return this.call<StylingState>('saveStyling', { data, expectedRevision }, signal);
   }
   getVisualization(jobId: string, signal?: AbortSignal) { return this.call<VisualizationJob>('getVisualization', { jobId }, signal); }
+  requestVisualization(operationId: string, caseId: string, signal?: AbortSignal) {
+    return this.call<VisualizationJob>('requestVisualization', { operationId, caseId, consentVersion: 'p33b-synthetic-v1', accepted: true }, signal);
+  }
+  reviewVisualization(jobId: string, expectedRevision: number, review: VisualizationReview, signal?: AbortSignal) {
+    return this.call<VisualizationJob>('reviewVisualization', { jobId, expectedRevision, ...review }, signal);
+  }
   cancelVisualization(jobId: string, expectedRevision: number, signal?: AbortSignal) { return this.call<VisualizationJob>('cancelVisualization', { jobId, expectedRevision }, signal); }
   deleteVisualization(jobId: string, expectedRevision: number, signal?: AbortSignal) { return this.call<DeleteResult>('deleteVisualization', { jobId, expectedRevision }, signal); }
   deleteAiData(expectedRevision: number, signal?: AbortSignal) { return this.call<DeleteResult>('deleteAiData', { expectedRevision }, signal); }

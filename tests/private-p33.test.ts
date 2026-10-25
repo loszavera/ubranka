@@ -125,3 +125,89 @@ test('deleting all AI data hides controlled inputs on refresh failure while pres
   const after = store.getSnapshot().snapshot!;
   assert.equal(after.bodyFit?.photo, null); assert.equal(after.bodyFit?.data.heightCm, 172.5); assert.deepEqual(after.items, value.items); assert.equal(after.visualization?.jobs.length, 0);
 });
+
+function trialSnapshot(): PrivateSnapshot {
+  const value = snapshot();
+  value.visualization!.mode = 'synthetic_trial';
+  value.visualization!.trial = { id: 'fixture-trial', endsAt: '2099-01-01T00:00:00Z', budgetPln: 10, spentPln: 0, reservedPln: 0, maxSends: 6, sentCount: 0, blocked: false,
+    cases: [{ id: 'B01', label: 'Fixture', personPath: photo.mainPath, itemPaths: [photo.mainPath, photo.mainPath], reservePln: 10, model: 'fixture-model', promptVersion: 'p33b-v1', jobId: null, sent: false }] };
+  return value;
+}
+
+test('B request checks server mode and explicit per-attempt consent before any generation call', async () => {
+  let value = snapshot(); let requests = 0;
+  const store = new PrivateStore(new WardrobeApi(wrap(async action => { if (action === 'bootstrap') return value; requests++; return job(); })), () => operationId);
+  store.setIdentity(identity); await store.refresh();
+  await assert.rejects(store.requestVisualization(operationId, 'B01', true), /AI_DISABLED/);
+  value = trialSnapshot(); await store.refresh();
+  await assert.rejects(store.requestVisualization(operationId, 'B01', false), /AI_CONSENT_REQUIRED/);
+  assert.equal(requests, 0); assert.equal(store.getSnapshot().visualizationAttempt, null);
+});
+
+test('uncertain B request is never replayed, even with a new UUID or read refresh', async () => {
+  let requests = 0; const value = trialSnapshot();
+  const store = new PrivateStore(new WardrobeApi(wrap(async (action, payload) => {
+    if (action === 'bootstrap') return value;
+    assert.equal(action, 'requestVisualization'); requests++;
+    assert.deepEqual(payload, { operationId, caseId: 'B01', consentVersion: 'p33b-synthetic-v1', accepted: true });
+    throw new PrivateError('NETWORK');
+  })), () => operationId);
+  store.setIdentity(identity); await store.refresh();
+  await assert.rejects(store.requestVisualization(operationId, 'B01', true), /NETWORK/);
+  await store.refresh();
+  await assert.rejects(store.requestVisualization('cccccccc-cccc-4ccc-8ccc-cccccccccccc', 'B01', true), /TRIAL_BLOCKED/);
+  assert.equal(requests, 1); assert.deepEqual(store.getSnapshot().visualizationAttempt, { id: operationId, caseId: 'B01', status: 'unconfirmed' });
+});
+
+test('lost response is recovered by a read of the original UUID and server case tombstone remains used', async () => {
+  const value = trialSnapshot(); const actions: string[] = [];
+  const store = new PrivateStore(new WardrobeApi(wrap(async (action, payload) => {
+    actions.push(action);
+    if (action === 'bootstrap') return value;
+    if (action === 'requestVisualization') {
+      value.visualization!.trial!.cases[0].jobId = operationId; value.visualization!.trial!.cases[0].sent = true;
+      throw new PrivateError('NETWORK');
+    }
+    assert.equal(action, 'getVisualization'); assert.equal(payload.jobId, operationId); return job();
+  })), () => operationId);
+  store.setIdentity(identity); await store.refresh(); await assert.rejects(store.requestVisualization(operationId, 'B01', true), /NETWORK/);
+  await store.getVisualization(operationId);
+  assert.equal(store.getSnapshot().visualizationAttempt?.status, 'accepted');
+  assert.equal(store.getSnapshot().snapshot?.visualization?.jobs[0].id, operationId);
+  assert.equal(actions.filter(action => action === 'requestVisualization').length, 1);
+});
+
+test('B blocks global in-flight reserve, exhausted sends, expired window and server block without touching network', async () => {
+  for (const changes of [{ reservedPln: 1 }, { sentCount: 6 }, { endsAt: '2020-01-01T00:00:00Z' }, { blocked: true }]) {
+    const value = trialSnapshot(); Object.assign(value.visualization!.trial!, changes); let requests = 0;
+    const store = new PrivateStore(new WardrobeApi(wrap(async action => { if (action === 'bootstrap') return value; requests++; return job(); })), () => operationId);
+    store.setIdentity(identity); await store.refresh(); await assert.rejects(store.requestVisualization(operationId, 'B01', true), /TRIAL_BLOCKED|AI_DISABLED/);
+    assert.equal(requests, 0);
+  }
+});
+
+test('concurrent click and late generation response cannot cross accounts', async () => {
+  let resolve!: (value: VisualizationJob) => void; const pending = new Promise<VisualizationJob>(done => { resolve = done; });
+  let signal: AbortSignal | undefined; let requests = 0;
+  const store = new PrivateStore(new WardrobeApi(wrap(async (action, _payload, requestSignal) => {
+    if (action === 'bootstrap') return trialSnapshot(); requests++; signal = requestSignal; return pending;
+  })), () => operationId);
+  store.setIdentity(identity); await store.refresh(); const first = store.requestVisualization(operationId, 'B01', true);
+  await assert.rejects(store.requestVisualization(operationId, 'B01', true), /BUSY/);
+  store.setIdentity({ id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc', email: 'other@example.invalid' });
+  assert.equal(signal?.aborted, true); resolve(job()); await assert.rejects(first, /SESSION_CHANGED/);
+  assert.equal(requests, 1); assert.equal(store.getSnapshot().visualizationAttempt, null); assert.equal(store.getSnapshot().snapshot, null);
+});
+
+test('image fidelity review uses its own CAS action and never changes outfit taste feedback', async () => {
+  const value = trialSnapshot(); value.visualization!.jobs = [job()]; const calls: string[] = [];
+  const review = { scores: { person: 2, garments: 1, completeness: 2, artifacts: 2, usefulness: 1 }, criticalError: true, note: 'Synthetic changed cut' };
+  const store = new PrivateStore(new WardrobeApi(wrap(async (action, payload) => {
+    if (action === 'bootstrap') return value; calls.push(action);
+    assert.equal(action, 'reviewVisualization'); assert.equal(payload.expectedRevision, 1); assert.deepEqual(payload.scores, review.scores);
+    return { ...job(), revision: 2, review };
+  })), () => operationId);
+  store.setIdentity(identity); await store.refresh(); await store.reviewVisualization(operationId, 1, review);
+  assert.deepEqual(store.getSnapshot().snapshot?.styling?.data.feedback, []);
+  assert.deepEqual(store.getSnapshot().snapshot?.visualization?.jobs[0].review, review); assert.deepEqual(calls, ['reviewVisualization']);
+});

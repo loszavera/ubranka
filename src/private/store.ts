@@ -1,6 +1,6 @@
 import type { AppState } from '../domain/model.ts';
 import { WardrobeApi, asPrivateError, type DeleteResult } from './api.ts';
-import { BODY_STORAGE_CONSENT, bytesToBase64, importReceiptId, mergeP2Import, normalizeBodyFitData, normalizeItemFields, PrivateError, type BodyFitData, type StylingData, type PrivateIdentity, type PrivateItem, type PrivateSettings, type PrivateSnapshot, type SaveItemInput } from './model.ts';
+import { BODY_STORAGE_CONSENT, bytesToBase64, importReceiptId, mergeP2Import, normalizeBodyFitData, normalizeItemFields, PrivateError, type VisualizationJob, type VisualizationReview, type BodyFitData, type StylingData, type PrivateIdentity, type PrivateItem, type PrivateSettings, type PrivateSnapshot, type SaveItemInput } from './model.ts';
 
 export interface UploadPhoto {
   main: { bytes: Uint8Array; mimeType: 'image/jpeg' };
@@ -15,12 +15,14 @@ export interface PrivateView {
   // Photo-only/account notices. Item cleanup is represented by snapshot tombstones.
   deletion: DeleteResult | null;
   pendingSave: { itemId: string; baseRevision: number | undefined; revision: number } | null;
+  visualizationAttempt: { id: string; caseId: string; status: 'sending' | 'accepted' | 'unconfirmed' } | null;
 }
 
 const ACCESS_REVOKED = new Set(['UNAUTHENTICATED', 'ACCOUNT_UNAVAILABLE', 'NOT_INVITED', 'SIGNED_OUT']);
 
 export class PrivateStore {
-  private view: PrivateView = { identity: null, snapshot: null, loading: false, busy: false, error: null, deletion: null, pendingSave: null };
+  private view: PrivateView = { identity: null, snapshot: null, loading: false, busy: false, error: null, deletion: null, pendingSave: null, visualizationAttempt: null };
+  private attemptedCases = new Set<string>();
   private generation = 0;
   private listeners = new Set<() => void>();
   private controllers = new Set<AbortController>();
@@ -45,7 +47,8 @@ export class PrivateStore {
     this.controllers.forEach(controller => controller.abort()); this.controllers.clear(); this.clearPhotos();
     this.photoOperations = new WeakMap();
     this.stagedSaves.clear();
-    this.patch({ identity, snapshot: null, loading: false, busy: false, error: null, deletion: null, pendingSave: null });
+    this.attemptedCases.clear();
+    this.patch({ identity, snapshot: null, loading: false, busy: false, error: null, deletion: null, pendingSave: null, visualizationAttempt: null });
   }
   clearError = () => this.patch({ error: null });
   private reportFailure(code: string) {
@@ -65,10 +68,12 @@ export class PrivateStore {
       if (version !== this.refreshVersion) return;
       if (snapshot.accountId !== this.view.identity?.id) throw new PrivateError('INVALID_RESPONSE');
       if (JSON.stringify(snapshot) !== JSON.stringify(this.view.snapshot)) {
-        const paths = (value: PrivateSnapshot | null) => `${value?.items.map(item => item.photo?.id ?? '').join('|')}|${value?.bodyFit?.photo?.id ?? ''}|${value?.visualization?.jobs.map(job => job.result?.id ?? '').join('|')}`;
+        const paths = (value: PrivateSnapshot | null) => `${value?.items.map(item => item.photo?.id ?? '').join('|')}|${value?.bodyFit?.photo?.id ?? ''}|${value?.visualization?.jobs.map(job => job.result ? `${job.result.mainPath}:${job.result.thumbPath}` : '').join('|')}`;
         if (paths(snapshot) !== paths(this.view.snapshot)) this.clearPhotos();
         this.patch({ snapshot });
       }
+      const attempt = this.view.visualizationAttempt;
+      if (attempt && snapshot.visualization?.jobs.some(job => job.id === attempt.id)) this.patch({ visualizationAttempt: { ...attempt, status: 'accepted' } });
     } catch (error) {
       if (generation === this.generation && version === this.refreshVersion) this.reportFailure(asPrivateError(error).code);
     } finally {
@@ -205,6 +210,55 @@ export class PrivateStore {
     const styling = await this.api.saveStyling(data, expectedRevision, signal); this.assertCurrent(generation);
     if (this.view.snapshot) this.patch({ snapshot: { ...this.view.snapshot, styling } });
     return styling;
+  });
+
+  private replaceVisualization(job: VisualizationJob) {
+    const current = this.view.snapshot;
+    if (!current?.visualization) return;
+    const existing = current.visualization.jobs.find(value => value.id === job.id);
+    if (existing && existing.revision > job.revision) return;
+    if (existing?.result?.mainPath !== job.result?.mainPath) this.clearPhotos();
+    this.patch({ snapshot: { ...current, visualization: { ...current.visualization, jobs: [...current.visualization.jobs.filter(value => value.id !== job.id), job] } } });
+  }
+
+  requestVisualization = (operationId: string, caseId: string, accepted: boolean) => this.mutate(async (signal, generation) => {
+    const visual = this.view.snapshot?.visualization; const trial = visual?.trial;
+    const selected = trial?.cases.find(value => value.id === caseId);
+    if (!accepted) throw new PrivateError('AI_CONSENT_REQUIRED');
+    if (!/^[a-f\d]{8}-[a-f\d]{4}-4[a-f\d]{3}-[89ab][a-f\d]{3}-[a-f\d]{12}$/i.test(operationId)) throw new PrivateError('INVALID_INPUT');
+    if (visual?.mode !== 'synthetic_trial' || !trial || !selected || !(Date.parse(trial.endsAt) > Date.now())) throw new PrivateError('AI_DISABLED');
+    if (trial.blocked || trial.reservedPln > 0 || trial.sentCount >= trial.maxSends || selected.sent || selected.jobId || this.attemptedCases.has(caseId)
+      || this.view.visualizationAttempt?.status === 'unconfirmed' || visual.jobs.some(job => ['reserved', 'sent', 'outcome_unknown'].includes(job.status))) throw new PrivateError('TRIAL_BLOCKED');
+    if (!Number.isFinite(selected.reservePln) || selected.reservePln <= 0 || trial.spentPln + trial.reservedPln + selected.reservePln > trial.budgetPln + 0.000001) throw new PrivateError('TRIAL_BLOCKED');
+    this.attemptedCases.add(caseId);
+    this.patch({ visualizationAttempt: { id: operationId, caseId, status: 'sending' } });
+    try {
+      // Exactly one POST per explicit attempt. A failed/unknown response is
+      // recovered by reads of this UUID, never by replaying this request.
+      const job = await this.api.requestVisualization(operationId, caseId, signal); this.assertCurrent(generation);
+      if (job.id !== operationId) throw new PrivateError('INVALID_RESPONSE');
+      this.replaceVisualization(job);
+      this.patch({ visualizationAttempt: { id: operationId, caseId, status: 'accepted' } });
+      const current = this.view.snapshot!;
+      if (current.visualization?.trial) this.patch({ snapshot: { ...current, visualization: { ...current.visualization, trial: { ...current.visualization.trial, cases: current.visualization.trial.cases.map(value => value.id === caseId ? { ...value, jobId: job.id } : value) } } } });
+      return job;
+    } catch (error) {
+      if (generation === this.generation) this.patch({ visualizationAttempt: { id: operationId, caseId, status: 'unconfirmed' } });
+      throw error;
+    }
+  });
+
+  getVisualization = (jobId: string) => this.mutate(async (signal, generation) => {
+    const job = await this.api.getVisualization(jobId, signal); this.assertCurrent(generation);
+    if (job.id !== jobId) throw new PrivateError('INVALID_RESPONSE');
+    this.replaceVisualization(job);
+    if (this.view.visualizationAttempt?.id === jobId) this.patch({ visualizationAttempt: { ...this.view.visualizationAttempt, status: 'accepted' } });
+    return job;
+  });
+  reviewVisualization = (jobId: string, expectedRevision: number, review: VisualizationReview) => this.mutate(async (signal, generation) => {
+    if (['person', 'garments', 'completeness', 'artifacts', 'usefulness'].some(key => { const score = review.scores[key as keyof VisualizationReview['scores']]; return !Number.isInteger(score) || score < 0 || score > 2; }) || review.note.length > 1000) throw new PrivateError('INVALID_REVIEW');
+    const job = await this.api.reviewVisualization(jobId, expectedRevision, review, signal); this.assertCurrent(generation);
+    this.replaceVisualization(job); return job;
   });
 
   cancelVisualization = (jobId: string, expectedRevision: number) => this.mutate(async (signal, generation) => {

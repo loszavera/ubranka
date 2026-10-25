@@ -14,7 +14,8 @@ export class PrivatePhotoAccess {
     if (Platform.OS === 'web') this.urls.forEach(url => URL.revokeObjectURL(url));
     this.urls.clear();
   };
-  async download(path: string): Promise<Uint8Array> {
+  async download(path: string): Promise<Uint8Array> { return (await this.read(path)).bytes; }
+  private async read(path: string): Promise<{ bytes: Uint8Array; mimeType: string }> {
     const generation = this.generation;
     const { data, error } = await this.services.client.auth.getSession();
     if (error || !data.session) throw new PrivateError('SIGNED_OUT');
@@ -32,17 +33,21 @@ export class PrivatePhotoAccess {
         cache: 'no-store', signal: controller.signal,
       });
       if (!response.ok) throw new PrivateError(response.status === 401 ? 'SIGNED_OUT' : 'PHOTO_UNAVAILABLE');
+      const mimeType = response.headers.get('content-type')?.split(';')[0].trim().toLowerCase();
+      if (mimeType !== 'image/jpeg' && mimeType !== 'image/png') throw new PrivateError('PHOTO_UNAVAILABLE');
+      if (Number(response.headers.get('content-length')) > 8_388_608) throw new PrivateError('PHOTO_TOO_LARGE');
       const bytes = new Uint8Array(await response.arrayBuffer());
       if (generation !== this.generation) throw new PrivateError('SESSION_CHANGED');
-      return bytes;
+      if (!bytes.length || bytes.length > 8_388_608) throw new PrivateError('PHOTO_TOO_LARGE');
+      return { bytes, mimeType };
     } finally { this.requests.delete(controller); }
   }
   async get(path: string): Promise<PhotoLease> {
     const generation = this.generation;
-    const bytes = await this.download(path);
+    const { bytes, mimeType } = await this.read(path);
     if (generation !== this.generation) throw new PrivateError('SESSION_CHANGED');
-    if (Platform.OS !== 'web') return { uri: `data:image/jpeg;base64,${bytesToBase64(bytes)}`, release: () => {} };
-    const uri = URL.createObjectURL(new Blob([bytes.slice().buffer], { type: 'image/jpeg' }));
+    if (Platform.OS !== 'web') return { uri: `data:${mimeType};base64,${bytesToBase64(bytes)}`, release: () => {} };
+    const uri = URL.createObjectURL(new Blob([bytes.slice().buffer], { type: mimeType }));
     this.urls.add(uri);
     return { uri, release: () => { URL.revokeObjectURL(uri); this.urls.delete(uri); } };
   }

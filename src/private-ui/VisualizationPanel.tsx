@@ -9,6 +9,8 @@ import { privateError } from './copy';
 import { p33Copy } from './p33copy';
 import { p33Styles as s } from './p33styles';
 import { PrivatePhoto } from './PrivatePhoto';
+import { SyntheticTrialPanel, VisualizationReviewForm } from './SyntheticTrialPanel';
+import { p33bCopy } from './p33bcopy';
 
 type Api = ReturnType<typeof usePrivateWardrobe>;
 function Example({ locale }: { locale: Locale }) {
@@ -29,7 +31,7 @@ export function VisualizationPreparation({ outfit, api, locale }: { outfit: Priv
   const items = valid ? outfit.itemIds.map(id => snapshot?.items.find(item => item.id === id)).filter(item => !!item) : [];
   const missing = !snapshot?.bodyFit?.photo || items.some(item => !item.photo);
   return <View style={s.stack}>
-    <View style={s.warning}><Text style={s.title}>{t.visualOff}</Text><Text style={s.body}>{t.visualOffHelp}</Text></View>
+    <View style={s.warning}><Text style={s.title}>{t.visualOff}</Text><Text style={s.body}>{snapshot?.visualization?.trial ? p33bCopy(locale).caseOnly : t.visualOffHelp}</Text></View>
     {!valid || bodyChanged ? <Text style={s.error}>{t.invalidInputs}</Text> : <>
       <Text style={s.title}>{t.personInput}</Text>
       {snapshot?.bodyFit?.photo ? <PrivatePhoto path={snapshot.bodyFit.photo.thumbPath} api={api} locale={locale} label={t.fitPhoto} /> : <Text style={s.note}>{t.missing}</Text>}
@@ -47,6 +49,7 @@ export function VisualizationPanel({ api, locale }: { api: Api; locale: Locale }
   const [deleting, setDeleting] = useState<VisualizationJob | null>(null);
   const [deleteAllRevision, setDeleteAllRevision] = useState<number | null>(null);
   const [error, setError] = useState('');
+  const [reviewing, setReviewing] = useState<VisualizationJob | null>(null);
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const timer = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(timer); }, []);
   if (!visual) return <Text style={s.body}>{t.unavailable}</Text>;
@@ -54,9 +57,10 @@ export function VisualizationPanel({ api, locale }: { api: Api; locale: Locale }
   const run = (action: Promise<unknown>) => { setError(''); void action.catch(issue => setError(privateError(locale, issue))); };
   const money = (value: number | null) => value === null ? t.unknown : `${value.toFixed(2)} PLN`;
   return <View style={s.stack}>
-    <View style={s.warning}><Text accessibilityRole="header" style={s.title}>{t.visualOff}</Text><Text style={s.body}>{t.visualOffHelp}</Text><Text style={s.note}>{t.noPilot}</Text></View>
-    <View style={s.card}><Text style={s.body}>{t.results}: {limits.usedResults}/{limits.results} · {t.attempts}: {limits.usedAttempts}/{limits.attempts} · {t.daily}: {limits.usedDailyAttempts}/{limits.dailyAttempts}</Text>
+    {visual.trial ? <SyntheticTrialPanel api={api} locale={locale} now={now} /> : <><View style={s.warning}><Text accessibilityRole="header" style={s.title}>{t.visualOff}</Text><Text style={s.body}>{t.visualOffHelp}</Text><Text style={s.note}>{t.noPilot}</Text></View>
+      <View style={s.card}><Text style={s.body}>{t.results}: {limits.usedResults}/{limits.results} · {t.attempts}: {limits.usedAttempts}/{limits.attempts} · {t.daily}: {limits.usedDailyAttempts}/{limits.dailyAttempts}</Text>
       <Text style={s.body}>{t.spent}: {money(limits.spentPln)} · {t.reserved}: {money(limits.reservedPln)}</Text><Text style={s.note}>{t.reservationHelp}</Text></View>
+    </>}
     <Example locale={locale} />
     <Text accessibilityRole="header" style={s.title}>{t.history}</Text>
     {!visual.jobs.length ? <Text style={s.body}>{t.noJobs}</Text> : null}
@@ -64,7 +68,9 @@ export function VisualizationPanel({ api, locale }: { api: Api; locale: Locale }
       <Text style={s.title}>{t.jobStates[job.status]}</Text><Text style={s.note}>{new Date(job.createdAt).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-GB')}</Text>
       <Text style={s.body}>{t.spent}: {money(job.spentPln)} · {t.reserved}: {money(job.reservedPln)}</Text>
       {job.status === 'outcome_unknown' || job.status === 'sent' ? <Text style={s.body}>{t.reservationHelp}</Text> : null}
-      {job.status === 'succeeded' && job.result && Date.parse(job.expiresAt) > now ? <><PrivatePhoto path={job.result.thumbPath} api={api} locale={locale} /><Text style={s.note}>{t.visualCaveat}</Text><Button label={t.download} kind="secondary" disabled={api.busy} onPress={() => run(api.downloadVisualization(job.id))} /></> : job.status === 'succeeded' ? <Text style={s.note}>{t.noResult}</Text> : null}
+      {job.status === 'succeeded' && job.result && Date.parse(job.expiresAt) > now ? <><PrivatePhoto path={job.result.thumbPath} api={api} locale={locale} label={p33bCopy(locale).result} /><Text style={s.note}>{t.visualCaveat}</Text><Button label={t.download} kind="secondary" disabled={api.busy} onPress={() => run(api.downloadVisualization(job.id))} />
+        <Button label={p33bCopy(locale).rate} kind="secondary" disabled={api.busy} onPress={() => { api.clearError(); setReviewing(job); }} /></> : job.status === 'succeeded' ? <Text style={s.note}>{t.noResult}</Text> : null}
+      {job.review ? <Text style={s.note}>{p33bCopy(locale).reviewed}: {Object.values(job.review.scores).reduce((sum, value) => sum + value, 0)}/10{job.review.criticalError ? ` · ${p33bCopy(locale).critical}` : ''}</Text> : null}
       {job.status === 'reserved' ? <Button label={t.cancelJob} disabled={api.busy} kind="secondary" onPress={() => run(api.cancelVisualization(job.id, job.revision))} /> : null}
       {['succeeded', 'failed', 'outcome_unknown', 'cancelled', 'expired'].includes(job.status) ? <Button label={t.deleteJob} disabled={api.busy} kind="quiet" onPress={() => { api.clearError(); setDeleting(job); }} /> : null}
     </View>)}
@@ -77,6 +83,9 @@ export function VisualizationPanel({ api, locale }: { api: Api; locale: Locale }
     <Dialog visible={deleteAllRevision !== null} title={t.deleteAiData} closeLabel={t.cancel} onClose={() => { if (!api.busy) setDeleteAllRevision(null); }}>
       <Text style={s.body}>{t.deleteAiBody}</Text>{error ? <Text style={s.error}>{error}</Text> : null}
       <Button label={t.deleteAiData} disabled={api.busy || deleteAllRevision !== api.snapshot?.bodyFit?.revision} onPress={() => { if (deleteAllRevision !== null) run(api.deleteAiData(deleteAllRevision).then(() => setDeleteAllRevision(null))); }} />
+    </Dialog>
+    <Dialog visible={!!reviewing} title={p33bCopy(locale).rate} closeLabel={t.cancel} onClose={() => { if (!api.busy) setReviewing(null); }}>
+      {reviewing ? <VisualizationReviewForm key={reviewing.id} job={reviewing} api={api} locale={locale} onDone={() => setReviewing(null)} /> : null}
     </Dialog>
   </View>;
 }
