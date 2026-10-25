@@ -43,11 +43,13 @@ Użytkownik pozwolił rozpocząć pomiar bez pełnej estymacji, zachowując limi
 **P3.3A: przetestowane i zaakceptowane przez Kasię i Aleksego, z AI wyłączonym.** Profil
 sylwetki, prywatne zdjęcie w Supabase, maksymalnie dwa zestawy z własnej szafy,
 zapis/opinie i przygotowanie wizualizacji PL/EN. [Raport oraz instrukcja odbioru](docs/P33A-VERIFICATION.md).
-Próba kilku osobnych zdjęć ubrań w P3.3B i pilotaż prywatnych zdjęć w C
-wymagają późniejszych zgód. [Propozycja P3.3B — V1.7](docs/IMPLEMENTATION-PLAN-V1.7.md)
-obejmuje integrację i najwyżej 6 prób / 10 PLN na syntetycznych obrazach;
-przygotowano wyłącznie dokumentację, bez aktywacji AI lub finansowania.
-Aplikacja nie generuje jeszcze obrazów AI; nie uruchomiono nowych abonamentów.
+**P3.3B zatwierdzono według [V1.7](docs/IMPLEMENTATION-PLAN-V1.7.md):** integracja
+i najwyżej 6 wysłań / 10 PLN na syntetycznych obrazach fikcyjnych dorosłych.
+Powstały serwerowe blokady, prywatne PNG i przepływ zgody/oceny PL/EN.
+**Płatny start jeszcze nie nastąpił; AI pozostaje OFF.** Stan kontroli, dostęp
+do sekretów i wyniki: [raport P3.3B](docs/P33B-REPORT.md),
+[galeria wejść i wyników](https://ubranka.vercel.app/p33b/).
+Pilotaż prywatnych zdjęć C nadal wymaga osobnej zgody. Nie uruchomiono abonamentów.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
 jest wspólna dla obu adresów. Lokalny zapis demo pozostaje osobny — publikacja
@@ -57,9 +59,11 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 ## Dokumenty
 
-- [Wymagania V1.7 — odebrane P3.3A, propozycja B](docs/REQUIREMENTS-V1.7.md)
-- [Plan implementacji V1.7 — konkretna propozycja P3.3B](docs/IMPLEMENTATION-PLAN-V1.7.md)
-- [Zasady danych V1.0 — Supabase w A, AI czeka na osobną zgodę](docs/P33-AI-DATA-POLICY-V1.0.md)
+- [Wymagania V1.7 — odebrane P3.3A, zatwierdzone B](docs/REQUIREMENTS-V1.7.md)
+- [Plan implementacji V1.7 — zatwierdzone P3.3B](docs/IMPLEMENTATION-PLAN-V1.7.md)
+- [Zasady danych V1.0 — A/B i oddzielny przyszły pilotaż C](docs/P33-AI-DATA-POLICY-V1.0.md)
+- [P3.3B — raport integracji, próby i kosztów](docs/P33B-REPORT.md)
+- [P3.3B — kontrakty i bezpłatne kontrole operatorowe](supabase/P33B-OPERATIONS.md)
 - [P3.3A — weryfikacja i test użytkowników](docs/P33A-VERIFICATION.md)
 - [P3.3A — kontrakty backendu i granice przygotowania AI](docs/P33A-BACKEND.md)
 - [Proponowana kontrola kosztów V1.6 — próba P3.3B](docs/COST-PLAN-V1.6.md)
@@ -111,6 +115,7 @@ npm run check
 npm test
 npm run test:backend
 npm run check:backend
+npm run test:codec
 npm run test:e2e
 npm run test:private:e2e
 npm run check:dependencies

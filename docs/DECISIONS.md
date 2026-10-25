@@ -74,6 +74,10 @@ Nowe wpisy z 2026-10-24:
 | D-048 | 2026-10-25 | Odbiór P3.3A i zlecone planowanie B | Kasia i Aleksy potwierdzili przetestowanie i zaakceptowali P3.3A. Zlecili propozycję P3.3B do zatwierdzenia, bez nowych płatnych wywołań. Aktualizuje D-047; nie oznacza aktywacji B/C, zgody na klucz AI w chmurze, nowe doładowanie ani osobnego potwierdzenia logowania Kasi. |
 | D-049 | 2026-10-25 | Propozycja do zatwierdzenia | V1.7 konkretyzuje B: brakująca integracja workera/Storage/UI, sześć dozwolonych przypadków i ich hashy, 6 wysłań / 10 PLN, pierwszy pomiar z czterema wejściami, wersjonowane rezerwy/koszty, osobny klucz Edge oraz wyłączenie/unieważnienie po raporcie. Finansowanie wymaga jawnej zgody według prywatnego odczytu konta; dane realnych osób i C pozostają wyłączone. Dziś tylko dokumentacja i odczyt. |
 
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-050 | 2026-10-25 | Zatwierdzone P3.3B | Aktualizuje D-049: implementacja V1.7, do 6 płatnych wywołań / 10 PLN łącznie, fikcyjne dorosłe osoby, brak ponowień, akceptacja granicy gwarancji pierwszego pomiaru. Osobny ograniczony klucz OpenAI wyłącznie w sekretach Supabase, bez zmian rozliczeń/abonamentów. Finansowanie jawnie ograniczone w rozmowie; gdy granic nie można potwierdzić, stop płatnego startu. Dev, raport i syntetyczna galeria na main, po próbie OFF i unieważnienie klucza. Bez prywatnych zdjęć i bez C. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

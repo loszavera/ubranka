@@ -1,6 +1,8 @@
 # P3.3B — koszty i granice próby V1.6
 
-Data: 2026-10-25. **Propozycja, bez zgody na nowe wywołania lub finansowanie.**
+Data: 2026-10-25. **Zatwierdzone dla P3.3B, po wymaganych kontrolach przed startem.**
+Użytkownik zaakceptował limit 6/10 PLN, brak retry, granicę gwarancji pierwszego
+pomiaru i osobno konkretne finansowanie podane w rozmowie. Nie pytamy o to ponownie.
 Uzupełnia [V1.5](COST-PLAN-V1.5.md) i [plan V1.7](IMPLEMENTATION-PLAN-V1.7.md).
 Nie zmienia propozycji pilotażu C ani obecnych ustawień usług.
 

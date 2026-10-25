@@ -83,8 +83,27 @@ P3.3A jest wdrożone na main, z wynikiem testów w docs/P33A-VERIFICATION.md.
 Zlecili wyłącznie propozycję P3.3B do zatwierdzenia, bez nowych płatnych wywołań.
 Aktualne wymagania/plan: V1.7. Nie pytaj ponownie o odbiór A. Ogólny odbiór
 nie dopisuje osobnego potwierdzenia logowania Kasi, konkretnego urządzenia
-ani testu każdego scenariusza. B, nowy klucz serwerowy i finansowanie pozostają
-propozycją; nie wdrażaj ich na podstawie prośby o plan.
+ani testu każdego scenariusza.
+Następnie 2026-10-25 użytkownik **zatwierdził P3.3B według V1.7**: integrację,
+do 6 płatnych wywołań / 10 PLN łącznie na fikcyjnych dorosłych, bez ponowień,
+z jawną akceptacją granicy gwarancji pierwszego pomiaru; osobny ograniczony klucz
+OpenAI Ubranka wyłącznie w sekretach Supabase. Zgoda obejmuje dev, testy,
+publikację raportu i syntetycznej galerii na main, wyłączenie AI i unieważnienie
+klucza po próbie. Finansowanie zatwierdzono osobno w tej samej wiadomości;
+konkretne granice zapisane są prywatnie, poza Git. Przed płatnym startem
+potwierdź te warunki; ich brak blokuje płatną część, bez samodzielnej zmiany
+ustawień/abonamentów. Nie pytaj ponownie o już udzielone zgody.
+Nie przesyłaj prywatnych zdjęć do AI. P3.3C/D nadal wymagają osobnych zgód.
+Integracja B dodaje worker, osobny prywatny magazyn wyników i manifest sześciu
+przypadków. Stan wykonania i płatnych wywołań sprawdzaj w docs/P33B-REPORT.md;
+sam kod, obecność galerii lub mock nie dowodzą aktywacji/przeprowadzenia próby.
+Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
+po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,
+promptów ani tokenów. Znika po potwierdzeniu trwałego slotu z serwera lub po
+usunięciu konta na tym urządzeniu. AsyncStorage nadal przechowuje tylko demo.
+Operacyjne testy B wykonuj wyłącznie na dedykowanych syntetycznych kontach.
+Nie odczytuj prywatnych rekordów użytkowników dla fingerprintów w tej próbie.
+Istniejące konta nie są fixture. Nie wywołuj globalnego cleanupu ręcznie.
 Poprzednia zgoda na finansowanie P3.2 nie przechodzi na dalsze fazy. Proponowane
 25 PLN pilotażu C jest odrębnym budżetem, nie bieżącym ustawieniem konta.
 Właściciel połączył Supabase z ChatGPT, wskazał organizację Risk Every Asset,

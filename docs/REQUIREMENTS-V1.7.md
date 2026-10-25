@@ -2,9 +2,10 @@
 
 Data: 2026-10-25. Dodatek do [V1.6](REQUIREMENTS-V1.6.md).
 **P3.3A przetestowane i zaakceptowane przez Kasię i Aleksego.** Użytkownicy
-zlecili wyłącznie propozycję P3.3B do zatwierdzenia, bez nowych płatnych wywołań.
+po przygotowaniu propozycji zatwierdzili wykonanie P3.3B z limitami i zatrzymaniem przed C.
 [Plan V1.7](IMPLEMENTATION-PLAN-V1.7.md), [koszty V1.6](COST-PLAN-V1.6.md).
-Poniższe wymagania B są propozycją; nie uruchamiają implementacji ani usług.
+Poniższy zakres B jest zatwierdzony. Finansowanie i granice gwarancji pierwszego
+pomiaru zaakceptowano w rozmowie; aktualny stan wykonania opisuje status projektu.
 
 ## Co zostało odebrane
 

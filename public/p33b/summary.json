@@ -1,9 +1,9 @@
 {
   "version": "1.0",
-  "status": "prepared-offline",
+  "status": "awaiting-secret-access",
   "date": "2026-10-25",
   "title": "Wejścia przygotowane — wyniki oczekują",
-  "note": "Przygotowano lokalnie 23 pliki JPEG dla sześciu przypadków. Ten zapis nie zawiera jeszcze płatnych prób, obrazów wyjściowych ani ocen. Żaden przypadek nie jest oznaczony jako sukces.",
+  "note": "Integracja i bezpłatne kontrole są gotowe. Płatna próba czeka na dostęp do panelu sekretów; AI pozostaje wyłączone. Przygotowano 23 JPEG dla sześciu przypadków. Nie ma jeszcze nowych wyników AI ani ocen. Żaden przypadek nie jest oznaczony jako sukces.",
   "calls": 0,
   "cases": [
     { "id": "B01", "status": "pending", "result": null, "qualityAssessment": null },

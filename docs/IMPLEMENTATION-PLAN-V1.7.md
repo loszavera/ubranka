@@ -1,8 +1,10 @@
 # Plan implementacji Ubranka — V1.7
 
-Data: 2026-10-25. **Propozycja P3.3B do zatwierdzenia; dziś tylko dokumentacja.**
-Kasia i Aleksy zaakceptowali P3.3A. Nie rozpoczęto B, nie utworzono klucza
-serwerowego i nie wykonano nowych płatnych wywołań.
+Data: 2026-10-25. **P3.3B zatwierdzone do realizacji przez użytkownika.**
+Aktualizacja statusu bez zmiany zakresu: integracja, próba do 6/10 PLN bez
+ponowień, osobny klucz Supabase, raport/main oraz zamknięcie przed C.
+Akceptacja obejmuje granicę gwarancji pierwszego pomiaru; konkretne finansowanie
+zatwierdzono osobno w rozmowie, poza publiczną dokumentacją.
 [Wymagania V1.7](REQUIREMENTS-V1.7.md), [koszty V1.6](COST-PLAN-V1.6.md),
 [poprzedni plan](IMPLEMENTATION-PLAN-V1.6.md), [wykonane A](P33A-VERIFICATION.md).
 
@@ -144,5 +146,6 @@ Jedna zgoda może objąć integrację, bezpłatne kontrole, dedykowany klucz ser
 syntetyczne wejścia do OpenAI, próbę 6/10 PLN z opisanymi granicami rezerwy,
 publikację raportu/galerii na main oraz zamknięcie dostępu B. Sposób finansowania
 musi być jawnie podany w tej samej rozmowie; wcześniejsza zgoda P3.2 nie wystarcza.
-**Do otrzymania tej zgody pozostają wyłącznie planowanie i odczyt.**
+**Zgoda została otrzymana 2026-10-25.** Przed płatnym startem pozostają
+obowiązkowe kontrole techniczne i potwierdzenie zatwierdzonych warunków finansowania.
 Po raporcie zatrzymanie przed C i prywatnymi zdjęciami, także przy sześciu dobrych wynikach.

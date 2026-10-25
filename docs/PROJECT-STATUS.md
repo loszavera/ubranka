@@ -3,16 +3,20 @@
 Aktualizacja: 2026-10-25.
 
 **P3.3A przetestowane i zaakceptowane przez Kasię i Aleksego (2026-10-25).**
-Zlecili wyłącznie przygotowanie propozycji P3.3B do zatwierdzenia,
-bez nowych płatnych wywołań. Aktualne [wymagania V1.7](REQUIREMENTS-V1.7.md),
+Następnie zatwierdzili wykonanie **P3.3B** z limitami i zatrzymaniem przed C.
+Aktualne [wymagania V1.7](REQUIREMENTS-V1.7.md),
 [plan V1.7](IMPLEMENTATION-PLAN-V1.7.md) i [koszty V1.6](COST-PLAN-V1.6.md).
-Propozycja: rzeczywista integracja serwerowa, tylko sześć zarejestrowanych
+Zakres: rzeczywista integracja serwerowa, tylko sześć zarejestrowanych
 syntetycznych przypadków, maks. 6 wysłań / 10 PLN, osobny ograniczony klucz
-w Supabase, raport/galeria i powrót do OFF. Finansowanie oraz granice rezerwy
-wymagają jawnej zgody; P3.3B/C/D pozostają niezlecone.
-W tej turze zmieniono tylko dokumentację. Odczytano aktualne źródła i ustawienia
-finansowania, bez sekretów, zmian usług i wywołań modeli. Nie powtarzano testów
-runtime przy zmianie wyłącznie dokumentacji; sprawdzono spójność i odnośniki.
+w Supabase, raport/galeria i powrót do OFF. Użytkownik jawnie zatwierdził
+granicę rezerwy i ograniczone finansowanie; szczegóły pozostają poza Git.
+Integracja i bezpłatne kontrole są wykonane: 74 testy klienta, 71 backendu,
+3 dekodera, 15 E2E demo, 24 E2E prywatne oraz kontrole rzeczywistego Supabase.
+**Płatnych wywołań 0/6, koszt 0 PLN, AI OFF, nowego klucza B nie utworzono.**
+Panel sekretów wymaga ponownego logowania właściciela; przed płatnym startem
+trzeba też odświeżyć warunki finansowania i wykonać kontrolę konkurencji hosted.
+Szczegóły dowodów, publikacji i ograniczeń: [raport P3.3B](P33B-REPORT.md).
+P3.3C/D nadal niezlecone; prywatne zdjęcia użytkowników pozostają wyłączone z AI.
 
 ## Odebrane P3.3A — dowody wykonania
 
