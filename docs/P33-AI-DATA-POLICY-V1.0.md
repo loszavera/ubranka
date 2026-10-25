@@ -1,14 +1,67 @@
-# P3.3 — proponowane zasady danych AI V1.0
+# P3.3 — zasady danych AI V1.0
 
-Data: 2026-10-25. **Zatwierdzono część P3.3A: profil i prywatne zdjęcie
-w Supabase; integracja z OpenAI pozostaje wyłączona.** Zasady przekazania zdjęć
-do AI i przyszłego pilotażu wymagają osobnych zgód B/C. Uzupełnia
+Data: 2026-10-25. Uzupełnienie V1.0: zatwierdzony zakres P3.3B i lokalny zapis
+identyfikatora próby. **Zatwierdzono P3.3A oraz próbę P3.3B, która wykorzystuje
+wyłącznie obrazy syntetyczne. Prywatne zdjęcia użytkowników nie są dopuszczone do AI;
+pilotaż C pozostaje wyłączony i wymaga osobnej zgody.** Dokument uzupełnia
 [przyjęte zasady P3.1](P3-DATA-POLICY-V1.0.md); nie zmienia obecnej retencji szafy.
 Akceptacja raportu P3.2 ani niniejszego planowania nie jest zgodą na przekazanie
 prywatnych zdjęć OpenAI. To zasady techniczne pilotażu, nie ocena zgodności prawnej
 przyszłej usługi komercyjnej.
 
-## Co i dokąd trafi po osobnym uruchomieniu
+## Zatwierdzony zakres P3.3B
+
+B obejmuje najwyżej **6 wysłań i 10 PLN dla całej próby**, wyłącznie dla
+zarejestrowanych obrazów fikcyjnych dorosłych i osobnych zdjęć rzeczy.
+Serwer dopuszcza tylko dedykowane konta próby i zarejestrowane wejścia;
+zwykłe konta pozostają w trybie AI OFF. Wybranie własnego zestawu, otwarcie
+ekranu, przesunięcie propozycji lub polubienie nie uruchamia generacji.
+
+Przed pojedynczym wysłaniem aplikacja pokazuje dokładne obrazy wejściowe,
+model, rezerwę, limit i zasady danych. Zgoda dotyczy wyłącznie tej jednej próby,
+bez domyślnego zaznaczenia i bez zgody ogólnej na przyszłe zdjęcia. Nie ponawiamy
+wysłania po utracie odpowiedzi. Sprawdzenie stanu odczytuje istniejące zadanie;
+nieznany wynik lub koszt blokuje następne wysłanie. Rezerwa ogranicza kolejne
+próby, lecz nie gwarantuje maksymalnego kosztu już trwającego zadania.
+Opisane niżej zasady przetwarzania danych przez OpenAI dotyczą również tych
+syntetycznych wejść; nie deklarujemy wyłącznego przetwarzania w UE ani ZDR.
+
+Wynik PNG i miniatura są prywatne, pobierane po sprawdzeniu właściciela przez
+serwer. Wynik ma limit 8 MB, miniatura 100 kB; wygasają po 30 dniach od zapisania
+wyniku lub po wcześniejszym usunięciu. Eksport obejmuje dostępny wynik.
+Usunięcie obrazu nie zwalnia wykorzystanego przypadku próby ani rozliczonego
+kosztu; pozostaje minimalny serwerowy rejestr blokujący ponowne wysłanie.
+Ocena wierności obrazu jest osobna od opinii o stylu.
+
+Osobny klucz B ma być przechowywany wyłącznie jako sekret Supabase i używany
+przez backend. Nie trafia do aplikacji, `EXPO_PUBLIC_*`, Git, Vercel ani logów.
+Ten opis wdrożonych mechanizmów i przyjętych zasad nie potwierdza zapisania
+klucza, zakończenia logowania testowego ani wykonania płatnych wywołań;
+faktyczny stan wykonania podaje [status projektu](PROJECT-STATUS.md).
+
+### Minimalny lokalny zapis próby
+
+Przed POST aplikacja trwale zapisuje i odczytem potwierdza wyłącznie UUID próby
+oraz identyfikator przypadku (`caseId`). Klucz zapisu obejmuje projekt i UUID
+konta; wpis zawiera także wersję formatu. Nie ma w nim zdjęć, profilu, promptu,
+treści zgody, tokenów ani kopii zadania. WWW używa osobnego klucza localStorage,
+a aplikacja natywna osobnego pliku; AsyncStorage nadal służy tylko danym demo.
+
+Zapis pozostaje do autorytatywnego potwierdzenia przez serwer istniejącego
+zadania lub trwałego zajęcia przypadku, albo do usunięcia konta przez aplikację
+na tym urządzeniu. Wylogowanie go zachowuje, aby ponowne logowanie lub reload
+nie umożliwiły drugiego wysłania przy nieznanym stanie pierwszej próby.
+Nie można z niego odtworzyć obrazu; służy wyłącznie sprawdzeniu stanu po UUID
+i blokadzie ponowienia. Błąd zapisu lub odczytu zatrzymuje wysyłanie.
+Serwer niezależnie pilnuje jednokrotnego wykorzystania przypadku.
+
+## Docelowy przepływ C — wymaga osobnej zgody
+
+Pozostałe sekcje opisują propozycję pilotażu prywatnych zdjęć C, z zachowaniem
+już przyjętego zapisu profilu i zdjęcia w A. Nie rozszerzają zakresu B i nie
+uruchamiają przekazywania rzeczywistych zdjęć użytkowników do OpenAI.
+
+### Co i dokąd trafi po osobnym uruchomieniu C
 
 | Odbiorca | Proponowane dane i cel |
 | --- | --- |
