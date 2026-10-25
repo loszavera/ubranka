@@ -12,7 +12,7 @@
       ]
     }
   },
-  "exclude": ["supabase/functions/**", "node_modules", ".local", "artifacts"],
+  "exclude": ["supabase/functions/**", "supabase/tests/*.deno.ts", "node_modules", ".local", "artifacts"],
   "include": [
     "**/*.ts",
     "**/*.tsx",

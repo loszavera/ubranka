@@ -3,7 +3,7 @@ import { decode, encode } from 'npm:fast-png@8.0.0';
 
 const WIDTH = 1024;
 const HEIGHT = 1536;
-const MAX_BYTES = 8 * 1024 * 1024;
+const MAX_BYTES = 8_000_000;
 const THUMB_WIDTH = 120;
 const THUMB_HEIGHT = 180;
 const SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];

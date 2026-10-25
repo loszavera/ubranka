@@ -42,7 +42,7 @@ Deno.test('reject bad header, CRC, dimensions, truncation and trailing bytes', (
   const png = source();
   const badCrc = png.slice(); badCrc[29] ^= 1;
   const bigHeader = png.slice(); new DataView(bigHeader.buffer).setUint32(16, 65535);
-  for (const bad of [new Uint8Array(), new Uint8Array(8 * 1024 * 1024 + 1),
+  for (const bad of [new Uint8Array(), new Uint8Array(8_000_001),
     png.slice(1), png.slice(0, -1), concat(png, new Uint8Array([0])), badCrc, bigHeader]) {
     assert.throws(() => decodeVisualizationPng(bad));
   }
