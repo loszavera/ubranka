@@ -11,14 +11,14 @@ const environment=(key:string)=>({SUPABASE_URL:'https://synthetic.invalid',SUPAB
 
 test('hosted handler hard OFF makes no provider request even with forged mode/env/consent',async()=>{
   const original=globalThis.fetch;const requests:string[]=[];
-  globalThis.fetch=async(input)=>{requests.push(String(input));assert.equal(String(input),'https://synthetic.invalid/auth/v1/user');return Response.json({id:account,email_confirmed_at:'2026-10-25'});};
+  globalThis.fetch=async(input)=>{requests.push(String(input));if(String(input).endsWith('/wardrobe_execute'))return Response.json({visualization:{mode:'off'}});assert.equal(String(input),'https://synthetic.invalid/auth/v1/user');return Response.json({id:account,email_confirmed_at:'2026-10-25'});};
   try {
     const handler=createWardrobeHandler((key)=>key==='OPENAI_API_KEY'?'must-never-be-read':environment(key));
     for(const action of['requestVisualization','setAiConsent']) {
       const response=await handler(new Request('https://synthetic.invalid/functions/v1/wardrobe',{method:'POST',headers:{Authorization:'Bearer synthetic-session','Content-Type':'application/json'},body:JSON.stringify({action,operationId:operation,mode:'test',enabled:true,accepted:true})}));
       assert.equal(response.status,403);assert.equal((await response.json()).error.code,'AI_DISABLED');
     }
-    assert.equal(requests.length,2,'only two current-auth checks, no RPC/storage/provider invocation');
+    assert.equal(requests.length,3,'two fresh auth checks and one server trial gate; no storage/provider invocation');
   }finally{globalThis.fetch=original;}
 });
 

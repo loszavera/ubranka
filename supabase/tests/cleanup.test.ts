@@ -11,6 +11,7 @@ test('failed oldest deletes yield to healthy rows on the next worker run', async
       return null;
     },
     async request(path:string,init:RequestInit={}) {
+      if(path.startsWith('/rest/v1/wardrobe_visualization_files'))return [];
       if(path.startsWith('/rest/v1/wardrobe_accounts'))return [];
       if(path==='/storage/v1/object/wardrobe-private'){
         const id=JSON.parse(String(init.body)).prefixes[0].split('/')[0];attempted.push(id);

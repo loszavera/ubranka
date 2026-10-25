@@ -6,26 +6,31 @@ type ReadablePhoto = { main_path: string; thumb_path: string; bytes: number; thu
 export async function privatePhotoResponse(caller: SupabaseRest, admin: SupabaseRest, value: unknown, headers: Record<string, string>): Promise<Response> {
   if (typeof value !== 'string') throw new WardrobeError('INVALID_PHOTO');
   const parts = value.split('/');
-  if (parts.length !== 4 || !['main.jpg', 'thumb.jpg'].includes(parts[3])) throw new WardrobeError('INVALID_PHOTO');
+  if (parts.length !== 4 || !['main.jpg', 'thumb.jpg','main.png','thumb.png'].includes(parts[3])) throw new WardrobeError('INVALID_PHOTO');
   const path = `${uuid(parts[0])}/${uuid(parts[1])}/${uuid(parts[2])}/${parts[3]}`;
+  const generated=parts[3].endsWith('.png'),mimeType=generated?'image/png':'image/jpeg';
   // Use the caller JWT, never service_role, for the authorization query. Its RLS
   // checks owner, current invitation, account, item and photo on every request.
   const query = new URLSearchParams({
     or: `(main_path.eq.${path},thumb_path.eq.${path})`,
     select: 'main_path,thumb_path,bytes,thumb_bytes,mime_type', limit: '1',
   });
-  const photos = await caller.request(`/rest/v1/wardrobe_photos?${query}`) as ReadablePhoto[];
+  const photos = await caller.request(`/rest/v1/${generated?'wardrobe_visualization_files':'wardrobe_photos'}?${query}`) as ReadablePhoto[];
   const photo = photos.length === 1 ? photos[0] : undefined;
-  if (!photo || photo.mime_type !== 'image/jpeg' || (path !== photo.main_path && path !== photo.thumb_path)) {
+  if (!photo || photo.mime_type !== mimeType || (path !== photo.main_path && path !== photo.thumb_path)) {
     throw new WardrobeError('NOT_FOUND', 404);
   }
   const expectedBytes = path === photo.main_path ? photo.bytes : photo.thumb_bytes;
-  if (!Number.isSafeInteger(expectedBytes) || expectedBytes < 1 || expectedBytes > (path === photo.main_path ? 1_000_000 : 100_000)) {
+  if (!Number.isSafeInteger(expectedBytes) || expectedBytes < 1 || expectedBytes > (path === photo.main_path ? (generated?8_000_000:1_000_000) : 100_000)) {
     throw new WardrobeError('PHOTO_UNAVAILABLE', 503);
   }
-  const bytes = await admin.binary(`/storage/v1/object/wardrobe-private/${path}`, expectedBytes);
+  const bytes = await admin.binary(`/storage/v1/object/${generated?'wardrobe-results':'wardrobe-private'}/${path}`, expectedBytes,mimeType);
+  // Revalidate after potentially slow Storage I/O. Deletion in flight must not
+  // deliver newly authorized bytes based only on an earlier database snapshot.
+  const current=await caller.request(`/rest/v1/${generated?'wardrobe_visualization_files':'wardrobe_photos'}?${query}`) as ReadablePhoto[];
+  if(current.length!==1||current[0].main_path!==photo.main_path||current[0].thumb_path!==photo.thumb_path)throw new WardrobeError('NOT_FOUND',404);
   return new Response(bytes.buffer as ArrayBuffer, { headers: {
-    ...headers, 'Content-Type': 'image/jpeg', 'Content-Length': String(bytes.byteLength),
+    ...headers, 'Content-Type': mimeType, 'Content-Length': String(bytes.byteLength),
     'Cache-Control': 'private, no-store, max-age=0', 'CDN-Cache-Control': 'no-store',
     'Surrogate-Control': 'no-store', 'X-Content-Type-Options': 'nosniff',
   } });

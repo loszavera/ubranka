@@ -50,11 +50,11 @@ test('photo proxy authorizes every read before privileged bytes and never return
   assert.equal(response.headers.get('cdn-cache-control'),'no-store');
   permitted=false;
   await assert.rejects(privatePhotoResponse(caller,admin,path,{}),/NOT_FOUND/);
-  assert.equal(checks,2,'same path is authorized again after revocation/deletion');
+  assert.equal(checks,3,'same path is authorized before/after I/O and again after revocation/deletion');
   assert.equal(downloads,1,'denied requests cannot retrieve cached privileged bytes');
   await assert.rejects(privatePhotoResponse(caller,admin,path+'?nonce=1',{}),/INVALID_PHOTO/);
   await assert.rejects(privatePhotoResponse(caller,admin,path.replace('main.jpg','../../main.jpg'),{}),/INVALID_PHOTO/);
-  assert.equal(checks,2,'malformed paths do not reach PostgREST');
+  assert.equal(checks,3,'malformed paths do not reach PostgREST');
 });
 
 test('privileged photo download rejects mismatched bytes and non-image responses',async()=>{

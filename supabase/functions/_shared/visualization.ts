@@ -1,6 +1,6 @@
 // P3.3A orchestration contract. No HTTP provider, credentials or runtime switch
-// exists here. The hosted handler always rejects generation. Only tests supply
-// a synthetic provider; wiring a real worker belongs to a separately approved B.
+// exists here. Retained as the A-stage test contract; the approved B-specific
+// worker lives separately in visualization-worker and never imports a fake provider.
 export type ImageUsage = { textInputTokens: number; imageInputTokens: number; imageOutputTokens: number };
 export type GeneratedImage = { bytes: Uint8Array; thumbnail: Uint8Array; usage: ImageUsage };
 export type VisualizationPorts = {
