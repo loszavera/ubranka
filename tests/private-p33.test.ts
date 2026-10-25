@@ -178,7 +178,7 @@ test('lost response is recovered by a read of the original UUID and server case 
 });
 
 test('B blocks global in-flight reserve, exhausted sends, expired window and server block without touching network', async () => {
-  for (const changes of [{ reservedPln: 1 }, { sentCount: 6 }, { endsAt: '2020-01-01T00:00:00Z' }, { blocked: true }]) {
+  for (const changes of [{ reservedPln: 1 }, { sentCount: 6 }, { endsAt: null }, { endsAt: '2020-01-01T00:00:00Z' }, { blocked: true }]) {
     const value = trialSnapshot(); Object.assign(value.visualization!.trial!, changes); let requests = 0;
     const store = new PrivateStore(new WardrobeApi(wrap(async action => { if (action === 'bootstrap') return value; requests++; return job(); })), () => operationId);
     store.setIdentity(identity); await store.refresh(); await assert.rejects(store.requestVisualization(operationId, 'B01', true), /TRIAL_BLOCKED|AI_DISABLED/);

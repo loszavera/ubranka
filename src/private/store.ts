@@ -1,5 +1,6 @@
 import type { AppState } from '../domain/model.ts';
 import { WardrobeApi, asPrivateError, type DeleteResult } from './api.ts';
+import type { AttemptReceiptJournal } from './attemptReceipt.ts';
 import { BODY_STORAGE_CONSENT, bytesToBase64, importReceiptId, mergeP2Import, normalizeBodyFitData, normalizeItemFields, PrivateError, type VisualizationJob, type VisualizationReview, type BodyFitData, type StylingData, type PrivateIdentity, type PrivateItem, type PrivateSettings, type PrivateSnapshot, type SaveItemInput } from './model.ts';
 
 export interface UploadPhoto {
@@ -32,8 +33,10 @@ export class PrivateStore {
   private readonly api: WardrobeApi;
   private readonly newId: () => string;
   private readonly clearPhotos: () => void;
-  constructor(api: WardrobeApi, newId: () => string, clearPhotos: () => void = () => {}) {
+  private readonly attemptJournal?: AttemptReceiptJournal;
+  constructor(api: WardrobeApi, newId: () => string, clearPhotos: () => void = () => {}, attemptJournal?: AttemptReceiptJournal) {
     this.api = api; this.newId = newId; this.clearPhotos = clearPhotos;
+    this.attemptJournal = attemptJournal;
   }
 
   getSnapshot = (): PrivateView => this.view;
@@ -67,13 +70,27 @@ export class PrivateStore {
       this.assertCurrent(generation);
       if (version !== this.refreshVersion) return;
       if (snapshot.accountId !== this.view.identity?.id) throw new PrivateError('INVALID_RESPONSE');
+      if (this.attemptJournal && snapshot.visualization?.trial) {
+        const receipts = await this.attemptJournal.read(snapshot.accountId); this.assertCurrent(generation);
+        if (version !== this.refreshVersion) return;
+        for (const receipt of receipts) {
+          this.attemptedCases.add(receipt.caseId);
+          const known = snapshot.visualization.jobs.some(job => job.id === receipt.id) || snapshot.visualization.trial.cases.some(value => value.id === receipt.caseId && value.jobId === receipt.id);
+          if (known) {
+            await this.attemptJournal.remove(snapshot.accountId, receipt.id); this.assertCurrent(generation);
+            if (this.view.visualizationAttempt?.id === receipt.id) this.patch({ visualizationAttempt: { ...receipt, status: 'accepted' } });
+          }
+          else this.patch({ visualizationAttempt: { ...receipt, status: 'unconfirmed' } });
+        }
+        if (version !== this.refreshVersion) return;
+      }
       if (JSON.stringify(snapshot) !== JSON.stringify(this.view.snapshot)) {
         const paths = (value: PrivateSnapshot | null) => `${value?.items.map(item => item.photo?.id ?? '').join('|')}|${value?.bodyFit?.photo?.id ?? ''}|${value?.visualization?.jobs.map(job => job.result ? `${job.result.mainPath}:${job.result.thumbPath}` : '').join('|')}`;
         if (paths(snapshot) !== paths(this.view.snapshot)) this.clearPhotos();
         this.patch({ snapshot });
       }
       const attempt = this.view.visualizationAttempt;
-      if (attempt && snapshot.visualization?.jobs.some(job => job.id === attempt.id)) this.patch({ visualizationAttempt: { ...attempt, status: 'accepted' } });
+      if (attempt && (snapshot.visualization?.jobs.some(job => job.id === attempt.id) || snapshot.visualization?.trial?.cases.some(value => value.id === attempt.caseId && value.jobId === attempt.id))) this.patch({ visualizationAttempt: { ...attempt, status: 'accepted' } });
     } catch (error) {
       if (generation === this.generation && version === this.refreshVersion) this.reportFailure(asPrivateError(error).code);
     } finally {
@@ -222,17 +239,19 @@ export class PrivateStore {
   }
 
   requestVisualization = (operationId: string, caseId: string, accepted: boolean) => this.mutate(async (signal, generation) => {
+    const accountId = this.view.identity!.id;
     const visual = this.view.snapshot?.visualization; const trial = visual?.trial;
     const selected = trial?.cases.find(value => value.id === caseId);
     if (!accepted) throw new PrivateError('AI_CONSENT_REQUIRED');
     if (!/^[a-f\d]{8}-[a-f\d]{4}-4[a-f\d]{3}-[89ab][a-f\d]{3}-[a-f\d]{12}$/i.test(operationId)) throw new PrivateError('INVALID_INPUT');
-    if (visual?.mode !== 'synthetic_trial' || !trial || !selected || !(Date.parse(trial.endsAt) > Date.now())) throw new PrivateError('AI_DISABLED');
+    if (visual?.mode !== 'synthetic_trial' || !trial || !selected || !trial.endsAt || !(Date.parse(trial.endsAt) > Date.now())) throw new PrivateError('AI_DISABLED');
     if (trial.blocked || trial.reservedPln > 0 || trial.sentCount >= trial.maxSends || selected.sent || selected.jobId || this.attemptedCases.has(caseId)
       || this.view.visualizationAttempt?.status === 'unconfirmed' || visual.jobs.some(job => ['reserved', 'sent', 'outcome_unknown'].includes(job.status))) throw new PrivateError('TRIAL_BLOCKED');
     if (!Number.isFinite(selected.reservePln) || selected.reservePln <= 0 || trial.spentPln + trial.reservedPln + selected.reservePln > trial.budgetPln + 0.000001) throw new PrivateError('TRIAL_BLOCKED');
     this.attemptedCases.add(caseId);
     this.patch({ visualizationAttempt: { id: operationId, caseId, status: 'sending' } });
     try {
+      await this.attemptJournal?.write(accountId, { id: operationId, caseId }); this.assertCurrent(generation);
       // Exactly one POST per explicit attempt. A failed/unknown response is
       // recovered by reads of this UUID, never by replaying this request.
       const job = await this.api.requestVisualization(operationId, caseId, signal); this.assertCurrent(generation);
@@ -293,8 +312,10 @@ export class PrivateStore {
   });
 
   requestAccountDeletion = () => this.mutate(async (signal, generation) => {
+    const accountId = this.view.identity!.id;
     const result = await this.api.deleteAccount(signal); this.assertCurrent(generation);
-    this.clearPhotos(); this.patch({ snapshot: null, deletion: result }); return result;
+    this.clearPhotos(); this.patch({ snapshot: null, deletion: result });
+    await this.attemptJournal?.clear(accountId); this.assertCurrent(generation); return result;
   });
 
   exportManifest = () => this.mutate(async (signal, generation) => {

@@ -11,6 +11,7 @@ import { PrivatePhotoAccess } from './photoAccess';
 import { getPrivateServices } from './supabase';
 import { PrivateStore } from './store';
 import { downloadPrivateExport, downloadPrivateFile } from './export';
+import { createAttemptJournal } from './attemptReceiptStorage';
 
 export const newPrivateId = () => randomUUID();
 WebBrowser.maybeCompleteAuthSession();
@@ -18,7 +19,8 @@ WebBrowser.maybeCompleteAuthSession();
 export function usePrivateWardrobe() {
   const services = useMemo(() => getPrivateServices(), []);
   const photos = useMemo(() => services ? new PrivatePhotoAccess(services) : null, [services]);
-  const store = useMemo(() => new PrivateStore(services?.api ?? new WardrobeApi(async () => { throw new PrivateError('NOT_CONFIGURED'); }), newPrivateId, photos?.clear), [services, photos]);
+  const attemptJournal = useMemo(() => services ? createAttemptJournal(services.config.url) : undefined, [services]);
+  const store = useMemo(() => new PrivateStore(services?.api ?? new WardrobeApi(async () => { throw new PrivateError('NOT_CONFIGURED'); }), newPrivateId, photos?.clear, attemptJournal), [services, photos, attemptJournal]);
   const view = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
   const [authLoading, setAuthLoading] = useState(Boolean(services));
   const [authError, setAuthError] = useState<string | null>(null);

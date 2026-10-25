@@ -35,6 +35,7 @@ const pl = {
   localUnavailable: 'Nie udało się odczytać danych demo. Wróć do demo i rozwiąż problem odczytu przed importem.',
   reasonSetting: 'Pytaj o powód odrzucenia', retry: 'Spróbuj ponownie', photoFailure: 'Nie udało się wczytać zdjęcia.',
   errors: {
+    attempt_storage_unavailable: 'Nie udało się bezpiecznie zapisać lub odczytać identyfikatora próby na tym urządzeniu. Wysyłanie wstrzymano; nie czyść danych w celu ponowienia.',
     ai_consent_required: 'Potwierdź zgodę na pojedyncze wysłanie pokazanych syntetycznych obrazów.',
     trial_blocked: 'Ta próba nie może być wysłana. Sprawdź stan i limity; nie ponawiamy żądania.',
     invalid_review: 'Oceń każdą kategorię od 0 do 2. Uwagi mogą mieć do 1000 znaków.',
@@ -94,6 +95,7 @@ const en: typeof pl = {
   localUnavailable: 'The demo data could not be read. Return to the demo and resolve the read issue before importing.',
   reasonSetting: 'Ask why I rejected a suggestion', retry: 'Try again', photoFailure: 'The photo could not be loaded.',
   errors: {
+    attempt_storage_unavailable: 'The attempt identifier could not be safely saved or read on this device. Sending is stopped; do not clear data to retry.',
     ai_consent_required: 'Confirm consent for this single submission of the shown synthetic images.',
     trial_blocked: 'This attempt cannot be sent. Check its status and limits; the request will not be retried.',
     invalid_review: 'Rate every category from 0 to 2. Notes can have up to 1000 characters.',

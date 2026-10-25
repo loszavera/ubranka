@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { unzipSync, strFromU8 } from 'fflate';
-import { ACCOUNT_B, authKey, button, installBackend, openWardrobe, session } from './fixture.mjs';
+import { ACCOUNT_A, ACCOUNT_B, authKey, button, installBackend, openWardrobe, session } from './fixture.mjs';
 
 const consent = 'Zgadzam się wysłać pokazane fikcyjne zdjęcia do OpenAI w tej jednej próbie';
 async function inputs(page) {
@@ -63,9 +63,43 @@ test('lost 202 is recovered by the existing job UUID after reload, never a secon
   expect(backend.logs.find(value => value.action === 'getVisualization').jobId).toBe(operationId); expect(backend.unexpected).toEqual([]);
 });
 
+test('a durable receipt blocks repeat POST after reload and logout while no server job is visible; account deletion removes it', async ({ page }) => {
+  const backend = await installBackend(page, { syntheticTrial: true }); backend.dropVisualizationBeforeReserve = true;
+  const receiptKey = `ubranka:private:ubranka-test.supabase.co:trial-receipts:${ACCOUNT_A}`;
+  await openWardrobe(page); await inputs(page); await button(page, 'Wyślij tę próbę raz').click();
+  await expect(page.getByText(/Nie potwierdzono przyjęcia próby/).last()).toBeVisible();
+  const requests = backend.logs.filter(value => value.action === 'requestVisualization'); expect(requests).toHaveLength(1);
+  const operationId = requests[0].operationId;
+  expect(JSON.parse(await page.evaluate(key => localStorage.getItem(key), receiptKey))).toEqual({ version: 1, receipts: [{ id: operationId, caseId: 'B01' }] });
+  expect(backend.state.visualization.jobs).toEqual([]); expect(backend.state.visualization.trial.cases[0].jobId).toBeNull();
+  await page.reload(); await button(page, 'Wizualizacje').click();
+  await expect(page.getByText(/Nie potwierdzono przyjęcia próby/).last()).toBeVisible();
+  await expect(button(page, 'Sprawdź wejścia: B01')).toHaveCount(0); await expect(button(page, 'Sprawdź wejścia: B03')).toBeDisabled();
+  await button(page, 'Sprawdź stan próby').click();
+  await expect.poll(() => backend.logs.filter(value => value.action === 'getVisualization').length).toBe(1);
+  expect(backend.logs.find(value => value.action === 'getVisualization').jobId).toBe(operationId);
+  await button(page, 'Konto').click(); await button(page, 'Wyloguj').click();
+  await expect(button(page, 'Zaloguj przez Google')).toBeVisible();
+  expect(await page.evaluate(key => localStorage.getItem(key), receiptKey)).not.toBeNull();
+  await page.evaluate(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)), { key: authKey, value: session() });
+  await page.reload(); await button(page, 'Wizualizacje').click();
+  await expect(page.getByText(/Nie potwierdzono przyjęcia próby/).last()).toBeVisible();
+  await expect(button(page, 'Sprawdź wejścia: B03')).toBeDisabled();
+  expect(backend.logs.filter(value => value.action === 'requestVisualization')).toHaveLength(1);
+  await button(page, 'Konto').click(); await button(page, 'Usuń konto i dane').click(); await button(page, 'Potwierdzam usunięcie konta').click();
+  await expect(button(page, 'Zaloguj przez Google')).toBeVisible();
+  expect(await page.evaluate(key => localStorage.getItem(key), receiptKey)).toBeNull(); expect(backend.unexpected).toEqual([]);
+});
+
 test('unknown outcome and expired or exhausted trials preserve reserve and cannot submit another case', async ({ page }) => {
   const backend = await installBackend(page, { syntheticTrial: true }); backend.autoFinishVisualization = false;
-  await openWardrobe(page); await inputs(page); await button(page, 'Wyślij tę próbę raz').click();
+  backend.state.visualization.trial.endsAt = null; backend.state.visualization.mode = 'off';
+  await openWardrobe(page); await button(page, 'Wizualizacje').click();
+  await expect(page.getByText('Koniec okna próby: Nie rozpoczęto', { exact: true })).toBeVisible();
+  await expect(button(page, 'Sprawdź wejścia: B01')).toBeDisabled();
+  await button(page, 'EN').click(); await expect(page.getByText('Trial window ends: Not started', { exact: true })).toBeVisible(); await button(page, 'PL').click();
+  backend.state.visualization.trial.endsAt = '2099-01-01T00:00:00Z'; backend.state.visualization.mode = 'synthetic_trial';
+  await button(page, 'Odśwież').click(); await inputs(page); await button(page, 'Wyślij tę próbę raz').click();
   await expect(page.getByText('Wysłano — oczekujemy na wynik', { exact: true })).toBeVisible();
   backend.completeVisualization('B01', true); await button(page, 'Odśwież').click();
   await expect(page.getByText('Nie udało się potwierdzić wyniku i kosztu', { exact: true })).toBeVisible();

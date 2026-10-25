@@ -58,7 +58,7 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
   const unexpected = [];
   const operations = new Map();
   const control = { state, second, objects, logs, photoRequests, unexpected, failPhoto: 0, holdPhoto: null, holdDownload: null, completedDownloads: 0, pendingDelete: false, failDelete: false, pendingAccountDelete: false, deny: false,
-    loseVisualizationResponse: false, holdVisualization: null, autoFinishVisualization: true };
+    loseVisualizationResponse: false, dropVisualizationBeforeReserve: false, holdVisualization: null, autoFinishVisualization: true };
   if (existingItem) {
     const mainPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/thumb.jpg`;
     objects.set(mainPath, image); objects.set(thumbPath, image);
@@ -183,6 +183,7 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
         if (body.expectedRevision !== current.styling.revision) return fail('CONFLICT');
         current.styling = { revision: current.styling.revision + 1, data: body.data }; return json({ data: current.styling });
       case 'requestVisualization': {
+        if (control.dropVisualizationBeforeReserve) return route.abort('failed');
         const trial = current.visualization.trial;
         if (current.visualization.mode !== 'synthetic_trial' || !trial) return fail('AI_DISABLED', 403);
         const chosen = trial.cases.find(value => value.id === body.caseId);

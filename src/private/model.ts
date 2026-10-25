@@ -58,7 +58,7 @@ export interface SyntheticCase {
   jobId: string | null; sent: boolean;
 }
 export interface SyntheticTrial {
-  id: string; endsAt: string; budgetPln: number; spentPln: number; reservedPln: number; maxSends: number; sentCount: number;
+  id: string; endsAt: string | null; budgetPln: number; spentPln: number; reservedPln: number; maxSends: number; sentCount: number;
   blocked: boolean; cases: SyntheticCase[];
 }
 export interface VisualizationJob {

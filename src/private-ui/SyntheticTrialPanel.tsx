@@ -16,14 +16,14 @@ export function SyntheticTrialPanel({ api, locale, now }: { api: Api; locale: Lo
   const [selected, setSelected] = useState<SyntheticCase | null>(null);
   const [error, setError] = useState('');
   if (!trial) return null;
-  const blocked = visual?.mode !== 'synthetic_trial' || trial.blocked || trial.reservedPln > 0 || !(Date.parse(trial.endsAt) > now) || trial.sentCount >= trial.maxSends
+  const blocked = visual?.mode !== 'synthetic_trial' || trial.blocked || trial.reservedPln > 0 || !trial.endsAt || !(Date.parse(trial.endsAt) > now) || trial.sentCount >= trial.maxSends
     || visual?.jobs.some(job => ['reserved', 'sent', 'outcome_unknown'].includes(job.status)) || api.visualizationAttempt?.status === 'unconfirmed';
   const check = async (id: string) => { setError(''); try { await api.getVisualization(id); } catch (issue) { setError(privateError(locale, issue)); } finally { await api.refresh(); } };
   return <View style={s.stack}>
     <View style={s.warning}><Text accessibilityRole="header" style={s.title}>{t.title}</Text><Text style={s.body}>{t.introduction}</Text>
       <Text style={s.body}>{t.sends}: {trial.sentCount}/{trial.maxSends} · {t.budget}: {trial.budgetPln.toFixed(2)} PLN</Text>
       <Text style={s.body}>{common.spent}: {trial.spentPln.toFixed(2)} PLN · {common.reserved}: {trial.reservedPln.toFixed(2)} PLN</Text>
-      <Text style={s.body}>{t.deadline}: {new Date(trial.endsAt).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-GB')}</Text>
+      <Text style={s.body}>{t.deadline}: {trial.endsAt ? new Date(trial.endsAt).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-GB') : t.notStarted}</Text>
       {blocked ? <><Text style={s.title}>{visual?.mode === 'off' ? common.visualOff : t.blocked}</Text><Text style={s.body}>{t.blockedHelp}</Text></> : null}
       <Text style={s.note}>{t.risk}</Text>
     </View>
@@ -49,7 +49,7 @@ function TrialConfirmation({ selected, api, locale, now, onAccepted }: { selecte
   const [accepted, setAccepted] = useState(false); const [error, setError] = useState('');
   const current = trial?.cases.find(value => value.id === selected.id);
   const changed = JSON.stringify(current) !== JSON.stringify(selected);
-  const blocked = changed || !current || visual?.mode !== 'synthetic_trial' || !trial || trial.blocked || trial.reservedPln > 0 || !(Date.parse(trial.endsAt) > now)
+  const blocked = changed || !current || visual?.mode !== 'synthetic_trial' || !trial || trial.blocked || trial.reservedPln > 0 || !trial.endsAt || !(Date.parse(trial.endsAt) > now)
     || trial.sentCount >= trial.maxSends || current.sent || !!current.jobId || !!api.visualizationAttempt && api.visualizationAttempt.status !== 'accepted'
     || !!visual?.jobs.some(job => ['reserved', 'sent', 'outcome_unknown'].includes(job.status));
   const submit = async () => {
