@@ -106,8 +106,35 @@ autoryzacji. Ten problem wykryto i poprawiono przed płatnym startem.
 
 ## Publikacja i sprzątanie
 
-Końcowe SHA, CI, podgląd main oraz wynik usunięcia dedykowanych kont testowych
-zostaną dopisane po zakończeniu publikacji. Kod nie aktywuje próby przy deployu.
+Kod, galerię i raport opublikowano bez force push na dev/main jako
+`32046d051c44994807c14149e35031fefff4644d`. Pełne
+[CI 40155204050](https://github.com/loszavera/ubranka/actions/runs/40155204050)
+zakończyło się SUCCESS: wszystkie wymienione testy oraz build trzech platform.
+Automatyczne Actions są wyłączone w repozytorium, więc użyto pojedynczego
+`workflow_dispatch`, bez zmiany ustawień repozytorium.
+
+Vercel Production `dpl_AiFSdrmTR3YER367kWWkeTmegBRf`: READY dla tego SHA,
+z aliasem [ubranka.vercel.app](https://ubranka.vercel.app).
+Test realnego wdrożenia zakończony 02:41:57 UTC: **15 kontroli PASS**,
+oba syntetyczne konta, PL/EN, szerokości 320/390 px, prywatne JPEG, AI OFF,
+reload i logout. Tylko język chwilowo zmieniono i przywrócono; pozostałe dane
+fixture zachowały hashe. Galeria: sześć oczekujących przypadków, 23 poprawnie
+odczytane JPEG (46 obserwacji w dwóch rozmiarach), zero obrazów wynikowych B.
+Zrzuty przejrzano wizualnie; brak błędów strony/sieci oraz przewijania poziomego.
+
+Po kontroli wywołano `deleteAccount` wyłącznie dla dwóch kont testowych.
+Odczyt o 02:42:50 UTC potwierdził brak ich rekordów w siedmiu tabelach,
+obiektów w obu prywatnych bucketach i kont Auth. W tym przypadku aplikacja
+dokończyła usuwanie bez oczekiwania na cron. Osobno potwierdzono brak prywatnych
+receiptów/linków przypadków, usunięto dokładnie dwa testowe zaproszenia oraz
+lokalny plik ich sesji. Istniejący harmonogram pozostaje bez zmian.
+
+Końcowy commit dokumentacyjny zapisuje te dowody i następny krok; nie zmienia
+przetestowanego runtime ani galerii. CI powyżej dotyczy wskazanego SHA kodu.
+**AI OFF, zero aktywacji B, zero wysłań, brak utworzonego klucza B.**
+Nie ma nowego klucza do unieważnienia ani usunięcia. Starego klucza P3.2 nie użyto.
+Kod nie aktywuje próby przy deployu. Całe B nie jest zakończone ani odebrane:
+wyniki jakości i kosztów dostawcy nadal wymagają zatwierdzonej próby.
 
 Automatyczna kontrola bezpieczeństwa odrzuciła porównanie fingerprintów
 istniejących prywatnych rekordów, ponieważ wymagałoby odczytu danych poza

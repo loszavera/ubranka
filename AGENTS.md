@@ -97,6 +97,12 @@ Nie przesyłaj prywatnych zdjęć do AI. P3.3C/D nadal wymagają osobnych zgód.
 Integracja B dodaje worker, osobny prywatny magazyn wyników i manifest sześciu
 przypadków. Stan wykonania i płatnych wywołań sprawdzaj w docs/P33B-REPORT.md;
 sam kod, obecność galerii lub mock nie dowodzą aktywacji/przeprowadzenia próby.
+Bezpłatną integrację B opublikowano i sprawdzono (kod 32046d0, CI SUCCESS,
+hosted UI PASS). Płatny start zatrzymano na ponownym logowaniu do panelu
+sekretów: 0/6, 0 PLN, nowego klucza B nie utworzono. Konta fixture usunięto.
+Kontynuacja wymaga odtworzenia tylko syntetycznych kont, kontroli konkurencji
+hosted i odświeżenia warunków finansowania. Zgoda na B nadal obowiązuje;
+nie żądaj jej ponownie i nie traktuj tej publikacji jako ukończenia próby.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
 po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,
 promptów ani tokenów. Znika po potwierdzeniu trwałego slotu z serwera lub po

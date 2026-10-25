@@ -16,6 +16,10 @@ Integracja i bezpłatne kontrole są wykonane: 74 testy klienta, 71 backendu,
 Panel sekretów wymaga ponownego logowania właściciela; przed płatnym startem
 trzeba też odświeżyć warunki finansowania i wykonać kontrolę konkurencji hosted.
 Szczegóły dowodów, publikacji i ograniczeń: [raport P3.3B](P33B-REPORT.md).
+Kod `32046d0` opublikowany na dev/main; Vercel Production READY, CI
+40155204050 SUCCESS. 15 kontroli wdrożonego WWW PL/EN 320/390 px: PASS.
+Dwa konta syntetyczne, ich dane/zdjęcia, zaproszenia i lokalne sesje usunięto.
+Galeria zawiera sześć przygotowanych przypadków bez nowych wyników AI.
 P3.3C/D nadal niezlecone; prywatne zdjęcia użytkowników pozostają wyłączone z AI.
 
 ## Odebrane P3.3A — dowody wykonania
@@ -257,11 +261,13 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-**Decyzja o propozycji P3.3B według V1.7.** Zgoda powinna obejmować integrację,
-dedykowany klucz serwerowy, syntetyczne dane do OpenAI, limity 6/10 PLN,
-granicę gwarancji pierwszego pomiaru i aktualne finansowanie podane w rozmowie,
-publikację raportu oraz zatrzymanie przed C. Do tej decyzji AI pozostaje OFF.
-Nie pytamy ponownie o odebrane A.
+**Dokończenie już zatwierdzonego P3.3B.** Potrzebny jest dostęp do panelu
+sekretów Supabase po ponownym logowaniu właściciela. Po jego przywróceniu:
+odtworzenie wyłącznie syntetycznych fixture, kontrola konkurencji hosted,
+odświeżenie warunków finansowania i osobny ograniczony klucz B tylko w Supabase.
+Następnie najwyżej 6 płatnych wywołań / 10 PLN, bez ponowień, raport i zamknięcie
+AI/klucza przed C. Zgoda użytkownika już obejmuje te czynności; nie pytamy o nią
+ponownie. Do spełnienia kontroli startowych AI pozostaje OFF.
 
 Logowanie Kasi w P3.1 nie zostało osobno potwierdzone; ogólny odbiór A nie
 dopisuje takiego wyniku. Galeria i pomiary P3.2 pozostają niezmienione.
