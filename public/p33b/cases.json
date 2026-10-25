@@ -1,0 +1,2546 @@
+{
+  "version": "1.0",
+  "preparedDate": "2026-10-25",
+  "status": "prepared-offline",
+  "model": "gpt-image-2.5-flare-2026-09-08",
+  "endpoint": "https://api.openai.com/v1/images/edits",
+  "parameters": {
+    "n": 1,
+    "quality": "medium",
+    "size": "1024x1536",
+    "background": "opaque",
+    "output_format": "png",
+    "moderation": "auto"
+  },
+  "limits": {
+    "maxCallsTotal": 6,
+    "budgetPlnTotal": 10,
+    "concurrency": 1,
+    "maxSendsPerCase": 1,
+    "automaticRetries": 0,
+    "maxInputBytes": 1000000,
+    "maxInputWidth": 1024,
+    "maxInputHeight": 1536,
+    "maxPromptCharacters": 2500
+  },
+  "preprocessing": {
+    "script": "scripts/prepare-p33b-inputs.py",
+    "pillow": "12.3.0",
+    "jpegCodec": "8.0",
+    "jpegQuality": 90,
+    "jpegSubsampling": 0,
+    "exif": false,
+    "backgroundRgb": [
+      248,
+      245,
+      239
+    ],
+    "generatedImages": 0
+  },
+  "executionGate": "Offline inputs only. Registration, access, financing, worker checks and controlled activation are separate prerequisites. This file cannot authorize a provider call.",
+  "inputLimitations": [
+    "Visible-pixel crops, not independent product photos or flat-lay images.",
+    "No hidden fourth layer: B03/B04/B06 shirts are worn without blazers; B06 declares shirt plus tie as one top input.",
+    "Occluded garment areas are absent, not reconstructed; their output fidelity cannot be validated.",
+    "Only a small, visually similar set of fictional adults; no claim of broad identity/body diversity validation."
+  ],
+  "cases": [
+    {
+      "id": "B01",
+      "order": 1,
+      "label": "Kobieta / na co dzień",
+      "audience": "women",
+      "occasion": "casual",
+      "syntheticAccountSlot": "woman",
+      "calibration": true,
+      "status": "pending",
+      "garmentCount": 3,
+      "inputs": [
+        {
+          "order": 1,
+          "path": "public/p33b/inputs/b01-01-person.jpg",
+          "publicPath": "p33b/inputs/b01-01-person.jpg",
+          "role": "person",
+          "mimeType": "image/jpeg",
+          "sha256": "c98ddd7c81b75b1c2bfb4bf915a2d354fa33ece9d3ee7ed9313043c286434834",
+          "bytes": 219189,
+          "sourcePath": "assets/outfits/w3.png",
+          "sourceSha256": "8aede920434099c03d7385315ae1d80473557df538f4d64b0ffdf961be1a5e26",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "method": "full-image-rgb-jpeg-reencode"
+          },
+          "width": 1024,
+          "height": 1536,
+          "label": "Fikcyjna dorosła osoba — wzorzec tożsamości i pozy",
+          "limitations": [
+            "Istniejące ubrania osoby są wyłącznie kontekstem wejściowym; cały strój ma zostać zastąpiony.",
+            "Syntetyczne postacie w tej małej bazie są do siebie podobne; próba słabo bada zmianę tożsamości i różnorodność sylwetek."
+          ]
+        },
+        {
+          "order": 2,
+          "path": "public/p33b/inputs/b01-02-w-knit.jpg",
+          "publicPath": "p33b/inputs/b01-02-w-knit.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "c4c697d17aaaaccd1166e156b84a3dfa92a50f19f144102201858594ff4da0b0",
+          "bytes": 43791,
+          "sourcePath": "assets/outfits/w1.png",
+          "sourceSha256": "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              285,
+              245,
+              725,
+              660
+            ],
+            "keepPolygons": [
+              [
+                [
+                  450,
+                  278
+                ],
+                [
+                  575,
+                  268
+                ],
+                [
+                  598,
+                  262
+                ],
+                [
+                  673,
+                  280
+                ],
+                [
+                  700,
+                  339
+                ],
+                [
+                  706,
+                  466
+                ],
+                [
+                  697,
+                  544
+                ],
+                [
+                  690,
+                  640
+                ],
+                [
+                  645,
+                  635
+                ],
+                [
+                  626,
+                  572
+                ],
+                [
+                  624,
+                  627
+                ],
+                [
+                  550,
+                  600
+                ],
+                [
+                  497,
+                  574
+                ],
+                [
+                  404,
+                  574
+                ],
+                [
+                  363,
+                  592
+                ],
+                [
+                  350,
+                  641
+                ],
+                [
+                  312,
+                  634
+                ],
+                [
+                  312,
+                  557
+                ],
+                [
+                  306,
+                  519
+                ],
+                [
+                  316,
+                  409
+                ],
+                [
+                  333,
+                  316
+                ],
+                [
+                  386,
+                  285
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 488,
+          "height": 463,
+          "garmentId": "w-knit",
+          "category": "top",
+          "label": "Kremowy sweter",
+          "description": "cream long-sleeve crew-neck knit sweater, relaxed shape",
+          "limitations": [
+            "Sweter wycięty z ilustracji na osobie; dół jest częściowo podwinięty lub wsunięty w spodnie.",
+            "Krawędź dekoltu styka się z włosami; wycinek nie pokazuje tyłu rzeczy."
+          ]
+        },
+        {
+          "order": 3,
+          "path": "public/p33b/inputs/b01-03-w-wide.jpg",
+          "publicPath": "p33b/inputs/b01-03-w-wide.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "7ab6445a9187110b7b3e40b2f6cc301ae5a48e4f79fb06c45a29d2f9cfa91660",
+          "bytes": 53980,
+          "sourcePath": "assets/outfits/w1.png",
+          "sourceSha256": "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              325,
+              560,
+              750,
+              1420
+            ],
+            "keepPolygons": [
+              [
+                [
+                  379,
+                  584
+                ],
+                [
+                  490,
+                  579
+                ],
+                [
+                  550,
+                  602
+                ],
+                [
+                  620,
+                  636
+                ],
+                [
+                  639,
+                  730
+                ],
+                [
+                  658,
+                  845
+                ],
+                [
+                  674,
+                  1051
+                ],
+                [
+                  730,
+                  1367
+                ],
+                [
+                  721,
+                  1398
+                ],
+                [
+                  575,
+                  1400
+                ],
+                [
+                  525,
+                  1220
+                ],
+                [
+                  497,
+                  1050
+                ],
+                [
+                  488,
+                  912
+                ],
+                [
+                  489,
+                  813
+                ],
+                [
+                  477,
+                  862
+                ],
+                [
+                  485,
+                  1070
+                ],
+                [
+                  520,
+                  1367
+                ],
+                [
+                  377,
+                  1374
+                ],
+                [
+                  355,
+                  1234
+                ],
+                [
+                  345,
+                  914
+                ],
+                [
+                  342,
+                  821
+                ],
+                [
+                  345,
+                  700
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 473,
+          "height": 908,
+          "garmentId": "w-wide",
+          "category": "bottom",
+          "label": "Granatowe szerokie spodnie",
+          "description": "navy high-waisted wide-leg trousers with long, very wide hems",
+          "limitations": [
+            "Pas spodni jest częściowo zasłonięty swetrem; zachowano tylko widoczne piksele.",
+            "Drobne fragmenty dłoni mogą zachodzić na boki spodni. Nie jest to flat-lay."
+          ]
+        },
+        {
+          "order": 4,
+          "path": "public/p33b/inputs/b01-04-w-sneakers.jpg",
+          "publicPath": "p33b/inputs/b01-04-w-sneakers.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "ec7fad42300775a9ac35a4daf3ebd4f99aab96f317dfb05befb8a65b3ac460de",
+          "bytes": 8687,
+          "sourcePath": "assets/outfits/w1.png",
+          "sourceSha256": "36db540ace72b851c90876a4a473cb7ced16f41a5079d8576db9e1252014e0e6",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              380,
+              1340,
+              785,
+              1470
+            ],
+            "keepPolygons": [
+              [
+                [
+                  409,
+                  1384
+                ],
+                [
+                  439,
+                  1366
+                ],
+                [
+                  480,
+                  1367
+                ],
+                [
+                  519,
+                  1366
+                ],
+                [
+                  519,
+                  1400
+                ],
+                [
+                  494,
+                  1414
+                ],
+                [
+                  459,
+                  1425
+                ],
+                [
+                  407,
+                  1421
+                ],
+                [
+                  405,
+                  1400
+                ],
+                [
+                  409,
+                  1384
+                ]
+              ],
+              [
+                [
+                  572,
+                  1402
+                ],
+                [
+                  624,
+                  1392
+                ],
+                [
+                  655,
+                  1374
+                ],
+                [
+                  696,
+                  1378
+                ],
+                [
+                  721,
+                  1393
+                ],
+                [
+                  757,
+                  1436
+                ],
+                [
+                  761,
+                  1450
+                ],
+                [
+                  736,
+                  1455
+                ],
+                [
+                  683,
+                  1446
+                ],
+                [
+                  628,
+                  1429
+                ],
+                [
+                  573,
+                  1416
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 453,
+          "height": 178,
+          "garmentId": "w-sneakers",
+          "category": "shoes",
+          "label": "Białe sneakersy",
+          "description": "white low-top sneakers with thick white soles",
+          "limitations": [
+            "Górę obuwia zasłaniają nogawki; widoczne są głównie przody i podeszwy."
+          ]
+        }
+      ],
+      "prompt": "Edit image 1: show the same fictional adult wearing only the declared garments in the separate reference images. Image 1 alone defines the person: preserve face, hair, skin tone, apparent adult age, body proportions, pose, camera, full-body framing, lighting and studio background. Replace all current clothing and footwear; do not retain a cardigan, jacket or other layer from image 1. Image 2: cream long-sleeve crew-neck knit sweater, relaxed shape. Image 3: navy high-waisted wide-leg trousers with long, very wide hems. Image 4: white low-top sneakers with thick white soles. References 2 onward are cropped visible garment pixels from illustrations of other fictional adults, not flat-lay photos. Ignore their residual skin, hands and neutral mask edges. Do not copy their person, pose or body. Some shirt sleeves, shoulders, waistbands and shoe uppers were occluded and are absent. Infer only the minimum continuous fabric needed to wear each declared garment; do not interpret the mask outline as a garment cut or add an outer layer. Preserve the visible colours, fabric, closures, neckline, trouser leg width, rise where visible, and hem length. A shirt reference means that shirt worn alone, never a blazer. Keep both shoes, whole head, natural hands and realistic anatomy visible. No added accessories, jewellery, text, logos, other people, collage or comparison board. Return one photorealistic outfit visualisation; this does not establish physical fit.",
+      "promptSha256": "889dd1e4a972f169ad688bfb91e7ea284a90ccb582b0dd224fce8be5b8c602ce",
+      "result": null,
+      "qualityAssessment": null
+    },
+    {
+      "id": "B02",
+      "order": 2,
+      "label": "Mężczyzna / na co dzień",
+      "audience": "men",
+      "occasion": "casual",
+      "syntheticAccountSlot": "man",
+      "calibration": false,
+      "status": "pending",
+      "garmentCount": 3,
+      "inputs": [
+        {
+          "order": 1,
+          "path": "public/p33b/inputs/b02-01-person.jpg",
+          "publicPath": "p33b/inputs/b02-01-person.jpg",
+          "role": "person",
+          "mimeType": "image/jpeg",
+          "sha256": "aab2f6565592dafc06b9b5b14ab1a6f72451af2da34f0c96f4b90d97a9bb4ebb",
+          "bytes": 183997,
+          "sourcePath": "assets/outfits/m3.png",
+          "sourceSha256": "972884d0df8ff8a28c9af65174fcc4ac2d4d18750d2a058effba2fff7d5847df",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "method": "full-image-rgb-jpeg-reencode"
+          },
+          "width": 1024,
+          "height": 1536,
+          "label": "Fikcyjna dorosła osoba — wzorzec tożsamości i pozy",
+          "limitations": [
+            "Istniejące ubrania osoby są wyłącznie kontekstem wejściowym; cały strój ma zostać zastąpiony.",
+            "Syntetyczne postacie w tej małej bazie są do siebie podobne; próba słabo bada zmianę tożsamości i różnorodność sylwetek."
+          ]
+        },
+        {
+          "order": 2,
+          "path": "public/p33b/inputs/b02-02-m-knit.jpg",
+          "publicPath": "p33b/inputs/b02-02-m-knit.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "d9e5a2504ac5310cbb03670db1eb2df2b489bf21081bde566b7ec64ae4ce181b",
+          "bytes": 50606,
+          "sourcePath": "assets/outfits/m1.png",
+          "sourceSha256": "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              250,
+              215,
+              750,
+              730
+            ],
+            "keepPolygons": [
+              [
+                [
+                  454,
+                  231
+                ],
+                [
+                  475,
+                  263
+                ],
+                [
+                  522,
+                  277
+                ],
+                [
+                  550,
+                  269
+                ],
+                [
+                  572,
+                  234
+                ],
+                [
+                  647,
+                  258
+                ],
+                [
+                  690,
+                  293
+                ],
+                [
+                  715,
+                  375
+                ],
+                [
+                  724,
+                  510
+                ],
+                [
+                  721,
+                  569
+                ],
+                [
+                  700,
+                  646
+                ],
+                [
+                  657,
+                  635
+                ],
+                [
+                  647,
+                  592
+                ],
+                [
+                  645,
+                  688
+                ],
+                [
+                  601,
+                  707
+                ],
+                [
+                  515,
+                  709
+                ],
+                [
+                  428,
+                  699
+                ],
+                [
+                  360,
+                  680
+                ],
+                [
+                  354,
+                  615
+                ],
+                [
+                  303,
+                  631
+                ],
+                [
+                  276,
+                  561
+                ],
+                [
+                  278,
+                  486
+                ],
+                [
+                  283,
+                  387
+                ],
+                [
+                  311,
+                  301
+                ],
+                [
+                  387,
+                  258
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 548,
+          "height": 563,
+          "garmentId": "m-knit",
+          "category": "top",
+          "label": "Sweter ecru",
+          "description": "ecru long-sleeve crew-neck knit sweater with a ribbed hem and cuffs",
+          "limitations": [
+            "Sweter pochodzi z obrazu na osobie; krawędzie szyi i nadgarstków nie są produktem flat-lay."
+          ]
+        },
+        {
+          "order": 3,
+          "path": "public/p33b/inputs/b02-03-m-chinos.jpg",
+          "publicPath": "p33b/inputs/b02-03-m-chinos.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "b2343851b59c8995b1f5b6645ab32f2c7649e1508e1b566523033cbfe7202887",
+          "bytes": 40607,
+          "sourcePath": "assets/outfits/m1.png",
+          "sourceSha256": "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              315,
+              675,
+              690,
+              1375
+            ],
+            "keepPolygons": [
+              [
+                [
+                  357,
+                  683
+                ],
+                [
+                  432,
+                  703
+                ],
+                [
+                  520,
+                  712
+                ],
+                [
+                  607,
+                  705
+                ],
+                [
+                  650,
+                  691
+                ],
+                [
+                  665,
+                  749
+                ],
+                [
+                  663,
+                  1008
+                ],
+                [
+                  649,
+                  1196
+                ],
+                [
+                  643,
+                  1358
+                ],
+                [
+                  562,
+                  1360
+                ],
+                [
+                  536,
+                  1180
+                ],
+                [
+                  518,
+                  1011
+                ],
+                [
+                  505,
+                  847
+                ],
+                [
+                  494,
+                  806
+                ],
+                [
+                  486,
+                  901
+                ],
+                [
+                  506,
+                  1121
+                ],
+                [
+                  500,
+                  1340
+                ],
+                [
+                  428,
+                  1347
+                ],
+                [
+                  405,
+                  1246
+                ],
+                [
+                  388,
+                  1090
+                ],
+                [
+                  347,
+                  843
+                ],
+                [
+                  338,
+                  746
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 423,
+          "height": 748,
+          "garmentId": "m-chinos",
+          "category": "bottom",
+          "label": "Granatowe chinosy",
+          "description": "navy slim straight chinos, ankle-length, with modest taper",
+          "limitations": [
+            "Sweter zakrywa pas; dłonie schowane w kieszeniach zasłaniają ich górne krawędzie."
+          ]
+        },
+        {
+          "order": 4,
+          "path": "public/p33b/inputs/b02-04-m-sneakers.jpg",
+          "publicPath": "p33b/inputs/b02-04-m-sneakers.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "dfd1f98c33c38203fc37b8d025cf5b74c0239a0b272733480153eb42b537c907",
+          "bytes": 10076,
+          "sourcePath": "assets/outfits/m1.png",
+          "sourceSha256": "8bf6251f47dd54166faa2363a40506939299b1e53e222078c1a2d2082a62c01e",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              360,
+              1320,
+              715,
+              1480
+            ],
+            "keepPolygons": [
+              [
+                [
+                  427,
+                  1343
+                ],
+                [
+                  499,
+                  1340
+                ],
+                [
+                  510,
+                  1390
+                ],
+                [
+                  485,
+                  1427
+                ],
+                [
+                  439,
+                  1446
+                ],
+                [
+                  382,
+                  1449
+                ],
+                [
+                  381,
+                  1427
+                ],
+                [
+                  399,
+                  1391
+                ]
+              ],
+              [
+                [
+                  563,
+                  1359
+                ],
+                [
+                  595,
+                  1355
+                ],
+                [
+                  627,
+                  1361
+                ],
+                [
+                  647,
+                  1381
+                ],
+                [
+                  681,
+                  1420
+                ],
+                [
+                  695,
+                  1449
+                ],
+                [
+                  691,
+                  1466
+                ],
+                [
+                  651,
+                  1466
+                ],
+                [
+                  607,
+                  1451
+                ],
+                [
+                  566,
+                  1426
+                ],
+                [
+                  550,
+                  1402
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 403,
+          "height": 208,
+          "garmentId": "m-sneakers",
+          "category": "shoes",
+          "label": "Białe sneakersy",
+          "description": "white low-top lace-up sneakers with white soles",
+          "limitations": [
+            "Nogawki zasłaniają tył cholewek; zachowano trochę skóry przy kostkach."
+          ]
+        }
+      ],
+      "prompt": "Edit image 1: show the same fictional adult wearing only the declared garments in the separate reference images. Image 1 alone defines the person: preserve face, hair, skin tone, apparent adult age, body proportions, pose, camera, full-body framing, lighting and studio background. Replace all current clothing and footwear; do not retain a cardigan, jacket or other layer from image 1. Image 2: ecru long-sleeve crew-neck knit sweater with a ribbed hem and cuffs. Image 3: navy slim straight chinos, ankle-length, with modest taper. Image 4: white low-top lace-up sneakers with white soles. References 2 onward are cropped visible garment pixels from illustrations of other fictional adults, not flat-lay photos. Ignore their residual skin, hands and neutral mask edges. Do not copy their person, pose or body. Some shirt sleeves, shoulders, waistbands and shoe uppers were occluded and are absent. Infer only the minimum continuous fabric needed to wear each declared garment; do not interpret the mask outline as a garment cut or add an outer layer. Preserve the visible colours, fabric, closures, neckline, trouser leg width, rise where visible, and hem length. A shirt reference means that shirt worn alone, never a blazer. Keep both shoes, whole head, natural hands and realistic anatomy visible. No added accessories, jewellery, text, logos, other people, collage or comparison board. Return one photorealistic outfit visualisation; this does not establish physical fit.",
+      "promptSha256": "27d2bc315fc30493f454e81a6f81e84be266017ab8641f55615c7f69cbc85423",
+      "result": null,
+      "qualityAssessment": null
+    },
+    {
+      "id": "B03",
+      "order": 3,
+      "label": "Kobieta / elegancko",
+      "audience": "women",
+      "occasion": "elegant",
+      "syntheticAccountSlot": "woman",
+      "calibration": false,
+      "status": "pending",
+      "garmentCount": 3,
+      "inputs": [
+        {
+          "order": 1,
+          "path": "public/p33b/inputs/b03-01-person.jpg",
+          "publicPath": "p33b/inputs/b03-01-person.jpg",
+          "role": "person",
+          "mimeType": "image/jpeg",
+          "sha256": "c98ddd7c81b75b1c2bfb4bf915a2d354fa33ece9d3ee7ed9313043c286434834",
+          "bytes": 219189,
+          "sourcePath": "assets/outfits/w3.png",
+          "sourceSha256": "8aede920434099c03d7385315ae1d80473557df538f4d64b0ffdf961be1a5e26",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "method": "full-image-rgb-jpeg-reencode"
+          },
+          "width": 1024,
+          "height": 1536,
+          "label": "Fikcyjna dorosła osoba — wzorzec tożsamości i pozy",
+          "limitations": [
+            "Istniejące ubrania osoby są wyłącznie kontekstem wejściowym; cały strój ma zostać zastąpiony.",
+            "Syntetyczne postacie w tej małej bazie są do siebie podobne; próba słabo bada zmianę tożsamości i różnorodność sylwetek."
+          ]
+        },
+        {
+          "order": 2,
+          "path": "public/p33b/inputs/b03-02-w-shirt.jpg",
+          "publicPath": "p33b/inputs/b03-02-w-shirt.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "b2b0b99cecb6c6ddb4ecc038214a51e176f1ae62beae430af0247de9ab8564d0",
+          "bytes": 12629,
+          "sourcePath": "assets/outfits/w4.png",
+          "sourceSha256": "25b83aae5d67b8f5a9c735b3fbcad7be4d3e2eafb23c45c3703ade86ebd2fad1",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              420,
+              245,
+              605,
+              560
+            ],
+            "keepPolygons": [
+              [
+                [
+                  449,
+                  257
+                ],
+                [
+                  464,
+                  289
+                ],
+                [
+                  493,
+                  335
+                ],
+                [
+                  508,
+                  369
+                ],
+                [
+                  526,
+                  327
+                ],
+                [
+                  537,
+                  292
+                ],
+                [
+                  545,
+                  255
+                ],
+                [
+                  555,
+                  311
+                ],
+                [
+                  558,
+                  373
+                ],
+                [
+                  566,
+                  434
+                ],
+                [
+                  582,
+                  514
+                ],
+                [
+                  588,
+                  547
+                ],
+                [
+                  439,
+                  541
+                ],
+                [
+                  442,
+                  467
+                ],
+                [
+                  445,
+                  363
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 233,
+          "height": 363,
+          "garmentId": "w-shirt",
+          "category": "top",
+          "label": "Błękitna koszula — widoczny przód",
+          "description": "pale-blue collared button-up shirt, tucked in; visible front panel only",
+          "limitations": [
+            "Marynarka zasłania rękawy, ramiona, boczne szwy i część kołnierza koszuli; nie odtwarzano tych części.",
+            "W wycięciu dekoltu pozostaje fragment skóry. Marynarka nie jest wejściem ani częścią zestawu B03."
+          ]
+        },
+        {
+          "order": 3,
+          "path": "public/p33b/inputs/b03-03-w-tailored.jpg",
+          "publicPath": "p33b/inputs/b03-03-w-tailored.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "5814bdd27a4e96a82b0f6225412a9dca9666109a2bac22ff66f4e8797c90f32b",
+          "bytes": 40555,
+          "sourcePath": "assets/outfits/w4.png",
+          "sourceSha256": "25b83aae5d67b8f5a9c735b3fbcad7be4d3e2eafb23c45c3703ade86ebd2fad1",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              325,
+              530,
+              685,
+              1400
+            ],
+            "keepPolygons": [
+              [
+                [
+                  442,
+                  547
+                ],
+                [
+                  584,
+                  551
+                ],
+                [
+                  602,
+                  599
+                ],
+                [
+                  616,
+                  643
+                ],
+                [
+                  636,
+                  691
+                ],
+                [
+                  637,
+                  750
+                ],
+                [
+                  647,
+                  818
+                ],
+                [
+                  654,
+                  1004
+                ],
+                [
+                  662,
+                  1372
+                ],
+                [
+                  562,
+                  1377
+                ],
+                [
+                  529,
+                  1160
+                ],
+                [
+                  508,
+                  963
+                ],
+                [
+                  493,
+                  819
+                ],
+                [
+                  482,
+                  769
+                ],
+                [
+                  475,
+                  878
+                ],
+                [
+                  487,
+                  1110
+                ],
+                [
+                  502,
+                  1339
+                ],
+                [
+                  402,
+                  1344
+                ],
+                [
+                  380,
+                  1192
+                ],
+                [
+                  365,
+                  1001
+                ],
+                [
+                  346,
+                  845
+                ],
+                [
+                  344,
+                  770
+                ],
+                [
+                  381,
+                  764
+                ],
+                [
+                  412,
+                  745
+                ],
+                [
+                  427,
+                  687
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 408,
+          "height": 918,
+          "garmentId": "w-tailored",
+          "category": "bottom",
+          "label": "Granatowe proste spodnie garniturowe",
+          "description": "navy tailored trousers with straight moderately wide legs and ankle-length hems; not skinny or flared",
+          "limitations": [
+            "Marynarka i dłoń zasłaniają boki pasa/kieszeni; obrys maski nie jest rzeczywistym górnym krojem spodni.",
+            "Ocena kroju dotyczy przede wszystkim widocznych prostych nogawek i długości, nie ukrytych partii."
+          ]
+        },
+        {
+          "order": 4,
+          "path": "public/p33b/inputs/b03-04-w-loafers.jpg",
+          "publicPath": "p33b/inputs/b03-04-w-loafers.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "1e536717e8f65af626e5e10affaa69c033a49adc3a4e4dabf3f9619f8300f74a",
+          "bytes": 10201,
+          "sourcePath": "assets/outfits/w4.png",
+          "sourceSha256": "25b83aae5d67b8f5a9c735b3fbcad7be4d3e2eafb23c45c3703ade86ebd2fad1",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              385,
+              1320,
+              740,
+              1475
+            ],
+            "keepPolygons": [
+              [
+                [
+                  431,
+                  1348
+                ],
+                [
+                  486,
+                  1341
+                ],
+                [
+                  500,
+                  1337
+                ],
+                [
+                  504,
+                  1382
+                ],
+                [
+                  489,
+                  1403
+                ],
+                [
+                  460,
+                  1416
+                ],
+                [
+                  414,
+                  1418
+                ],
+                [
+                  404,
+                  1403
+                ],
+                [
+                  409,
+                  1383
+                ]
+              ],
+              [
+                [
+                  562,
+                  1377
+                ],
+                [
+                  608,
+                  1380
+                ],
+                [
+                  636,
+                  1375
+                ],
+                [
+                  656,
+                  1392
+                ],
+                [
+                  696,
+                  1419
+                ],
+                [
+                  717,
+                  1439
+                ],
+                [
+                  720,
+                  1455
+                ],
+                [
+                  692,
+                  1460
+                ],
+                [
+                  643,
+                  1451
+                ],
+                [
+                  607,
+                  1437
+                ],
+                [
+                  557,
+                  1424
+                ],
+                [
+                  556,
+                  1402
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 403,
+          "height": 203,
+          "garmentId": "w-loafers",
+          "category": "shoes",
+          "label": "Czarne mokasyny",
+          "description": "black leather penny loafers with low heels",
+          "limitations": [
+            "Nogawki zakrywają górę butów; nad cholewkami pozostają fragmenty kostek."
+          ]
+        }
+      ],
+      "prompt": "Edit image 1: show the same fictional adult wearing only the declared garments in the separate reference images. Image 1 alone defines the person: preserve face, hair, skin tone, apparent adult age, body proportions, pose, camera, full-body framing, lighting and studio background. Replace all current clothing and footwear; do not retain a cardigan, jacket or other layer from image 1. Image 2: pale-blue collared button-up shirt, tucked in; visible front panel only. Image 3: navy tailored trousers with straight moderately wide legs and ankle-length hems; not skinny or flared. Image 4: black leather penny loafers with low heels. References 2 onward are cropped visible garment pixels from illustrations of other fictional adults, not flat-lay photos. Ignore their residual skin, hands and neutral mask edges. Do not copy their person, pose or body. Some shirt sleeves, shoulders, waistbands and shoe uppers were occluded and are absent. Infer only the minimum continuous fabric needed to wear each declared garment; do not interpret the mask outline as a garment cut or add an outer layer. Preserve the visible colours, fabric, closures, neckline, trouser leg width, rise where visible, and hem length. A shirt reference means that shirt worn alone, never a blazer. Keep both shoes, whole head, natural hands and realistic anatomy visible. No added accessories, jewellery, text, logos, other people, collage or comparison board. Return one photorealistic outfit visualisation; this does not establish physical fit.",
+      "promptSha256": "44cf028209ce4d007c74aa57bbb504e5626fdfeb7836201325a4497ee5e7eee4",
+      "result": null,
+      "qualityAssessment": null
+    },
+    {
+      "id": "B04",
+      "order": 4,
+      "label": "Mężczyzna / elegancko",
+      "audience": "men",
+      "occasion": "elegant",
+      "syntheticAccountSlot": "man",
+      "calibration": false,
+      "status": "pending",
+      "garmentCount": 3,
+      "inputs": [
+        {
+          "order": 1,
+          "path": "public/p33b/inputs/b04-01-person.jpg",
+          "publicPath": "p33b/inputs/b04-01-person.jpg",
+          "role": "person",
+          "mimeType": "image/jpeg",
+          "sha256": "aab2f6565592dafc06b9b5b14ab1a6f72451af2da34f0c96f4b90d97a9bb4ebb",
+          "bytes": 183997,
+          "sourcePath": "assets/outfits/m3.png",
+          "sourceSha256": "972884d0df8ff8a28c9af65174fcc4ac2d4d18750d2a058effba2fff7d5847df",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "method": "full-image-rgb-jpeg-reencode"
+          },
+          "width": 1024,
+          "height": 1536,
+          "label": "Fikcyjna dorosła osoba — wzorzec tożsamości i pozy",
+          "limitations": [
+            "Istniejące ubrania osoby są wyłącznie kontekstem wejściowym; cały strój ma zostać zastąpiony.",
+            "Syntetyczne postacie w tej małej bazie są do siebie podobne; próba słabo bada zmianę tożsamości i różnorodność sylwetek."
+          ]
+        },
+        {
+          "order": 2,
+          "path": "public/p33b/inputs/b04-02-m-shirt.jpg",
+          "publicPath": "p33b/inputs/b04-02-m-shirt.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "0c23299a1186964e7561008dc54b0b9951e408ba4b742d8f38d2b4651038d338",
+          "bytes": 11580,
+          "sourcePath": "assets/outfits/m4.png",
+          "sourceSha256": "a0847f633b9c49c57a150d5abf67754e644316488681bb7e9022962d19461b6d",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              420,
+              215,
+              605,
+              610
+            ],
+            "keepPolygons": [
+              [
+                [
+                  449,
+                  228
+                ],
+                [
+                  466,
+                  264
+                ],
+                [
+                  497,
+                  302
+                ],
+                [
+                  525,
+                  260
+                ],
+                [
+                  542,
+                  220
+                ],
+                [
+                  549,
+                  267
+                ],
+                [
+                  550,
+                  373
+                ],
+                [
+                  554,
+                  471
+                ],
+                [
+                  572,
+                  545
+                ],
+                [
+                  592,
+                  591
+                ],
+                [
+                  439,
+                  589
+                ],
+                [
+                  445,
+                  527
+                ],
+                [
+                  449,
+                  422
+                ],
+                [
+                  449,
+                  313
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 233,
+          "height": 443,
+          "garmentId": "m-shirt",
+          "category": "top",
+          "label": "Biała koszula — widoczny przód",
+          "description": "white collared button-up dress shirt, tucked in, open collar, no tie; visible front only",
+          "limitations": [
+            "Marynarka zasłania rękawy, ramiona i boki koszuli; widoczny jest tylko przód i część kołnierza.",
+            "Zostaje skóra przy kołnierzu. Marynarka została wykluczona z wejścia i z docelowego stroju B04."
+          ]
+        },
+        {
+          "order": 3,
+          "path": "public/p33b/inputs/b04-03-m-tailored.jpg",
+          "publicPath": "p33b/inputs/b04-03-m-tailored.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "c8a550325e88f8eda4fb7f1692671fa999081dff17c89114fba33ff4aa6910ac",
+          "bytes": 47235,
+          "sourcePath": "assets/outfits/m4.png",
+          "sourceSha256": "a0847f633b9c49c57a150d5abf67754e644316488681bb7e9022962d19461b6d",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              345,
+              580,
+              685,
+              1345
+            ],
+            "keepPolygons": [
+              [
+                [
+                  443,
+                  597
+                ],
+                [
+                  592,
+                  596
+                ],
+                [
+                  613,
+                  644
+                ],
+                [
+                  637,
+                  688
+                ],
+                [
+                  650,
+                  738
+                ],
+                [
+                  648,
+                  805
+                ],
+                [
+                  653,
+                  986
+                ],
+                [
+                  661,
+                  1317
+                ],
+                [
+                  591,
+                  1325
+                ],
+                [
+                  559,
+                  1183
+                ],
+                [
+                  536,
+                  1034
+                ],
+                [
+                  511,
+                  843
+                ],
+                [
+                  504,
+                  797
+                ],
+                [
+                  492,
+                  870
+                ],
+                [
+                  497,
+                  1081
+                ],
+                [
+                  520,
+                  1286
+                ],
+                [
+                  447,
+                  1295
+                ],
+                [
+                  423,
+                  1195
+                ],
+                [
+                  396,
+                  1026
+                ],
+                [
+                  370,
+                  829
+                ],
+                [
+                  360,
+                  762
+                ],
+                [
+                  383,
+                  759
+                ],
+                [
+                  410,
+                  736
+                ],
+                [
+                  425,
+                  680
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 388,
+          "height": 813,
+          "garmentId": "m-tailored",
+          "category": "bottom",
+          "label": "Grafitowe spodnie garniturowe",
+          "description": "charcoal tailored trousers with straight moderately tapered legs and full-length hems",
+          "limitations": [
+            "Marynarka i ręka zasłaniają kieszenie i zewnętrzne części pasa; wycinek zachowuje tylko widoczną tkaninę."
+          ]
+        },
+        {
+          "order": 4,
+          "path": "public/p33b/inputs/b04-04-m-derby.jpg",
+          "publicPath": "p33b/inputs/b04-04-m-derby.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "517a1b8bd8fc16ae05cc5625b539818644359f185fe5a56fd55e0ba4fb7f65ee",
+          "bytes": 10557,
+          "sourcePath": "assets/outfits/m4.png",
+          "sourceSha256": "a0847f633b9c49c57a150d5abf67754e644316488681bb7e9022962d19461b6d",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              385,
+              1260,
+              735,
+              1435
+            ],
+            "keepPolygons": [
+              [
+                [
+                  447,
+                  1289
+                ],
+                [
+                  504,
+                  1287
+                ],
+                [
+                  517,
+                  1276
+                ],
+                [
+                  524,
+                  1325
+                ],
+                [
+                  504,
+                  1354
+                ],
+                [
+                  465,
+                  1375
+                ],
+                [
+                  420,
+                  1383
+                ],
+                [
+                  404,
+                  1372
+                ],
+                [
+                  408,
+                  1352
+                ],
+                [
+                  432,
+                  1313
+                ]
+              ],
+              [
+                [
+                  590,
+                  1326
+                ],
+                [
+                  625,
+                  1324
+                ],
+                [
+                  659,
+                  1320
+                ],
+                [
+                  665,
+                  1352
+                ],
+                [
+                  687,
+                  1378
+                ],
+                [
+                  707,
+                  1398
+                ],
+                [
+                  714,
+                  1417
+                ],
+                [
+                  693,
+                  1424
+                ],
+                [
+                  659,
+                  1422
+                ],
+                [
+                  629,
+                  1411
+                ],
+                [
+                  591,
+                  1386
+                ],
+                [
+                  588,
+                  1350
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 398,
+          "height": 223,
+          "garmentId": "m-derby",
+          "category": "shoes",
+          "label": "Czarne półbuty derby",
+          "description": "black lace-up leather derby dress shoes with low heels",
+          "limitations": [
+            "Spodnie zasłaniają górę cholewek; wycinek nie pokazuje tyłu butów."
+          ]
+        }
+      ],
+      "prompt": "Edit image 1: show the same fictional adult wearing only the declared garments in the separate reference images. Image 1 alone defines the person: preserve face, hair, skin tone, apparent adult age, body proportions, pose, camera, full-body framing, lighting and studio background. Replace all current clothing and footwear; do not retain a cardigan, jacket or other layer from image 1. Image 2: white collared button-up dress shirt, tucked in, open collar, no tie; visible front only. Image 3: charcoal tailored trousers with straight moderately tapered legs and full-length hems. Image 4: black lace-up leather derby dress shoes with low heels. References 2 onward are cropped visible garment pixels from illustrations of other fictional adults, not flat-lay photos. Ignore their residual skin, hands and neutral mask edges. Do not copy their person, pose or body. Some shirt sleeves, shoulders, waistbands and shoe uppers were occluded and are absent. Infer only the minimum continuous fabric needed to wear each declared garment; do not interpret the mask outline as a garment cut or add an outer layer. Preserve the visible colours, fabric, closures, neckline, trouser leg width, rise where visible, and hem length. A shirt reference means that shirt worn alone, never a blazer. Keep both shoes, whole head, natural hands and realistic anatomy visible. No added accessories, jewellery, text, logos, other people, collage or comparison board. Return one photorealistic outfit visualisation; this does not establish physical fit.",
+      "promptSha256": "a7d1408cf81f4b37544f04a105738a6c0621f899489930fba08fa6b388c01c05",
+      "result": null,
+      "qualityAssessment": null
+    },
+    {
+      "id": "B05",
+      "order": 5,
+      "label": "Kobieta / wesele jako gość",
+      "audience": "women",
+      "occasion": "wedding",
+      "syntheticAccountSlot": "woman",
+      "calibration": false,
+      "status": "pending",
+      "garmentCount": 2,
+      "inputs": [
+        {
+          "order": 1,
+          "path": "public/p33b/inputs/b05-01-person.jpg",
+          "publicPath": "p33b/inputs/b05-01-person.jpg",
+          "role": "person",
+          "mimeType": "image/jpeg",
+          "sha256": "c98ddd7c81b75b1c2bfb4bf915a2d354fa33ece9d3ee7ed9313043c286434834",
+          "bytes": 219189,
+          "sourcePath": "assets/outfits/w3.png",
+          "sourceSha256": "8aede920434099c03d7385315ae1d80473557df538f4d64b0ffdf961be1a5e26",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "method": "full-image-rgb-jpeg-reencode"
+          },
+          "width": 1024,
+          "height": 1536,
+          "label": "Fikcyjna dorosła osoba — wzorzec tożsamości i pozy",
+          "limitations": [
+            "Istniejące ubrania osoby są wyłącznie kontekstem wejściowym; cały strój ma zostać zastąpiony.",
+            "Syntetyczne postacie w tej małej bazie są do siebie podobne; próba słabo bada zmianę tożsamości i różnorodność sylwetek."
+          ]
+        },
+        {
+          "order": 2,
+          "path": "public/p33b/inputs/b05-02-w-dress.jpg",
+          "publicPath": "p33b/inputs/b05-02-w-dress.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "ec1ed91e1c8b4be2a14f86e3b39596955e0d67713397e0febee0a8341ad0851b",
+          "bytes": 63491,
+          "sourcePath": "assets/outfits/w5.png",
+          "sourceSha256": "1db25aaceae3d83f87a3d03ae70dad2e15919ca860834e61a13be532c890355d",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              285,
+              245,
+              775,
+              1145
+            ],
+            "keepPolygons": [
+              [
+                [
+                  384,
+                  263
+                ],
+                [
+                  426,
+                  262
+                ],
+                [
+                  452,
+                  274
+                ],
+                [
+                  512,
+                  282
+                ],
+                [
+                  568,
+                  275
+                ],
+                [
+                  598,
+                  262
+                ],
+                [
+                  640,
+                  272
+                ],
+                [
+                  666,
+                  304
+                ],
+                [
+                  693,
+                  388
+                ],
+                [
+                  663,
+                  403
+                ],
+                [
+                  644,
+                  396
+                ],
+                [
+                  628,
+                  391
+                ],
+                [
+                  615,
+                  463
+                ],
+                [
+                  615,
+                  503
+                ],
+                [
+                  648,
+                  606
+                ],
+                [
+                  675,
+                  698
+                ],
+                [
+                  689,
+                  784
+                ],
+                [
+                  712,
+                  902
+                ],
+                [
+                  756,
+                  1077
+                ],
+                [
+                  736,
+                  1089
+                ],
+                [
+                  699,
+                  1098
+                ],
+                [
+                  659,
+                  1102
+                ],
+                [
+                  611,
+                  1119
+                ],
+                [
+                  558,
+                  1123
+                ],
+                [
+                  512,
+                  1120
+                ],
+                [
+                  466,
+                  1128
+                ],
+                [
+                  412,
+                  1115
+                ],
+                [
+                  359,
+                  1121
+                ],
+                [
+                  336,
+                  1111
+                ],
+                [
+                  301,
+                  1094
+                ],
+                [
+                  322,
+                  1044
+                ],
+                [
+                  339,
+                  969
+                ],
+                [
+                  355,
+                  890
+                ],
+                [
+                  375,
+                  791
+                ],
+                [
+                  390,
+                  702
+                ],
+                [
+                  411,
+                  602
+                ],
+                [
+                  421,
+                  519
+                ],
+                [
+                  422,
+                  487
+                ],
+                [
+                  405,
+                  411
+                ],
+                [
+                  403,
+                  395
+                ],
+                [
+                  365,
+                  390
+                ],
+                [
+                  345,
+                  391
+                ],
+                [
+                  319,
+                  378
+                ],
+                [
+                  339,
+                  330
+                ],
+                [
+                  357,
+                  282
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 538,
+          "height": 948,
+          "garmentId": "w-dress",
+          "category": "dress",
+          "label": "Niebieska sukienka midi",
+          "description": "muted blue midi dress with short flutter sleeves, fitted waist and softly flared skirt below the knees",
+          "limitations": [
+            "Dłonie i ramiona zasłaniają małe części boków sukienki; wycinek nie odtwarza zasłoniętej tkaniny.",
+            "Krawędź maski przy rękawach jest technicznym wycięciem, nie zdjęciem produktu na płasko."
+          ]
+        },
+        {
+          "order": 3,
+          "path": "public/p33b/inputs/b05-03-w-pumps.jpg",
+          "publicPath": "p33b/inputs/b05-03-w-pumps.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "d216a01fbba05ac44332d45d29d543ff48d4fd7498e32b98a9a877dad6e38e3c",
+          "bytes": 9506,
+          "sourcePath": "assets/outfits/w5.png",
+          "sourceSha256": "1db25aaceae3d83f87a3d03ae70dad2e15919ca860834e61a13be532c890355d",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              275,
+              1280,
+              590,
+              1470
+            ],
+            "keepPolygons": [
+              [
+                [
+                  332,
+                  1355
+                ],
+                [
+                  360,
+                  1322
+                ],
+                [
+                  384,
+                  1300
+                ],
+                [
+                  397,
+                  1314
+                ],
+                [
+                  394,
+                  1350
+                ],
+                [
+                  383,
+                  1395
+                ],
+                [
+                  369,
+                  1427
+                ],
+                [
+                  330,
+                  1448
+                ],
+                [
+                  305,
+                  1451
+                ],
+                [
+                  299,
+                  1436
+                ],
+                [
+                  309,
+                  1399
+                ]
+              ],
+              [
+                [
+                  506,
+                  1353
+                ],
+                [
+                  516,
+                  1308
+                ],
+                [
+                  528,
+                  1290
+                ],
+                [
+                  544,
+                  1301
+                ],
+                [
+                  552,
+                  1332
+                ],
+                [
+                  560,
+                  1353
+                ],
+                [
+                  570,
+                  1375
+                ],
+                [
+                  570,
+                  1394
+                ],
+                [
+                  553,
+                  1415
+                ],
+                [
+                  535,
+                  1424
+                ],
+                [
+                  516,
+                  1417
+                ],
+                [
+                  505,
+                  1400
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 363,
+          "height": 238,
+          "garmentId": "w-pumps",
+          "category": "shoes",
+          "label": "Beżowe czółenka",
+          "description": "nude beige closed-toe pumps with medium heels",
+          "limitations": [
+            "W czółenkach pozostają fragmenty stóp i kostek. To wycinek obuwia noszonego na osobie."
+          ]
+        }
+      ],
+      "prompt": "Edit image 1: show the same fictional adult wearing only the declared garments in the separate reference images. Image 1 alone defines the person: preserve face, hair, skin tone, apparent adult age, body proportions, pose, camera, full-body framing, lighting and studio background. Replace all current clothing and footwear; do not retain a cardigan, jacket or other layer from image 1. Image 2: muted blue midi dress with short flutter sleeves, fitted waist and softly flared skirt below the knees. Image 3: nude beige closed-toe pumps with medium heels. References 2 onward are cropped visible garment pixels from illustrations of other fictional adults, not flat-lay photos. Ignore their residual skin, hands and neutral mask edges. Do not copy their person, pose or body. Some shirt sleeves, shoulders, waistbands and shoe uppers were occluded and are absent. Infer only the minimum continuous fabric needed to wear each declared garment; do not interpret the mask outline as a garment cut or add an outer layer. Preserve the visible colours, fabric, closures, neckline, trouser leg width, rise where visible, and hem length. A shirt reference means that shirt worn alone, never a blazer. Keep both shoes, whole head, natural hands and realistic anatomy visible. No added accessories, jewellery, text, logos, other people, collage or comparison board. Return one photorealistic outfit visualisation; this does not establish physical fit.",
+      "promptSha256": "1cb1170d51820b9e7c9bf26279750beb973fcec2cad14467b49ad59b95a583dd",
+      "result": null,
+      "qualityAssessment": null
+    },
+    {
+      "id": "B06",
+      "order": 6,
+      "label": "Mężczyzna / wesele jako gość",
+      "audience": "men",
+      "occasion": "wedding",
+      "syntheticAccountSlot": "man",
+      "calibration": false,
+      "status": "pending",
+      "garmentCount": 3,
+      "inputs": [
+        {
+          "order": 1,
+          "path": "public/p33b/inputs/b06-01-person.jpg",
+          "publicPath": "p33b/inputs/b06-01-person.jpg",
+          "role": "person",
+          "mimeType": "image/jpeg",
+          "sha256": "aab2f6565592dafc06b9b5b14ab1a6f72451af2da34f0c96f4b90d97a9bb4ebb",
+          "bytes": 183997,
+          "sourcePath": "assets/outfits/m3.png",
+          "sourceSha256": "972884d0df8ff8a28c9af65174fcc4ac2d4d18750d2a058effba2fff7d5847df",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "method": "full-image-rgb-jpeg-reencode"
+          },
+          "width": 1024,
+          "height": 1536,
+          "label": "Fikcyjna dorosła osoba — wzorzec tożsamości i pozy",
+          "limitations": [
+            "Istniejące ubrania osoby są wyłącznie kontekstem wejściowym; cały strój ma zostać zastąpiony.",
+            "Syntetyczne postacie w tej małej bazie są do siebie podobne; próba słabo bada zmianę tożsamości i różnorodność sylwetek."
+          ]
+        },
+        {
+          "order": 2,
+          "path": "public/p33b/inputs/b06-02-m-wedding-shirt.jpg",
+          "publicPath": "p33b/inputs/b06-02-m-wedding-shirt.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "cad0cfcdd2f83f001898fec1a7863824b33477d06b0e7a4a641f66e461b1d5ef",
+          "bytes": 15396,
+          "sourcePath": "assets/outfits/m5.png",
+          "sourceSha256": "8320008f9a72fbc3aa7caf66060d2ed1d23c2442f96004aed930591156146478",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              405,
+              215,
+              605,
+              630
+            ],
+            "keepPolygons": [
+              [
+                [
+                  454,
+                  223
+                ],
+                [
+                  469,
+                  246
+                ],
+                [
+                  499,
+                  264
+                ],
+                [
+                  518,
+                  256
+                ],
+                [
+                  550,
+                  218
+                ],
+                [
+                  560,
+                  264
+                ],
+                [
+                  559,
+                  377
+                ],
+                [
+                  562,
+                  473
+                ],
+                [
+                  571,
+                  550
+                ],
+                [
+                  587,
+                  597
+                ],
+                [
+                  532,
+                  600
+                ],
+                [
+                  514,
+                  619
+                ],
+                [
+                  483,
+                  600
+                ],
+                [
+                  420,
+                  595
+                ],
+                [
+                  441,
+                  535
+                ],
+                [
+                  450,
+                  472
+                ],
+                [
+                  455,
+                  376
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 248,
+          "height": 463,
+          "garmentId": "m-wedding-shirt",
+          "category": "top",
+          "label": "Biała koszula z granatowym krawatem — przód",
+          "description": "white dress shirt with a navy tie, tucked in; the shirt-and-tie reference is one declared top input, visible front only",
+          "limitations": [
+            "Koszula i krawat to jawnie jedna pozycja wejściowa (tak jak w katalogu); nie dołączono marynarki.",
+            "Widoczny jest tylko przód koszuli. Rękawy, ramiona, boki oraz fragmenty kołnierza zasłania marynarka; szyja częściowo pozostaje."
+          ]
+        },
+        {
+          "order": 3,
+          "path": "public/p33b/inputs/b06-03-m-wedding-trousers.jpg",
+          "publicPath": "p33b/inputs/b06-03-m-wedding-trousers.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "8460402b802abaaefbc43149d0f31d094e893af946918369d909bce5e93d0e3b",
+          "bytes": 43655,
+          "sourcePath": "assets/outfits/m5.png",
+          "sourceSha256": "8320008f9a72fbc3aa7caf66060d2ed1d23c2442f96004aed930591156146478",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              335,
+              585,
+              715,
+              1350
+            ],
+            "keepPolygons": [
+              [
+                [
+                  421,
+                  604
+                ],
+                [
+                  482,
+                  605
+                ],
+                [
+                  514,
+                  621
+                ],
+                [
+                  533,
+                  605
+                ],
+                [
+                  583,
+                  604
+                ],
+                [
+                  594,
+                  653
+                ],
+                [
+                  613,
+                  717
+                ],
+                [
+                  636,
+                  762
+                ],
+                [
+                  645,
+                  826
+                ],
+                [
+                  675,
+                  1025
+                ],
+                [
+                  699,
+                  1332
+                ],
+                [
+                  608,
+                  1334
+                ],
+                [
+                  581,
+                  1181
+                ],
+                [
+                  554,
+                  1043
+                ],
+                [
+                  525,
+                  863
+                ],
+                [
+                  513,
+                  807
+                ],
+                [
+                  499,
+                  873
+                ],
+                [
+                  503,
+                  1084
+                ],
+                [
+                  503,
+                  1304
+                ],
+                [
+                  421,
+                  1318
+                ],
+                [
+                  391,
+                  1169
+                ],
+                [
+                  370,
+                  985
+                ],
+                [
+                  352,
+                  831
+                ],
+                [
+                  355,
+                  751
+                ],
+                [
+                  381,
+                  712
+                ],
+                [
+                  408,
+                  660
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 428,
+          "height": 813,
+          "garmentId": "m-wedding-trousers",
+          "category": "bottom",
+          "label": "Granatowe spodnie garniturowe",
+          "description": "navy tailored suit trousers with straight legs and full-length hems",
+          "limitations": [
+            "Krawat, marynarka i dłoń zasłaniają części pasa/kieszeni; nie odtworzono ukrytych partii.",
+            "Marynarka nie jest czwartą rzeczą zestawu. Męski przypadek weselny sprawdza koszulę bez marynarki, spodnie i buty."
+          ]
+        },
+        {
+          "order": 4,
+          "path": "public/p33b/inputs/b06-04-m-wedding-shoes.jpg",
+          "publicPath": "p33b/inputs/b06-04-m-wedding-shoes.jpg",
+          "role": "garment",
+          "mimeType": "image/jpeg",
+          "sha256": "74a48e30bd689c799bf7174a410671c4a35f1828407b499d24a8e5f74bf642b6",
+          "bytes": 11390,
+          "sourcePath": "assets/outfits/m5.png",
+          "sourceSha256": "8320008f9a72fbc3aa7caf66060d2ed1d23c2442f96004aed930591156146478",
+          "sourceWidth": 1024,
+          "sourceHeight": 1536,
+          "transform": {
+            "crop": [
+              375,
+              1285,
+              750,
+              1450
+            ],
+            "keepPolygons": [
+              [
+                [
+                  430,
+                  1314
+                ],
+                [
+                  499,
+                  1304
+                ],
+                [
+                  509,
+                  1325
+                ],
+                [
+                  508,
+                  1363
+                ],
+                [
+                  475,
+                  1386
+                ],
+                [
+                  440,
+                  1400
+                ],
+                [
+                  400,
+                  1403
+                ],
+                [
+                  395,
+                  1392
+                ],
+                [
+                  401,
+                  1364
+                ]
+              ],
+              [
+                [
+                  609,
+                  1335
+                ],
+                [
+                  648,
+                  1335
+                ],
+                [
+                  685,
+                  1333
+                ],
+                [
+                  697,
+                  1353
+                ],
+                [
+                  701,
+                  1379
+                ],
+                [
+                  721,
+                  1402
+                ],
+                [
+                  731,
+                  1424
+                ],
+                [
+                  733,
+                  1437
+                ],
+                [
+                  702,
+                  1440
+                ],
+                [
+                  661,
+                  1430
+                ],
+                [
+                  627,
+                  1413
+                ],
+                [
+                  602,
+                  1394
+                ],
+                [
+                  600,
+                  1365
+                ]
+              ]
+            ],
+            "paddingPixels": 24,
+            "backgroundRgb": [
+              248,
+              245,
+              239
+            ],
+            "method": "manual-visible-pixel-mask-and-crop-no-inpainting"
+          },
+          "width": 423,
+          "height": 213,
+          "garmentId": "m-wedding-shoes",
+          "category": "shoes",
+          "label": "Czarne sznurowane półbuty",
+          "description": "black lace-up leather dress shoes with low heels",
+          "limitations": [
+            "Nogawki zasłaniają górę obuwia; widok przodu i boków, bez tyłu."
+          ]
+        }
+      ],
+      "prompt": "Edit image 1: show the same fictional adult wearing only the declared garments in the separate reference images. Image 1 alone defines the person: preserve face, hair, skin tone, apparent adult age, body proportions, pose, camera, full-body framing, lighting and studio background. Replace all current clothing and footwear; do not retain a cardigan, jacket or other layer from image 1. Image 2: white dress shirt with a navy tie, tucked in; the shirt-and-tie reference is one declared top input, visible front only. Image 3: navy tailored suit trousers with straight legs and full-length hems. Image 4: black lace-up leather dress shoes with low heels. References 2 onward are cropped visible garment pixels from illustrations of other fictional adults, not flat-lay photos. Ignore their residual skin, hands and neutral mask edges. Do not copy their person, pose or body. Some shirt sleeves, shoulders, waistbands and shoe uppers were occluded and are absent. Infer only the minimum continuous fabric needed to wear each declared garment; do not interpret the mask outline as a garment cut or add an outer layer. Preserve the visible colours, fabric, closures, neckline, trouser leg width, rise where visible, and hem length. A shirt reference means that shirt worn alone, never a blazer. Keep both shoes, whole head, natural hands and realistic anatomy visible. No added accessories, jewellery, text, logos, other people, collage or comparison board. Return one photorealistic outfit visualisation; this does not establish physical fit.",
+      "promptSha256": "3b05c6666f44ee323a267960869eac1796581757b0d5422d9128f7513625156a",
+      "result": null,
+      "qualityAssessment": null
+    }
+  ]
+}

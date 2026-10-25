@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "status": "prepared-offline",
+  "date": "2026-10-25",
+  "title": "Wejścia przygotowane — wyniki oczekują",
+  "note": "Przygotowano lokalnie 23 pliki JPEG dla sześciu przypadków. Ten zapis nie zawiera jeszcze płatnych prób, obrazów wyjściowych ani ocen. Żaden przypadek nie jest oznaczony jako sukces.",
+  "calls": 0,
+  "cases": [
+    { "id": "B01", "status": "pending", "result": null, "qualityAssessment": null },
+    { "id": "B02", "status": "pending", "result": null, "qualityAssessment": null },
+    { "id": "B03", "status": "pending", "result": null, "qualityAssessment": null },
+    { "id": "B04", "status": "pending", "result": null, "qualityAssessment": null },
+    { "id": "B05", "status": "pending", "result": null, "qualityAssessment": null },
+    { "id": "B06", "status": "pending", "result": null, "qualityAssessment": null }
+  ]
+}
