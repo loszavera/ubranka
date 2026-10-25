@@ -12,8 +12,8 @@ export class SupabaseRest {
   private authorization: string;
   private timeoutMs: number;
   private deadline?: AbortSignal;
-  constructor(url: string, key: string, authorization = `Bearer ${key}`, timeoutMs = 15000, deadline?: AbortSignal) {
-    this.url = url; this.key = key; this.authorization = authorization; this.timeoutMs = timeoutMs;
+  constructor(url: string, key: string, authorization?: string, timeoutMs = 15000, deadline?: AbortSignal) {
+    this.url = url; this.key = key; this.authorization = authorization ?? (key.startsWith('sb_') ? '' : `Bearer ${key}`); this.timeoutMs = timeoutMs;
     this.deadline = deadline;
   }
 
@@ -21,7 +21,7 @@ export class SupabaseRest {
 
   async request(path: string, init: RequestInit = {}): Promise<unknown> {
     const response = await fetch(`${this.url}${path}`, { ...init, signal: this.signal(), headers: {
-      apikey: this.key, Authorization: this.authorization,
+      apikey: this.key, ...(this.authorization ? {Authorization: this.authorization} : {}),
       ...(init.body && !(init.body instanceof Uint8Array) ? { 'Content-Type': 'application/json' } : {}),
       ...init.headers,
     }});
@@ -46,7 +46,7 @@ export class SupabaseRest {
 
   async binary(path: string, expectedBytes: number, mimeType = 'image/jpeg'): Promise<Uint8Array> {
     const response = await fetch(`${this.url}${path}`, { signal: this.signal(), headers: {
-      apikey: this.key, Authorization: this.authorization, 'Cache-Control': 'no-store',
+      apikey: this.key, ...(this.authorization ? {Authorization: this.authorization} : {}), 'Cache-Control': 'no-store',
     } });
     if (!response.ok || !response.headers.get('content-type')?.startsWith(mimeType) ||
       Number(response.headers.get('content-length')) > expectedBytes || !response.body) {

@@ -7,6 +7,7 @@ import { createWorkerHandler } from '../functions/visualization-worker/handler.t
 import { runVisualizationWorker } from '../functions/visualization-worker/worker.ts';
 import { privatePhotoResponse } from '../functions/_shared/photo-read.ts';
 import { createWardrobeHandler } from '../functions/wardrobe/handler.ts';
+import { authorizeWorker, serverKey } from '../functions/_shared/service-auth.ts';
 
 const account='00000000-0000-4000-8000-000000000001',job='00000000-0000-4000-8000-000000000900',file='00000000-0000-4000-8000-000000000901';
 const jpeg=Uint8Array.from([255,216,255,192,0,11,8,0,1,0,1,1,1,17,0,255,218,0,8,1,1,0,0,63,0,0,255,217]);
@@ -53,20 +54,69 @@ test('all usage components must agree; oversized/malformed output keeps known us
   const huge=await editImageOnce('synthetic-test',plan,[jpeg],new AbortController().signal,async()=>new Response('{}',{headers:{'content-length':'11000001'}}));
   assert.equal(huge.usage,null);assert.equal(huge.errorCode,'OUTCOME_UNKNOWN');
 });
-test('service-only raw PNG probe calls decoder without key lookup, jobs, persistence or network',async()=>{
+test('service-only raw PNG probe verifies role without AI key, jobs, persistence or provider access',async()=>{
+  const original=globalThis.fetch;
+  globalThis.fetch=async(input,init)=>{assert.equal(String(input),'https://synthetic.invalid/rest/v1/rpc/wardrobe_worker_authorized');return Response.json(new Headers(init?.headers).get('authorization')==='Bearer service-test');};
+  try {
   const keys:string[]=[];let decodes=0,background=0;
   const handler=createWorkerHandler(key=>{keys.push(key);assert.notEqual(key,'UBRANKA_P33B_OPENAI_KEY');return env(key);},()=>{background++;},bytes=>{decodes++;assert.deepEqual(bytes,fakePng);return decode();});
   const request=(authorization:string,bytes=fakePng)=>new Request('https://worker.invalid',{method:'POST',headers:{Authorization:authorization,'X-Ubranka-Probe':'png','Content-Type':'image/png'},body:bytes});
   assert.equal((await handler(request('Bearer ordinary-jwt'))).status,401);assert.equal(decodes,0);
   const result=await handler(request('Bearer service-test'));assert.equal(result.status,200);const data=await result.json();assert.equal(data.width,1024);assert.equal(data.thumbBytes,8);assert.equal(background,0);
-  assert.ok(!JSON.stringify(data).includes('main'));assert.deepEqual(keys,['SUPABASE_SERVICE_ROLE_KEY','SUPABASE_SERVICE_ROLE_KEY']);
+  assert.ok(!JSON.stringify(data).includes('main'));assert.ok(keys.every(key=>['SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY','SUPABASE_ANON_KEY'].includes(key)));
   assert.equal((await handler(request('Bearer service-test',new Uint8Array(8_000_001)))).status,400);
+  }finally{globalThis.fetch=original;}
 });
-test('JSON/base64 probe exercises the actual bounded response parser without reading a key or dispatching',async()=>{
-  const handler=createWorkerHandler(key=>{assert.equal(key,'SUPABASE_SERVICE_ROLE_KEY');return env(key);},()=>assert.fail('background forbidden'),decode);
+test('JSON/base64 probe exercises the actual bounded response parser without AI key or dispatching',async()=>{
+  const original=globalThis.fetch;globalThis.fetch=async(input)=>{assert.equal(String(input),'https://synthetic.invalid/rest/v1/rpc/wardrobe_worker_authorized');return Response.json(true);};
+  try {
+  const handler=createWorkerHandler(key=>{assert.ok(['SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY','SUPABASE_ANON_KEY'].includes(key));return env(key);},()=>assert.fail('background forbidden'),decode);
   const result=await handler(new Request('https://worker.invalid',{method:'POST',headers:{Authorization:'Bearer service-test','X-Ubranka-Probe':'json','Content-Type':'application/json'},
     body:JSON.stringify({usage:rawUsage,data:[{b64_json:Buffer.from(fakePng).toString('base64')}]})}));
   assert.equal(result.status,200);const data=await result.json();assert.ok(data.parseMs>=0);assert.ok(data.totalMs>=data.parseMs);assert.equal(data.bytes,fakePng.length);
+  }finally{globalThis.fetch=original;}
+});
+
+test('worker verifies a different valid service Bearer through public-key RPC, not string equality or unverified claims',async()=>{
+  const original=globalThis.fetch;let calls=0;
+  globalThis.fetch=async(input,init)=>{
+    calls++;assert.equal(String(input),'https://synthetic.invalid/rest/v1/rpc/wardrobe_worker_authorized');
+    const headers=new Headers(init?.headers);assert.equal(headers.get('apikey'),'public-test');assert.equal(init?.redirect,'error');
+    return headers.get('authorization')==='Bearer other-valid-service-jwt'?Response.json(true):Response.json({message:'denied'},{status:403});
+  };
+  try{
+    const request=(token:string)=>new Request('https://worker.invalid',{method:'POST',headers:{Authorization:`Bearer ${token}`}});
+    assert.equal(await authorizeWorker(request('other-valid-service-jwt'),env),true);
+    for(const token of ['ordinary-jwt','forged-service-role-claim','revoked-service-jwt','public-test'])assert.equal(await authorizeWorker(request(token),env),false);
+    assert.equal(calls,5);
+  }finally{globalThis.fetch=original;}
+});
+test('modern caller key is verified only at role RPC; worker admin credential always comes from env',async()=>{
+  const original=globalThis.fetch;
+  const modern=(key:string)=>({SUPABASE_URL:'https://synthetic.invalid',SUPABASE_SECRET_KEYS:'{"default":"sb_secret_server-owned"}',SUPABASE_PUBLISHABLE_KEYS:'{"default":"sb_publishable_server-owned"}'}[key]);
+  globalThis.fetch=async(_input,init)=>{
+    const h=new Headers(init?.headers);assert.equal(h.has('authorization'),false);
+    return Response.json(h.get('apikey')==='sb_secret_other-valid-server');
+  };
+  try{
+    assert.equal(serverKey(modern),'sb_secret_server-owned');
+    assert.equal(await authorizeWorker(new Request('https://worker.invalid',{method:'POST',headers:{apikey:'sb_secret_other-valid-server'}}),modern),true);
+    assert.equal(await authorizeWorker(new Request('https://worker.invalid',{method:'POST',headers:{apikey:'sb_secret_invalid'}}),modern),false);
+    assert.equal(serverKey(modern),'sb_secret_server-owned');
+    const admin=new SupabaseRest('https://synthetic.invalid',serverKey(modern)!);
+    globalThis.fetch=async(_input,init)=>{const h=new Headers(init?.headers);assert.equal(h.get('apikey'),'sb_secret_server-owned');assert.equal(h.has('authorization'),false);return Response.json(true);};
+    await admin.rpc('wardrobe_worker_authorized');
+  }finally{globalThis.fetch=original;}
+});
+test('missing server/public configuration fails closed without exposing diagnostic details',async()=>{
+  const original=globalThis.fetch;globalThis.fetch=async()=>assert.fail('no verification network on invalid config');
+  try{
+    const request=()=>new Request('https://worker.invalid',{method:'POST',headers:{Authorization:'Bearer fixture'}});
+    for(const missing of ['SUPABASE_SERVICE_ROLE_KEY','SUPABASE_ANON_KEY']){
+      const handler=createWorkerHandler(key=>key===missing?undefined:env(key),()=>assert.fail('no dispatch'),decode);
+      const result=await handler(request());assert.equal(result.status,503);assert.deepEqual(await result.json(),{error:{code:'SERVICE_UNAVAILABLE'}});
+    }
+  }finally{globalThis.fetch=original;}
 });
 
 async function workerFixture(options:{unknown?:boolean;deleteDuringUpload?:boolean;storageFail?:boolean;claim?:boolean}={}) {

@@ -1,13 +1,14 @@
 import { readBody, uuid } from '../_shared/protocol.ts';
 import { runVisualizationWorker, type ImageDecoder } from './worker.ts';
 import { parseImageResponse } from '../_shared/openai-images.ts';
+import { authorizeWorker } from '../_shared/service-auth.ts';
 
 export function createWorkerHandler(environment:(key:string)=>string|undefined,waitUntil:(task:Promise<unknown>)=>void,decode:ImageDecoder) {
   return async(request:Request)=>{
-    const service=environment('SUPABASE_SERVICE_ROLE_KEY');
     const headers={'Cache-Control':'no-store'};
-    if(request.method!=='POST'||!service||request.headers.get('authorization')!==`Bearer ${service}`)
-      return Response.json({error:{code:'UNAUTHENTICATED'}},{status:401,headers});
+    try {
+      if(!await authorizeWorker(request,environment))return Response.json({error:{code:'UNAUTHENTICATED'}},{status:401,headers});
+    }catch{return Response.json({error:{code:'SERVICE_UNAVAILABLE'}},{status:503,headers});}
     try {
       if(request.headers.get('x-ubranka-probe')==='json') {
         const started=performance.now();

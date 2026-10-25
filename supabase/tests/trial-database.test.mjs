@@ -47,6 +47,9 @@ test.beforeEach(async()=>{
 test.afterEach(async()=>db.exec('rollback'));test.after(async()=>db.close());
 
 test('provision is service-only, immutable, six exact cases / two synthetic accounts; ordinary API stays OFF',async()=>{
+  assert.equal(await admin('wardrobe_worker_authorized'),true);
+  await assert.rejects(asUser(A,'select public.wardrobe_worker_authorized()'),/permission denied/);
+  await db.exec('set role anon');await assert.rejects(db.query('select public.wardrobe_worker_authorized()'),/permission denied/);await db.exec('reset role');
   await assert.rejects(asUser(A,'select public.wardrobe_b_provision($1)',[manifest]),/permission denied/);
   await assert.rejects(admin('wardrobe_b_provision',[{...manifest,cases:manifest.cases.slice(0,5)}]),/INVALID_MANIFEST/);
   const wrong=structuredClone(manifest);wrong.cases[0].params.n=2;

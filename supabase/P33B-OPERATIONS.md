@@ -109,6 +109,17 @@ not read an OpenAI key, create jobs, store images, or call a provider. JSON prob
 includes the actual response/base64 parser. Hosted CPU/RAM evidence is required;
 local Deno process RSS is not Supabase worker memory qualification.
 
+Worker authentication uses the no-data `wardrobe_worker_authorized()` RPC
+(`SECURITY INVOKER`, EXECUTE only service_role), letting PostgREST validate the
+caller instead of comparing different valid server keys literally. Legacy
+Bearer is verified with the server's **public** gateway key; a modern secret
+is checked on apikey at this same restricted RPC. The worker's privileged data
+client still uses only its own environment key, never the caller's credential.
+Modern environment fallback is the documented `SUPABASE_SECRET_KEYS.default`
+and `SUPABASE_PUBLISHABLE_KEYS.default`; missing config fails closed. No auth
+user records are read. See https://supabase.com/docs/guides/functions/secrets
+and https://supabase.com/docs/guides/getting-started/api-keys.
+
 Operator SQL under `tests/hosted-*.sql` is **not deployed as functions**:
 `hosted-trial-smoke.sql` exercises six SQL transitions inside a rollback;
 result setup/activate/teardown files create only exact synthetic Storage fixtures.
