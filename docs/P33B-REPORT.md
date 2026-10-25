@@ -6,16 +6,58 @@ integracji, bezpłatne testy i rzeczywiste wyniki dostawcy.
 
 ## Stan próby
 
-**Integracja wdrożona do Supabase; bezpłatne testy przeszły. Płatny start
-nie nastąpił: 0/6 wysłań, 0 PLN.** Publikacja WWW jest opisana poniżej.
-AI pozostaje wyłączone. Nie utworzono nowego klucza B. Do ukończenia konfiguracji
-sekretu potrzebne jest ponowne logowanie właściciela do panelu Supabase.
-Nie przesłano prywatnych zdjęć ani danych użytkowników do OpenAI.
-Nie zmieniono ustawień rozliczeń ani abonamentów. P3.3C pozostaje nieuruchomione.
+**Wykonano 6/6 rzeczywistych generacji, wszystkie zakończyły się poprawnie,
+bez ponowień. Koszt API: 0,214403 USD; rozliczenie budżetu: 1,49 PLN / 10 PLN.**
+Próbę zamknięto: AI OFF, sześć zajętych slotów, zero nieznanych rozliczeń i
+rezerw. Klucz B unieważniono w OpenAI i usunięto z sekretów Supabase;
+kontrolę zamknięcia dostępu zakończono o 13:47 UTC.
 
-Brak wyniku jest oznaczony w [galerii syntetycznej](https://ubranka.vercel.app/p33b/).
-Sześć przypadków pozostaje w mianowniku. **Próg sukcesu ≥5/6 nie został oceniony**;
-obrazy wejściowe, testy z atrapami i dawny wynik P3.2 nie są nowymi generacjami B.
+Wykorzystano wyłącznie fikcyjne dorosłe osoby i syntetyczne ubrania. Nie
+przesłano prywatnych zdjęć użytkowników. Bez nowych abonamentów. P3.3C nie
+rozpoczęto. Sześć wysłań wyczerpuje zgodę B; pozostały budżet nie pozwala
+na dalsze generacje ani ponowienie przypadku.
+
+Ocena wizualna: **6/6 wyników spełnia próg ≥8/10 bez błędu krytycznego**,
+więc warunek jakości ≥5/6 został spełniony. Końcowa kontrola UI i sprzątanie
+odtworzonych kont testowych zakończyły się poprawnie; publikacja sześciu wyników
+na main pozostaje w toku.
+**Odbiór przez Kasię i Aleksego pozostaje
+otwarty.** [Galeria syntetyczna](https://ubranka.vercel.app/p33b/) jest miejscem
+odbioru po zakończeniu publikacji opisanej poniżej.
+
+## Zmierzone wyniki i koszty
+
+| Przypadek | API USD | Budżet PLN | Czas workera | Ocena / 10 |
+| --- | ---: | ---: | ---: | ---: |
+| B01 | 0,038656 | 0,27 | 15,00 s | 10 |
+| B02 | 0,040113 | 0,28 | 12,79 s | 10 |
+| B03 | 0,033672 | 0,23 | 12,48 s | 10 |
+| B04 | 0,034629 | 0,24 | 11,97 s | 10 |
+| B05 | 0,031852 | 0,22 | 13,20 s | 8 |
+| B06 | 0,035481 | 0,25 | 12,71 s | 9 |
+| **Razem** | **0,214403** | **1,49** | **średnio 13,03 s** | **6/6 zaliczonych** |
+
+PLN to konserwatywny współczynnik 6,765 z [planu kosztów](COST-PLAN-V1.6.md),
+zaokrąglany w górę do grosza osobno dla każdego żądania. Przed tym zaokrągleniem
+suma wynosi 1,450436295 PLN. To rozliczenie budżetu próby, nie kwota obciążenia
+karty. Parametry konta i finansowania pozostają prywatne.
+
+Każde usage jest znane i rozliczone; żaden wynik nie przekroczył swojej rezerwy.
+Wyniki mają 1024×1536 px, prywatne miniatury 120×180 px. Średni czas dotyczy
+workera w tej próbie, nie SLA ani czasu od kliknięcia w aplikacji. Surowe pomiary:
+ignorowane `artifacts/p33b-results/B01-measurement.json`–`B06-measurement.json`;
+stan finansowy po zamknięciu: `artifacts/p33b-financial-before-cleanup.json`.
+
+Ocena obejmuje osobę, ubrania, kompletność, anatomię/artefakty i użyteczność,
+każde 0–2. W B05 model zmienia ułożenie ręki po prawej stronie obrazu, a dłoń
+jest nieczytelna lub schowana przy boku sukienki (osoba 1, artefakty 1).
+W B06 nieco zwęża dół nogawek i poszerza wygląd krawata (ubrania 1), bez
+istotnej zmiany rodzaju lub kroju. Nie stwierdzono błędów krytycznych.
+Oceny i pomiary: [wyniki B](p33b/results.json); lokalny dowód oceny:
+`artifacts/p33b-quality-review.json`. Próg dotyczy tej małej próby
+wizualnej, nie gwarancji jakości innych zdjęć, fizycznego dopasowania ani odbioru
+przez użytkowników. Niewidoczne rękawy i ramiona koszul model odtwarza; ta próba
+nie potwierdza wierności ukrytych części ubrania.
 
 ## Co obejmuje integracja
 
@@ -79,8 +121,17 @@ Osobny test SQL objął sześć rezerwacji, jednokrotne oznaczenie wysłania,
 odmowę drugiego UUID, replay i rozliczenie sztucznego usage. Całość wycofano
 przez ROLLBACK; osobny odczyt potwierdził zero prób, przypadków, zadań,
 budżetów B i syntetycznych zgód AI. Sekwencyjne instrukcje nie są dowodem
-równoczesnych transakcji hosted. Przed płatnym uruchomieniem trzeba jeszcze
-wykonać tę kontrolę na odtworzonych kontach próby.
+równoczesnych transakcji hosted.
+
+Przed płatnym startem wykonano także kontrolę dwóch sesji: edytor SQL utrzymywał
+blokadę istniejącego `ai_control`, a rzeczywisty `b_reserve` drugiego konta
+czekał **12 524,063 ms**, po czym po rollbacku otrzymał `AI_DISABLED`.
+`pg_blocking_pids` potwierdziło blokujący proces. Snapshot przed i po był
+identyczny: zero trwałych slotów, zadań, budżetów B i zmian zgód. Dowód:
+`artifacts/p33b-concurrency-resumed.json`. Potwierdza to oczekiwanie RPC na
+globalną blokadę i izolację; **nie jest testem dwóch zatwierdzonych rezerwacji
+ani konkurencyjnego rozliczenia budżetu**. Pierwsza próba przez dwa wywołania
+MCP nie uzyskała dowodu nakładania się sesji i nie została zaliczona.
 
 Trwały fixture wyniku (dawny PNG P3.2, jawnie poza galerią B): PASS dla
 odmowy przed publikacją, prywatnego PNG i miniatury, eksportu, izolacji,
@@ -106,6 +157,11 @@ autoryzacji. Ten problem wykryto i poprawiono przed płatnym startem.
 
 ## Publikacja i sprzątanie
 
+Poniższe historyczne dowody publikacji dotyczą wcześniejszej integracji z AI
+OFF. Nowe wyniki są przygotowane, lokalna galeria i `build:web` przeszły kontrolę.
+Ich publikacja na main i kontrola wdrożonej galerii pozostają w toku;
+nie przypisujemy im wcześniejszych testów.
+
 Kod, galerię i raport opublikowano bez force push na dev/main jako
 `32046d051c44994807c14149e35031fefff4644d`. Pełne
 [CI 40155204050](https://github.com/loszavera/ubranka/actions/runs/40155204050)
@@ -129,12 +185,45 @@ dokończyła usuwanie bez oczekiwania na cron. Osobno potwierdzono brak prywatny
 receiptów/linków przypadków, usunięto dokładnie dwa testowe zaproszenia oraz
 lokalny plik ich sesji. Istniejący harmonogram pozostaje bez zmian.
 
-Końcowy commit dokumentacyjny zapisuje te dowody i następny krok; nie zmienia
-przetestowanego runtime ani galerii. CI powyżej dotyczy wskazanego SHA kodu.
-**AI OFF, zero aktywacji B, zero wysłań, brak utworzonego klucza B.**
-Nie ma nowego klucza do unieważnienia ani usunięcia. Starego klucza P3.2 nie użyto.
-Kod nie aktywuje próby przy deployu. Całe B nie jest zakończone ani odebrane:
-wyniki jakości i kosztów dostawcy nadal wymagają zatwierdzonej próby.
+Dokumentacyjny commit `9ae488b` zachował te dowody bez zmiany runtime.
+CI powyżej dotyczy wskazanego SHA kodu. Następnie po odzyskaniu dostępu do
+panelu odtworzono wyłącznie dwa konta syntetyczne i wykonano opisaną próbę B.
+Osobny klucz miał wyłącznie uprawnienie Images Request i ważność jednego dnia;
+był przechowywany tylko w Supabase. Nie użyto lokalnego klucza P3.2.
+Klucz B jest już unieważniony i usunięty z Supabase, a trial trwale zamknięty.
+
+**Kontrola prywatnego wyniku w rzeczywistym UI: PASS o 13:49:01 UTC.**
+Sprawdzono odczyt B01, hash PNG, formularz oceny, zapis i odtworzenie po reloadzie.
+Próbna ocena służyła testowi zapisu, nie zastępuje oceny jakości; usunięto ją
+wraz z fixture. Dowód: `artifacts/p33b-result-ui.json`.
+Na zrzucie B01 miniatura 120×180 px powiększona do około 300 px szerokości
+wygląda rozmyta, choć pobrany oryginalny PNG jest ostry. Przed ewentualnym C
+należy poprawić czytelność podglądu, np. większą miniaturą z zachowaniem limitu
+100 kB. To ograniczenie UX nie blokuje tej próby syntetycznej; poprawki teraz
+nie implementowano i nie stanowi ona zgody na rozpoczęcie C.
+
+**Sprzątanie odtworzonych kont po płatnej próbie: PASS.** Wywołania aplikacyjnego
+`deleteAccount` objęły dokładnie dwa konta syntetyczne (13:49:36–13:49:46 UTC).
+Potwierdzono brak ich rekordów w siedmiu tabelach, kont Auth i obiektów pod
+oboma prefiksami w prywatnych magazynach. O 13:49:58 UTC przeszły też warunki
+usunięcia zaproszeń. Dwie próby wykonania SQL przez MCP zakończyły się błędem
+transportu; odczyt potwierdził, że zaproszenia nadal istniały. Następnie usunięto
+wyłącznie te dwa wpisy przez edytor SQL z tymi samymi warunkami zakresu;
+osobny odczyt MCP potwierdził zero. Dowód: `artifacts/p33b-invitations-final.json`.
+Usunięto również lokalny plik sesji. Nie uruchamiano globalnego cleanupu ręcznie.
+
+Wyniki raportowe zapisano przed usunięciem. Końcowy snapshot finansowy potwierdził
+niezmienny digest przed/po, sześć wysłań, 214 403 mikroUSD i 149 groszy;
+trial zamknięty i zablokowany, zero nieznanych rozliczeń, rezerw, prywatnych
+referencji i osobistych jobów. Usunięcie kont nie przywróciło slotów ani budżetu.
+
+Nowa galeria lokalna: **PASS dla 320/390 px**, 29 unikalnych obrazów (23 JPEG
+wejściowe i sześć WebP wynikowych), 58 udanych odczytów, zero błędów i przewijania
+poziomego. Sześć WebP ma łącznie 398 922 B wobec 10 884 397 B oryginalnych PNG;
+brak EXIF/ICC/XMP. Hashe obu formatów zapisano w publicznym zestawieniu wyników.
+Dowód: `artifacts/p33b-gallery-local-report.json`. To kontrola lokalna, nie
+potwierdzenie gotowości nowego wdrożenia Vercel. Zmiany obejmują galerię i
+dokumentację; runtime aplikacji i backend nie zmieniły się.
 
 Automatyczna kontrola bezpieczeństwa odrzuciła porównanie fingerprintów
 istniejących prywatnych rekordów, ponieważ wymagałoby odczytu danych poza
@@ -144,10 +233,7 @@ i regresje; nie deklarujemy bezpośredniego porównania bajtów prywatnych rekor
 
 ## Kontynuacja
 
-Zgoda na B i limity pozostają zapisane; nie jest potrzebna ponowna zgoda na
-rutynowe czynności tego etapu. Po udostępnieniu zalogowanego panelu należy
-odświeżyć stan techniczny i warunki finansowania, utworzyć osobny ograniczony
-klucz, zapisać go wyłącznie w Supabase i aktywować próbę dopiero po komplecie
-kontroli. Każdy rzeczywisty wynik wymaga zapisu usage, kosztu i oceny; na końcu
-AI OFF, unieważnienie klucza, usunięcie sekretu i sprzątanie kont testowych.
-Nie przechodzić do C ani prywatnych zdjęć.
+Po dokończeniu publikacji i kontroli wdrożonej galerii Kasię i Aleksego prosimy o
+obejrzenie sześciu wyników w galerii i akceptację lub feedback. Wykonanie
+techniczne nie jest odbiorem użytkowników. Nie ponawiać żadnego z sześciu
+wywołań, nie otwierać nowego okna i nie rozpoczynać C ani prywatnych zdjęć.

@@ -48,7 +48,7 @@
     .photo-window { width:100%; aspect-ratio:2/3; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .photo-window img { width:100%; height:100%; object-fit:contain; display:block; }
     figcaption { padding:15px 16px; font-size:14px; font-weight:600; }
-    .image-meta { display:block; margin-top:7px; color:var(--muted); font-size:12px; font-weight:400; }
+    .image-meta { display:block; margin-top:7px; color:var(--muted); font-size:12px; font-weight:400; overflow-wrap:anywhere; }
     details { margin:14px 0; }
     summary { min-height:44px; display:list-item; padding:10px 0; cursor:pointer; color:var(--plum); font-weight:600; }
     .input-details { padding:0 16px 12px; margin:0; font-size:13px; }
@@ -74,7 +74,7 @@
         <p class="eyebrow">Przymierzamy pomysł · P3.3B</p>
         <h1>Osobne rzeczy,<br>jeden zestaw.</h1>
         <p class="lead">Sześć przypadków z fikcyjnymi dorosłymi. Sprawdzamy osobne obrazy ubrań: trzy rzeczy lub sukienkę i buty, na tej samej osobie w każdej z trzech okazji.</p>
-        <p class="disclaimer">Wyłącznie materiały syntetyczne. Wizualizacja nie potwierdza rozmiaru ani fizycznego dopasowania.</p>
+        <p class="disclaimer">Wyłącznie materiały syntetyczne. Wizualizacja nie potwierdza rozmiaru ani fizycznego dopasowania. Punkty to ocena techniczna Codex, nie odbiór Kasi i Aleksego.</p>
       </section>
       <div class="panel" aria-live="polite"><h2 id="overall-title">Wczytywanie manifestu</h2><p id="overall-note" class="muted">Stan prób i obrazy pojawią się po odczytaniu danych.</p><p id="error" role="alert" hidden></p></div>
       <noscript><p class="notice">Ta galeria wymaga JavaScript. Dostępny jest też <a href="cases.json">manifest wejść</a> oraz <a href="summary.json">zapis stanu prób</a>.</p></noscript>
@@ -93,7 +93,7 @@
         </section>
         <details class="panel"><summary>Dokładna instrukcja i ograniczenia oceny</summary><p id="case-limits" class="muted"></p><pre id="prompt"></pre><p id="prompt-hash" class="muted"></p></details>
       </section>
-      <section class="panel" style="margin-top:28px"><h2>Jak czytać tę próbę</h2><p class="muted">Wejścia mają podobne sylwetki i studyjne oświetlenie. Próba nie obejmuje prywatnych zdjęć, różnorodnych figur ani domowych warunków. Ukrytych rękawów, boków koszul i fragmentów pasa nie da się wiernie ocenić na podstawie tych wycinków.</p><p class="muted">Ocena techniczna po rzeczywistym pomiarze: osoba, ubrania, kompletność, anatomia i użyteczność — każda 0–2. Próg to co najmniej 8/10 bez błędu krytycznego. Próby brakujące lub nieudane pozostają w sześciu przypadkach. Wynik techniczny nie uruchamia pilotażu prywatnych zdjęć.</p></section>
+      <section class="panel" style="margin-top:28px"><h2>Jak czytać tę próbę</h2><p class="muted">Wejścia mają podobne sylwetki i studyjne oświetlenie. Próba nie obejmuje prywatnych zdjęć, różnorodnych figur ani domowych warunków. Ukrytych rękawów, boków koszul i fragmentów pasa nie da się wiernie ocenić na podstawie tych wycinków.</p><p class="muted">Ocena techniczna po rzeczywistym pomiarze: osoba, ubrania, kompletność, anatomia i użyteczność — każda 0–2. Próg to co najmniej 8/10 bez błędu krytycznego. Próby brakujące lub nieudane pozostają w sześciu przypadkach. Wynik techniczny nie uruchamia pilotażu prywatnych zdjęć.</p><p class="muted">Oceniono oryginalne PNG. Galeria pokazuje lżejsze kopie WebP (jakość 90), bez zmiany rozdzielczości i bez metadanych EXIF/ICC/XMP. Hash wyświetlonego pliku i hash oryginału są zapisane osobno. Wynik 10/10 oznacza brak widocznej wady w ocenianym zakresie, nie identyczność wszystkich detali.</p></section>
     </main>
     <footer><a href="cases.json">Manifest wejść i ich hashe</a> · <a href="summary.json">Stan i wyniki prób</a> · <a href="/p32/">Poprzednia próba P3.2</a><p style="margin-top:14px">Ubranka · Krem i śliwka. Publiczne materiały badawcze przedstawiają wyłącznie fikcyjne osoby.</p></footer>
   </div>
@@ -127,7 +127,7 @@
       const result = byId('result'); result.replaceChildren();
       const hasResult = status === 'succeeded' && report.result && localImagePath(report.result.publicPath) && /^[a-f0-9]{64}$/.test(report.result.sha256 || '');
       if (hasResult) {
-        result.append(imageCard(report.result.publicPath, 'Rzeczywisty wynik ' + selected.id, 'SHA-256: ' + report.result.sha256));
+        result.append(imageCard(report.result.publicPath, 'Rzeczywisty wynik ' + selected.id, 'Kopia WebP · 1024 × 1536 · ' + Math.ceil(report.result.bytes / 1000) + ' kB · SHA-256: ' + report.result.sha256));
       } else {
         const pending = element('div', '', 'pending'); pending.append(element('h3', status === 'pending' ? 'Tu pojawi się rzeczywisty wynik' : statusLabels[status]));
         pending.append(element('p', report.note || 'Ten przypadek nie ma jeszcze zapisanego obrazu wyjściowego ani oceny. Nie podstawiamy przykładu z wcześniejszej próby.', 'muted')); result.append(pending);
@@ -135,6 +135,11 @@
       const assessment = element('div', '', 'panel'); assessment.append(element('h3', 'Ocena wierności'));
       if (hasResult && report.qualityAssessment && Number.isFinite(report.qualityAssessment.total)) {
         assessment.append(element('p', report.qualityAssessment.total + '/10 — ' + (report.qualityAssessment.passed ? 'próg techniczny spełniony' : 'próg techniczny niespełniony')));
+        assessment.append(element('p', 'Ocena Codex · odbiór użytkowników oczekuje', 'muted'));
+        const criteria = { person:'Osoba i poza', garments:'Ubrania', completeness:'Kompletność', artifacts:'Anatomia i artefakty', usefulness:'Użyteczność' };
+        const scores = element('ul', '', 'muted');
+        for (const [key, label] of Object.entries(criteria)) if (Number.isFinite(report.qualityAssessment.scores?.[key])) scores.append(element('li', label + ': ' + report.qualityAssessment.scores[key] + '/2'));
+        assessment.append(scores);
         const list = element('ul', '', 'muted'); for (const note of report.qualityAssessment.notes || []) list.append(element('li', note)); assessment.append(list);
       } else assessment.append(element('p', 'Oczekuje na ocenę rzeczywistego wyniku. Brak obrazu nie jest sukcesem próby.', 'muted'));
       result.append(assessment);

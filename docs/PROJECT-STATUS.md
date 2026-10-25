@@ -12,14 +12,26 @@ w Supabase, raport/galeria i powrót do OFF. Użytkownik jawnie zatwierdził
 granicę rezerwy i ograniczone finansowanie; szczegóły pozostają poza Git.
 Integracja i bezpłatne kontrole są wykonane: 74 testy klienta, 71 backendu,
 3 dekodera, 15 E2E demo, 24 E2E prywatne oraz kontrole rzeczywistego Supabase.
-**Płatnych wywołań 0/6, koszt 0 PLN, AI OFF, nowego klucza B nie utworzono.**
-Panel sekretów wymaga ponownego logowania właściciela; przed płatnym startem
-trzeba też odświeżyć warunki finansowania i wykonać kontrolę konkurencji hosted.
+**Próba B wykonana: 6/6 udanych wywołań, bez ponowień; koszt API 0,214403 USD,
+budżetowo 1,49 PLN / 10 PLN. AI ponownie OFF, sześć slotów zużytych, zero
+nieznanych rozliczeń i rezerw.** Osobny klucz unieważniono i usunięto z Supabase
+(kontrola 13:47 UTC). Hosted test potwierdził, że rzeczywisty `b_reserve`
+czeka na globalną blokadę; nie jest to dowód dwóch zatwierdzonych rezerwacji.
 Szczegóły dowodów, publikacji i ograniczeń: [raport P3.3B](P33B-REPORT.md).
-Kod `32046d0` opublikowany na dev/main; Vercel Production READY, CI
+Wcześniejszy kod `32046d0` opublikowano na dev/main; Vercel Production READY, CI
 40155204050 SUCCESS. 15 kontroli wdrożonego WWW PL/EN 320/390 px: PASS.
-Dwa konta syntetyczne, ich dane/zdjęcia, zaproszenia i lokalne sesje usunięto.
-Galeria zawiera sześć przygotowanych przypadków bez nowych wyników AI.
+Ocena wizualna: 6/6 spełnia próg ≥8/10, bez błędu krytycznego; uwagi dotyczą
+ręki w B05 oraz drobnych zmian nogawek i krawata w B06. Konta pierwszej
+bezpłatnej kontroli usunięto; do płatnej próby odtworzono dwa konta syntetyczne.
+Końcowy odczyt B01 i zapis oceny z reloadem w rzeczywistym UI: PASS. Oba konta,
+ich rekordy, prywatne pliki, zaproszenia i lokalne sesje usunięto; koszt i sześć
+slotów pozostały niezmienione. Nowa lokalna galeria 320/390 px i `build:web`:
+PASS. Publikacja sześciu nowych obrazów na main i kontrola wdrożenia pozostają
+w toku. Historyczne CI i test WWW nie są nowym odbiorem galerii.
+**Odbiór B przez Kasię i Aleksego oczekuje**;
+po publikacji następny krok to obejrzenie wyników i akceptacja albo feedback.
+Przed ewentualnym C pozostaje poprawa czytelności powiększanej miniatury
+120×180 px (limit 100 kB zachowany); oryginalny PNG B01 jest ostry.
 P3.3C/D nadal niezlecone; prywatne zdjęcia użytkowników pozostają wyłączone z AI.
 
 ## Odebrane P3.3A — dowody wykonania
@@ -261,13 +273,11 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-**Dokończenie już zatwierdzonego P3.3B.** Potrzebny jest dostęp do panelu
-sekretów Supabase po ponownym logowaniu właściciela. Po jego przywróceniu:
-odtworzenie wyłącznie syntetycznych fixture, kontrola konkurencji hosted,
-odświeżenie warunków finansowania i osobny ograniczony klucz B tylko w Supabase.
-Następnie najwyżej 6 płatnych wywołań / 10 PLN, bez ponowień, raport i zamknięcie
-AI/klucza przed C. Zgoda użytkownika już obejmuje te czynności; nie pytamy o nią
-ponownie. Do spełnienia kontroli startowych AI pozostaje OFF.
+**Odbiór sześciu wyników B przez Kasię i Aleksego** po dokończeniu już
+zatwierdzonej publikacji galerii na main i kontroli wdrożenia.
+Należy obejrzeć obrazy i przekazać akceptację albo feedback. Sześć wywołań
+wyczerpało zgodę, AI i klucz B są wyłączone. Nie ponawiamy generacji i nie
+rozpoczynamy C ani prywatnych zdjęć na podstawie dobrego wyniku technicznego.
 
 Logowanie Kasi w P3.1 nie zostało osobno potwierdzone; ogólny odbiór A nie
 dopisuje takiego wyniku. Galeria i pomiary P3.2 pozostają niezmienione.

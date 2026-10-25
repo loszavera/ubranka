@@ -98,11 +98,25 @@ Integracja B dodaje worker, osobny prywatny magazyn wyników i manifest sześciu
 przypadków. Stan wykonania i płatnych wywołań sprawdzaj w docs/P33B-REPORT.md;
 sam kod, obecność galerii lub mock nie dowodzą aktywacji/przeprowadzenia próby.
 Bezpłatną integrację B opublikowano i sprawdzono (kod 32046d0, CI SUCCESS,
-hosted UI PASS). Płatny start zatrzymano na ponownym logowaniu do panelu
-sekretów: 0/6, 0 PLN, nowego klucza B nie utworzono. Konta fixture usunięto.
-Kontynuacja wymaga odtworzenia tylko syntetycznych kont, kontroli konkurencji
-hosted i odświeżenia warunków finansowania. Zgoda na B nadal obowiązuje;
-nie żądaj jej ponownie i nie traktuj tej publikacji jako ukończenia próby.
+hosted UI PASS). Po odzyskaniu dostępu i wymaganych kontrolach wykonano
+**6/6 udanych generacji B bez ponowień**: 0,214403 USD kosztu API i 1,49 PLN
+w konserwatywnym rozliczeniu budżetu. AI jest ponownie OFF; trial zamknięty,
+zero nieznanych rozliczeń/rezerw. Klucz B unieważniono i usunięto z Supabase
+(potwierdzenie 2026-10-25, 13:47 UTC). Nie używano klucza P3.2.
+Zgoda na sześć wywołań została wyczerpana: nie ponawiaj przypadków, nie
+zeruj slotów ani kosztów i nie traktuj niewydanych PLN jako zgody na więcej.
+Ocena wizualna: 6/6 spełnia próg ≥8/10 bez błędu krytycznego, z uwagami
+o ręce w B05 i drobnych zmianach ubrania w B06. To nie dowód dopasowania rozmiaru.
+Kontrola prywatnego wyniku i zapisu oceny w UI oraz końcowe sprzątanie dwóch
+kont syntetycznych przeszły: rekordy, pliki, Auth, zaproszenia i lokalne sesje
+usunięte, koszty i sloty zachowane. Lokalna galeria i build WWW przeszły;
+publikacja nowych wyników na main i kontrola wdrożenia pozostają w toku.
+Dowody aktualizuj w docs/P33B-REPORT.md.
+Otwarta uwaga UX przed ewentualnym C: miniatura 120×180 px po powiększeniu
+jest rozmyta; poprawę czytelności przy limicie 100 kB dopiero zaplanuj.
+Nie zmieniaj teraz kodeka ani nie ponawiaj generacji z tego powodu.
+Po publikacji zaproponuj obejrzenie galerii i odbiór B albo feedback.
+Odbiór Kasi i Aleksego nadal oczekuje; nie uruchamia to C/D ani prywatnych zdjęć.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
 po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,
 promptów ani tokenów. Znika po potwierdzeniu trwałego slotu z serwera lub po

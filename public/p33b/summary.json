@@ -1,16 +1,329 @@
 {
-  "version": "1.0",
-  "status": "awaiting-secret-access",
+  "version": "1.1",
+  "status": "completed",
   "date": "2026-10-25",
-  "title": "Wejścia przygotowane — wyniki oczekują",
-  "note": "Integracja i bezpłatne kontrole są gotowe. Płatna próba czeka na dostęp do panelu sekretów; AI pozostaje wyłączone. Przygotowano 23 JPEG dla sześciu przypadków. Nie ma jeszcze nowych wyników AI ani ocen. Żaden przypadek nie jest oznaczony jako sukces.",
-  "calls": 0,
+  "title": "Sześć prób, sześć rzeczywistych wyników",
+  "note": "Wykonano 6/6 wysłań bez ponowień. Wszystkie sześć obrazów osiągnęło próg wizualny w ocenie technicznej Codex; B05 ma ograniczenie dłoni/pozy, B06 drobne odchylenia kroju. AI po próbie wyłączono. Odbiór Kasi i Aleksego pozostaje osobnym krokiem.",
+  "calls": 6,
+  "automaticRetries": 0,
+  "quality": {
+    "passed": 6,
+    "totalCases": 6,
+    "visualThresholdMet": true,
+    "humanAcceptance": "not-recorded"
+  },
   "cases": [
-    { "id": "B01", "status": "pending", "result": null, "qualityAssessment": null },
-    { "id": "B02", "status": "pending", "result": null, "qualityAssessment": null },
-    { "id": "B03", "status": "pending", "result": null, "qualityAssessment": null },
-    { "id": "B04", "status": "pending", "result": null, "qualityAssessment": null },
-    { "id": "B05", "status": "pending", "result": null, "qualityAssessment": null },
-    { "id": "B06", "status": "pending", "result": null, "qualityAssessment": null }
+    {
+      "id": "B01",
+      "status": "succeeded",
+      "result": {
+        "publicPath": "p33b/results/b01.webp",
+        "mimeType": "image/webp",
+        "sha256": "f24a09cd874140946515a06653fc340d2fc42432f6e938665f30f4c1cb05d925",
+        "bytes": 75584,
+        "width": 1024,
+        "height": 1536,
+        "encoding": {
+          "format": "WebP",
+          "quality": 90,
+          "method": 6,
+          "resize": false,
+          "metadata": "EXIF/ICC/XMP absent",
+          "pillowVersion": "12.3.0",
+          "webpVersion": "1.6.0"
+        },
+        "originalPngSha256": "97dab46b21cc9088a917c7b4a5e1b6e78206411e0260ce6d81de789457de48e9",
+        "originalPngBytes": 1877159
+      },
+      "qualityAssessment": {
+        "scores": {
+          "person": 2,
+          "garments": 2,
+          "completeness": 2,
+          "artifacts": 2,
+          "usefulness": 2
+        },
+        "total": 10,
+        "criticalError": false,
+        "passed": true,
+        "assessor": "Codex — ocena techniczna obrazu",
+        "humanAcceptance": "not-recorded",
+        "notes": [
+          "Osoba: zachowano rozpoznawalną fikcyjną twarz, włosy, ustawienie rąk i pełną sylwetkę z wejścia osoby.",
+          "Ubrania: kremowy sweter z okrągłym dekoltem, bardzo szerokie długie granatowe spodnie oraz białe sneakersy odpowiadają widocznym cechom osobnych wejść.",
+          "Kompletność: wszystkie trzy rzeczy; kardigan, biały T-shirt, jeansy i mokasyny z wejścia osoby zostały zastąpione.",
+          "Anatomia/artefakty: brak widocznej dodatkowej kończyny, zniekształconej dłoni lub uszkodzonego połączenia odzieży; część jednej dłoni pozostaje w kieszeni zgodnie z pozą.",
+          "Użyteczność: czytelna pełna postać i oba buty; można ocenić ogólne połączenie kolorów i szeroki krój nogawek.",
+          "Granica oceny: zakryte w źródle fragmenty pasa i cholewek nie pozwalają potwierdzić ich dokładnej konstrukcji."
+        ]
+      },
+      "timingsMs": {
+        "input": 519.981779,
+        "provider": 13918.47237,
+        "decode": 134.6236340000014,
+        "upload": 306.29996500000016,
+        "workerTotal": 15002.780727
+      }
+    },
+    {
+      "id": "B02",
+      "status": "succeeded",
+      "result": {
+        "publicPath": "p33b/results/b02.webp",
+        "mimeType": "image/webp",
+        "sha256": "7ef91f70091b489d29adb4b768f6289931db6a3126c6f8ead6df5403c80524c1",
+        "bytes": 59062,
+        "width": 1024,
+        "height": 1536,
+        "encoding": {
+          "format": "WebP",
+          "quality": 90,
+          "method": 6,
+          "resize": false,
+          "metadata": "EXIF/ICC/XMP absent",
+          "pillowVersion": "12.3.0",
+          "webpVersion": "1.6.0"
+        },
+        "originalPngSha256": "0d1cbd9920959eb03ac4d0a4ac4f7ed30b454d97f88139f7b430ee2a624076c8",
+        "originalPngBytes": 1764315
+      },
+      "qualityAssessment": {
+        "scores": {
+          "person": 2,
+          "garments": 2,
+          "completeness": 2,
+          "artifacts": 2,
+          "usefulness": 2
+        },
+        "total": 10,
+        "criticalError": false,
+        "passed": true,
+        "assessor": "Codex — ocena techniczna obrazu",
+        "humanAcceptance": "not-recorded",
+        "notes": [
+          "Osoba: zachowano fikcyjną twarz, fryzurę, proporcje i stojącą pozę z jedną dłonią przy kieszeni.",
+          "Ubrania: sweter ecru zachował okrągły dekolt i ściągacze; granatowe chinosy są wąskie, proste z niewielkim zwężeniem, a buty białe i sznurowane.",
+          "Kompletność: obecne są trzy deklarowane rzeczy; oliwkowa koszula, biały T-shirt i ciemne jeansy z wejścia osoby nie zostały zachowane.",
+          "Anatomia/artefakty: dłonie, sylwetka, stopy i połączenia odzieży nie wykazują widocznej istotnej deformacji.",
+          "Użyteczność: cały strój jest widoczny w spójnym oświetleniu, z czytelną długością i szerokością spodni.",
+          "Granica oceny: pas i część kieszeni były zasłonięte w źródle; nie oceniam ich fizycznej konstrukcji ani rozmiaru."
+        ]
+      },
+      "timingsMs": {
+        "input": 533.287384,
+        "provider": 11497.354088999999,
+        "decode": 126.88096700000096,
+        "upload": 448.44428399999924,
+        "workerTotal": 12792.868474
+      }
+    },
+    {
+      "id": "B03",
+      "status": "succeeded",
+      "result": {
+        "publicPath": "p33b/results/b03.webp",
+        "mimeType": "image/webp",
+        "sha256": "1c5b99501d4f6d7fcd746cbca6fe81fa381771fc630a0466e1d7aa6964c66e05",
+        "bytes": 58710,
+        "width": 1024,
+        "height": 1536,
+        "encoding": {
+          "format": "WebP",
+          "quality": 90,
+          "method": 6,
+          "resize": false,
+          "metadata": "EXIF/ICC/XMP absent",
+          "pillowVersion": "12.3.0",
+          "webpVersion": "1.6.0"
+        },
+        "originalPngSha256": "ec289c4687df2669f70ef416d205e4461046682552b13c4a9dc6654267babd7a",
+        "originalPngBytes": 1776781
+      },
+      "qualityAssessment": {
+        "scores": {
+          "person": 2,
+          "garments": 2,
+          "completeness": 2,
+          "artifacts": 2,
+          "usefulness": 2
+        },
+        "total": 10,
+        "criticalError": false,
+        "passed": true,
+        "assessor": "Codex — ocena techniczna obrazu",
+        "humanAcceptance": "not-recorded",
+        "notes": [
+          "Osoba: zachowano fikcyjną twarz, włosy i pozę osoby referencyjnej.",
+          "Ubrania: jasnobłękitna koszula z guzikami, granatowe spodnie z prostymi umiarkowanie szerokimi nogawkami do kostek i czarne mokasyny odpowiadają widocznym wejściom. Nie stwierdzam zmiany spodni na skinny ani rozszerzane.",
+          "Kompletność: wszystkie trzy rzeczy; brak marynarki lub kardiganu jako niezamówionej czwartej warstwy.",
+          "Anatomia/artefakty: brak widocznego błędu krytycznego dłoni, nóg lub stóp; ubrania łączą się spójnie z sylwetką.",
+          "Użyteczność: nogawki i ich zakończenia są czytelne, co pozwala ocenić główny cel przypadku — ogólny krój spodni.",
+          "Granica oceny: wejście koszuli pokazywało tylko przód. Rękawy, ramiona i ich podwinięcie są odtworzone; wynik nie dowodzi ich zgodności z prawdziwą rzeczą. Nie oceniam niewidocznych boków pasa spodni."
+        ]
+      },
+      "timingsMs": {
+        "input": 509.5224400000001,
+        "provider": 11447.727041,
+        "decode": 119.98347400000057,
+        "upload": 286.46098000000165,
+        "workerTotal": 12481.343304
+      }
+    },
+    {
+      "id": "B04",
+      "status": "succeeded",
+      "result": {
+        "publicPath": "p33b/results/b04.webp",
+        "mimeType": "image/webp",
+        "sha256": "a1fc63d67b14b043c0a92616ef6d9d70eb1de0aca44f1c1f8507f905a30422b2",
+        "bytes": 74502,
+        "width": 1024,
+        "height": 1536,
+        "encoding": {
+          "format": "WebP",
+          "quality": 90,
+          "method": 6,
+          "resize": false,
+          "metadata": "EXIF/ICC/XMP absent",
+          "pillowVersion": "12.3.0",
+          "webpVersion": "1.6.0"
+        },
+        "originalPngSha256": "27d937f521552f5074fe0a98d077a8810f85748d204b367d3ec064e8295881ac",
+        "originalPngBytes": 1829113
+      },
+      "qualityAssessment": {
+        "scores": {
+          "person": 2,
+          "garments": 2,
+          "completeness": 2,
+          "artifacts": 2,
+          "usefulness": 2
+        },
+        "total": 10,
+        "criticalError": false,
+        "passed": true,
+        "assessor": "Codex — ocena techniczna obrazu",
+        "humanAcceptance": "not-recorded",
+        "notes": [
+          "Osoba: fikcyjna twarz, fryzura, proporcje i układ postaci są zgodne z referencją.",
+          "Ubrania: biała koszula z otwartym kołnierzem bez krawata, grafitowe pełnej długości spodnie i czarne sznurowane półbuty zachowują widoczne kolory i ogólny krój.",
+          "Kompletność: trzy deklarowane rzeczy; brak marynarki i brak oliwkowej warstwy z wejścia osoby.",
+          "Anatomia/artefakty: nie widzę istotnej deformacji postaci, dłoni ani butów.",
+          "Użyteczność: cały zestaw jest czytelny, z widocznym zakończeniem nogawek i obuwiem.",
+          "Granica oceny: rękawy i ramiona koszuli zostały odtworzone, ponieważ wejście pokazywało jedynie przód. Ich dokładny fason pozostaje niezweryfikowany."
+        ]
+      },
+      "timingsMs": {
+        "input": 555.74646,
+        "provider": 10900.678609,
+        "decode": 120.98511599999983,
+        "upload": 274.79863300000034,
+        "workerTotal": 11970.940260000001
+      }
+    },
+    {
+      "id": "B05",
+      "status": "succeeded",
+      "result": {
+        "publicPath": "p33b/results/b05.webp",
+        "mimeType": "image/webp",
+        "sha256": "5b63ce4470955cdf15e2dd11e31b6126f73376e50cd129cd1300a92a8002e820",
+        "bytes": 76422,
+        "width": 1024,
+        "height": 1536,
+        "encoding": {
+          "format": "WebP",
+          "quality": 90,
+          "method": 6,
+          "resize": false,
+          "metadata": "EXIF/ICC/XMP absent",
+          "pillowVersion": "12.3.0",
+          "webpVersion": "1.6.0"
+        },
+        "originalPngSha256": "b70feb6e6221cd6e0d4944fed7215be7466d088d66a0286dd5daac75cee186b0",
+        "originalPngBytes": 1855664
+      },
+      "qualityAssessment": {
+        "scores": {
+          "person": 1,
+          "garments": 2,
+          "completeness": 2,
+          "artifacts": 1,
+          "usefulness": 2
+        },
+        "total": 8,
+        "criticalError": false,
+        "passed": true,
+        "assessor": "Codex — ocena techniczna obrazu",
+        "humanAcceptance": "not-recorded",
+        "notes": [
+          "Osoba/poza — 1/2: fikcyjna twarz i ogólne proporcje są zachowane, ale ręka po prawej stronie obrazu zmieniła ułożenie względem pozy referencyjnej z dłonią w kieszeni.",
+          "Ubrania: przygaszona niebieska sukienka midi zachowuje krótki falujący rękaw, dopasowaną talię i rozszerzany dół; beżowe zamknięte czółenka są obecne.",
+          "Kompletność: wszystkie dwie deklarowane rzeczy, bez kardiganu i pozostałości jeansów.",
+          "Anatomia/artefakty — 1/2: dłoń po prawej stronie obrazu jest schowana lub nieczytelna przy boku sukienki. Nie stwierdzam jej braku, lecz połączenie dłoni z tkaniną nie daje pewnej oceny naturalności.",
+          "Użyteczność: sylwetka sukienki, jej długość i oba buty są widoczne; wynik nadaje się do porównania zestawu, z uwagą na rękę.",
+          "Brak błędu krytycznego w deklarowanych ubraniach lub tożsamości. Zakrytej dłoni i dopasowania sukienki nie należy traktować jako wiarygodnego odwzorowania."
+        ]
+      },
+      "timingsMs": {
+        "input": 480.8698509999999,
+        "provider": 12007.336212,
+        "decode": 139.02872500000012,
+        "upload": 422.65042599999833,
+        "workerTotal": 13203.879928
+      }
+    },
+    {
+      "id": "B06",
+      "status": "succeeded",
+      "result": {
+        "publicPath": "p33b/results/b06.webp",
+        "mimeType": "image/webp",
+        "sha256": "a4f0b6bbdcacb8c120cde97fc366faab1b630e881cfa71a09fcf1420878044a9",
+        "bytes": 54642,
+        "width": 1024,
+        "height": 1536,
+        "encoding": {
+          "format": "WebP",
+          "quality": 90,
+          "method": 6,
+          "resize": false,
+          "metadata": "EXIF/ICC/XMP absent",
+          "pillowVersion": "12.3.0",
+          "webpVersion": "1.6.0"
+        },
+        "originalPngSha256": "cb4447135f0442cc53a6149896c8459706eab309bddc41434ce17e7c0235222b",
+        "originalPngBytes": 1781365
+      },
+      "qualityAssessment": {
+        "scores": {
+          "person": 2,
+          "garments": 1,
+          "completeness": 2,
+          "artifacts": 2,
+          "usefulness": 2
+        },
+        "total": 9,
+        "criticalError": false,
+        "passed": true,
+        "assessor": "Codex — ocena techniczna obrazu",
+        "humanAcceptance": "not-recorded",
+        "notes": [
+          "Osoba: zachowano fikcyjną twarz, fryzurę, proporcje i stojącą pozę z ręką przy kieszeni.",
+          "Ubrania — 1/2: ogólne kolory i rodzaje rzeczy są zgodne, ale dół granatowych nogawek wygląda nieco węziej, a krawat nieco szerzej niż w wycinkach. Zmiana jest niewielka; nie stwierdzam przejścia do radykalnie innego kroju.",
+          "Kompletność: biała koszula z granatowym krawatem jako jedno deklarowane wejście, granatowe spodnie i czarne sznurowane buty są obecne. Nie dodano marynarki.",
+          "Anatomia/artefakty: brak widocznej istotnej deformacji dłoni, stóp lub połączeń tkaniny z sylwetką.",
+          "Użyteczność: pełna postać umożliwia ocenę połączenia kolorów i ogólnej elegancji; wymiary nogawek i krawata trzeba traktować orientacyjnie.",
+          "Granica oceny: odtworzone rękawy i ramiona koszuli nie były widoczne na wejściu. Przypadek nie bada kompletnego garnituru z marynarką."
+        ]
+      },
+      "timingsMs": {
+        "input": 561.236079,
+        "provider": 11455.161786,
+        "decode": 146.08686999999918,
+        "upload": 433.9426739999999,
+        "workerTotal": 12711.025174999999
+      }
+    }
   ]
 }
