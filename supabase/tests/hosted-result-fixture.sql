@@ -4,6 +4,11 @@
 -- Allowed identity p33b-...@example.com only; no changes to other accounts.
 -- 1. Run setup. 2. Upload exact PNG bytes to returned private paths via Storage
 -- API. 3. Activate fixture explicitly with the separate SQL below. 4. Test reads.
+-- This commits a labeled test job and temporary test consent on this account;
+-- it is deliberately NOT a rollback test. Record exact fresh job/file UUIDs for
+-- teardown. Run before real B provision, with no OpenAI key/provider involved.
+-- It validates storage/access plumbing, not provider response validation or
+-- publication: compare downloaded byte hashes separately in the HTTP harness.
 begin;
 do $$
 declare v jsonb:=convert_from(decode('__RESULT_BASE64__','base64'),'UTF8')::jsonb;
@@ -33,11 +38,7 @@ select f.main_path,f.thumb_path from public.wardrobe_visualization_files f
   where f.id=(convert_from(decode('__RESULT_BASE64__','base64'),'UTF8')::jsonb->>'fileId')::uuid;
 commit;
 
--- RUN SEPARATELY ONLY AFTER uploading both exact objects:
--- update public.wardrobe_visualization_files set status='active' where id=:fileId and status='staged';
--- update public.wardrobe_visualizations j set status='succeeded',completed_at=now(),
---   expires_at=f.expires_at where j.id=:jobId and j.fingerprint='p33b-storage-fixture-v1'
---   and f.job_id=j.id (use UPDATE ... FROM public.wardrobe_visualization_files f);
+-- Run hosted-result-activate.sql separately only after both exact uploads.
 -- For deletion test call ordinary deleteVisualization as the fixture user. The
 -- result must be immediately denied. Let the existing cron remove the physical
 -- files after the 5-minute lease; do not manually invoke global cleanup.

@@ -2,6 +2,12 @@
 -- JSON of the final synthetic manifest (never raw SQL interpolation). Run this
 -- ENTIRE script in one transaction. There is no HTTP/provider/storage call.
 -- All trial slots, fake settlement fixtures and budget changes roll back.
+-- No OpenAI key is read, required, or inferred from this test. The sequential
+-- transaction checks SQL rules, not concurrent hosted sessions or paid dispatch.
+-- After this whole batch succeeds, use a NEW read to compare trial/cases/jobs,
+-- body AI consent, ai_control and budget rows against the pre-test baseline.
+-- If a client stops the batch on error, ensure ROLLBACK/session close completes;
+-- do not reuse a pooled connection that still holds this transaction open.
 begin;
 select public.wardrobe_b_provision(convert_from(decode('__MANIFEST_BASE64__','base64'),'UTF8')::jsonb);
 do $$
@@ -29,5 +35,5 @@ begin
   perform public.wardrobe_b_close();
   if wardrobe_private.b_open(c.account_id) then raise exception 'SMOKE_CLOSE'; end if;
 end; $$;
-select 'PASS: six synthetic SQL transitions; zero provider calls; transaction rolled back' as result;
+select 'PASS: six synthetic SQL assertions; zero provider calls; the following ROLLBACK must complete' as result;
 rollback;

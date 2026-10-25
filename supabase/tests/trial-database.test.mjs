@@ -191,6 +191,11 @@ test('scoped hosted result setup/activate/teardown SQL affects only explicit syn
   const v={accountId:A,jobId:id(990),fileId:id(991),outfitId:cs('B01').outfitId,bytes:1000,thumbBytes:100,sha256:HASH,thumbSha256:HASH};
   const run=async name=>{const sql=(await readFile(new URL(name,import.meta.url),'utf8')).replaceAll('__RESULT_BASE64__',Buffer.from(JSON.stringify(v)).toString('base64')).replace(/^begin;$/m,'').replace(/^commit;$/m,'');await db.exec(sql);};
   await run('./hosted-result-fixture.sql');const f=(await db.query('select * from public.wardrobe_visualization_files')).rows[0];
+  const originalJob=v.jobId;v.jobId=id(992);
+  await db.exec('savepoint wrong_operator_fixture');
+  await assert.rejects(run('./hosted-result-teardown.sql'),/WRONG_FIXTURE/);
+  await db.exec('rollback to savepoint wrong_operator_fixture; release savepoint wrong_operator_fixture');v.jobId=originalJob;
+  assert.equal((await db.query('select ai_consent_version from public.wardrobe_body_fit where account_id=$1',[A])).rows[0].ai_consent_version,'p33b-storage-fixture-v1');
   assert.equal((await asUser(A,'select * from public.wardrobe_visualization_files')).rows.length,0);
   await storage(f,'wardrobe-results');await run('./hosted-result-activate.sql');assert.equal((await asUser(A,'select * from public.wardrobe_visualization_files')).rows.length,1);
   await db.query("delete from storage.objects where bucket_id='wardrobe-results' and name in($1,$2)",[f.main_path,f.thumb_path]);
