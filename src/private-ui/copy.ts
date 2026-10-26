@@ -36,7 +36,9 @@ const pl = {
   reasonSetting: 'Pytaj o powód odrzucenia', retry: 'Spróbuj ponownie', photoFailure: 'Nie udało się wczytać zdjęcia.',
   errors: {
     attempt_storage_unavailable: 'Nie udało się bezpiecznie zapisać lub odczytać identyfikatora próby na tym urządzeniu. Wysyłanie wstrzymano; nie czyść danych w celu ponowienia.',
-    ai_consent_required: 'Potwierdź zgodę na pojedyncze wysłanie pokazanych syntetycznych obrazów.',
+    ai_consent_required: 'Potwierdź zgodę na pojedyncze wysłanie dokładnie pokazanych zdjęć.',
+    case_used: 'Te wejścia mają już zlecenie. Sprawdź istniejący stan; nie wysyłaj ich ponownie.',
+    ai_busy: 'Inne zlecenie jest w toku lub ma nieznany koszt. Sprawdź jego stan przed nowym wysłaniem.',
     trial_blocked: 'Ta próba nie może być wysłana. Sprawdź stan i limity; nie ponawiamy żądania.',
     invalid_review: 'Oceń każdą kategorię od 0 do 2. Uwagi mogą mieć do 1000 znaków.',
     not_found: 'Nie znaleziono dostępnego zadania. Nie wysyłaj próby ponownie; odśwież stan lub sprawdź zgłoszenie z osobą prowadzącą próbę.',
@@ -96,7 +98,9 @@ const en: typeof pl = {
   reasonSetting: 'Ask why I rejected a suggestion', retry: 'Try again', photoFailure: 'The photo could not be loaded.',
   errors: {
     attempt_storage_unavailable: 'The attempt identifier could not be safely saved or read on this device. Sending is stopped; do not clear data to retry.',
-    ai_consent_required: 'Confirm consent for this single submission of the shown synthetic images.',
+    ai_consent_required: 'Confirm consent for this single submission of the exact photos shown.',
+    case_used: 'These inputs already have a request. Check its existing status; do not resubmit them.',
+    ai_busy: 'Another request is in progress or has an unknown cost. Check its status before a new submission.',
     trial_blocked: 'This attempt cannot be sent. Check its status and limits; the request will not be retried.',
     invalid_review: 'Rate every category from 0 to 2. Notes can have up to 1000 characters.',
     not_found: 'No available job was found. Do not resubmit the case; refresh or check with the trial operator.',

@@ -18,6 +18,7 @@ test('synthetic trial sends once with explicit inputs/consent, privately reads P
   await expect(page.getByText('Rezerwa tej próby: 10.00 PLN', { exact: true })).toBeVisible();
   await page.screenshot({ path: info.outputPath('p33b-inputs-pl-390.png'), fullPage: true, animations: 'disabled' });
   await button(page, 'Wyślij tę próbę raz').click();
+  await button(page, 'Powiększ').scrollIntoViewIfNeeded();
   await expect(page.getByRole('img', { name: 'Wynik wizualizacji', exact: true })).toBeVisible();
   const calls = backend.logs.filter(value => value.action === 'requestVisualization'); expect(calls).toHaveLength(1);
   expect(calls[0]).toMatchObject({ caseId: 'B01', accepted: true, consentVersion: 'p33b-synthetic-v1' });
@@ -57,6 +58,7 @@ test('lost 202 is recovered by the existing job UUID after reload, never a secon
   const operationId = backend.state.visualization.trial.cases[0].jobId;
   backend.completeVisualization('B01');
   await page.reload(); await button(page, 'Wizualizacje').click();
+  await button(page, 'Powiększ').scrollIntoViewIfNeeded();
   await expect(page.getByRole('img', { name: 'Wynik wizualizacji', exact: true })).toBeVisible();
   await button(page, 'Sprawdź stan próby: B01').click();
   expect(backend.logs.filter(value => value.action === 'requestVisualization')).toHaveLength(1);

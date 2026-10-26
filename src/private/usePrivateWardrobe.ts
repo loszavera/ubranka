@@ -7,7 +7,7 @@ import { randomUUID } from 'expo-crypto';
 import type { Session } from '@supabase/supabase-js';
 import { asPrivateError, WardrobeApi, type DeleteResult } from './api';
 import { PrivateError } from './model';
-import { PrivatePhotoAccess } from './photoAccess';
+import { PrivatePhotoAccess, type PhotoReadOptions } from './photoAccess';
 import { getPrivateServices } from './supabase';
 import { PrivateStore } from './store';
 import { downloadPrivateExport, downloadPrivateFile } from './export';
@@ -126,9 +126,9 @@ export function usePrivateWardrobe() {
     await signOut(); return result;
   }, [store, signOut]);
 
-  const getPhoto = useCallback((path: string) => {
+  const getPhoto = useCallback((path: string, options?: PhotoReadOptions) => {
     if (!photos || !view.identity || !view.snapshot || !store.getSnapshot().identity) return Promise.reject(new PrivateError('SIGNED_OUT'));
-    return photos.get(path);
+    return photos.get(path, options);
     // Identity/snapshot changes invalidate leases, so consumers reload on this callback.
   }, [photos, store, view.identity, view.snapshot]);
 
@@ -139,7 +139,7 @@ export function usePrivateWardrobe() {
     setExporting(true); setAuthError(null);
     try {
       const manifest = await store.exportManifest();
-      await downloadPrivateExport(manifest, path => photos.download(path), () => store.getSnapshot().identity === identity);
+      await downloadPrivateExport(manifest, (path, options) => photos.download(path, options), () => store.getSnapshot().identity === identity);
     } catch (error) { const safe = asPrivateError(error); setAuthError(safe.code); throw safe; }
     finally { setExporting(false); }
   }, [photos, store, exporting]);
@@ -152,7 +152,7 @@ export function usePrivateWardrobe() {
     const result = job.result;
     const isCurrent = () => store.getSnapshot().identity === identity && store.getSnapshot().snapshot?.visualization?.jobs.some(value => value.id === jobId && value.result?.mainPath === result.mainPath && value.result?.thumbPath === result.thumbPath && value.status === 'succeeded' && Date.parse(value.expiresAt) > Date.now()) === true;
     setExporting(true); setAuthError(null);
-    try { await downloadPrivateFile(await photos.download(result.mainPath), result.mimeType, result.mimeType === 'image/png' ? 'ubranka-visualization.png' : 'ubranka-visualization.jpg', isCurrent); }
+    try { await downloadPrivateFile(await photos.download(result.mainPath, { mimeType: result.mimeType, maxBytes: 8_000_000 }), result.mimeType, result.mimeType === 'image/png' ? 'ubranka-visualization.png' : 'ubranka-visualization.jpg', isCurrent); }
     catch (error) { const safe = asPrivateError(error); setAuthError(safe.code); throw safe; }
     finally { setExporting(false); }
   }, [photos, store, exporting]);
@@ -169,6 +169,7 @@ export function usePrivateWardrobe() {
     saveBodyFit: store.saveBodyFit, uploadBodyPhoto: store.uploadBodyPhoto, deleteBodyPhoto: store.deleteBodyPhoto, saveStyling: store.saveStyling,
     cancelVisualization: store.cancelVisualization, deleteVisualization: store.deleteVisualization, deleteAiData: store.deleteAiData,
     requestVisualization: store.requestVisualization, getVisualization: store.getVisualization, reviewVisualization: store.reviewVisualization,
+    prepareVisualization: store.prepareVisualization, requestPrivateVisualization: store.requestPrivateVisualization, revokeAiConsent: store.revokeAiConsent,
     deleteAccount, importP2: store.importP2, getPhoto, exportData, downloadVisualization,
   };
 }

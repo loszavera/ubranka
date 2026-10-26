@@ -52,7 +52,20 @@ export interface VisualizationReview {
 }
 export interface VisualizationResult {
   mainPath: string; thumbPath: string; bytes: number; thumbBytes: number; mimeType: string; thumbMimeType?: string; expiresAt?: string;
+  bucket?: string; width?: number; height?: number; thumbWidth?: number; thumbHeight?: number;
 }
+export interface AiConsent { accepted: boolean; version: string; revision?: number }
+export interface PrivatePilot {
+  id: string; status: 'prepared' | 'active' | 'closed'; eligible: boolean; startsAt: string | null; endsAt: string | null;
+  maxSends: number; accountMaxSends: number; dailyMaxSends: number; sentCount: number; accountSentCount: number; dailySentCount: number;
+  budgetPln: number; spentPln: number; reservedPln: number; availablePln: number; blocked: boolean;
+}
+export interface VisualizationIntent {
+  id: string; trialId: string; outfitId: string; fingerprint: string; bodyRevision: number; stylingRevision: number;
+  consentRevision: number; expiresAt: string; reservePln: number; jobId: string | null;
+  inputs: { photoId: string; path: string; thumbPath: string; bytes: number; kind: 'body' | 'item'; itemId?: string | null }[];
+}
+export const PRIVATE_AI_CONSENT = 'p33c-ai-v1.1';
 export interface SyntheticCase {
   id: string; label: string; personPath: string; itemPaths: string[]; reservePln: number; model: string; promptVersion: string;
   jobId: string | null; sent: boolean;
@@ -65,9 +78,10 @@ export interface VisualizationJob {
   id: string; revision: number; outfitId: string; status: VisualizationStatus; createdAt: string; completedAt: string | null;
   expiresAt: string; errorCode: string | null; reservedPln: number; spentPln: number | null; result: VisualizationResult | null;
   review?: VisualizationReview | null;
+  trialId?: string; intentId?: string;
 }
 export interface VisualizationState {
-  mode: 'off' | 'synthetic_trial'; jobs: VisualizationJob[]; consent: { accepted: false; version: string }; trial?: SyntheticTrial | null;
+  mode: 'off' | 'synthetic_trial' | 'private_pilot'; jobs: VisualizationJob[]; consent: AiConsent; trial?: SyntheticTrial | null; pilot?: PrivatePilot | null;
   limits: { results: number; attempts: number; dailyAttempts: number; usedResults: number; usedAttempts: number; usedDailyAttempts: number;
     reservedPln: number; spentPln: number; budgetPln: number; trialEndsAt: string | null; monthResetsAt: string; dayResetsAt: string };
 }

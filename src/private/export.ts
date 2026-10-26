@@ -4,8 +4,9 @@ import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 import type { ExportManifest } from './model';
 import { PrivateError } from './model';
+import { resultVariant } from './visualization';
 
-export async function downloadPrivateExport(manifest: ExportManifest, download: (path: string) => Promise<Uint8Array>, isCurrent: () => boolean): Promise<void> {
+export async function downloadPrivateExport(manifest: ExportManifest, download: (path: string, options?: { mimeType: string; maxBytes: number }) => Promise<Uint8Array>, isCurrent: () => boolean): Promise<void> {
   const files: Record<string, Uint8Array> = { 'wardrobe.json': strToU8(JSON.stringify(manifest, null, 2)) };
   if (manifest.bodyFit?.photo) {
     if (!isCurrent()) throw new PrivateError('SESSION_CHANGED');
@@ -16,8 +17,9 @@ export async function downloadPrivateExport(manifest: ExportManifest, download: 
     if (!job.result || job.status !== 'succeeded' || !(Date.parse(job.expiresAt) > Date.now())) continue;
     if (!isCurrent()) throw new PrivateError('SESSION_CHANGED');
     if (!/^[\da-f-]{36}$/i.test(job.id)) throw new PrivateError('INVALID_RESPONSE');
-    files[`visualizations/${job.id}.${job.result.mimeType === 'image/png' ? 'png' : 'jpg'}`] = await download(job.result.mainPath);
-    files[`visualizations/${job.id}-thumbnail.${job.result.thumbMimeType === 'image/png' ? 'png' : 'jpg'}`] = await download(job.result.thumbPath);
+    const main = resultVariant(job.result, false); const thumb = resultVariant(job.result, true);
+    files[`visualizations/${job.id}.${main.extension}`] = await download(main.path, { mimeType: main.mimeType, maxBytes: 8_000_000 });
+    files[`visualizations/${job.id}-thumbnail.${thumb.extension}`] = await download(thumb.path, { mimeType: thumb.mimeType, maxBytes: 100_000 });
   }
   for (const item of manifest.items) {
     if (!isCurrent()) throw new PrivateError('SESSION_CHANGED');

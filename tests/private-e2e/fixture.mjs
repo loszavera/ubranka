@@ -47,9 +47,9 @@ export async function syntheticPhoto(page, mimeType = 'image/jpeg') {
   }, mimeType));
 }
 
-export async function installBackend(page, { existingItem = false, ownedOutfits = false, syntheticTrial = false, locale = 'pl', noSession = false } = {}) {
+export async function installBackend(page, { existingItem = false, ownedOutfits = false, syntheticTrial = false, privatePilot = false, locale = 'pl', noSession = false } = {}) {
   const image = await syntheticPhoto(page);
-  const png = syntheticTrial ? await syntheticPhoto(page, 'image/png') : null;
+  const png = syntheticTrial || privatePilot ? await syntheticPhoto(page, 'image/png') : null;
   const state = snapshot(ACCOUNT_A, locale);
   const second = snapshot(ACCOUNT_B, locale);
   const objects = new Map();
@@ -57,8 +57,9 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
   const photoRequests = [];
   const unexpected = [];
   const operations = new Map();
+  const intents = new Map();
   const control = { state, second, objects, logs, photoRequests, unexpected, failPhoto: 0, holdPhoto: null, holdDownload: null, completedDownloads: 0, pendingDelete: false, failDelete: false, pendingAccountDelete: false, deny: false,
-    loseVisualizationResponse: false, dropVisualizationBeforeReserve: false, holdVisualization: null, autoFinishVisualization: true };
+    loseVisualizationResponse: false, dropVisualizationBeforeReserve: false, holdVisualization: null, autoFinishVisualization: true, activeDownloads: 0, maxDownloads: 0 };
   if (existingItem) {
     const mainPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/thumb.jpg`;
     objects.set(mainPath, image); objects.set(thumbPath, image);
@@ -66,7 +67,7 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
       createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z',
       photo: { id: PHOTO_ID, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length } });
   }
-  if (ownedOutfits || syntheticTrial) {
+  if (ownedOutfits || syntheticTrial || privatePilot) {
     state.state.data.profiles = [structuredClone(demo.profiles[0])];
     state.state.data.activeProfileId = demo.profiles[0].id;
     for (const [index, category, name, occasions] of [
@@ -85,6 +86,24 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
         photo: { id: photoId, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length } });
     }
   }
+  if (privatePilot) {
+    const mainPath = `${ACCOUNT_A}/${ACCOUNT_A}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ACCOUNT_A}/${PHOTO_ID}/thumb.jpg`;
+    objects.set(mainPath, image); objects.set(thumbPath, image);
+    state.bodyFit.photo = { id: PHOTO_ID, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length };
+    state.visualization.mode = privatePilot === 'off' ? 'off' : 'private_pilot';
+    state.visualization.consent = { accepted: false, revision: 0, version: 'p33c-ai-v1.1' };
+    state.visualization.pilot = { id: 'p33c-v1', status: privatePilot === 'off' ? 'prepared' : 'active', eligible: true, startsAt: new Date().toISOString(), endsAt: privatePilot === 'off' ? null : new Date(Date.now() + 86_400_000).toISOString(),
+      maxSends: 60, accountMaxSends: 30, dailyMaxSends: 5, sentCount: 0, accountSentCount: 0, dailySentCount: 0, budgetPln: 25, spentPln: 0, reservedPln: 0, availablePln: 23.51, blocked: false };
+  }
+  control.seedPrivateResult = (id, legacy = false) => {
+    const mainPath = `${ACCOUNT_A}/${id}/${id}/main.png`; const thumbPath = `${ACCOUNT_A}/${id}/${id}/thumb.${legacy ? 'png' : 'jpg'}`;
+    objects.set(mainPath, png); objects.set(thumbPath, legacy ? png : image);
+    const result = { mainPath, thumbPath, bytes: png.length, thumbBytes: legacy ? png.length : image.length, mimeType: 'image/png', ...(legacy ? {} : { thumbMimeType: 'image/jpeg', width: 1024, height: 1536, thumbWidth: 600, thumbHeight: 900 }) };
+    let job = state.visualization.jobs.find(value => value.id === id);
+    if (!job) { job = { id, outfitId: state.styling.data.outfits[0]?.id ?? ITEM_ID, revision: 1, trialId: 'p33c-v1', createdAt: new Date().toISOString(), expiresAt: new Date(Date.now() + 30 * 86_400_000).toISOString(), errorCode: null }; state.visualization.jobs.push(job); }
+    Object.assign(job, { status: 'succeeded', result, completedAt: new Date().toISOString(), reservedPln: 0, spentPln: 0.25, review: null });
+    return job;
+  };
   if (syntheticTrial) {
     const mainPath = `${ACCOUNT_A}/${ACCOUNT_A}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ACCOUNT_A}/${PHOTO_ID}/thumb.jpg`;
     objects.set(mainPath, image); objects.set(thumbPath, image);
@@ -148,9 +167,12 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
         // Capture the already-authorized response, then allow tests to deliver it
         // after the client switches accounts and must abort/discard the read.
         const bytes = objects.get(body.path);
-        if (control.holdDownload) await control.holdDownload;
-        await route.fulfill({ status: 200, headers: { ...headers, 'Cache-Control': 'private, no-store, max-age=0', 'CDN-Cache-Control': 'no-store' }, contentType: body.path === photo.thumbPath ? photo.thumbMimeType ?? 'image/jpeg' : photo.mimeType, body: bytes });
-        control.completedDownloads++;
+        control.activeDownloads++; control.maxDownloads = Math.max(control.maxDownloads, control.activeDownloads);
+        try {
+          if (control.holdDownload) await control.holdDownload;
+          await route.fulfill({ status: 200, headers: { ...headers, 'Cache-Control': 'private, no-store, max-age=0', 'CDN-Cache-Control': 'no-store' }, contentType: body.path === photo.thumbPath ? photo.thumbMimeType ?? photo.mimeType : photo.mimeType, body: bytes });
+          control.completedDownloads++;
+        } finally { control.activeDownloads--; }
         return;
       }
       case 'saveState':
@@ -182,8 +204,39 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
       case 'saveStyling':
         if (body.expectedRevision !== current.styling.revision) return fail('CONFLICT');
         current.styling = { revision: current.styling.revision + 1, data: body.data }; return json({ data: current.styling });
+      case 'prepareVisualization': {
+        if (body.expectedBodyRevision !== current.bodyFit.revision || body.expectedStylingRevision !== current.styling.revision) return fail('CONFLICT');
+        const outfit = current.styling.data.outfits.find(value => value.id === body.outfitId);
+        if (!outfit || !current.bodyFit.photo || !current.visualization.pilot) return fail('NOT_FOUND');
+        const photos = [current.bodyFit.photo, ...outfit.itemIds.map(id => current.items.find(value => value.id === id)?.photo)];
+        if (photos.some(photo => !photo)) return fail('NOT_FOUND');
+        const id = `77777777-7777-4777-8777-${String(intents.size + 1).padStart(12, '0')}`;
+        const intent = { id, trialId: body.trialId, outfitId: body.outfitId, fingerprint: `${body.outfitId}:${current.bodyFit.revision}`, bodyRevision: current.bodyFit.revision, stylingRevision: current.styling.revision, consentRevision: current.visualization.consent.revision, expiresAt: new Date(Date.now() + 600_000).toISOString(), reservePln: current.visualization.pilot.sentCount ? 1 : 23.51, jobId: null,
+          inputs: photos.map((photo, index) => ({ photoId: photo.id, path: photo.mainPath, thumbPath: photo.thumbPath, bytes: photo.bytes, kind: index ? 'item' : 'body', itemId: index ? outfit.itemIds[index - 1] : null })) };
+        const used = [...intents.values()].find(value => value.fingerprint === intent.fingerprint && value.jobId); if (used) intent.jobId = used.jobId;
+        intents.set(id, intent); return json({ data: intent });
+      }
+      case 'setAiConsent': {
+        if (body.accepted !== false) return fail('AI_DISABLED', 403);
+        if (body.expectedConsentRevision !== current.visualization.consent.revision) return fail('CONFLICT');
+        current.visualization.consent = { accepted: false, version: 'p33c-ai-v1.1', revision: current.visualization.consent.revision + 1 };
+        return json({ data: current.visualization.consent });
+      }
       case 'requestVisualization': {
         if (control.dropVisualizationBeforeReserve) return route.abort('failed');
+        if (body.trialId) {
+          const pilot = current.visualization.pilot; const intent = intents.get(body.intentId);
+          if (current.visualization.mode !== 'private_pilot' || !pilot || pilot.blocked) return fail('AI_DISABLED', 403);
+          if (!intent || intent.jobId || body.expectedConsentRevision !== current.visualization.consent.revision) return fail('CONFLICT');
+          if (body.accepted !== true || body.consentVersion !== 'p33c-ai-v1.1') return fail('AI_CONSENT_REQUIRED');
+          intent.jobId = body.operationId; pilot.sentCount++; pilot.accountSentCount++; pilot.dailySentCount++;
+          current.visualization.consent = { accepted: true, version: 'p33c-ai-v1.1', revision: current.visualization.consent.revision + 1 };
+          const job = { id: body.operationId, revision: 1, outfitId: intent.outfitId, trialId: pilot.id, intentId: intent.id, status: 'sent', createdAt: new Date().toISOString(), completedAt: null, expiresAt: new Date(Date.now() + 30 * 86_400_000).toISOString(), errorCode: null, reservedPln: intent.reservePln, spentPln: null, result: null, review: null };
+          current.visualization.jobs.push(job); pilot.reservedPln = intent.reservePln;
+          if (control.autoFinishVisualization) { control.seedPrivateResult(job.id); pilot.reservedPln = 0; pilot.spentPln += 0.25; pilot.availablePln -= 0.25; }
+          if (control.loseVisualizationResponse) return route.abort('failed');
+          return json({ data: job }, 202);
+        }
         const trial = current.visualization.trial;
         if (current.visualization.mode !== 'synthetic_trial' || !trial) return fail('AI_DISABLED', 403);
         const chosen = trial.cases.find(value => value.id === body.caseId);

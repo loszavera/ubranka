@@ -16,6 +16,7 @@ import { OutfitsPanel } from './OutfitsPanel';
 import { VisualizationPanel } from './VisualizationPanel';
 import { PrivatePhoto } from './PrivatePhoto';
 import { p33Copy } from './p33copy';
+import { p33cCopy } from './p33ccopy';
 import { p33bCopy } from './p33bcopy';
 
 type PrivateApi = ReturnType<typeof usePrivateWardrobe>;
@@ -82,7 +83,8 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
     try { await api.importP2(demoState, selectedProfiles, includeFeedback); setImporting(false); setNotice(t.imported); }
     catch { /* Keep the explicit selection available for retry. */ }
   };
-  const formError = api.error ? <Text accessibilityRole="alert" style={s.error}>{privateError(locale, api.error)}</Text> : null;
+  const uncertainVisual = api.visualizationAttempt?.status === 'unconfirmed';
+  const formError = api.error ? <Text accessibilityRole="alert" style={s.error}>{uncertainVisual ? p33Copy(locale).reservationHelp : privateError(locale, api.error)}</Text> : null;
 
   return <SafeAreaView style={s.screen}>
     <View style={s.header}><View style={controls.row}><Icon name="hanger" size={26} /><Text style={s.logo}>ubranka</Text></View>
@@ -93,7 +95,10 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
         <Button label={t.back} compact kind="quiet" disabled={api.busy} onPress={onClose} />
         <View style={{ gap: 10 }}><Text style={s.eyebrow}>{t.tagline}</Text><Text accessibilityRole="header" style={s.title}>{t.title}</Text></View>
         {api.error ? <View style={s.warning}>{formError}
-          {api.identity ? <Button label={api.conflict ? t.reload : t.retry} kind="secondary" disabled={api.busy} onPress={() => { void api.refresh(); }} /> : null}
+          {api.identity ? <Button label={uncertainVisual ? p33cCopy(locale).check : api.conflict ? t.reload : t.retry} kind="secondary" disabled={api.busy} onPress={() => {
+            if (uncertainVisual && api.visualizationAttempt) void api.getVisualization(api.visualizationAttempt.id).catch(() => {}).finally(() => api.refresh());
+            else void api.refresh();
+          }} /> : null}
         </View> : null}
         {notice ? <Text accessibilityLiveRegion="polite" style={s.note}>{notice}</Text> : null}
         {api.deletion?.status === 'pending' ? <View style={s.warning}><Text style={s.cardTitle}>{t.pending}</Text><Text style={s.body}>{t.pendingHelp}</Text></View> : null}

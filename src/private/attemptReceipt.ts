@@ -1,6 +1,6 @@
 import { PrivateError } from './model.ts';
 
-export interface AttemptReceipt { id: string; caseId: string }
+export type AttemptReceipt = { id: string; caseId: string; trialId?: never } | { id: string; trialId: string; caseId?: never };
 export interface AttemptReceiptJournal {
   read(accountId: string): Promise<AttemptReceipt[]>;
   write(accountId: string, receipt: AttemptReceipt): Promise<void>;
@@ -16,10 +16,12 @@ const uuid = /^[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}$/i;
 function parse(raw: string | null): AttemptReceipt[] {
   if (raw === null) return [];
   const value: unknown = JSON.parse(raw);
-  if (!value || typeof value !== 'object' || !('version' in value) || value.version !== 1 || !('receipts' in value) || !Array.isArray(value.receipts) || value.receipts.length > 6) throw new Error('Invalid receipt');
+  if (!value || typeof value !== 'object' || !('version' in value) || (value.version !== 1 && value.version !== 2) || !('receipts' in value) || !Array.isArray(value.receipts) || value.receipts.length > 66) throw new Error('Invalid receipt');
   return value.receipts.map(receipt => {
-    if (!receipt || typeof receipt !== 'object' || typeof receipt.id !== 'string' || !uuid.test(receipt.id) || typeof receipt.caseId !== 'string' || !/^B0[1-6]$/.test(receipt.caseId)) throw new Error('Invalid receipt');
-    return { id: receipt.id, caseId: receipt.caseId };
+    if (!receipt || typeof receipt !== 'object' || typeof receipt.id !== 'string' || !uuid.test(receipt.id)) throw new Error('Invalid receipt');
+    if (typeof receipt.caseId === 'string' && /^B0[1-6]$/.test(receipt.caseId) && !receipt.trialId) return { id: receipt.id, caseId: receipt.caseId };
+    if (value.version === 2 && typeof receipt.trialId === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(receipt.trialId) && !receipt.caseId) return { id: receipt.id, trialId: receipt.trialId };
+    throw new Error('Invalid receipt');
   });
 }
 
@@ -40,10 +42,10 @@ export class PrivateAttemptJournal implements AttemptReceiptJournal {
   write(accountId: string, receipt: AttemptReceipt) {
     return this.run(accountId, async () => {
       const receipts = parse(await this.storage.get(accountId));
-      const existing = receipts.find(value => value.caseId === receipt.caseId);
+      const existing = receipts.find(value => receipt.trialId ? value.trialId === receipt.trialId : value.caseId === receipt.caseId);
       if (existing && existing.id !== receipt.id) throw new Error('Case already attempted');
       const next = existing ? receipts : [...receipts, receipt];
-      const text = JSON.stringify({ version: 1, receipts: next }); parse(text);
+      const text = JSON.stringify({ version: next.some(value => value.trialId) ? 2 : 1, receipts: next }); parse(text);
       await this.storage.set(accountId, text);
       if (await this.storage.get(accountId) !== text) throw new Error('Receipt write not confirmed');
     });
@@ -51,7 +53,7 @@ export class PrivateAttemptJournal implements AttemptReceiptJournal {
   remove(accountId: string, id: string) {
     return this.run(accountId, async () => {
       const next = parse(await this.storage.get(accountId)).filter(receipt => receipt.id !== id);
-      if (next.length) await this.storage.set(accountId, JSON.stringify({ version: 1, receipts: next }));
+      if (next.length) await this.storage.set(accountId, JSON.stringify({ version: next.some(value => value.trialId) ? 2 : 1, receipts: next }));
       else await this.storage.delete(accountId);
     });
   }

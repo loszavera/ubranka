@@ -114,7 +114,7 @@ test('acknowledged result deletion survives failed refresh and preserves consume
   assert.equal(store.getSnapshot().snapshot?.visualization?.limits.usedAttempts, 1); assert.equal(store.getSnapshot().snapshot?.visualization?.limits.reservedPln, 1);
 });
 
-test('deleting all AI data hides controlled inputs on refresh failure while preserving clothes, measurements and budget', async () => {
+test('deleting AI results preserves body photo, clothes and measurements even on refresh failure', async () => {
   const value = snapshot(); value.bodyFit!.photo = photo; value.bodyFit!.data.heightCm = 172.5; value.visualization!.jobs = [job()];
   let reads = 0;
   const store = new PrivateStore(new WardrobeApi(wrap(async action => {
@@ -123,7 +123,7 @@ test('deleting all AI data hides controlled inputs on refresh failure while pres
   })), () => operationId);
   store.setIdentity(identity); await store.refresh(); await assert.rejects(store.deleteAiData(0), /NETWORK/);
   const after = store.getSnapshot().snapshot!;
-  assert.equal(after.bodyFit?.photo, null); assert.equal(after.bodyFit?.data.heightCm, 172.5); assert.deepEqual(after.items, value.items); assert.equal(after.visualization?.jobs.length, 0);
+  assert.deepEqual(after.bodyFit?.photo, photo); assert.equal(after.bodyFit?.data.heightCm, 172.5); assert.deepEqual(after.items, value.items); assert.equal(after.visualization?.jobs.length, 0);
 });
 
 function trialSnapshot(): PrivateSnapshot {

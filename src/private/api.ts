@@ -1,4 +1,4 @@
-import { PrivateError, type VisualizationReview, type VisualizationJob, type BodyFit, type BodyFitData, type StylingData, type StylingState, type CloudState, type ExportManifest, type ItemFields, type PrivateItem, type PrivateSettings, type PrivateSnapshot } from './model.ts';
+import { PRIVATE_AI_CONSENT, PrivateError, type AiConsent, type VisualizationIntent, type VisualizationReview, type VisualizationJob, type BodyFit, type BodyFitData, type StylingData, type StylingState, type CloudState, type ExportManifest, type ItemFields, type PrivateItem, type PrivateSettings, type PrivateSnapshot } from './model.ts';
 
 export type WardrobeCall = <T>(action: string, payload?: Record<string, unknown>, signal?: AbortSignal) => Promise<T>;
 export interface DeleteResult { status: 'deleted' | 'pending' }
@@ -37,6 +37,15 @@ export class WardrobeApi {
     return this.call<StylingState>('saveStyling', { data, expectedRevision }, signal);
   }
   getVisualization(jobId: string, signal?: AbortSignal) { return this.call<VisualizationJob>('getVisualization', { jobId }, signal); }
+  prepareVisualization(trialId: string, outfitId: string, expectedBodyRevision: number, expectedStylingRevision: number, signal?: AbortSignal) {
+    return this.call<VisualizationIntent>('prepareVisualization', { trialId, outfitId, expectedBodyRevision, expectedStylingRevision }, signal);
+  }
+  requestPrivateVisualization(operationId: string, intent: VisualizationIntent, signal?: AbortSignal) {
+    return this.call<VisualizationJob>('requestVisualization', { operationId, trialId: intent.trialId, intentId: intent.id, accepted: true, consentVersion: PRIVATE_AI_CONSENT, expectedConsentRevision: intent.consentRevision }, signal);
+  }
+  revokeAiConsent(expectedConsentRevision: number, signal?: AbortSignal) {
+    return this.call<AiConsent>('setAiConsent', { accepted: false, consentVersion: PRIVATE_AI_CONSENT, expectedConsentRevision }, signal);
+  }
   requestVisualization(operationId: string, caseId: string, signal?: AbortSignal) {
     return this.call<VisualizationJob>('requestVisualization', { operationId, caseId, consentVersion: 'p33b-synthetic-v1', accepted: true }, signal);
   }
