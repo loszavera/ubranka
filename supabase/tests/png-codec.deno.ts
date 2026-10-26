@@ -109,6 +109,45 @@ Deno.test('quality and resolution adaptation is bounded and reports the actual s
   assert.equal(thumb.width, result.thumbnailWidth); assert.equal(thumb.height, result.thumbnailHeight);
 });
 
+Deno.test('PNG fallback filters premultiplied alpha without hidden-color fringes', () => {
+  const pixels = new Uint8Array(W * H * 4);
+  for (let p = 0; p < pixels.length; p += 4) {
+    // Alternating opaque black and fully transparent red within every output pixel.
+    const transparent = (p / 4) % 2 === 1;
+    pixels[p] = transparent ? 255 : 0;
+    pixels[p + 3] = transparent ? 0 : 255;
+  }
+  const png = encode({ width: W, height: H, channels: 4, depth: 8, data: pixels });
+  const fallback = createVisualizationPngDecoder(() => { throw new Error('synthetic failure'); });
+  const result = fallback(png), thumb = decode(result.thumbnail, { checkCrc: true });
+  assert.equal(result.main, png);
+  assert.equal(result.thumbnailMimeType, 'image/png');
+  for (let p = 0; p < thumb.data.length; p += 4) {
+    assert.deepEqual(Array.from(thumb.data.subarray(p, p + 3)), [0, 0, 0]);
+    assert.ok(thumb.data[p + 3] >= 110 && thumb.data[p + 3] <= 145);
+  }
+  // A fully transparent image has canonical zero RGB, not arbitrary hidden color.
+  for (let p = 3; p < pixels.length; p += 4) pixels[p] = 0;
+  const transparent = fallback(encode({ width: W, height: H, channels: 4, depth: 8, data: pixels }));
+  assert.ok(decode(transparent.thumbnail).data.every(value => value === 0));
+});
+
+Deno.test('PLTE is bounded before library allocations, unique, and before image data', () => {
+  const png = source(), header = png.subarray(0, 33), rest = png.subarray(33);
+  for (const length of [0, 1, 2, 4, 769, 771, 3_000_000]) {
+    const bad = concat(header, chunk('PLTE', new Uint8Array(length)), rest);
+    assert.throws(() => decodeVisualizationPng(bad), /invalid_png_palette/);
+  }
+  const palette = chunk('PLTE', new Uint8Array(3));
+  assert.throws(() => decodeVisualizationPng(concat(header, palette, palette, rest)), /invalid_png_palette/);
+  assert.throws(() => decodeVisualizationPng(concat(png.subarray(0, -12), palette, png.subarray(-12))), /invalid_png_palette/);
+  // A legal suggested palette for truecolor is preserved; no unrelated compatibility gate.
+  for (const length of [3, 768]) {
+    const valid = concat(header, chunk('PLTE', new Uint8Array(length)), rest);
+    assert.equal(decodeVisualizationPng(valid).main, valid);
+  }
+});
+
 Deno.test('reject bad header, CRC, dimensions, truncation and trailing bytes', () => {
   const png = source();
   const badCrc = png.slice(); badCrc[29] ^= 1;

@@ -9,13 +9,17 @@ pomiaru Edge ani odbioru Kasi i Aleksego.
 
 - Walidacja oryginału pozostaje: PNG RGB/RGBA8, 1024×1536, maks. 8 000 000 B,
   CRC, bez przeplotu/APNG, ograniczenie rozpakowanego strumienia i metadanych.
+  Opcjonalne PLTE: tylko jedno przed IDAT, 3–768 B, długość podzielna przez 3.
+  Kontrola poprzedza alokowanie tablic palety przez bibliotekę.
 - Maksymalnie trzy próby JPEG: 600×900 q82, 600×900 q65, 450×675 q65. Przy każdym
   powodzeniu limit 100 000 B. Druga próba używa tych samych przeskalowanych pikseli.
 - Przeskalowanie obszarowe uwzględnia częściowe piksele brzegowe. Przezroczystość
   JPEG jest składana na białym tle przed uśrednianiem. Nie powstaje powiększenie AI.
 - Awaria kodera, błędne bajty JPEG lub przekroczenie limitu we wszystkich próbach
   uruchamia miniaturę PNG 120×180 ≤100 000 B. Poprawny oryginał nadal jest zwracany;
-  nie ma ponownego żądania do dostawcy AI. PNG zachowuje kanał alpha.
+  nie ma ponownego żądania do dostawcy AI. PNG zachowuje kanał alpha; RGB jest
+  filtrowane z wagą alpha i odtwarzane po skalowaniu. Ukryte kolory całkowicie
+  przezroczystych pikseli nie tworzą obwódek, a całkowicie przezroczysty wynik ma RGB=0.
 - Wynik zawiera `thumbnailMimeType`, `thumbnailWidth`, `thumbnailHeight` oraz
   `main`, `thumbnail`, `width`, `height`. Worker mapuje pola na `thumbMimeType`,
   `thumbWidth`, `thumbHeight` w danych klienta; obsługa dawnych PNG należy do workera.
@@ -53,10 +57,19 @@ wymaga potwierdzenia w rzeczywistym workerze, wraz z parsowaniem JSON/base64.
 [Limity Supabase Edge](https://supabase.com/docs/guides/functions/limits) to
 2 s CPU i 256 MB; lokalny wynik nie dowodzi spełnienia ich w chmurze.
 
-Testy kodeka: **6/6 PASS**. Obejmują RGB/RGBA, białe tło przezroczystych pikseli,
+Testy kodeka po przeglądzie: **8/8 PASS**. Obejmują RGB/RGBA, białe tło przezroczystych pikseli,
 dekodowanie wynikowego JPEG, tożsamość oryginału, ograniczenia bajtów, adaptację,
 wymuszoną awarię/niepoprawny wynik/przekroczenie limitu kodera, błędny CRC,
 wymiary, ucięcie, dodatkowe bajty, nadmiarową dekompresję i niedozwolone chunki.
+Przegląd wykrył dwie luki: nieograniczoną długość PLTE i uśrednianie ukrytego RGB
+w PNG fallback. Obie najpierw odtworzono testami, następnie poprawiono: test
+odrzuca również PLTE 3 MB, nieprawidłową długość/kolejność i duplikat, zachowuje
+legalne 1–256 wpisów; mieszanina czerni opaque i czerwieni transparent pozostaje
+czarna z częściową alpha, bez czerwonej obwódki. Powyższy benchmark jest pomiarem
+pierwotnej implementacji; odrębny ponowny pomiar zapisano w `artifacts/p33c1-codec-review/`.
+W ponownym pomiarze SHA-256 wszystkich siedmiu miniaturek pozostają identyczne
+(sześć B i szum opaque). Maks. CPU: 516 ms dla B, 1296 ms dla szumu; maks. RSS
+procesu: odpowiednio 193,3 i 241,4 MiB. Ograniczenie dowodu lokalnego pozostaje.
 Sprawdzenie typów trzech funkcji Edge i benchmarku: **PASS**.
 Pillow niezależnie dekoduje sześć JPEG, stare miniatury i wejścia, weryfikuje
 hashe i wymiary przed złożeniem plansz.

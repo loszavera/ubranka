@@ -34,8 +34,9 @@ function resize(data: ArrayLike<number>, channels: number, width: number, height
           const weight = wy * (Math.min(x1, sx + 1) - Math.max(x0, sx));
           const p = (sy * WIDTH + sx) * channels;
           const alpha = channels === 4 ? data[p + 3] : 255;
-          // JPEG has no alpha: composite each source sample over white before averaging.
-          const opacity = opaque ? alpha / 255 : 1;
+          // Filter premultiplied RGB in both modes so hidden transparent colors cannot
+          // bleed into visible edges. JPEG additionally composites over white.
+          const opacity = alpha / 255;
           const background = opaque ? 255 - alpha : 0;
           r += (data[p] * opacity + background) * weight;
           g += (data[p + 1] * opacity + background) * weight;
@@ -44,8 +45,13 @@ function resize(data: ArrayLike<number>, channels: number, width: number, height
         }
       }
       const p = (y * width + x) * 4;
-      pixels[p] = Math.round(r / area); pixels[p + 1] = Math.round(g / area);
-      pixels[p + 2] = Math.round(b / area); pixels[p + 3] = opaque ? 255 : Math.round(a / area);
+      const colorWeight = opaque ? area : a / 255;
+      // PNG stores straight alpha: unpremultiply after filtering, or canonicalize RGB
+      // to zero for an entirely transparent footprint (no division by zero).
+      pixels[p] = colorWeight ? Math.round(r / colorWeight) : 0;
+      pixels[p + 1] = colorWeight ? Math.round(g / colorWeight) : 0;
+      pixels[p + 2] = colorWeight ? Math.round(b / colorWeight) : 0;
+      pixels[p + 3] = opaque ? 255 : Math.round(a / area);
     }
   }
   return pixels;
@@ -77,6 +83,7 @@ function decodePng(bytes: Uint8Array, jpegEncoder: JpegEncoder) {
   let total = 0;
   let ended = false;
   let dataEnded = false;
+  let paletteSeen = false;
   let chunks = 0;
   for (let offset = 8; offset < bytes.length;) {
     if (++chunks > 4096 || offset + 12 > bytes.length) throw new Error('invalid_png_chunks');
@@ -85,6 +92,14 @@ function decodePng(bytes: Uint8Array, jpegEncoder: JpegEncoder) {
     const end = offset + 12 + length;
     if (end > bytes.length || (offset !== 8 && type === 'IHDR') ||
         ['acTL', 'fcTL', 'fdAT'].includes(type)) throw new Error('invalid_png_chunks');
+    // fast-png materializes one array per palette entry. Bound this optional
+    // truecolor palette before decode, rather than relying only on total PNG bytes.
+    if (type === 'PLTE') {
+      if (paletteSeen || compressed.length || length === 0 || length > 768 || length % 3 !== 0) {
+        throw new Error('invalid_png_palette');
+      }
+      paletteSeen = true;
+    }
     if (type === 'IDAT') {
       if (dataEnded) throw new Error('invalid_png_chunks');
       compressed.push(bytes.subarray(offset + 8, end - 4));
