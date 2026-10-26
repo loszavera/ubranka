@@ -37,7 +37,9 @@ export async function prepareCanonicalInputs(admin:SupabaseRest,inputs:SourceInp
  if(!Array.isArray(inputs)||inputs.length<1||inputs.length>4||new Set(inputs.map(p=>p.photoId)).size!==inputs.length)throw new WardrobeError('INVALID_MANIFEST');
  const output:(CanonicalDescriptor&{photoId:string})[]=[],bytes:Uint8Array[]=[];
  for(const input of inputs){
-  const result=await admin.request('/functions/v1/canonical-input',{method:'POST',body:JSON.stringify({accountId,input})}) as {canonical:unknown;jpeg:unknown};
+  let result:{canonical:unknown;jpeg:unknown};
+  try{result=await admin.request('/functions/v1/canonical-input',{method:'POST',body:JSON.stringify({accountId,input})}) as typeof result;}
+  catch{throw new WardrobeError('INPUT_PREPARATION_FAILED');}
   if(!isCanonicalDescriptor(result?.canonical))throw new WardrobeError('INPUT_PREPARATION_FAILED');
   const image=jpeg(result.jpeg,1_000_000);
   if(image.length!==result.canonical.bytes||await sha256(image)!==result.canonical.sha256)throw new WardrobeError('MANIFEST_MISMATCH');
