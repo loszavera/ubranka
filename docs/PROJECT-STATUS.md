@@ -1,10 +1,31 @@
 # Stan projektu Ubranka
 
-Aktualizacja: 2026-10-25.
+Aktualizacja: 2026-10-26.
+
+**P3.3B zaakceptowane przez Kasię i Aleksego z opisanymi ograniczeniami
+(2026-10-26).** Zlecono wyłącznie propozycję P3.3C z poprawą ostrości miniatur.
+Powstały [wymagania V1.8](REQUIREMENTS-V1.8.md),
+[plan V1.8](IMPLEMENTATION-PLAN-V1.8.md), [koszty V1.7](COST-PLAN-V1.7.md)
+i [propozycja zasad danych AI V1.1](P33-AI-DATA-POLICY-V1.1.md).
+**C1/C2 nie zatwierdzono do wykonania.** Rekomendacja C1: czytelniejsza
+miniatura i pełny podgląd, zgody, izolacja, liczniki i testy syntetyczne przy
+serwerowym AI OFF. C2 osobno: 30 dni / 25 PLN łącznie, maks. 60 wysłań,
+30/konto i 5/dobę, bez ponowień. Szczegóły finansowania trzeba ustalić przed C2;
+zgoda na B nie przechodzi na C.
+W tej turze tylko dokumentacja i odczyt kodu/oficjalnych źródeł, bez zmiany
+aplikacji, usług, kluczy i danych oraz bez nowych wywołań AI. Testów runtime
+nie powtarzano. Odbiór B nie dopisuje logowania Kasi ani testów urządzeń.
+Kontrola dokumentacji: dziewięć plików, 114 lokalnych odnośników bez braków,
+UTF-8 i `git diff --check` PASS. Niezależne przeglądy backendu i klienta;
+uwzględniono zachowanie wspólnego budżetu miesięcznego, odczyt gotowych wyników
+po wycofaniu zgody, rozliczanie po końcu trialu i rzeczywiste uprawnienia
+administratora infrastruktury. Brak zmian runtime, manifestów i obrazów B.
+
+## Odebrane P3.3B — dowody wykonania z 2026-10-25
 
 **P3.3A przetestowane i zaakceptowane przez Kasię i Aleksego (2026-10-25).**
 Następnie zatwierdzili wykonanie **P3.3B** z limitami i zatrzymaniem przed C.
-Aktualne [wymagania V1.7](REQUIREMENTS-V1.7.md),
+Ówczesne [wymagania V1.7](REQUIREMENTS-V1.7.md),
 [plan V1.7](IMPLEMENTATION-PLAN-V1.7.md) i [koszty V1.6](COST-PLAN-V1.6.md).
 Zakres: rzeczywista integracja serwerowa, tylko sześć zarejestrowanych
 syntetycznych przypadków, maks. 6 wysłań / 10 PLN, osobny ograniczony klucz
@@ -30,11 +51,10 @@ PASS. Sześć nowych obrazów opublikowano na dev/main jako `b0b84ce`;
 Vercel Production READY. Końcowy test WWW 390/1440 px: 18 kontroli PASS
 (14:40:41 UTC), hashe wszystkich sześciu obrazów zgodne, zero błędów.
 Historia CI dotyczy runtime; nowe dowody galerii zapisano w raporcie B.
-**Odbiór B przez Kasię i Aleksego oczekuje**;
-następny krok to obejrzenie wyników i akceptacja albo feedback.
-Przed ewentualnym C pozostaje poprawa czytelności powiększanej miniatury
-120×180 px (limit 100 kB zachowany); oryginalny PNG B01 jest ostry.
-P3.3C/D nadal niezlecone; prywatne zdjęcia użytkowników pozostają wyłączone z AI.
+**Odbiór B został następnie potwierdzony 2026-10-26.** Poprawę czytelności
+miniatury 120×180 px uwzględniono w propozycji C1: większa miniatura ≤100 kB
+i podgląd istniejącego oryginału na żądanie. Nie została zaimplementowana.
+Implementacja C/D nadal niezlecona; prywatne zdjęcia pozostają wyłączone z AI.
 
 ## Odebrane P3.3A — dowody wykonania
 
@@ -275,11 +295,12 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-**Odbiór sześciu wyników B przez Kasię i Aleksego** w opublikowanej
-[galerii na main](https://ubranka.vercel.app/p33b/).
-Należy obejrzeć obrazy i przekazać akceptację albo feedback. Sześć wywołań
-wyczerpało zgodę, AI i klucz B są wyłączone. Nie ponawiamy generacji i nie
-rozpoczynamy C ani prywatnych zdjęć na podstawie dobrego wyniku technicznego.
+**Zatwierdzenie C1 według V1.8:** ostrzejsze miniatury, pełny podgląd i
+przygotowanie przepływu C z AI OFF, testy syntetyczne, dev i podgląd main.
+Oczekiwany rezultat: gotowa do oceny aplikacja, bez aktywnego AI i klucza AI
+w chmurze. Osobny późniejszy start C2 wymaga zgody na płatny pilotaż,
+finansowanie i świadome wysłanie zdjęć przez każdego uczestnika.
+Nie ponawiamy żadnej generacji B; jego sześć slotów pozostaje wykorzystanych.
 
-Logowanie Kasi w P3.1 nie zostało osobno potwierdzone; ogólny odbiór A nie
+Logowanie Kasi w P3.1 nie zostało osobno potwierdzone; ogólny odbiór A/B nie
 dopisuje takiego wyniku. Galeria i pomiary P3.2 pozostają niezmienione.

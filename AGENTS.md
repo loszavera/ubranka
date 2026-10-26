@@ -81,7 +81,7 @@ nadal wymagają osobnej zgody. Po wdrożeniu i raporcie A zatrzymaj się przed B
 P3.3A jest wdrożone na main, z wynikiem testów w docs/P33A-VERIFICATION.md.
 2026-10-25 Kasia i Aleksy potwierdzili przetestowanie i **zaakceptowali P3.3A**.
 Zlecili wyłącznie propozycję P3.3B do zatwierdzenia, bez nowych płatnych wywołań.
-Aktualne wymagania/plan: V1.7. Nie pytaj ponownie o odbiór A. Ogólny odbiór
+Ówczesne wymagania/plan: V1.7. Nie pytaj ponownie o odbiór A. Ogólny odbiór
 nie dopisuje osobnego potwierdzenia logowania Kasi, konkretnego urządzenia
 ani testu każdego scenariusza.
 Następnie 2026-10-25 użytkownik **zatwierdził P3.3B według V1.7**: integrację,
@@ -112,12 +112,20 @@ kont syntetycznych przeszły: rekordy, pliki, Auth, zaproszenia i lokalne sesje
 usunięte, koszty i sloty zachowane. Lokalna galeria i build WWW przeszły.
 Wyniki opublikowano na dev/main jako b0b84ce; Vercel Production READY.
 Końcowa kontrola WWW 390/1440 px: 18 kontroli PASS, hashe sześciu wyników
-zgodne, zero błędów. Dowody: docs/P33B-REPORT.md. B wykonane, odbiór oczekuje.
-Otwarta uwaga UX przed ewentualnym C: miniatura 120×180 px po powiększeniu
-jest rozmyta; poprawę czytelności przy limicie 100 kB dopiero zaplanuj.
-Nie zmieniaj teraz kodeka ani nie ponawiaj generacji z tego powodu.
-Zaproponuj obejrzenie galerii i odbiór B albo feedback.
-Odbiór Kasi i Aleksego nadal oczekuje; nie uruchamia to C/D ani prywatnych zdjęć.
+zgodne, zero błędów. Dowody: docs/P33B-REPORT.md.
+2026-10-26 Kasia i Aleksy **zaakceptowali P3.3B z opisanymi ograniczeniami**
+i zlecili wyłącznie propozycję C, uwzględniającą ostrzejsze miniatury.
+Nie pytaj ponownie o odbiór B. Nie dopisuj testów konkretnych urządzeń ani
+osobnego potwierdzenia logowania Kasi. Obecne wymagania/plan: V1.8,
+koszty V1.7, propozycja zasad danych AI V1.1. To dokumentacja do zatwierdzenia,
+**bez zgody na implementację C, nowe płatne wywołania i prywatne zdjęcia w AI**.
+Rekomendowane C1: ostrzejszy podgląd (kandydat JPEG 600×900 ≤100 kB), osobne
+otwarcie istniejącego PNG, gotowy przepływ/zgody/limity C z serwerowym AI OFF,
+bez klucza w chmurze, testy syntetyczne i main. Nie zmieniaj kodeka teraz.
+C2 to osobno zatwierdzany pilotaż 30 dni / 25 PLN łącznie / maks. 60 wysłań,
+30/konto i 5/dobę, bez retry. Te limity są propozycją, nie aktywną konfiguracją.
+Finansowanie B nie przechodzi na C. Nie odnawiaj slotów B ani lokalnego klucza
+P3.2; kolejnym krokiem do zaproponowania jest akceptacja C1, nie aktywacja AI.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
 po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,
 promptów ani tokenów. Znika po potwierdzeniu trwałego slotu z serwera lub po

@@ -78,6 +78,11 @@ Nowe wpisy z 2026-10-24:
 | --- | --- | --- | --- |
 | D-050 | 2026-10-25 | Zatwierdzone P3.3B | Aktualizuje D-049: implementacja V1.7, do 6 płatnych wywołań / 10 PLN łącznie, fikcyjne dorosłe osoby, brak ponowień, akceptacja granicy gwarancji pierwszego pomiaru. Osobny ograniczony klucz OpenAI wyłącznie w sekretach Supabase, bez zmian rozliczeń/abonamentów. Finansowanie jawnie ograniczone w rozmowie; gdy granic nie można potwierdzić, stop płatnego startu. Dev, raport i syntetyczna galeria na main, po próbie OFF i unieważnienie klucza. Bez prywatnych zdjęć i bez C. |
 
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-051 | 2026-10-26 | Odbiór P3.3B i tylko planowanie C | Kasia i Aleksy zaakceptowali B z opisanymi ograniczeniami i zlecili propozycję C, w tym poprawę ostrości miniatur. Aktualizuje D-050: B zakończone/odebrane, 6/6 wywołań zużyte. Bez implementacji C, nowych płatnych wywołań i prywatnych zdjęć w AI. |
+| D-052 | 2026-10-26 | Propozycja do zatwierdzenia | V1.8 proponuje C1: miniatury, pełny podgląd i przygotowanie całego przepływu C przy AI OFF, bez klucza w chmurze; później osobne C2: 30 dni / 25 PLN łącznie / maks. 60 wysłań, 30/konto i 5/dobę, bez retry. 30 wysłań/konto zastępuje wcześniejszą propozycję 40 prób. Zasady AI V1.1 rozdzielają usunięcie wyników i zdjęcia sylwetki. Finansowanie C2 wymaga osobnego aktualnego uzgodnienia. Żaden z tych zakresów nie jest jeszcze zatwierdzony. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

@@ -43,13 +43,16 @@ Użytkownik pozwolił rozpocząć pomiar bez pełnej estymacji, zachowując limi
 **P3.3A: przetestowane i zaakceptowane przez Kasię i Aleksego, z AI wyłączonym.** Profil
 sylwetki, prywatne zdjęcie w Supabase, maksymalnie dwa zestawy z własnej szafy,
 zapis/opinie i przygotowanie wizualizacji PL/EN. [Raport oraz instrukcja odbioru](docs/P33A-VERIFICATION.md).
-**P3.3B zatwierdzono według [V1.7](docs/IMPLEMENTATION-PLAN-V1.7.md):** integracja
-i najwyżej 6 wysłań / 10 PLN na syntetycznych obrazach fikcyjnych dorosłych.
-Powstały serwerowe blokady, prywatne PNG i przepływ zgody/oceny PL/EN.
-**Płatny start jeszcze nie nastąpił; AI pozostaje OFF.** Stan kontroli, dostęp
-do sekretów i wyniki: [raport P3.3B](docs/P33B-REPORT.md),
+**P3.3B wykonane i zaakceptowane z ograniczeniami (2026-10-26):** sześć udanych
+generacji syntetycznych, bez ponowień; 0,214403 USD API / 1,49 PLN budżetu.
+AI ponownie OFF, klucz B unieważniony i usunięty, limit 6/6 wyczerpany.
+[Raport P3.3B](docs/P33B-REPORT.md),
 [galeria wejść i wyników](https://ubranka.vercel.app/p33b/).
-Pilotaż prywatnych zdjęć C nadal wymaga osobnej zgody. Nie uruchomiono abonamentów.
+**P3.3C: przygotowano tylko propozycję [V1.8](docs/IMPLEMENTATION-PLAN-V1.8.md).**
+Rekomendowane C1: ostrzejsze miniatury, pełny podgląd i przygotowanie prywatnego
+przepływu z AI OFF. Późniejsze C2: osobno zatwierdzany pilotaż 30 dni / 25 PLN
+łącznie, maks. 60 wysłań (30/konto). C nie rozpoczęto; brak nowych wywołań,
+prywatnych zdjęć w AI i nowych abonamentów.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
 jest wspólna dla obu adresów. Lokalny zapis demo pozostaje osobny — publikacja
@@ -59,14 +62,14 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 ## Dokumenty
 
-- [Wymagania V1.7 — odebrane P3.3A, zatwierdzone B](docs/REQUIREMENTS-V1.7.md)
-- [Plan implementacji V1.7 — zatwierdzone P3.3B](docs/IMPLEMENTATION-PLAN-V1.7.md)
-- [Zasady danych V1.0 — A/B i oddzielny przyszły pilotaż C](docs/P33-AI-DATA-POLICY-V1.0.md)
+- [Wymagania V1.8 — odebrane B, propozycja C](docs/REQUIREMENTS-V1.8.md)
+- [Plan implementacji V1.8 — C1 z AI OFF, osobny pilotaż C2](docs/IMPLEMENTATION-PLAN-V1.8.md)
+- [Propozycja zasad danych AI V1.1 — prywatny pilotaż C](docs/P33-AI-DATA-POLICY-V1.1.md)
 - [P3.3B — raport integracji, próby i kosztów](docs/P33B-REPORT.md)
 - [P3.3B — kontrakty i bezpłatne kontrole operatorowe](supabase/P33B-OPERATIONS.md)
 - [P3.3A — weryfikacja i test użytkowników](docs/P33A-VERIFICATION.md)
 - [P3.3A — kontrakty backendu i granice przygotowania AI](docs/P33A-BACKEND.md)
-- [Proponowana kontrola kosztów V1.6 — próba P3.3B](docs/COST-PLAN-V1.6.md)
+- [Proponowana kontrola kosztów V1.7 — pilotaż P3.3C](docs/COST-PLAN-V1.7.md)
 - [P3.2 — raport jakości, kosztów i weryfikacji](docs/P32-REPORT.md)
 - [P3.2 — historyczny preflight i późniejsze rozstrzygnięcie użytkownika](docs/P32-PREFLIGHT.md)
 - [Przypadki P3.2, prompty i hashe wejść](docs/p32/cases.json)

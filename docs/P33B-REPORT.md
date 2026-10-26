@@ -21,9 +21,11 @@ Ocena wizualna: **6/6 wyników spełnia próg ≥8/10 bez błędu krytycznego**,
 więc warunek jakości ≥5/6 został spełniony. Końcowa kontrola UI i sprzątanie
 odtworzonych kont testowych zakończyły się poprawnie. Sześć wyników jest
 opublikowanych na main; końcowa kontrola wdrożonego WWW przeszła.
-**Odbiór przez Kasię i Aleksego pozostaje
-otwarty.** [Galeria syntetyczna](https://ubranka.vercel.app/p33b/) jest miejscem
-odbioru. Dowody publikacji opisano poniżej.
+**Aktualizacja 2026-10-26: Kasia i Aleksy zaakceptowali P3.3B z opisanymi
+ograniczeniami.** [Galeria syntetyczna](https://ubranka.vercel.app/p33b/) i pomiary
+pozostają dowodem wykonania. Odbiór nie dopisuje ocen poszczególnych obrazów
+ani testów urządzeń. Zlecono tylko propozycję C z poprawą ostrości miniatur;
+bez implementacji, nowych wywołań i prywatnych zdjęć w AI.
 
 ## Zmierzone wyniki i koszty
 
@@ -242,7 +244,7 @@ i regresje; nie deklarujemy bezpośredniego porównania bajtów prywatnych rekor
 
 ## Kontynuacja
 
-Po publikacji i kontroli wdrożonej galerii Kasię i Aleksego prosimy o
-obejrzenie sześciu wyników w galerii i akceptację lub feedback. Wykonanie
-techniczne nie jest odbiorem użytkowników. Nie ponawiać żadnego z sześciu
-wywołań, nie otwierać nowego okna i nie rozpoczynać C ani prywatnych zdjęć.
+Po odbiorze 2026-10-26 przygotowano wyłącznie [propozycję C V1.8](IMPLEMENTATION-PLAN-V1.8.md),
+w tym poprawę podglądu bez ponownej generacji. Rekomendowany następny krok to
+zatwierdzenie C1 z AI OFF. Nie ponawiać żadnego z sześciu wywołań B, nie otwierać
+nowego okna próby i nie wysyłać prywatnych zdjęć na podstawie tego odbioru.
