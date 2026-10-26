@@ -9,7 +9,9 @@ const id=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`,A=id(1),B=id
 const params={model:'gpt-image-2.5-flare-2026-09-08',n:1,quality:'medium',size:'1024x1536',output_format:'png',background:'opaque',moderation:'auto'};
 const usage={textInputTokens:230,imageInputTokens:3072,imageOutputTokens:343};
 let manifest;
-async function admin(name,args=[]){await db.exec('set role service_role');try{return(await db.query(`select public.${name}(${args.map((_,n)=>`$${n+1}`).join(',')}) value`,args)).rows[0].value;}finally{await db.exec('reset role');}}
+// B's historical arithmetic remains exercised against current schema by the
+// disposable DB owner. C1 revokes remote B admission; pilot-database verifies it.
+async function admin(name,args=[]){const historical=['wardrobe_b_provision','wardrobe_b_activate','wardrobe_b_plan','wardrobe_b_reserve','wardrobe_b_mark_sent','wardrobe_b_manifest'].includes(name);if(!historical)await db.exec('set role service_role');try{return(await db.query(`select public.${name}(${args.map((_,n)=>`$${n+1}`).join(',')}) value`,args)).rows[0].value;}finally{await db.exec('reset role');}}
 async function user(account,action,payload={}){await db.query("select set_config('request.jwt.claim.sub',$1,false)",[account]);await db.exec('set role authenticated');try{return(await db.query('select public.wardrobe_execute($1,$2) value',[action,JSON.stringify(payload)])).rows[0].value;}finally{await db.exec('reset role');}}
 async function asUser(account,sql,args=[]){await db.query("select set_config('request.jwt.claim.sub',$1,false)",[account]);await db.exec('set role authenticated');try{return await db.query(sql,args);}finally{await db.exec('reset role');}}
 async function storage(photo,bucket='wardrobe-private'){await db.query('insert into storage.objects(bucket_id,name) values($1,$2),($1,$3)',[bucket,photo.main_path,photo.thumb_path]);}
@@ -56,7 +58,7 @@ test('provision is service-only, immutable, six exact cases / two synthetic acco
   await assert.rejects(admin('wardrobe_b_provision',[wrong]),/INVALID_MANIFEST/);
   await provision();await assert.rejects(provision(),/CONFLICT/);
   assert.equal((await user(A,'bootstrap')).visualization.mode,'off');await activate();
-  assert.equal((await user(A,'bootstrap')).visualization.mode,'synthetic_trial');
+  assert.equal((await user(A,'bootstrap')).visualization.mode,'off');
   assert.equal((await user(C,'bootstrap')).visualization.mode,'off');assert.equal((await user(C,'bootstrap')).visualization.trial,null);
   await assert.rejects(user(A,'requestVisualization',{caseId:'B01',accepted:true}),/AI_DISABLED/);
   await assert.rejects(admin('wardrobe_ai_reserve',[A,id(999),cs('B01').outfitId,1,1]),/AI_DISABLED/);

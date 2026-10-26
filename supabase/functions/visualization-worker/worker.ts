@@ -4,7 +4,8 @@ import { editImageOnce } from '../_shared/openai-images.ts';
 import type { ImageUsage } from '../_shared/visualization.ts';
 import { serverKey } from '../_shared/service-auth.ts';
 
-export type ImageDecoder=(bytes:Uint8Array)=>{main:Uint8Array;thumbnail:Uint8Array;width:number;height:number;metrics:unknown}|Promise<{main:Uint8Array;thumbnail:Uint8Array;width:number;height:number;metrics:unknown}>;
+export type DecodedImage={main:Uint8Array;thumbnail:Uint8Array;width:number;height:number;thumbnailMimeType?:'image/jpeg'|'image/png';thumbnailWidth?:number;thumbnailHeight?:number;metrics:unknown};
+export type ImageDecoder=(bytes:Uint8Array)=>DecodedImage|Promise<DecodedImage>;
 // All durable state lives in PostgreSQL. This function is never scheduled for
 // retry and a duplicate invocation cannot pass mark_sent twice.
 export async function runVisualizationWorker(environment:(key:string)=>string|undefined,account:string,jobId:string,decode:ImageDecoder) {

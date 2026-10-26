@@ -39,9 +39,9 @@ test('CORS matches exact origins and hashes bind both variants',async()=>{
 
 test('photo proxy authorizes every read before privileged bytes and never returns a reusable Storage URL',async()=>{
   const path='00000000-0000-4000-8000-000000000001/10000000-0000-4000-8000-000000000001/20000000-0000-4000-8000-000000000001/main.jpg';
-  const photo={main_path:path,thumb_path:path.replace('main.jpg','thumb.jpg'),bytes:bytes.length,thumb_bytes:bytes.length,mime_type:'image/jpeg'};
+  const photo={path,bucket:'wardrobe-private',mimeType:'image/jpeg',bytes:bytes.length,main:true};
   let permitted=true;let checks=0;let downloads=0;
-  const caller={request:async(url:string)=>{checks++;assert.ok(url.startsWith('/rest/v1/wardrobe_photos?'));return permitted?[photo]:[];}} as unknown as SupabaseRest;
+  const caller={rpc:async(name:string)=>{checks++;assert.equal(name,'wardrobe_photo_variant');return permitted?photo:null;}} as unknown as SupabaseRest;
   const admin={binary:async(url:string,expected:number)=>{downloads++;assert.equal(url,`/storage/v1/object/wardrobe-private/${path}`);assert.equal(expected,bytes.length);return bytes;}} as unknown as SupabaseRest;
   const response=await privatePhotoResponse(caller,admin,path,{});
   assert.deepEqual(new Uint8Array(await response.arrayBuffer()),bytes);

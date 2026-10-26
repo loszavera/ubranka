@@ -18,7 +18,7 @@ test('hosted handler hard OFF makes no provider request even with forged mode/en
       const response=await handler(new Request('https://synthetic.invalid/functions/v1/wardrobe',{method:'POST',headers:{Authorization:'Bearer synthetic-session','Content-Type':'application/json'},body:JSON.stringify({action,operationId:operation,mode:'test',enabled:true,accepted:true})}));
       assert.equal(response.status,403);assert.equal((await response.json()).error.code,'AI_DISABLED');
     }
-    assert.equal(requests.length,3,'two fresh auth checks and one server trial gate; no storage/provider invocation');
+    assert.equal(requests.length,2,'two fresh auth checks; no storage/provider invocation');
   }finally{globalThis.fetch=original;}
 });
 

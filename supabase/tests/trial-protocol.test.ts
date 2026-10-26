@@ -148,14 +148,14 @@ test('unknown provider response blocks with null usage; partial upload settles k
   assert.ok(partial.events.includes('/rest/v1/rpc/wardrobe_b_manifest'));
 });
 test('PNG proxy checks caller RLS again after Storage, so deletion while fetching returns no bytes',async()=>{
-  const path=`${account}/${job}/${file}/main.png`,photo={main_path:path,thumb_path:path.replace('main.png','thumb.png'),bytes:fakePng.length,thumb_bytes:fakePng.length,mime_type:'image/png'};
+  const path=`${account}/${job}/${file}/main.png`,photo={path,bucket:'wardrobe-results',mimeType:'image/png',bytes:fakePng.length,main:true};
   let active=true,checks=0;
-  const caller={request:async(url:string)=>{checks++;assert.ok(url.includes('wardrobe_visualization_files'));return active?[photo]:[];}} as unknown as SupabaseRest;
+  const caller={rpc:async(name:string)=>{checks++;assert.equal(name,'wardrobe_photo_variant');return active?photo:null;}} as unknown as SupabaseRest;
   const admin={binary:async(_p:string,_b:number,mime:string)=>{assert.equal(mime,'image/png');return fakePng;}} as unknown as SupabaseRest;
   const response=await privatePhotoResponse(caller,admin,path,{});assert.equal(response.headers.get('content-type'),'image/png');assert.equal(checks,2);
   admin.binary=async()=>{active=false;return fakePng;};await assert.rejects(privatePhotoResponse(caller,admin,path,{}),/NOT_FOUND/);
 });
-test('request creates durable case operation before waking worker and accepts no arbitrary prompt/model',async()=>{
+test('C1 retires B HTTP dispatch even with formerly eligible synthetic account and forged parameters',async()=>{
   const original=globalThis.fetch,events:string[]=[];
   globalThis.fetch=async(input,init)=>{
     const path=new URL(String(input)).pathname;events.push(path);
@@ -170,9 +170,8 @@ test('request creates durable case operation before waking worker and accepts no
   try {
     const body={action:'requestVisualization',operationId:job,caseId:'B01',consentVersion:'p33b-synthetic-v1',accepted:true};
     const request=(extra={})=>new Request('https://wardrobe.invalid',{method:'POST',headers:{Authorization:'Bearer fixture'},body:JSON.stringify({...body,...extra})});
-    const handler=createWardrobeHandler(env);const result=await handler(request());assert.equal(result.status,202);assert.equal((await result.json()).data.id,job);
-    assert.ok(events.indexOf('/rest/v1/rpc/wardrobe_b_reserve')<events.indexOf('/functions/v1/visualization-worker'));
-    assert.equal((await handler(request({prompt:'replace'}))).status,400);assert.equal(events.filter(x=>x.endsWith('/wardrobe_b_reserve')).length,1);
+    const handler=createWardrobeHandler(env);const result=await handler(request());assert.equal(result.status,403);assert.equal((await result.json()).error.code,'AI_DISABLED');
+    assert.equal((await handler(request({prompt:'replace'}))).status,403);assert.deepEqual(events,['/auth/v1/user','/auth/v1/user']);
   }finally{globalThis.fetch=original;}
 });
 test('deleteAiData remains pending while a result manifest awaits physical cleanup after body photo is gone',async()=>{

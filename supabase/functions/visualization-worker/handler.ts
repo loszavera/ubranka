@@ -1,9 +1,8 @@
-import { readBody, uuid } from '../_shared/protocol.ts';
-import { runVisualizationWorker, type ImageDecoder } from './worker.ts';
+import { type ImageDecoder } from './worker.ts';
 import { parseImageResponse } from '../_shared/openai-images.ts';
 import { authorizeWorker } from '../_shared/service-auth.ts';
 
-export function createWorkerHandler(environment:(key:string)=>string|undefined,waitUntil:(task:Promise<unknown>)=>void,decode:ImageDecoder) {
+export function createWorkerHandler(environment:(key:string)=>string|undefined,_waitUntil:(task:Promise<unknown>)=>void,decode:ImageDecoder) {
   return async(request:Request)=>{
     const headers={'Cache-Control':'no-store'};
     try {
@@ -16,7 +15,9 @@ export function createWorkerHandler(environment:(key:string)=>string|undefined,w
         const parsed=await parseImageResponse(new Response(request.body,{headers:request.headers}));
         if(!parsed.png||!parsed.usage)throw new Error();
         const parseMs=performance.now()-started,image=await decode(parsed.png);
-        return Response.json({width:image.width,height:image.height,bytes:image.main.length,thumbBytes:image.thumbnail.length,parseMs,totalMs:performance.now()-started,metrics:image.metrics},{headers});
+        return Response.json({width:image.width,height:image.height,bytes:image.main.length,thumbBytes:image.thumbnail.length,
+          thumbMimeType:image.thumbnailMimeType??'image/png',thumbWidth:image.thumbnailWidth??120,thumbHeight:image.thumbnailHeight??180,
+          parseMs,totalMs:performance.now()-started,metrics:image.metrics},{headers});
       }
       if(request.headers.get('x-ubranka-probe')==='png') {
         // Pure decoder preflight: no key lookup, job, persistence or provider.
@@ -26,12 +27,11 @@ export function createWorkerHandler(environment:(key:string)=>string|undefined,w
           if(length>8_000_000){await reader.cancel();throw new Error();}chunks.push(part.value);}
         const bytes=new Uint8Array(length);let at=0;for(const chunk of chunks){bytes.set(chunk,at);at+=chunk.length;}
         const image=await decode(bytes);
-        return Response.json({width:image.width,height:image.height,bytes:image.main.length,thumbBytes:image.thumbnail.length,metrics:image.metrics},{headers});
+        return Response.json({width:image.width,height:image.height,bytes:image.main.length,thumbBytes:image.thumbnail.length,
+          thumbMimeType:image.thumbnailMimeType??'image/png',thumbWidth:image.thumbnailWidth??120,thumbHeight:image.thumbnailHeight??180,metrics:image.metrics},{headers});
       }
-      const body=await readBody(request),account=uuid(body.accountId),job=uuid(body.jobId);
-      if(Object.keys(body).some(key=>!['accountId','jobId'].includes(key)))throw new Error();
-      waitUntil(runVisualizationWorker(environment,account,job,decode));
-      return Response.json({accepted:true},{status:202,headers});
+      // C1 has no production dispatch path, regardless of env, job or payload.
+      return Response.json({error:{code:'AI_DISABLED'}},{status:403,headers});
     }catch{return Response.json({error:{code:'INVALID_REQUEST'}},{status:400,headers});}
   };
 }
