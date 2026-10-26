@@ -65,7 +65,7 @@ export function VisualizationPanel({ api, locale }: { api: Api; locale: Locale }
   const run = (action: Promise<unknown>) => { setError(''); void action.catch(issue => setError(privateError(locale, issue))); };
   const money = (value: number | null) => value === null ? t.unknown : `${value.toFixed(2)} PLN`;
   return <View style={s.stack}>
-    {visual.pilot ? <PrivatePilotPanel api={api} locale={locale} /> : visual.trial ? <SyntheticTrialPanel api={api} locale={locale} now={now} /> : <><View style={s.warning}><Text accessibilityRole="header" style={s.title}>{t.visualOff}</Text><Text style={s.body}>{t.visualOffHelp}</Text><Text style={s.note}>{t.noPilot}</Text></View>
+    {visual.pilot ? <PrivatePilotPanel api={api} locale={locale} now={now} /> : visual.trial ? <SyntheticTrialPanel api={api} locale={locale} now={now} /> : <><View style={s.warning}><Text accessibilityRole="header" style={s.title}>{t.visualOff}</Text><Text style={s.body}>{t.visualOffHelp}</Text><Text style={s.note}>{t.noPilot}</Text></View>
       <View style={s.card}><Text style={s.body}>{t.results}: {limits.usedResults}/{limits.results} · {t.attempts}: {limits.usedAttempts}/{limits.attempts} · {t.daily}: {limits.usedDailyAttempts}/{limits.dailyAttempts}</Text>
       <Text style={s.body}>{t.spent}: {money(limits.spentPln)} · {t.reserved}: {money(limits.reservedPln)}</Text><Text style={s.note}>{t.reservationHelp}</Text></View>
     </>}

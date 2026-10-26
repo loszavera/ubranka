@@ -23,7 +23,7 @@ const pl = {
   confirmRemove: 'Usuń rzecz i zdjęcie', deleteAccount: 'Usuń konto i dane', deleteAccountTitle: 'Usunąć całe konto?',
   deleteAccountBody: 'Usuniemy prywatną szafę, zdjęcia, profile i opinie w chmurze. Lokalny zapis demo i oryginały zdjęć pozostaną. Tej operacji nie można cofnąć.',
   deleteAccountConfirm: 'Potwierdzam usunięcie konta', export: 'Pobierz moje dane i zdjęcia', exportHelp: 'Archiwum ZIP zawiera Twoje dane i kopie zdjęć. Zachowaj je w bezpiecznym miejscu.',
-  privacy: 'Twoje zdjęcia i prywatność', privacySummary: 'Zdjęcia są prywatne w Supabase we Frankfurcie i pozostają do Twojego usunięcia. W tej wersji nie przekazujemy ich do AI ani drugiej osobie.',
+  privacy: 'Twoje zdjęcia i prywatność', privacySummary: 'Zdjęcia są prywatne w Supabase we Frankfurcie i pozostają do Twojego usunięcia. Zapis w szafie nie jest zgodą na AI. Wizualizacja wymaga osobnego potwierdzenia dokładnych zdjęć.',
   privacyDetails: 'Kopia główna: do 1 MB i 1600 px; miniatura: do 100 kB. Limit miejsca: 250 MB na konto. Usunięcie blokuje nowe odczyty przez aplikację; cel usunięcia plików to 24 h przy działającej usłudze. Wcześniej pobranych kopii nie można odwołać.',
   backup: 'Darmowy magazyn nie zapewnia automatycznej kopii bezpieczeństwa zdjęć i może zostać wstrzymany po nieaktywności. Zachowaj oryginały i korzystaj z eksportu.',
   consent: 'Rozumiem zasady przechowywania zdjęć',
@@ -35,6 +35,7 @@ const pl = {
   localUnavailable: 'Nie udało się odczytać danych demo. Wróć do demo i rozwiąż problem odczytu przed importem.',
   reasonSetting: 'Pytaj o powód odrzucenia', retry: 'Spróbuj ponownie', photoFailure: 'Nie udało się wczytać zdjęcia.',
   errors: {
+    canonical_input_invalid: 'Nie udało się przygotować lub potwierdzić dokładnych kopii zdjęć. AI nie zostało uruchomione. Zamknij widok i sprawdź wejścia ponownie.',
     attempt_storage_unavailable: 'Nie udało się bezpiecznie zapisać lub odczytać identyfikatora próby na tym urządzeniu. Wysyłanie wstrzymano; nie czyść danych w celu ponowienia.',
     ai_consent_required: 'Potwierdź zgodę na pojedyncze wysłanie dokładnie pokazanych zdjęć.',
     case_used: 'Te wejścia mają już zlecenie. Sprawdź istniejący stan; nie wysyłaj ich ponownie.',
@@ -85,7 +86,7 @@ const en: typeof pl = {
   confirmRemove: 'Delete item and photo', deleteAccount: 'Delete account and data', deleteAccountTitle: 'Delete your entire account?',
   deleteAccountBody: 'Your private wardrobe, photos, profiles and cloud feedback will be deleted. The local demo and original photos will remain. This cannot be undone.',
   deleteAccountConfirm: 'Confirm account deletion', export: 'Download my data and photos', exportHelp: 'The ZIP archive contains your data and photo copies. Keep it somewhere safe.',
-  privacy: 'Your photos and privacy', privacySummary: 'Photos are private in Supabase in Frankfurt and stay until you delete them. This version does not send them to AI or another person.',
+  privacy: 'Your photos and privacy', privacySummary: 'Photos are private in Supabase in Frankfurt and stay until you delete them. Saving to your wardrobe is not AI consent. Visualisation requires separate confirmation of the exact photos.',
   privacyDetails: 'Main copy: up to 1 MB and 1600 px; thumbnail: up to 100 kB. Storage limit: 250 MB per account. Deletion blocks new app reads; the target for removing files is 24 hours while the service is running. Downloaded copies cannot be recalled.',
   backup: 'Free storage has no automatic photo backup and may pause after inactivity. Keep your originals and use export.',
   consent: 'I understand how my photos are stored',
@@ -97,6 +98,7 @@ const en: typeof pl = {
   localUnavailable: 'The demo data could not be read. Return to the demo and resolve the read issue before importing.',
   reasonSetting: 'Ask why I rejected a suggestion', retry: 'Try again', photoFailure: 'The photo could not be loaded.',
   errors: {
+    canonical_input_invalid: 'The exact photo copies could not be prepared or verified. AI did not start. Close this view and check the inputs again.',
     attempt_storage_unavailable: 'The attempt identifier could not be safely saved or read on this device. Sending is stopped; do not clear data to retry.',
     ai_consent_required: 'Confirm consent for this single submission of the exact photos shown.',
     case_used: 'These inputs already have a request. Check its existing status; do not resubmit them.',
@@ -128,6 +130,6 @@ export function privateCopy(locale: Locale) { return locale === 'en' ? en : pl; 
 export function privateError(locale: Locale, error: unknown) {
   const errors = privateCopy(locale).errors;
   const code = (typeof error === 'string' ? error : error && typeof error === 'object' && 'code' in error ? String(error.code) : 'generic').toLowerCase();
-  const aliases: Record<string, keyof typeof errors> = { forbidden: 'not_invited', signed_out: 'unauthenticated', session: 'unauthenticated', item_limit: 'limit_exceeded', storage_limit: 'limit_exceeded', photo_too_large: 'too_large', development_build_required: 'native_development_build_required', invalid_body: 'invalid_body_fit', invalid_replacement: 'invalid_outfit', stale_outfit: 'invalid_outfit', styling_limit: 'limit_exceeded' };
+  const aliases: Record<string, keyof typeof errors> = { forbidden: 'not_invited', signed_out: 'unauthenticated', session: 'unauthenticated', item_limit: 'limit_exceeded', storage_limit: 'limit_exceeded', photo_too_large: 'too_large', development_build_required: 'native_development_build_required', invalid_body: 'invalid_body_fit', invalid_replacement: 'invalid_outfit', stale_outfit: 'invalid_outfit', styling_limit: 'limit_exceeded', invalid_photo: 'canonical_input_invalid', photo_dimensions: 'canonical_input_invalid', photo_metadata: 'canonical_input_invalid', manifest_mismatch: 'canonical_input_invalid' };
   return errors[aliases[code] ?? code as keyof typeof errors] ?? errors.generic;
 }

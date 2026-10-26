@@ -25,7 +25,7 @@ type Tab = 'wardrobe' | 'profiles' | 'fit' | 'outfits' | 'visuals' | 'account';
 function AccountContent({ api, locale, onDelete }: { api: PrivateApi; locale: Locale; onDelete: () => void }) {
   const t = privateCopy(locale);
   return <View style={{ gap: 20 }}>
-    <View style={s.card}><Text style={s.cardTitle}>{t.privacy}</Text><Text style={s.body}>{api.snapshot?.visualization?.trial ? p33bCopy(locale).accountPrivacy : t.privacySummary}</Text>
+    <View style={s.card}><Text style={s.cardTitle}>{t.privacy}</Text><Text style={s.body}>{api.snapshot?.visualization?.pilot ? p33cCopy(locale).accountPrivacy : api.snapshot?.visualization?.trial ? p33bCopy(locale).accountPrivacy : t.privacySummary}</Text>
       {api.snapshot?.visualization?.trial ? <Text style={s.body}>{p33bCopy(locale).resultStorage}</Text> : null}
       <Text style={s.body}>{t.privacyDetails}</Text><Text style={s.note}>{t.backup}</Text></View>
     <View style={s.card}><Text style={s.cardTitle}>{t.export}</Text><Text style={s.body}>{t.exportHelp}</Text>
@@ -129,7 +129,7 @@ function PrivateWardrobeView({ demoState, demoAvailable, onClose, api }: Private
                 <Button label={`${t.remove}: ${item.name}`} compact kind="quiet" disabled={api.busy} onPress={() => { api.clearError(); setNotice(''); setDeleting(item); }} />
               </View>
             </View>)}</View>
-            <Text style={s.note}>{t.limit}</Text><Text style={s.note}>{api.snapshot.visualization?.trial ? p33bCopy(locale).caseOnly : t.future}</Text>
+            <Text style={s.note}>{t.limit}</Text><Text style={s.note}>{api.snapshot.visualization?.mode === 'private_pilot' ? p33cCopy(locale).activeHelp : api.snapshot.visualization?.trial ? p33bCopy(locale).caseOnly : t.future}</Text>
           </> : tab === 'profiles' ? <>
             {settings.profiles.length === 0 ? <Text style={s.body}>{t.noProfiles}</Text> : null}
             {settings.profiles.map(profile => <View key={profile.id} style={s.card}>

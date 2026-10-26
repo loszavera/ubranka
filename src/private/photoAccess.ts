@@ -1,5 +1,7 @@
 import { Platform } from 'react-native';
-import { bytesToBase64, PrivateError } from './model';
+import { digest, CryptoDigestAlgorithm } from 'expo-crypto';
+import { bytesToBase64, PrivateError, type CanonicalInput, type VisualizationIntent } from './model';
+import { verifyCanonicalInput } from './canonicalInput';
 import type { PrivateServices } from './supabase';
 import { PhotoQueue } from './photoQueue';
 
@@ -18,7 +20,7 @@ export class PrivatePhotoAccess {
     this.urls.clear();
   };
   async download(path: string, options?: PhotoReadOptions): Promise<Uint8Array> { return (await this.read(path, options)).bytes; }
-  private async read(path: string, options: PhotoReadOptions = {}): Promise<{ bytes: Uint8Array; mimeType: string }> {
+  private async read(path: string, options: PhotoReadOptions = {}, canonical?: { intentId: string; photoId: string; descriptor: CanonicalInput }): Promise<{ bytes: Uint8Array; mimeType: string }> {
     const generation = this.generation;
     const controller = new AbortController(); this.requests.add(controller);
     const abort = () => controller.abort();
@@ -35,7 +37,7 @@ export class PrivatePhotoAccess {
       const response = await fetch(`${this.services.config.url}/functions/v1/wardrobe`, {
         method: 'POST',
         headers: { apikey: this.services.config.publishableKey, Authorization: `Bearer ${data.session.access_token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'downloadPhoto', path }),
+        body: JSON.stringify(canonical ? { action: 'downloadCanonicalInput', intentId: canonical.intentId, photoId: canonical.photoId } : { action: 'downloadPhoto', path }),
         cache: 'no-store', signal: controller.signal,
       });
       if (!response.ok) throw new PrivateError(response.status === 401 ? 'SIGNED_OUT' : 'PHOTO_UNAVAILABLE');
@@ -47,8 +49,26 @@ export class PrivatePhotoAccess {
       const bytes = new Uint8Array(await response.arrayBuffer());
       if (generation !== this.generation || controller.signal.aborted) throw new PrivateError('SESSION_CHANGED');
       if (!bytes.length || bytes.length > maxBytes) throw new PrivateError('PHOTO_TOO_LARGE');
+      if (canonical) {
+        try {
+          await verifyCanonicalInput(bytes, canonical.descriptor, async data => Array.from(new Uint8Array(await digest(CryptoDigestAlgorithm.SHA256, new Uint8Array(data)))).map(value => value.toString(16).padStart(2, '0')).join(''));
+          if (generation !== this.generation || controller.signal.aborted) throw new PrivateError('SESSION_CHANGED');
+        } catch (error) { bytes.fill(0); throw error; }
+      }
       return { bytes, mimeType };
     }); } finally { options.signal?.removeEventListener('abort', abort); this.requests.delete(controller); }
+  }
+  async getCanonical(intent: VisualizationIntent, input: VisualizationIntent['inputs'][number], signal?: AbortSignal): Promise<PhotoLease> {
+    if (!input.canonical) throw new PrivateError('CANONICAL_INPUT_INVALID');
+    const generation = this.generation;
+    const { bytes, mimeType } = await this.read(input.path, { signal, mimeType: 'image/jpeg', maxBytes: 1_000_000 }, { intentId: intent.id, photoId: input.photoId, descriptor: input.canonical });
+    try {
+      if (generation !== this.generation) throw new PrivateError('SESSION_CHANGED');
+      if (Platform.OS !== 'web') return { uri: `data:${mimeType};base64,${bytesToBase64(bytes)}`, release: () => {} };
+      const uri = URL.createObjectURL(new Blob([bytes.slice().buffer], { type: mimeType }));
+      this.urls.add(uri);
+      return { uri, release: () => { URL.revokeObjectURL(uri); this.urls.delete(uri); } };
+    } finally { bytes.fill(0); }
   }
   async get(path: string, options?: PhotoReadOptions): Promise<PhotoLease> {
     const generation = this.generation;

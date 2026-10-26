@@ -1,4 +1,6 @@
 import { Buffer } from 'node:buffer';
+import { createHash } from 'node:crypto';
+import { stripJpegMetadata } from '../../src/private/photos.core.ts';
 
 export const ACCOUNT_A = '11111111-1111-4111-8111-111111111111';
 export const ACCOUNT_B = '22222222-2222-4222-8222-222222222222';
@@ -49,6 +51,8 @@ export async function syntheticPhoto(page, mimeType = 'image/jpeg') {
 
 export async function installBackend(page, { existingItem = false, ownedOutfits = false, syntheticTrial = false, privatePilot = false, locale = 'pl', noSession = false } = {}) {
   const image = await syntheticPhoto(page);
+  const canonicalImage = Buffer.from(stripJpegMetadata(image));
+  const canonical = { version: 'p33c-jpeg-v1', sha256: createHash('sha256').update(canonicalImage).digest('hex'), bytes: canonicalImage.length, width: 80, height: 120 };
   const png = syntheticTrial || privatePilot ? await syntheticPhoto(page, 'image/png') : null;
   const state = snapshot(ACCOUNT_A, locale);
   const second = snapshot(ACCOUNT_B, locale);
@@ -58,8 +62,10 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
   const unexpected = [];
   const operations = new Map();
   const intents = new Map();
+  const intentOwners = new Map();
   const control = { state, second, objects, logs, photoRequests, unexpected, failPhoto: 0, holdPhoto: null, holdDownload: null, completedDownloads: 0, pendingDelete: false, failDelete: false, pendingAccountDelete: false, deny: false,
-    loseVisualizationResponse: false, dropVisualizationBeforeReserve: false, holdVisualization: null, autoFinishVisualization: true, activeDownloads: 0, maxDownloads: 0 };
+    loseVisualizationResponse: false, dropVisualizationBeforeReserve: false, holdVisualization: null, autoFinishVisualization: true, activeDownloads: 0, maxDownloads: 0,
+    failCanonical: false, corruptCanonical: false, canonicalImage, intents };
   if (existingItem) {
     const mainPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/main.jpg`; const thumbPath = `${ACCOUNT_A}/${ITEM_ID}/${PHOTO_ID}/thumb.jpg`;
     objects.set(mainPath, image); objects.set(thumbPath, image);
@@ -91,7 +97,8 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
     objects.set(mainPath, image); objects.set(thumbPath, image);
     state.bodyFit.photo = { id: PHOTO_ID, mainPath, thumbPath, mimeType: 'image/jpeg', bytes: image.length, thumbBytes: image.length };
     state.visualization.mode = privatePilot === 'off' ? 'off' : 'private_pilot';
-    state.visualization.consent = { accepted: false, revision: 0, version: 'p33c-ai-v1.1' };
+    state.visualization.consent = { accepted: false, revision: 0, version: 'p33c-ai-v1.2' };
+    state.visualization.monthlyBudget = { budgetPln: 25, spentPln: 1.49, reservedPln: 0, availablePln: 23.51, resetsAt: new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 1)).toISOString() };
     state.visualization.pilot = { id: 'p33c-v1', status: privatePilot === 'off' ? 'prepared' : 'active', eligible: true, startsAt: new Date().toISOString(), endsAt: privatePilot === 'off' ? null : new Date(Date.now() + 86_400_000).toISOString(),
       maxSends: 60, accountMaxSends: 30, dailyMaxSends: 5, sentCount: 0, accountSentCount: 0, dailySentCount: 0, budgetPln: 25, spentPln: 0, reservedPln: 0, availablePln: 23.51, blocked: false };
   }
@@ -158,6 +165,24 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
     let item = current.items.find(value => value.id === body.itemId);
     switch (body.action) {
       case 'bootstrap': return json({ data: current });
+      case 'getVisualizationIntent': {
+        const intent = intents.get(body.intentId);
+        return intent && intentOwners.get(intent.id) === subject ? json({ data: intent }) : fail('NOT_FOUND');
+      }
+      case 'downloadCanonicalInput': {
+        photoRequests.push({ url: request.url(), method: request.method(), contentType: request.headers()['content-type'], apikey: request.headers().apikey, accountId: subject, body });
+        const intent = intents.get(body.intentId);
+        if (control.failCanonical || !intent || intentOwners.get(intent.id) !== subject || !intent.inputs.some(input => input.photoId === body.photoId)
+          || intent.bodyRevision !== current.bodyFit.revision || intent.stylingRevision !== current.styling.revision || Date.parse(intent.expiresAt) <= Date.now()) return fail('CANONICAL_INPUT_INVALID');
+        control.activeDownloads++; control.maxDownloads = Math.max(control.maxDownloads, control.activeDownloads);
+        try {
+          if (control.holdDownload) await control.holdDownload;
+          const bytes = Buffer.from(canonicalImage); if (control.corruptCanonical) bytes[bytes.length - 3] ^= 1;
+          await route.fulfill({ status: 200, headers: { ...headers, 'Cache-Control': 'private, no-store, max-age=0', 'CDN-Cache-Control': 'no-store' }, contentType: 'image/jpeg', body: bytes });
+          control.completedDownloads++;
+        } finally { control.activeDownloads--; }
+        return;
+      }
       case 'downloadPhoto': {
         photoRequests.push({ url: request.url(), method: request.method(), contentType: request.headers()['content-type'], apikey: request.headers().apikey, accountId: subject, body });
         const photo = [...current.items.filter(value => value.status === 'active').map(value => value.photo), current.bodyFit.photo,
@@ -212,14 +237,15 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
         if (photos.some(photo => !photo)) return fail('NOT_FOUND');
         const id = `77777777-7777-4777-8777-${String(intents.size + 1).padStart(12, '0')}`;
         const intent = { id, trialId: body.trialId, outfitId: body.outfitId, fingerprint: `${body.outfitId}:${current.bodyFit.revision}`, bodyRevision: current.bodyFit.revision, stylingRevision: current.styling.revision, consentRevision: current.visualization.consent.revision, expiresAt: new Date(Date.now() + 600_000).toISOString(), reservePln: current.visualization.pilot.sentCount ? 1 : 23.51, jobId: null,
-          inputs: photos.map((photo, index) => ({ photoId: photo.id, path: photo.mainPath, thumbPath: photo.thumbPath, bytes: photo.bytes, kind: index ? 'item' : 'body', itemId: index ? outfit.itemIds[index - 1] : null })) };
+          inputs: photos.map((photo, index) => ({ photoId: photo.id, path: photo.mainPath, thumbPath: photo.thumbPath, bytes: photo.bytes, kind: index ? 'item' : 'body', itemId: index ? outfit.itemIds[index - 1] : null, canonical: { ...canonical } })) };
+        intent.manifestHash = createHash('sha256').update(JSON.stringify(intent.inputs)).digest('hex');
         const used = [...intents.values()].find(value => value.fingerprint === intent.fingerprint && value.jobId); if (used) intent.jobId = used.jobId;
-        intents.set(id, intent); return json({ data: intent });
+        intents.set(id, intent); intentOwners.set(id, subject); return json({ data: intent });
       }
       case 'setAiConsent': {
         if (body.accepted !== false) return fail('AI_DISABLED', 403);
         if (body.expectedConsentRevision !== current.visualization.consent.revision) return fail('CONFLICT');
-        current.visualization.consent = { accepted: false, version: 'p33c-ai-v1.1', revision: current.visualization.consent.revision + 1 };
+        current.visualization.consent = { accepted: false, version: 'p33c-ai-v1.2', revision: current.visualization.consent.revision + 1 };
         return json({ data: current.visualization.consent });
       }
       case 'requestVisualization': {
@@ -228,9 +254,10 @@ export async function installBackend(page, { existingItem = false, ownedOutfits 
           const pilot = current.visualization.pilot; const intent = intents.get(body.intentId);
           if (current.visualization.mode !== 'private_pilot' || !pilot || pilot.blocked) return fail('AI_DISABLED', 403);
           if (!intent || intent.jobId || body.expectedConsentRevision !== current.visualization.consent.revision) return fail('CONFLICT');
-          if (body.accepted !== true || body.consentVersion !== 'p33c-ai-v1.1') return fail('AI_CONSENT_REQUIRED');
+          if (body.accepted !== true || body.consentVersion !== 'p33c-ai-v1.2') return fail('AI_CONSENT_REQUIRED');
+          if (body.expectedManifestHash !== intent.manifestHash) return fail('CANONICAL_INPUT_INVALID');
           intent.jobId = body.operationId; pilot.sentCount++; pilot.accountSentCount++; pilot.dailySentCount++;
-          current.visualization.consent = { accepted: true, version: 'p33c-ai-v1.1', revision: current.visualization.consent.revision + 1 };
+          current.visualization.consent = { accepted: true, version: 'p33c-ai-v1.2', revision: current.visualization.consent.revision + 1 };
           const job = { id: body.operationId, revision: 1, outfitId: intent.outfitId, trialId: pilot.id, intentId: intent.id, status: 'sent', createdAt: new Date().toISOString(), completedAt: null, expiresAt: new Date(Date.now() + 30 * 86_400_000).toISOString(), errorCode: null, reservedPln: intent.reservePln, spentPln: null, result: null, review: null };
           current.visualization.jobs.push(job); pilot.reservedPln = intent.reservePln;
           if (control.autoFinishVisualization) { control.seedPrivateResult(job.id); pilot.reservedPln = 0; pilot.spentPln += 0.25; pilot.availablePln -= 0.25; }

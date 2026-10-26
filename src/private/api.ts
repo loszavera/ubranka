@@ -40,8 +40,9 @@ export class WardrobeApi {
   prepareVisualization(trialId: string, outfitId: string, expectedBodyRevision: number, expectedStylingRevision: number, signal?: AbortSignal) {
     return this.call<VisualizationIntent>('prepareVisualization', { trialId, outfitId, expectedBodyRevision, expectedStylingRevision }, signal);
   }
+  getVisualizationIntent(intentId: string, signal?: AbortSignal) { return this.call<VisualizationIntent>('getVisualizationIntent', { intentId }, signal); }
   requestPrivateVisualization(operationId: string, intent: VisualizationIntent, signal?: AbortSignal) {
-    return this.call<VisualizationJob>('requestVisualization', { operationId, trialId: intent.trialId, intentId: intent.id, accepted: true, consentVersion: PRIVATE_AI_CONSENT, expectedConsentRevision: intent.consentRevision }, signal);
+    return this.call<VisualizationJob>('requestVisualization', { operationId, trialId: intent.trialId, intentId: intent.id, accepted: true, consentVersion: PRIVATE_AI_CONSENT, expectedConsentRevision: intent.consentRevision, expectedManifestHash: intent.manifestHash }, signal);
   }
   revokeAiConsent(expectedConsentRevision: number, signal?: AbortSignal) {
     return this.call<AiConsent>('setAiConsent', { accepted: false, consentVersion: PRIVATE_AI_CONSENT, expectedConsentRevision }, signal);

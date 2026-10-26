@@ -62,10 +62,11 @@ export interface PrivatePilot {
 }
 export interface VisualizationIntent {
   id: string; trialId: string; outfitId: string; fingerprint: string; bodyRevision: number; stylingRevision: number;
-  consentRevision: number; expiresAt: string; reservePln: number; jobId: string | null;
-  inputs: { photoId: string; path: string; thumbPath: string; bytes: number; kind: 'body' | 'item'; itemId?: string | null }[];
+  consentRevision: number; expiresAt: string; reservePln: number; jobId: string | null; manifestHash?: string;
+  inputs: { photoId: string; path: string; thumbPath: string; bytes: number; kind: 'body' | 'item'; itemId?: string | null; canonical?: CanonicalInput }[];
 }
-export const PRIVATE_AI_CONSENT = 'p33c-ai-v1.1';
+export interface CanonicalInput { version: string; sha256: string; bytes: number; width: number; height: number }
+export const PRIVATE_AI_CONSENT = 'p33c-ai-v1.2';
 export interface SyntheticCase {
   id: string; label: string; personPath: string; itemPaths: string[]; reservePln: number; model: string; promptVersion: string;
   jobId: string | null; sent: boolean;
@@ -82,6 +83,7 @@ export interface VisualizationJob {
 }
 export interface VisualizationState {
   mode: 'off' | 'synthetic_trial' | 'private_pilot'; jobs: VisualizationJob[]; consent: AiConsent; trial?: SyntheticTrial | null; pilot?: PrivatePilot | null;
+  monthlyBudget?: { budgetPln: number; spentPln: number; reservedPln: number; availablePln: number; resetsAt: string };
   limits: { results: number; attempts: number; dailyAttempts: number; usedResults: number; usedAttempts: number; usedDailyAttempts: number;
     reservedPln: number; spentPln: number; budgetPln: number; trialEndsAt: string | null; monthResetsAt: string; dayResetsAt: string };
 }

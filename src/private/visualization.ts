@@ -12,7 +12,7 @@ export function isIntentCurrent(snapshot: PrivateSnapshot | null, intent: Visual
   if (body.length !== 1 || !photo || body[0].photoId !== photo.id || body[0].path !== photo.mainPath || body[0].thumbPath !== photo.thumbPath) return false;
   return outfit.itemIds.every(id => {
     const item = snapshot.items.find(value => value.id === id && value.status === 'active');
-    return item?.photo && intent.inputs.filter(value => value.kind === 'item' && value.photoId === item.photo!.id
+    return item?.photo && item.revision === outfit.itemRevisions[id] && intent.inputs.filter(value => value.kind === 'item' && value.photoId === item.photo!.id
       && value.path === item.photo!.mainPath && value.thumbPath === item.photo!.thumbPath && (!value.itemId || value.itemId === id)).length === 1;
   });
 }

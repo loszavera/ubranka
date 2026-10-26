@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform, Text, View } from 'react-native';
 import type { Locale } from '../domain/model';
 import type { VisualizationIntent } from '../private/model';
@@ -6,33 +6,41 @@ import { asPrivateError } from '../private/api';
 import type { PrivateOutfit } from '../private/outfits';
 import { rehydratePrivateOutfit } from '../private/outfits';
 import { isIntentCurrent } from '../private/visualization';
+import { hasCanonicalInputs } from '../private/canonicalInput';
 import { newPrivateId, type usePrivateWardrobe } from '../private/usePrivateWardrobe';
 import { Button, Chip, Dialog } from '../ui/Controls';
 import { privateError } from './copy';
 import { p33Copy } from './p33copy';
 import { p33cCopy } from './p33ccopy';
 import { p33Styles as s } from './p33styles';
-import { PrivatePhoto } from './PrivatePhoto';
+import { CanonicalInputPhoto } from './CanonicalInputPhoto';
 type Api = ReturnType<typeof usePrivateWardrobe>;
 
 export function PreviewExample({ locale }: { locale: Locale }) {
   return Platform.OS === 'web' ? <Button label={p33cCopy(locale).example} kind="quiet" onPress={() => window.open('/p33c1/', '_blank', 'noopener,noreferrer')} /> : null;
 }
 
-export function PrivatePilotPanel({ api, locale }: { api: Api; locale: Locale }) {
+export function PrivatePilotPanel({ api, locale, now }: { api: Api; locale: Locale; now: number }) {
   const t = p33cCopy(locale); const common = p33Copy(locale); const visual = api.snapshot?.visualization; const pilot = visual?.pilot;
   const [revoke, setRevoke] = useState<number | null>(null); const [error, setError] = useState(''); const [notice, setNotice] = useState('');
   if (!visual || !pilot) return null;
+  const ended = pilot.status === 'closed' || Boolean(pilot.endsAt && Date.parse(pilot.endsAt) <= now);
   const check = async () => { try { if (api.visualizationAttempt) await api.getVisualization(api.visualizationAttempt.id); } catch (issue) { setError(privateError(locale, issue)); } finally { await api.refresh(); } };
   return <View style={s.stack}>
     <View style={s.warning}><Text style={s.title} accessibilityRole="header">{t.title}</Text>
       {visual.mode !== 'private_pilot' ? <><Text style={s.title}>{common.visualOff}</Text><Text style={s.body}>{t.off}</Text></> : null}
-      {pilot.status !== 'active' ? <Text style={s.body}>{pilot.status === 'closed' ? t.closed : t.prepared}</Text> : null}
+      {ended || pilot.status !== 'active' ? <Text style={s.body}>{ended ? t.closed : t.prepared}</Text> : null}
       <Text style={s.body}>{t.limits}: {pilot.sentCount}/{pilot.maxSends} · {t.account}: {pilot.accountSentCount}/{pilot.accountMaxSends}</Text>
       <Text style={s.body}>{t.daily}: {pilot.dailySentCount}/{pilot.dailyMaxSends}</Text>
       <Text style={s.body}>{common.spent}: {pilot.spentPln.toFixed(2)} PLN · {common.reserved}: {pilot.reservedPln.toFixed(2)} PLN</Text>
       <Text style={s.body}>{t.available}: {pilot.availablePln.toFixed(2)} PLN / {pilot.budgetPln.toFixed(2)} PLN</Text>
+      {visual.monthlyBudget ? <View style={s.stack}><Text style={s.title}>{t.monthly}</Text>
+        <Text style={s.body}>{common.spent}: {visual.monthlyBudget.spentPln.toFixed(2)} PLN · {common.reserved}: {visual.monthlyBudget.reservedPln.toFixed(2)} PLN</Text>
+        <Text style={s.body}>{t.available}: {visual.monthlyBudget.availablePln.toFixed(2)} PLN / {visual.monthlyBudget.budgetPln.toFixed(2)} PLN</Text>
+        <Text style={s.note}>{t.monthlyHelp}</Text></View> : null}
       <Text style={s.body}>{t.deadline}: {pilot.endsAt ? new Date(pilot.endsAt).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-GB') : t.prepared}</Text>
+      {pilot.startsAt ? <Text style={s.note}>{t.started}: {new Date(pilot.startsAt).toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-GB')}</Text> : null}
+      {pilot.blocked && pilot.status === 'active' && !ended ? <Text style={s.error} accessibilityRole="alert">{t.stopped}</Text> : null}
       <Text style={s.note}>{common.reservationHelp}</Text>
       <PreviewExample locale={locale} />
     </View>
@@ -79,18 +87,20 @@ export function PrivateVisualizationPreparation({ outfit, api, locale }: { outfi
 
 function PrivateConfirmation({ intent, api, locale }: { intent: VisualizationIntent; api: Api; locale: Locale }) {
   const t = p33cCopy(locale); const common = p33Copy(locale); const [operationId] = useState(newPrivateId);
-  const [accepted, setAccepted] = useState(false); const [submitted, setSubmitted] = useState(false); const sent = useRef(false);
+  const [accepted, setAccepted] = useState(false); const [policyAccepted, setPolicyAccepted] = useState(false); const [policyOpen, setPolicyOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false); const sent = useRef(false);
   const [ready, setReady] = useState<string[]>([]); const [error, setError] = useState('');
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const timer = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(timer); }, []);
-  const visual = api.snapshot?.visualization; const pilot = visual?.pilot; const current = isIntentCurrent(api.snapshot, intent, now);
+  const visual = api.snapshot?.visualization; const pilot = visual?.pilot; const current = isIntentCurrent(api.snapshot, intent, now) && hasCanonicalInputs(intent);
+  const markReady = useCallback((photoId: string, loaded: boolean) => setReady(previous => loaded ? previous.includes(photoId) ? previous : [...previous, photoId] : previous.filter(value => value !== photoId)), []);
   const attempt = api.visualizationAttempt;
   const blocked = !current || visual?.mode !== 'private_pilot' || !pilot?.eligible || pilot.status !== 'active' || !pilot.endsAt || Date.parse(pilot.endsAt) <= now
     || pilot.blocked || pilot.reservedPln > 0 || pilot.sentCount >= pilot.maxSends || pilot.accountSentCount >= pilot.accountMaxSends || pilot.dailySentCount >= pilot.dailyMaxSends
     || intent.jobId !== null || intent.reservePln <= 0 || intent.reservePln > pilot.availablePln || attempt?.status === 'unconfirmed'
     || visual.jobs.some(job => ['reserved', 'sent', 'outcome_unknown'].includes(job.status));
   const send = async () => {
-    if (sent.current || blocked || !accepted || ready.length !== intent.inputs.length) return;
+    if (sent.current || blocked || !accepted || !policyAccepted || ready.length !== intent.inputs.length) return;
     sent.current = true; setSubmitted(true); setError('');
     try { await api.requestPrivateVisualization(operationId, intent, accepted); await api.refresh(); }
     catch (issue) { setError(['NETWORK', 'INVALID_RESPONSE', 'SERVICE', 'CANCELLED'].includes(asPrivateError(issue).code) ? '' : privateError(locale, issue)); }
@@ -100,12 +110,16 @@ function PrivateConfirmation({ intent, api, locale }: { intent: VisualizationInt
     {!current ? <Text style={s.error}>{t.changed}</Text> : intent.inputs.map((input, index) => {
       const item = api.snapshot?.items.find(value => value.photo?.id === input.photoId);
       const label = input.kind === 'body' ? common.personInput : item?.name ?? `${common.clothingInputs} ${index}`;
-      return <View key={input.photoId} style={s.stack}><Text style={s.title}>{label}</Text><PrivatePhoto path={input.path} api={api} locale={locale} label={label} mimeType="image/jpeg" maxBytes={1_000_000} onReady={path => setReady(previous => previous.includes(path) ? previous : [...previous, path])} /></View>;
+      return <View key={`${input.photoId}:${input.canonical!.sha256}`} style={s.stack}><Text style={s.title}>{label}</Text><CanonicalInputPhoto intent={intent} input={input} api={api} locale={locale} label={label} onReady={markReady} /></View>;
     })}
+    <Text style={s.note}>{t.copies}</Text>
     <Text style={s.title}>{t.reserve}: {Number.isFinite(intent.reservePln) ? `${intent.reservePln.toFixed(2)} PLN` : common.unknown}</Text>
-    <Text style={s.body}>{t.data}</Text><Text style={s.body}>{t.retention}</Text><Text style={s.note}>{t.once}</Text><Text style={s.note}>{common.visualCaveat}</Text>
+    <Text style={s.body}>{t.data}</Text><Text style={s.body}>{t.retention}</Text><Text style={s.note}>{t.once}</Text><Text style={s.body}>{t.priceBoundary}</Text><Text style={s.note}>{common.visualCaveat}</Text>
+    <Button label={t.policy} kind="quiet" onPress={() => setPolicyOpen(!policyOpen)} />
+    {policyOpen ? <View style={s.warning}><Text style={s.title}>{t.policy}</Text><Text style={s.body}>{t.policyStorage}</Text><Text style={s.body}>{t.policyProvider}</Text><Text style={s.body}>{t.policyDelete}</Text><Text style={s.body}>{t.policyLedger}</Text></View> : null}
+    <Chip label={t.policyConsent} selected={policyAccepted && current} disabled={api.busy || blocked || submitted} onPress={() => setPolicyAccepted(!policyAccepted)} />
     <Chip label={t.consent} selected={accepted && current} disabled={api.busy || blocked || submitted} onPress={() => setAccepted(!accepted)} />
-    <Button label={t.send} disabled={api.busy || blocked || !accepted || submitted || ready.length !== intent.inputs.length} onPress={() => { void send(); }} />
+    <Button label={t.send} disabled={api.busy || blocked || !accepted || !policyAccepted || submitted || ready.length !== intent.inputs.length} onPress={() => { void send(); }} />
     {intent.jobId ? <><Text style={s.body}>{t.used}</Text><Button label={t.check} kind="secondary" disabled={api.busy} onPress={() => { void check(intent.jobId!); }} /></> : null}
     {attempt?.id === operationId ? <><Text style={s.body} accessibilityRole="alert">{attempt.status === 'accepted' ? t.accepted : t.unknown}</Text><Button label={t.check} kind="secondary" disabled={api.busy} onPress={() => { void check(operationId); }} /></> : null}
     {error ? <Text style={s.error} accessibilityRole="alert">{error}</Text> : null}

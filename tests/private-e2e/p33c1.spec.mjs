@@ -4,6 +4,7 @@ import { unzipSync } from 'fflate';
 import { ACCOUNT_A, button, installBackend, openWardrobe } from './fixture.mjs';
 
 const consent = 'Potwierdzam własne zdjęcie dorosłej osoby i zgadzam się na to jedno wysłanie pokazanych zdjęć do OpenAI';
+const policyConsent = 'Akceptuję zasady danych AI V1.2 i opisaną granicę ceny żądania';
 const send = 'Wyślij te zdjęcia do OpenAI i wygeneruj';
 const fixedId = '99999999-9999-4999-8999-999999999999';
 async function prepare(page) {
@@ -34,7 +35,7 @@ test('C1 OFF allows exact owned inputs but never submits, accepts consent or cre
 
 test('mock C flow sends once, uses JPEG thumbnail and explicit PNG full view, exports and removes results only', async ({ page }, info) => {
   const backend = await installBackend(page, { privatePilot: true }); await openWardrobe(page); await prepare(page);
-  await expect(button(page, send)).toBeDisabled(); await button(page, consent).click(); await button(page, send).click();
+  await expect(button(page, send)).toBeDisabled(); await button(page, consent).click(); await expect(button(page, send)).toBeDisabled(); await button(page, policyConsent).click(); await button(page, send).click();
   await expect(page.getByText('Zlecenie przyjęto. Wynik znajdziesz w Historii wizualizacji.', { exact: true })).toBeVisible();
   await history(page); const job = backend.state.visualization.jobs[0]; const result = job.result;
   expect(backend.photoRequests.filter(value => value.body.path === result.mainPath)).toEqual([]);
@@ -57,13 +58,13 @@ test('mock C flow sends once, uses JPEG thumbnail and explicit PNG full view, ex
   expect(backend.state.bodyFit.photo).toEqual(bodyPhoto); expect(backend.state.items).toEqual(clothes);
   expect(backend.state.visualization.pilot.sentCount).toBe(1); expect(backend.state.visualization.pilot.spentPln).toBe(0.25);
   const sends = backend.logs.filter(value => value.action === 'requestVisualization'); expect(sends).toHaveLength(1);
-  expect(sends[0]).toMatchObject({ trialId: 'p33c-v1', accepted: true, consentVersion: 'p33c-ai-v1.1', expectedConsentRevision: 0 });
+  expect(sends[0]).toMatchObject({ trialId: 'p33c-v1', accepted: true, consentVersion: 'p33c-ai-v1.2', expectedConsentRevision: 0, expectedManifestHash: expect.stringMatching(/^[a-f0-9]{64}$/) });
   expect(backend.state.styling.data.feedback).toEqual([]); expect(backend.unexpected).toEqual([]);
 });
 
 test('lost C request before reservation stays read-only after reload and never receives another UUID POST', async ({ page }) => {
   const backend = await installBackend(page, { privatePilot: true }); backend.dropVisualizationBeforeReserve = true;
-  await openWardrobe(page); await prepare(page); await button(page, consent).click(); await button(page, send).click();
+  await openWardrobe(page); await prepare(page); await button(page, consent).click(); await button(page, policyConsent).click(); await button(page, send).click();
   await expect(page.getByText(/Nie potwierdzono przyjęcia zlecenia/)).toBeVisible();
   const first = backend.logs.find(value => value.action === 'requestVisualization');
   const receiptKey = `ubranka:private:ubranka-test.supabase.co:trial-receipts:${ACCOUNT_A}`;

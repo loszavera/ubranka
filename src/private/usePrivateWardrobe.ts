@@ -6,7 +6,8 @@ import Constants from 'expo-constants';
 import { randomUUID } from 'expo-crypto';
 import type { Session } from '@supabase/supabase-js';
 import { asPrivateError, WardrobeApi, type DeleteResult } from './api';
-import { PrivateError } from './model';
+import { PrivateError, type VisualizationIntent } from './model';
+import { isIntentCurrent } from './visualization';
 import { PrivatePhotoAccess, type PhotoReadOptions } from './photoAccess';
 import { getPrivateServices } from './supabase';
 import { PrivateStore } from './store';
@@ -144,6 +145,12 @@ export function usePrivateWardrobe() {
     finally { setExporting(false); }
   }, [photos, store, exporting]);
 
+  const getCanonicalPhoto = useCallback((intent: VisualizationIntent, input: VisualizationIntent['inputs'][number], signal?: AbortSignal) => {
+    const current = store.getSnapshot();
+    if (!photos || !view.identity || !view.snapshot || !current.identity || !isIntentCurrent(current.snapshot, intent)) return Promise.reject(new PrivateError('CONFLICT'));
+    return photos.getCanonical(intent, input, signal);
+  }, [photos, store, view.identity, view.snapshot]);
+
   const downloadVisualization = useCallback(async (jobId: string) => {
     if (!photos || exporting) throw new PrivateError(exporting ? 'BUSY' : 'NOT_CONFIGURED');
     const identity = store.getSnapshot().identity;
@@ -170,6 +177,6 @@ export function usePrivateWardrobe() {
     cancelVisualization: store.cancelVisualization, deleteVisualization: store.deleteVisualization, deleteAiData: store.deleteAiData,
     requestVisualization: store.requestVisualization, getVisualization: store.getVisualization, reviewVisualization: store.reviewVisualization,
     prepareVisualization: store.prepareVisualization, requestPrivateVisualization: store.requestPrivateVisualization, revokeAiConsent: store.revokeAiConsent,
-    deleteAccount, importP2: store.importP2, getPhoto, exportData, downloadVisualization,
+    deleteAccount, importP2: store.importP2, getPhoto, getCanonicalPhoto, exportData, downloadVisualization,
   };
 }

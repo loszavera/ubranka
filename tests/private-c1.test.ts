@@ -19,8 +19,8 @@ function fixture(): { snapshot: PrivateSnapshot; intent: VisualizationIntent } {
     visualization: { mode: 'private_pilot', jobs: [], consent: { accepted: false, version: 'p33c-ai-v1.1', revision: 0 },
       pilot: { id: 'p33c-v1', status: 'active', eligible: true, startsAt: '2026-01-01', endsAt: '2099-01-01', maxSends: 60, accountMaxSends: 30, dailyMaxSends: 5, sentCount: 0, accountSentCount: 0, dailySentCount: 0, budgetPln: 25, spentPln: 0, reservedPln: 0, availablePln: 23.51, blocked: false },
       limits: { results: 30, attempts: 30, dailyAttempts: 5, usedResults: 0, usedAttempts: 0, usedDailyAttempts: 0, reservedPln: 0, spentPln: 0, budgetPln: 25, trialEndsAt: '2099-01-01', monthResetsAt: '2099-01-01', dayResetsAt: '2099-01-01' } } };
-  const intent: VisualizationIntent = { id: nextId, trialId: 'p33c-v1', outfitId: id, fingerprint: 'in-memory-only', bodyRevision: 1, stylingRevision: 1, consentRevision: 0, expiresAt: '2099-01-01', reservePln: 23.51, jobId: null,
-    inputs: [body, dress, shoes].map((value, index) => ({ photoId: value.id, path: value.mainPath, thumbPath: value.thumbPath, bytes: value.bytes, kind: index ? 'item' : 'body', itemId: index ? value.id : null })) };
+  const intent: VisualizationIntent = { id: nextId, trialId: 'p33c-v1', outfitId: id, fingerprint: 'in-memory-only', bodyRevision: 1, stylingRevision: 1, consentRevision: 0, expiresAt: '2099-01-01', reservePln: 23.51, jobId: null, manifestHash: 'a'.repeat(64),
+    inputs: [body, dress, shoes].map((value, index) => ({ photoId: value.id, path: value.mainPath, thumbPath: value.thumbPath, bytes: value.bytes, kind: index ? 'item' : 'body', itemId: index ? value.id : null, canonical: { version: 'p33c-jpeg-v1', sha256: 'b'.repeat(64), bytes: 10, width: 1, height: 1 } })) };
   return { snapshot, intent };
 }
 function service(handler: (action: string, payload: Record<string, unknown>) => Promise<unknown>) {
@@ -43,7 +43,7 @@ test('C validates displayed input versions, explicit consent, limits and receipt
   const store = new PrivateStore(service(async (action, payload) => {
     if (action === 'bootstrap') return snapshot;
     requests++; assert.equal(action, 'requestVisualization');
-    assert.deepEqual(payload, { operationId: id, trialId: 'p33c-v1', intentId: nextId, accepted: true, consentVersion: 'p33c-ai-v1.1', expectedConsentRevision: 0 });
+    assert.deepEqual(payload, { operationId: id, trialId: 'p33c-v1', intentId: nextId, accepted: true, consentVersion: 'p33c-ai-v1.2', expectedConsentRevision: 0, expectedManifestHash: 'a'.repeat(64) });
     assert.deepEqual(JSON.parse(saved.values.get(account.id)!), { version: 2, receipts: [{ id, trialId: 'p33c-v1' }] });
     return job();
   }), () => id, undefined, saved.create());
@@ -52,7 +52,29 @@ test('C validates displayed input versions, explicit consent, limits and receipt
   await assert.rejects(store.requestPrivateVisualization(id, { ...intent, bodyRevision: 0 }, true), /CONFLICT/);
   await assert.rejects(store.requestPrivateVisualization(id, { ...intent, reservePln: 25 }, true), /TRIAL_BLOCKED/);
   await store.requestPrivateVisualization(id, intent, true); assert.equal(requests, 1); assert.equal(saved.values.size, 0);
-  await assert.rejects(store.requestPrivateVisualization(nextId, intent, true), /TRIAL_BLOCKED/);
+  await assert.rejects(store.requestPrivateVisualization(nextId, intent, true), /CASE_USED/);
+});
+
+test('C2 refuses a legacy or incomplete copy manifest before persisting a receipt or contacting the provider path', async () => {
+  const { snapshot, intent } = fixture(); let requests = 0; const saved = journal();
+  const store = new PrivateStore(service(async action => { if (action === 'bootstrap') return snapshot; requests++; return job(); }), () => id, undefined, saved.create());
+  store.setIdentity(account); await store.refresh();
+  await assert.rejects(store.requestPrivateVisualization(id, { ...intent, manifestHash: undefined }, true), /CANONICAL_INPUT_INVALID/);
+  await assert.rejects(store.requestPrivateVisualization(id, { ...intent, inputs: intent.inputs.map(input => ({ ...input, canonical: undefined })) }, true), /CANONICAL_INPUT_INVALID/);
+  assert.equal(requests, 0); assert.equal(saved.values.size, 0);
+});
+
+test('C2 successful response cannot be submitted again before the next authoritative snapshot', async () => {
+  const { snapshot, intent } = fixture(); let requests = 0; const saved = journal();
+  const store = new PrivateStore(service(async action => { if (action === 'bootstrap') return snapshot; requests++; return { ...job(), status: 'succeeded', reservedPln: 0, spentPln: 0.25 }; }), () => id, undefined, saved.create());
+  store.setIdentity(account); await store.refresh(); await store.requestPrivateVisualization(id, intent, true);
+  await assert.rejects(store.requestPrivateVisualization(nextId, intent, true), /CASE_USED/);
+  assert.equal(requests, 1);
+});
+
+test('a garment revision invalidates C consent even when the photo identifier stays unchanged', () => {
+  const { snapshot, intent } = fixture(); assert.equal(isIntentCurrent(snapshot, intent), true);
+  snapshot.items[0].revision++; assert.equal(isIntentCurrent(snapshot, intent), false);
 });
 
 test('lost C response before visible reservation survives reload/logout and cannot send a new UUID', async () => {

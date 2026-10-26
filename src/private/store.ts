@@ -2,6 +2,7 @@ import type { AppState } from '../domain/model.ts';
 import { WardrobeApi, asPrivateError, type DeleteResult } from './api.ts';
 import type { AttemptReceipt, AttemptReceiptJournal } from './attemptReceipt.ts';
 import { isIntentCurrent } from './visualization.ts';
+import { hasCanonicalInputs } from './canonicalInput.ts';
 import { BODY_STORAGE_CONSENT, bytesToBase64, importReceiptId, mergeP2Import, normalizeBodyFitData, normalizeItemFields, PrivateError, type VisualizationIntent, type VisualizationJob, type VisualizationReview, type BodyFitData, type StylingData, type PrivateIdentity, type PrivateItem, type PrivateSettings, type PrivateSnapshot, type SaveItemInput } from './model.ts';
 
 export interface UploadPhoto {
@@ -25,6 +26,7 @@ const ACCESS_REVOKED = new Set(['UNAUTHENTICATED', 'ACCOUNT_UNAVAILABLE', 'NOT_I
 export class PrivateStore {
   private view: PrivateView = { identity: null, snapshot: null, loading: false, busy: false, error: null, deletion: null, pendingSave: null, visualizationAttempt: null };
   private attemptedCases = new Set<string>();
+  private attemptedPrivateInputs = new Set<string>();
   private generation = 0;
   private listeners = new Set<() => void>();
   private controllers = new Set<AbortController>();
@@ -52,6 +54,7 @@ export class PrivateStore {
     this.photoOperations = new WeakMap();
     this.stagedSaves.clear();
     this.attemptedCases.clear();
+    this.attemptedPrivateInputs.clear();
     this.patch({ identity, snapshot: null, loading: false, busy: false, error: null, deletion: null, pendingSave: null, visualizationAttempt: null });
   }
   clearError = () => this.patch({ error: null });
@@ -274,6 +277,7 @@ export class PrivateStore {
     const intent = await this.api.prepareVisualization(snapshot.visualization.pilot.id, outfitId, snapshot.bodyFit.revision, snapshot.styling.revision, signal);
     this.assertCurrent(generation);
     if (!isIntentCurrent(this.view.snapshot, intent)) throw new PrivateError('CONFLICT');
+    if (!hasCanonicalInputs(intent)) throw new PrivateError('CANONICAL_INPUT_INVALID');
     return intent;
   });
 
@@ -283,12 +287,15 @@ export class PrivateStore {
     if (!/^[a-f\d]{8}-[a-f\d]{4}-4[a-f\d]{3}-[89ab][a-f\d]{3}-[a-f\d]{12}$/i.test(operationId)) throw new PrivateError('INVALID_INPUT');
     if (visual?.mode !== 'private_pilot' || !pilot?.eligible || pilot.status !== 'active' || !pilot.endsAt || !(Date.parse(pilot.endsAt) > Date.now())) throw new PrivateError('AI_DISABLED');
     if (!isIntentCurrent(this.view.snapshot, intent)) throw new PrivateError('CONFLICT');
-    if (intent.jobId) throw new PrivateError('CASE_USED');
+    if (!hasCanonicalInputs(intent)) throw new PrivateError('CANONICAL_INPUT_INVALID');
+    const inputKey = `${intent.trialId}:${intent.fingerprint}`;
+    if (intent.jobId || this.attemptedPrivateInputs.has(inputKey)) throw new PrivateError('CASE_USED');
     if (pilot.blocked || pilot.reservedPln > 0 || pilot.sentCount >= pilot.maxSends || pilot.accountSentCount >= pilot.accountMaxSends
       || pilot.dailySentCount >= pilot.dailyMaxSends || this.view.visualizationAttempt?.status === 'unconfirmed'
       || visual.jobs.some(job => ['reserved', 'sent', 'outcome_unknown'].includes(job.status))
       || !Number.isFinite(intent.reservePln) || intent.reservePln <= 0 || intent.reservePln > pilot.availablePln) throw new PrivateError('TRIAL_BLOCKED');
     if (!this.attemptJournal) throw new PrivateError('ATTEMPT_STORAGE_UNAVAILABLE');
+    this.attemptedPrivateInputs.add(inputKey);
     const receipt = { id: operationId, trialId: intent.trialId };
     this.patch({ visualizationAttempt: { ...receipt, status: 'sending' } });
     try {
