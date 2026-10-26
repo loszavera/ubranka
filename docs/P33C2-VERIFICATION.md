@@ -1,6 +1,6 @@
 # P3.3C2 — realizacja i weryfikacja
 
-Aktualizacja: 2026-10-26. **W trakcie implementacji; C2 nieaktywne.**
+Aktualizacja: 2026-10-26. **Integracja gotowa, kontrola publikacji w toku; C2 nieaktywne.**
 
 ## Upoważnienie i granice
 
@@ -19,14 +19,51 @@ Operator nie otwiera i nie przesyła prywatnych zdjęć uczestników do AI.
 ## Bieżący stan
 
 - Punkt startowy: czysty dev `19159d7`; C1 odebrane.
-- Integracja klienta, backendu i workera: w toku, w oddzielnych worktree.
+- Integracja klienta, backendu i workera zakończona. Migracja C2 i cztery Edge
+  Functions wdrożone przy OFF; osobny helper przygotowuje kopie JPEG bez AI.
 - Finansowanie: 2026-10-26 wyłączono auto-reload całej organizacji i potwierdzono
   widoczny stan OFF. Kredyty były dostępne; bez wpłat i zmian abonamentów.
-- Testy C2, publikacja, konfiguracja klucza i aktywacja: oczekują.
+- Testy lokalne i API opisano poniżej; końcowy hosted UI, klucz i aktywacja oczekują.
 - Płatne wywołania operatora w C2: 0. Zgoda B pozostaje wyczerpana.
 - Potwierdzone urządzenia Aleksego: Chrome na PC i Androidzie. Urządzenie/
   przeglądarka Kasi: iPhone/Safari (odpowiedź użytkownika 2026-10-26). To zakres
   użycia pilotażu, nie wykonany przez agenta test na fizycznym urządzeniu.
+- Kasia potwierdziła osobiste logowanie Google i widok prywatnej szafy.
+  Kontrola Auth/zaproszeń potwierdziła oba aktywne konta; bez odczytu ich zdjęć.
+
+## Dowody przed aktywacją
+
+- `check`, `check:backend`: PASS; klient 88/88, backend 123/123, kodeki 12/12,
+  E2E demo 15/15, prywatne E2E 39/39. Razem 277 testów, bez pominięć.
+  Kontrolowany transport modelu nie jest dowodem płatnej generacji C2.
+- `check:dependencies`, Expo Doctor 21/21 i `build:all`: PASS. Trzy eksporty
+  to kontrola kompilacji, nie test fizycznego iOS/Android. Finalne pakiety mają
+  właściwy projekt Supabase i nie zawierają konfiguracji syntetycznej.
+- Rzeczywiste API: 29/29 kontroli na dwóch świeżych kontach syntetycznych.
+  Przygotowanie i dokładny hash ośmiu kopii, brak cache, cudzy dostęp odrzucony,
+  generowanie OFF, bezpośredni dostęp do helpera/workera odrzucony, B zamknięte.
+- Hosted SQL: dziewięć kontroli aktywacji, zgód, hashy, jednorazowej rezerwacji,
+  zajętości, 60/30/5 i budżetów w jednej transakcji zakończonej `ROLLBACK`.
+  Stan końcowy: runtime OFF, C prepared, zero uczestników/prób/rezerw;
+  dotychczasowe B i miesiąc zachowują 149 groszy i identyczny skrót rozliczeń.
+- Osobna syntetyczna rezerwacja bez wysłania została zwolniona i usunięta.
+  Nowy test nakładania transakcji nie dostarczył dowodu: kanał MCP zwrócił
+  wygasły requestState. Dotychczasowy test współbieżności C1 dotyczy tego samego,
+  niezmienionego `c_reserve_core`; nie oznaczamy nowego overlap jako PASS.
+- Helper kopiowania: cztery rzeczywiste żądania na sztucznym obrazie 1066×1600
+  dały identyczny JPEG 1023×1536 / 904427 B. Round-trip 1194–2150 ms, bez AI.
+  Pojedyncze zdjęcie ma osobną invokację, aby nie sumować CPU czterech dekodowań.
+  Lokalny pomiar do 1,141 s CPU / 214,5 MB RSS nie jest pomiarem zasobów chmury.
+- Niezależny przegląd klienta/backendu/workera: bez blokujących ustaleń.
+  Doradca Supabase: 9 informacji o celowym RLS bez polityk w prywatnym schemacie,
+  3 wcześniejsze ostrzeżenia o kontrolowanych funkcjach SECURITY DEFINER i
+  ostrzeżenie ochrony haseł (aplikacja korzysta z Google OAuth).
+  [RLS](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy),
+  [SECURITY DEFINER](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable),
+  [ochrona haseł](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection).
+
+Prywatne dowody operacyjne pozostają w ignorowanych `.local/` i `artifacts/`.
+Nie publikujemy identyfikatorów uczestników, sesji ani ich zdjęć.
 
 ## Zakończenie
 

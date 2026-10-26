@@ -172,6 +172,8 @@ zdjęcia i wysłania w aplikacji. Operator nie odczytuje/wysyła ich zdjęć w t
 nie wykonuje płatnej kalibracji. Po pilotażu OFF, unieważnienie klucza,
 usunięcie sekretu i raport zbiorczy; stop przed D. Stan: docs/P33C2-VERIFICATION.md.
 W tej samej turze użytkownik wskazał urządzenie Kasi dla C2: iPhone/Safari.
+Następnie potwierdził osobiste logowanie Google Kasi i widok prywatnej szafy;
+oba zaproszone konta są aktywne. Nie pytaj ponownie o pierwsze logowanie.
 Nie jest to osobny dowód przetestowania C2 ani natywnego iOS. Auto-reload całej
 organizacji wyłączono 2026-10-26 i potwierdzono OFF; bez wpłat/abonamentów.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje

@@ -1,5 +1,10 @@
 # P3.1 — odbiór na telefonach
 
+Aktualizacja 2026-10-26: użytkownik potwierdził osobiste logowanie Kasi przez
+Google na iPhone/Safari i widok prywatnej szafy. Warunek pierwszego logowania
+obu uczestników jest zamknięty. Nie oznacza to testu każdego scenariusza poniżej
+ani aplikacji natywnej. Dalszy tekst opisuje historyczny zakres odbioru P3.1.
+
 Data: 2026-10-24. Docelowy adres odbioru:
 https://ubranka.vercel.app/?wardrobe=1.
 P3.1 jest wdrożone na main. Logowanie właściciela, odczyt istniejącego zdjęcia

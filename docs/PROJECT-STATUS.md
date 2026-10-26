@@ -12,6 +12,13 @@ i osobny ograniczony klucz tylko w Supabase. Zero płatnych testów operatora
 i prywatnych zdjęć uczestników w testach. Każdy osobiście potwierdza wysłania.
 Do spełnienia warunków planu AI pozostaje OFF. Zatrzymanie przed D.
 
+Integracja C2 jest gotowa na dev; migracja i cztery Edge Functions są wdrożone
+przy OFF. Lokalne kontrole: 88 testów klienta, 123 backendu, 12 kodeka,
+15 E2E demo i 39 prywatnych; typy/lint, Deno, trzy eksporty i Doctor 21/21 PASS.
+Kasia potwierdziła logowanie Google i prywatną szafę na iPhone/Safari;
+oba konta uczestników są gotowe. Auto-reload organizacji wyłączone.
+Publikacja, końcowy hosted UI, klucz oraz aktywacja jeszcze oczekują.
+
 ## Historia przygotowania propozycji C2
 
 **P3.3C1 przetestowane i zaakceptowane przez Kasię i Aleksego.**

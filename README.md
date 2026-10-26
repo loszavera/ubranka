@@ -18,7 +18,7 @@ Opinie zmieniają ranking przykładów i pozostają z ustawieniami na urządzeni
 Demo używa 37 fikcyjnych ubrań i 12 ilustracji. AI, sklepy i lista zakupowa
 należą do kolejnych etapów.
 
-**P3.1: pozytywny test Aleksego; logowanie Kasi do sprawdzenia.** Zakres zatwierdzony
+**P3.1: pozytywny test Aleksego; logowanie Kasi potwierdzone 2026-10-26.** Zakres zatwierdzony
 zgodnie z [planem V1.4](docs/IMPLEMENTATION-PLAN-V1.4.md).
 Zaimplementowano prywatną szafę PL/EN, zdjęcia, konta Google, synchronizację,
 eksport i usuwanie. Lokalne testy opisuje [raport P3.1](docs/P31-VERIFICATION.md).
@@ -29,7 +29,8 @@ przenosi pobieranie zdjęć do autoryzowanego POST przez Edge i przeszła retest
 Testy chmury, fizyczne usunięcie fixture przez harmonogram oraz CI: PASS.
 P3.1 przeniesiono na main i sprawdzono logowanie, odczyt zdjęcia oraz wylogowanie.
 Aleksy potwierdził działanie większości funkcji i pozytywny ponowny test poprawki
-usuwania. Logowanie Kasi pozostaje otwarte; szczegóły [odbioru](docs/P31-ACCEPTANCE.md).
+usuwania. Kasia potwierdziła logowanie Google i widok prywatnej szafy na iPhone/Safari;
+szczegóły [odbioru](docs/P31-ACCEPTANCE.md).
 Bieżące dowody:
 [raport P3.1](docs/P31-VERIFICATION.md), [konfiguracja](docs/P31-SETUP.md).
 **P3.2 zatwierdzono 2026-10-25:** do 12 płatnych wywołań i 25 PLN łącznie,
