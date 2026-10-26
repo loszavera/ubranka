@@ -175,12 +175,15 @@ zero sekretów AI. Nie odczytywano ich wartości.
 ## Ograniczenia i odbiór
 
 Brak nowych generacji i przesyłania prywatnych zdjęć do AI. C1 nie dowodzi
-jakości płatnej integracji C2 ani dopasowania rozmiaru. Nie wykonano testu na
+jakości płatnej integracji C2 ani dopasowania rozmiaru. Agent nie wykonał testu na
 fizycznym iOS/Android; eksport JS i emulacja DPR nie zastępują urządzenia.
 Przed C2 konieczny jest test urządzeń rzeczywiście używanych przez uczestników.
 
 Kasia i Aleksy następnie potwierdzili przetestowanie i akceptację C1.
-Nie podali w tej wiadomości urządzeń ani konkretnych scenariuszy; nie dopisujemy
-osobnych wyników. Zlecili wyłącznie końcową propozycję C2, bez aktywacji,
+Później Aleksy doprecyzował (2026-10-26): **Chrome na PC oraz Chrome na Androidzie**.
+To test wersji WWW przez użytkownika. Nie podano modelu urządzenia, wersji
+przeglądarki, systemu PC ani konkretnych scenariuszy. Urządzenie/przeglądarka
+Kasi pozostają niepodane; nie jest to test aplikacji natywnej ani potwierdzenie iOS.
+Zlecili wyłącznie końcową propozycję C2, bez aktywacji,
 płatnych wywołań i prywatnych zdjęć w AI. [Plan V1.9](IMPLEMENTATION-PLAN-V1.9.md)
 nie uruchamia C2; finansowanie, klucz, daty i zgody nadal wymagają zatwierdzenia.

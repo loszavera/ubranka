@@ -15,6 +15,9 @@ Przyjęto poprawę miniatur, pełny podgląd i przygotowany przepływ C1.
 [Raport C1](P33C1-VERIFICATION.md) pozostaje dowodem wykonania.
 Ogólna akceptacja nie dopisuje nazw urządzeń, testu aplikacji natywnej,
 osobnego logowania Kasi ani zgody na przekazanie zdjęć dostawcy AI.
+Uzupełnienie odbioru 2026-10-26: Aleksy potwierdził Chrome na PC oraz Chrome
+na Androidzie. Zakres dotyczy WWW; modeli i wersji nie podał. Urządzenie oraz
+przeglądarka Kasi pozostają niepodane. Nie jest to zgoda na wykonanie C2.
 
 ## Końcowa propozycja C2
 

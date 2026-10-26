@@ -41,8 +41,10 @@ Po zwykłym cron oba konta syntetyczne, rekordy i 20 plików fizycznie usunięto
 zaproszenia, puste triale fixture i lokalne sesje także usunięte.
 B pozostaje zamknięte: 6/6 zużytych slotów, 149 groszy, identyczny skrót rozliczeń,
 zero rezerw. C jest nieaktywne, z zerem prób; nowy koszt API 0 PLN.
-Agent nie wykonywał testów na fizycznym iOS/Android. Użytkownicy potwierdzili
-ogólny odbiór C1, bez wskazania urządzeń i osobnych scenariuszy.
+Agent nie wykonywał testów na fizycznym iOS/Android. Po odbiorze C1 Aleksy
+doprecyzował 2026-10-26 własny test WWW: **Chrome na PC oraz Chrome na Androidzie**.
+Nie podano modeli, wersji ani osobnych scenariuszy. Urządzenie/przeglądarka Kasi
+pozostają niepodane. Ta informacja nie zatwierdza C2 ani zmian rozliczeń.
 Następny krok: zatwierdzenie końcowej propozycji C2, jeżeli odpowiadają jej granice.
 Szczegóły: [raport C1](P33C1-VERIFICATION.md).
 

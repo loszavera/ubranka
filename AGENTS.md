@@ -146,6 +146,10 @@ Raport: docs/P33C1-VERIFICATION.md, porównanie miniatur: /p33c1/.
 2026-10-26 Kasia i Aleksy **potwierdzili przetestowanie i zaakceptowali C1**.
 Zlecili wyłącznie końcową propozycję C2. Nie pytaj ponownie o odbiór C1.
 Ogólny odbiór nie dopisuje urządzenia/przeglądarki ani testów aplikacji natywnej.
+Następnie Aleksy doprecyzował test C1: Chrome na PC oraz Chrome na Androidzie
+(2026-10-26). To potwierdzony zakres WWW Aleksego, bez podanych modeli i wersji
+przeglądarek; urządzenie i przeglądarka Kasi pozostają niepodane. Odpowiedź
+dotyczy zakresu testów, nie zatwierdzenia C2 ani zgody na zmianę rozliczeń.
 Aktualne wymagania/plan: V1.9, koszty V1.8, propozycja zasad AI V1.2.
 C2 nadal bez zgody na implementację, aktywację, nowy klucz i płatne wywołania.
 Propozycja: 30 dni / 25 PLN trial + istniejące 25 PLN/miesiąc UTC / 60 wysłań,

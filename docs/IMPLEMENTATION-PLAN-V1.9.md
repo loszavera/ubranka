@@ -101,7 +101,9 @@ prywatnej płatnej ścieżki jako sprawdzonej na podstawie mocków C1 lub próby
 Wykonać `check`, testy klienta/backendu/kodeka, `check:backend`, E2E demo/prywatne
 i `build:all`; zależności/doctor jeśli ulegną zmianie. Rzeczywisty hosted QA tylko
 na świeżych syntetycznych kontach, z posprzątaniem; bez ręcznego globalnego cleanupu.
-Przed aktywacją potwierdzić używane przeglądarki uczestników. Odbiór C1 już przyjęty,
+Potwierdzony test WWW C1 Aleksego (2026-10-26): Chrome na PC oraz Chrome na Androidzie,
+bez modeli/wersji. Przed aktywacją uzupełnić urządzenie/przeglądarkę Kasi.
+Odbiór C1 już przyjęty,
 nie wymaga ponownej akceptacji; nieznane platformy nie dostają fikcyjnego PASS.
 
 ## Odbiór i granice
