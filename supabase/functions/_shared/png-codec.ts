@@ -1,15 +1,66 @@
 import { inflateSync } from 'node:zlib';
 import { decode, encode } from 'npm:fast-png@8.0.0';
+import encodeJpeg from 'npm:jpeg-js@0.4.4/lib/encoder.js';
 
 const WIDTH = 1024;
 const HEIGHT = 1536;
 const MAX_BYTES = 8_000_000;
 const THUMB_WIDTH = 120;
 const THUMB_HEIGHT = 180;
+const MAX_THUMB_BYTES = 100_000;
+// Finite CPU/allocation budget. Reuse the 600px resize for the first two attempts.
+const JPEG_CANDIDATES = [
+  { width: 600, height: 900, quality: 82 },
+  { width: 600, height: 900, quality: 65 },
+  { width: 450, height: 675, quality: 65 },
+] as const;
 const SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];
 
+type JpegEncoder = (image: { width: number; height: number; data: Uint8Array }, quality: number) => { data: Uint8Array };
+
+/** Area resampling includes partial edge pixels, unlike nearest-neighbour or a floor-bin average. */
+function resize(data: ArrayLike<number>, channels: number, width: number, height: number, opaque: boolean) {
+  const pixels = new Uint8Array(width * height * 4);
+  const xScale = WIDTH / width, yScale = HEIGHT / height;
+  const area = xScale * yScale;
+  for (let y = 0; y < height; y++) {
+    const y0 = y * yScale, y1 = (y + 1) * yScale;
+    for (let x = 0; x < width; x++) {
+      const x0 = x * xScale, x1 = (x + 1) * xScale;
+      let r = 0, g = 0, b = 0, a = 0;
+      for (let sy = Math.floor(y0); sy < Math.min(HEIGHT, Math.ceil(y1)); sy++) {
+        const wy = Math.min(y1, sy + 1) - Math.max(y0, sy);
+        for (let sx = Math.floor(x0); sx < Math.min(WIDTH, Math.ceil(x1)); sx++) {
+          const weight = wy * (Math.min(x1, sx + 1) - Math.max(x0, sx));
+          const p = (sy * WIDTH + sx) * channels;
+          const alpha = channels === 4 ? data[p + 3] : 255;
+          // JPEG has no alpha: composite each source sample over white before averaging.
+          const opacity = opaque ? alpha / 255 : 1;
+          const background = opaque ? 255 - alpha : 0;
+          r += (data[p] * opacity + background) * weight;
+          g += (data[p + 1] * opacity + background) * weight;
+          b += (data[p + 2] * opacity + background) * weight;
+          a += alpha * weight;
+        }
+      }
+      const p = (y * width + x) * 4;
+      pixels[p] = Math.round(r / area); pixels[p + 1] = Math.round(g / area);
+      pixels[p + 2] = Math.round(b / area); pixels[p + 3] = opaque ? 255 : Math.round(a / area);
+    }
+  }
+  return pixels;
+}
+
+// Exported factory is a deterministic failure seam for tests. The production export
+// below always uses the pinned encoder; callers cannot select quality or dimensions.
+export function createVisualizationPngDecoder(jpegEncoder: JpegEncoder = encodeJpeg) {
+  return (bytes: Uint8Array) => decodePng(bytes, jpegEncoder);
+}
+
+export const decodeVisualizationPng = createVisualizationPngDecoder();
+
 /** Narrow, bounded decoder for this trial's fixed RGB/RGBA8, non-interlaced PNG. */
-export function decodeVisualizationPng(bytes: Uint8Array) {
+function decodePng(bytes: Uint8Array, jpegEncoder: JpegEncoder) {
   const started = performance.now();
   if (bytes.length < 45 || bytes.length > MAX_BYTES ||
       !SIGNATURE.every((b, i) => bytes[i] === b)) throw new Error('invalid_png');
@@ -62,32 +113,58 @@ export function decodeVisualizationPng(bytes: Uint8Array) {
       decoded.channels !== channels || decoded.data.length !== WIDTH * HEIGHT * channels) {
     throw new Error('invalid_png_pixels');
   }
-  const pixels = new Uint8Array(THUMB_WIDTH * THUMB_HEIGHT * 4);
-  // Box average includes every source pixel and avoids aliasing on thin garment edges.
-  for (let y = 0; y < THUMB_HEIGHT; y++) {
-    const y0 = Math.floor(y * HEIGHT / THUMB_HEIGHT);
-    const y1 = Math.floor((y + 1) * HEIGHT / THUMB_HEIGHT);
-    for (let x = 0; x < THUMB_WIDTH; x++) {
-      const x0 = Math.floor(x * WIDTH / THUMB_WIDTH);
-      const x1 = Math.floor((x + 1) * WIDTH / THUMB_WIDTH);
-      let r = 0, g = 0, b = 0, a = 0;
-      for (let sy = y0; sy < y1; sy++) for (let sx = x0; sx < x1; sx++) {
-        const p = (sy * WIDTH + sx) * channels;
-        r += decoded.data[p]; g += decoded.data[p + 1]; b += decoded.data[p + 2];
-        a += channels === 4 ? decoded.data[p + 3] : 255;
+  const decodeMs = performance.now() - started;
+  let thumbnail: Uint8Array | undefined;
+  let thumbnailWidth = THUMB_WIDTH, thumbnailHeight = THUMB_HEIGHT;
+  let thumbnailMimeType: 'image/jpeg' | 'image/png' = 'image/png';
+  let jpegAttempts = 0, resizeMs = 0, jpegEncodeMs = 0, fallbackMs = 0;
+  let thumbnailQuality: number | null = null;
+  let thumbnailFallbackReason: 'jpeg_error' | 'jpeg_byte_limit' | null = null;
+  try {
+    let previousWidth = 0, pixels = new Uint8Array();
+    for (const candidate of JPEG_CANDIDATES) {
+      if (previousWidth !== candidate.width) {
+        const resizeStart = performance.now();
+        pixels = resize(decoded.data, channels, candidate.width, candidate.height, true);
+        resizeMs += performance.now() - resizeStart;
+        previousWidth = candidate.width;
       }
-      const count = (x1 - x0) * (y1 - y0);
-      const p = (y * THUMB_WIDTH + x) * 4;
-      pixels[p] = Math.round(r / count); pixels[p + 1] = Math.round(g / count);
-      pixels[p + 2] = Math.round(b / count); pixels[p + 3] = Math.round(a / count);
+      jpegAttempts++;
+      const encodeStart = performance.now();
+      let jpeg: Uint8Array;
+      try {
+        jpeg = jpegEncoder({ width: candidate.width, height: candidate.height, data: pixels }, candidate.quality).data;
+      } finally { jpegEncodeMs += performance.now() - encodeStart; }
+      // Header/end guard also catches malformed data returned by a failed encoder.
+      if (jpeg.length < 4 || jpeg[0] !== 255 || jpeg[1] !== 216 || jpeg.at(-2) !== 255 || jpeg.at(-1) !== 217) {
+        throw new Error('invalid_jpeg_thumbnail');
+      }
+      if (jpeg.length <= MAX_THUMB_BYTES) {
+        thumbnail = jpeg;
+        thumbnailWidth = candidate.width; thumbnailHeight = candidate.height;
+        thumbnailMimeType = 'image/jpeg'; thumbnailQuality = candidate.quality;
+        break;
+      }
     }
+    if (!thumbnail) thumbnailFallbackReason = 'jpeg_byte_limit';
+  } catch {
+    thumbnailFallbackReason = 'jpeg_error';
   }
-  const thumbnail = encode({ width: THUMB_WIDTH, height: THUMB_HEIGHT, depth: 8, channels: 4, data: pixels });
-  if (thumbnail.length > 100_000) throw new Error('thumbnail_too_large');
+  if (!thumbnail) {
+    const fallbackStart = performance.now();
+    const pixels = resize(decoded.data, channels, THUMB_WIDTH, THUMB_HEIGHT, false);
+    thumbnail = encode({ width: THUMB_WIDTH, height: THUMB_HEIGHT, depth: 8, channels: 4, data: pixels });
+    // Raw RGBA is only 86,400 bytes; even incompressible PNG stays under the bound.
+    if (thumbnail.length > MAX_THUMB_BYTES) throw new Error('thumbnail_too_large');
+    fallbackMs = performance.now() - fallbackStart;
+  }
   return {
     main: bytes, thumbnail, width: WIDTH, height: HEIGHT,
+    thumbnailMimeType, thumbnailWidth, thumbnailHeight,
     metrics: { elapsedMs: performance.now() - started, mainBytes: bytes.length,
       thumbnailBytes: thumbnail.length, decodedBytes: decoded.data.byteLength,
-      boundedScanBytes: expected },
+      boundedScanBytes: expected, decodeMs, resizeMs, jpegEncodeMs, fallbackMs,
+      jpegAttempts, thumbnailQuality, thumbnailFallback: thumbnailMimeType === 'image/png',
+      thumbnailFallbackReason, thumbnailMimeType, thumbnailWidth, thumbnailHeight },
   };
 }

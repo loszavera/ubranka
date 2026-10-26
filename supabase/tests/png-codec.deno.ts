@@ -1,7 +1,8 @@
 import { strict as assert } from 'node:assert';
 import { encode, decode } from 'npm:fast-png@8.0.0';
 import { deflateSync } from 'node:zlib';
-import { decodeVisualizationPng } from '../functions/_shared/png-codec.ts';
+import jpeg from 'npm:jpeg-js@0.4.4';
+import { createVisualizationPngDecoder, decodeVisualizationPng } from '../functions/_shared/png-codec.ts';
 
 const W = 1024, H = 1536;
 function crc(bytes: Uint8Array) {
@@ -32,10 +33,80 @@ Deno.test('fixed-size real pixels, bounded thumbnail and identity main; noise st
     const png = source(noise), start = Deno.memoryUsage();
     const result = decodeVisualizationPng(png);
     assert.equal(result.main, png); assert.ok(result.thumbnail.length <= 100_000);
-    const thumb = decode(result.thumbnail, { checkCrc: true });
-    assert.equal(thumb.width, 120); assert.equal(thumb.height, 180);
+    const thumb = result.thumbnailMimeType === 'image/jpeg'
+      ? jpeg.decode(result.thumbnail, { useTArray: true, maxResolutionInMP: 1, maxMemoryUsageInMB: 32 })
+      : decode(result.thumbnail, { checkCrc: true });
+    assert.equal(thumb.width, result.thumbnailWidth); assert.equal(thumb.height, result.thumbnailHeight);
+    assert.ok(result.metrics.jpegAttempts <= 3);
+    if (!noise) {
+      assert.equal(result.thumbnailMimeType, 'image/jpeg');
+      assert.equal(thumb.width, 600); assert.equal(thumb.height, 900);
+      assert.equal(result.metrics.thumbnailFallback, false);
+    }
     console.log(JSON.stringify({ noise, ...result.metrics, memoryBefore: start, memoryAfter: Deno.memoryUsage() }));
   }
+});
+
+Deno.test('RGB accepted and transparent RGBA composites over white without hidden RGB leaking', () => {
+  for (const channels of [3, 4] as const) {
+    const pixels = new Uint8Array(W * H * channels);
+    for (let p = 0; p < pixels.length; p += channels) pixels[p] = 255; // RGB red, RGBA transparent red
+    const png = encode({ width: W, height: H, channels, depth: 8, data: pixels });
+    const result = decodeVisualizationPng(png);
+    assert.equal(result.main, png);
+    const thumb = jpeg.decode(result.thumbnail, { useTArray: true, maxResolutionInMP: 1, maxMemoryUsageInMB: 32 });
+    const expected = channels === 3 ? [255, 0, 0] : [255, 255, 255];
+    for (let c = 0; c < 3; c++) assert.ok(Math.abs(thumb.data[c] - expected[c]) <= 2);
+    assert.equal(thumb.data[3], 255);
+    // The encoder receives only pixels, no EXIF/ICC/XMP or source metadata.
+    const header = new TextDecoder('latin1').decode(result.thumbnail);
+    for (const marker of ['Exif', 'ICC_PROFILE', 'http://ns.adobe.com/xap']) assert.ok(!header.includes(marker));
+  }
+});
+
+Deno.test('encoder failure or repeated oversize produces bounded PNG without rejecting the valid main', () => {
+  const png = source(true);
+  for (const mode of ['throw', 'oversize', 'invalid'] as const) {
+    let calls = 0;
+    const decodeWithFailure = createVisualizationPngDecoder(() => {
+      calls++;
+      if (mode === 'throw') throw new Error('synthetic encoder failure');
+      const data = new Uint8Array(mode === 'oversize' ? 100_001 : 4);
+      if (mode === 'oversize') { data.set([255, 216]); data.set([255, 217], data.length - 2); }
+      return { data };
+    });
+    const result = decodeWithFailure(png);
+    assert.equal(result.main, png);
+    assert.equal(calls, mode === 'oversize' ? 3 : 1);
+    assert.equal(result.thumbnailMimeType, 'image/png');
+    assert.equal(result.metrics.thumbnailFallback, true);
+    assert.equal(result.metrics.thumbnailFallbackReason, mode === 'oversize' ? 'jpeg_byte_limit' : 'jpeg_error');
+    assert.ok(result.thumbnail.length <= 100_000);
+    const thumb = decode(result.thumbnail, { checkCrc: true });
+    assert.equal(thumb.width, 120); assert.equal(thumb.height, 180);
+  }
+});
+
+Deno.test('quality and resolution adaptation is bounded and reports the actual selected dimensions', () => {
+  const seen: number[][] = [];
+  const realEncode = jpeg.encode;
+  const decodeAdaptive = createVisualizationPngDecoder((input, quality) => {
+    seen.push([input.width, input.height, quality]);
+    if (seen.length < 3) {
+      const data = new Uint8Array(100_001);
+      data.set([255, 216]); data.set([255, 217], data.length - 2);
+      return { data };
+    }
+    return realEncode(input, quality);
+  });
+  const result = decodeAdaptive(source());
+  assert.equal(seen.length, 3);
+  assert.equal(result.thumbnailWidth, 450); assert.equal(result.thumbnailHeight, 675);
+  assert.equal(result.thumbnailMimeType, 'image/jpeg');
+  assert.equal(result.metrics.thumbnailQuality, seen[2][2]);
+  assert.equal(result.metrics.thumbnailFallback, false);
+  const thumb = jpeg.decode(result.thumbnail, { useTArray: true, maxResolutionInMP: 1, maxMemoryUsageInMB: 32 });
+  assert.equal(thumb.width, result.thumbnailWidth); assert.equal(thumb.height, result.thumbnailHeight);
 });
 
 Deno.test('reject bad header, CRC, dimensions, truncation and trailing bytes', () => {
