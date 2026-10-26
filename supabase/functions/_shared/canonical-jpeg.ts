@@ -4,11 +4,9 @@ import { gunzipSync } from 'node:zlib';
 import { DECODER } from './vendor/canonical-wasm.ts';
 import { jpeg, WardrobeError } from './protocol.ts';
 import { base64, sha256 } from './trial.ts';
-import { CANONICAL_VERSION } from './canonical-input.ts';
+import { CANONICAL_VERSION, type Canonicalizer } from './canonical-input.ts';
 
 export { CANONICAL_VERSION } from './canonical-input.ts';
-export type CanonicalJpeg = {bytes:Uint8Array;sha256:string;width:number;height:number;version:typeof CANONICAL_VERSION};
-export type Canonicalizer = (source:Uint8Array)=>Promise<CanonicalJpeg>;
 
 let ready:Promise<void>|undefined;
 function initialize(){

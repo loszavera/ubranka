@@ -1,9 +1,8 @@
 import { readBody, safeError, uuid } from '../_shared/protocol.ts';
 import { SupabaseRest } from '../_shared/rest.ts';
 import { authorizeWorker, serverKey } from '../_shared/service-auth.ts';
-import { verifySourceInput, type SourceInput } from '../_shared/canonical-input.ts';
+import { verifySourceInput, type SourceInput, type Canonicalizer } from '../_shared/canonical-input.ts';
 import { base64 } from '../_shared/trial.ts';
-import type { Canonicalizer } from '../_shared/canonical-jpeg.ts';
 
 export function createCanonicalInputHandler(environment:(key:string)=>string|undefined,canonicalize:Canonicalizer){
  return async(request:Request)=>{

@@ -4,6 +4,8 @@ import type { SupabaseRest } from './rest.ts';
 
 export const CANONICAL_VERSION='p33c-jpeg-v1' as const;
 export type CanonicalDescriptor={version:typeof CANONICAL_VERSION;sha256:string;bytes:number;width:number;height:number};
+export type CanonicalJpeg={bytes:Uint8Array;sha256:string;width:number;height:number;version:typeof CANONICAL_VERSION};
+export type Canonicalizer=(source:Uint8Array)=>Promise<CanonicalJpeg>;
 export type SourceInput={photoId:string;path:string;thumbPath:string;bytes:number;thumbBytes:number;fingerprint:string;kind:'body'|'item'};
 export type CanonicalInput=SourceInput&{canonical:CanonicalDescriptor};
 export function isCanonicalDescriptor(value:unknown):value is CanonicalDescriptor {
