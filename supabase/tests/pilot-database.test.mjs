@@ -196,7 +196,11 @@ test('90-day cleanup strips private inputs and settled receipts, preserves anony
  await db.query("update wardrobe_private.c_attempts set created_at=now()-interval '92 days',completed_at=case when completed_at is not null then now()-interval '91 days' end");
  await db.query("update wardrobe_private.c_trials set starts_at=now()-interval '119 days',ends_at=now()-interval '89 days',status='closed' where id=$1",[TRIAL]);
  const before=(await db.query('select scope,spent_cents,reserved_cents from wardrobe_private.ai_budgets order by scope')).rows;
+ await db.exec(`create temporary table member_archive_audit(id uuid);
+  create function pg_temp.audit_member_archive() returns trigger language plpgsql as $$begin insert into pg_temp.member_archive_audit values(new.id); return new; end$$;
+  create trigger audit_member_archive after update of archived_sends on wardrobe_private.c_members for each row execute function pg_temp.audit_member_archive();`);
  await admin('wardrobe_expire_uploads');
+ assert.equal((await db.query('select count(*) n from pg_temp.member_archive_audit')).rows[0].n,1,'only the eligible settled member is updated; unknown member is untouched');
  assert.equal((await db.query('select count(*) n from public.wardrobe_visualizations')).rows[0].n,0);
  assert.deepEqual((await db.query('select scope,spent_cents,reserved_cents from wardrobe_private.ai_budgets order by scope')).rows,before);
  const receipts=(await db.query('select status,reserved_cents from wardrobe_private.c_attempts')).rows;assert.deepEqual(receipts,[{status:'outcome_unknown',reserved_cents:100}]);
@@ -204,5 +208,7 @@ test('90-day cleanup strips private inputs and settled receipts, preserves anony
  assert.equal((await db.query('select count(*) n from wardrobe_private.c_attempts a join wardrobe_private.c_intents i on i.job_id=a.id')).rows[0].n,0);
  const members=(await db.query('select account_id,archived_sends from wardrobe_private.c_members where trial_id=$1',[TRIAL])).rows;
  assert.ok(members.every(x=>x.account_id===null));assert.equal(members.reduce((n,m)=>n+m.archived_sends,0),1);
+ await db.exec('truncate pg_temp.member_archive_audit');
  await admin('wardrobe_expire_uploads');assert.equal(Number((await db.query('select sum(archived_sends) n from wardrobe_private.c_members')).rows[0].n),1);
+ assert.equal((await db.query('select count(*) n from pg_temp.member_archive_audit')).rows[0].n,0,'no receipt eligible: repeated cleanup must not issue any member archive UPDATE');
 });
