@@ -1,8 +1,9 @@
-# P3.3 — zasady danych AI V1.2: końcowa propozycja C2
+# P3.3 — zasady danych AI V1.2: przyjęte dla C2
 
-Data: 2026-10-26. **DO ZATWIERDZENIA — nie udzielono zgody na prywatne zdjęcia w AI ani aktywację C2.**
+Data: 2026-10-26. **PRZYJĘTE przez właściciela dla C2.** Każdy uczestnik nadal osobiście
+akceptuje zasady i każde wysłanie dokładnych wejść w aplikacji; zgoda w czacie tego nie zastępuje.
 C1 odebrane. Rozwinięcie [V1.1](P33-AI-DATA-POLICY-V1.1.md), [zasad szafy](P3-DATA-POLICY-V1.0.md)
-i [planu V1.9](IMPLEMENTATION-PLAN-V1.9.md); koszty: [V1.8](COST-PLAN-V1.8.md). Teraz tylko dokumentacja.
+i [planu V1.9](IMPLEMENTATION-PLAN-V1.9.md); koszty: [V1.8](COST-PLAN-V1.8.md).
 
 ## Dane i odbiorcy po ewentualnej aktywacji
 
@@ -12,7 +13,7 @@ i [planu V1.9](IMPLEMENTATION-PLAN-V1.9.md); koszty: [V1.8](COST-PLAN-V1.8.md). 
 | OpenAI Images edits | Jedno własne zdjęcie dorosłego uczestnika, 1–3 wybrane zdjęcia ubrań, kontrolowana instrukcja jednego zestawu oraz pseudonimowy `safety_identifier`. |
 | Vercel / Google | Dotychczasowy hosting / logowanie; nie pośredniczą w przesyłaniu zdjęć do OpenAI. |
 
-Kopie AI: proponowany limit C2 maks. 1024×1536 i 1 MB każda, bez rozciągania oraz EXIF/GPS.
+Kopie AI: przyjęty limit C2 maks. 1024×1536 i 1 MB każda, bez rozciągania oraz EXIF/GPS.
 Przygotowanie bez AI zachowuje źródła szafy; podgląd/zgoda dotyczą dokładnie przekształconych bajtów.
 Jeżeli przygotowanie kopii się nie uda, odmowa następuje przed płatnym wysłaniem. Bez emaila, imienia konta,
 wymiarów, historii opinii, całej szafy i nazw ubrań używanych jako instrukcje. Bez publicznych/signed URL i Files API.

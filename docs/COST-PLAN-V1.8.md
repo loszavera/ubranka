@@ -1,8 +1,10 @@
-# Koszty Ubranka — V1.8: końcowa propozycja C2
+# Koszty Ubranka — V1.8: zatwierdzony pilotaż C2
 
-Data: 2026-10-26. **DO ZATWIERDZENIA — bez zgody na implementację lub aktywację C2.**
+Data: 2026-10-26. **ZATWIERDZONE dla C2**, w tym granica gwarancji ceny oraz wyłączenie
+automatycznych doładowań całej organizacji i pozostawienie OFF po pilotażu.
 C1 odebrane. Rozwinięcie [V1.7](COST-PLAN-V1.7.md), powiązane z [planem V1.9](IMPLEMENTATION-PLAN-V1.9.md)
-i [zasadami danych V1.2](P33-AI-DATA-POLICY-V1.2.md). Teraz tylko dokumentacja; AI pozostaje OFF.
+i [zasadami danych V1.2](P33-AI-DATA-POLICY-V1.2.md). Wykonanie: [raport C2](P33C2-VERIFICATION.md).
+AI pozostaje OFF do spełnienia warunków aktywacji.
 
 ## Model i punkt odniesienia
 
@@ -18,7 +20,7 @@ Ostrzejsza miniatura powstaje z zapisanego wyniku, bez ponownej generacji AI.
 
 ## Limity całej próby
 
-| Zakres | Proponowana granica C2 |
+| Zakres | Zatwierdzona granica C2 |
 | --- | --- |
 | Czas | 30 kolejnych dni od aktywacji zapisanej na serwerze, bez automatycznego przedłużenia. |
 | Budżet | 25 PLN na cały pilotaż dla obu kont, również przez granicę miesięcy; równolegle dotychczasowe 25 PLN/miesiąc UTC całej aplikacji. B za 149 groszy pozostaje w swoim miesiącu. |
@@ -51,20 +53,21 @@ Nie obcinamy kosztu do rezerwy; przechowujemy pełną znaną kwotę albo nierozs
 pojedyncze przyjęte żądanie może przekroczyć rezerwę, a nawet budżet 25 PLN;
 kontrakt nie ma `max_cost`, a limity dostawcy mogą działać z opóźnieniem. [API edits](https://developers.openai.com/api/reference/resources/images/methods/edit), [spend limits](https://developers.openai.com/api/docs/guides/spend-limits).
 
-## Proponowane finansowanie — wymaga nowej zgody
+## Zatwierdzone finansowanie
 
 **Wyłącznie istniejące opłacone kredyty API; zero nowych wpłat, doładowań i abonamentów.** Zgoda finansowa B wygasła.
-Przed C2 proponujemy jedną jawną zmianę: **wyłączyć auto-reload w całej organizacji OpenAI**.
+Właściciel zatwierdził jedną jawną zmianę: **wyłączyć auto-reload w całej organizacji OpenAI**.
 Dotyczy to także innych projektów korzystających z jej wspólnych kredytów; nie zmienia abonamentu ChatGPT.
-Auto-reload pozostanie OFF po C2, bez automatycznego przywrócenia. Obecnie nie wykonano tej zmiany.
+Auto-reload pozostanie OFF po C2, bez automatycznego przywrócenia.
+2026-10-26 wyłączono i potwierdzono OFF w panelu; nie dokonano nowych wpłat.
 Przed aktywacją trzeba potwierdzić wyłączenie, dostępność finansowania i brak niezatwierdzonych obciążeń.
 Jeśli nie można tego potwierdzić albo środków brakuje, pozostaje AI OFF; bez ręcznego doładowania i obejścia.
 Kredyty są wspólne: inne projekty mogą je zużyć. Pogorszenie warunków zatrzymuje wysyłki, nie zwiększa budżetu.
-Dokładne saldo i ustawienia konta pozostają poza repo; powyższe to propozycja, nie opis zmienionych ustawień.
+Dokładne saldo i pozostałe ustawienia konta pozostają poza repo.
 
 ## Zakończenie
 
-Nowy ograniczony klucz C tylko w sekretach Supabase po zatwierdzeniu, z ważnością najpóźniej do końca C2.
+Zatwierdzony nowy ograniczony klucz C tylko w sekretach Supabase, z ważnością najpóźniej do końca C2.
 Brak potwierdzenia terminu wygaśnięcia tego klucza blokuje aktywację i wymaga uzgodnienia innego sposobu końca.
 Po terminie/limicie: AI OFF; kontrola końcowa unieważnia klucz i usuwa sekret. Sam koniec daty nie jest
 dowodem usunięcia sekretu. Bez resetowania B/C, nowego okna lub automatycznej zgody na D.

@@ -2,6 +2,18 @@
 
 Aktualizacja: 2026-10-26.
 
+**P3.3C2 zatwierdzone do implementacji i warunkowej aktywacji według V1.9.**
+Trwa praca na dev; [raport wykonania C2](P33C2-VERIFICATION.md) będzie zawierał
+testy, publikację i osobne potwierdzenie aktywacji. Zakres: 30 dni / 25 PLN
+łącznie / 60 wysłań, 30 na konto i 5 na konto na dobę UTC, bez retry.
+Właściciel przyjął granicę gwarancji ceny oraz zasady AI V1.2. Zatwierdził
+wyłączenie auto-reload całej organizacji, finansowanie istniejącymi kredytami
+i osobny ograniczony klucz tylko w Supabase. Zero płatnych testów operatora
+i prywatnych zdjęć uczestników w testach. Każdy osobiście potwierdza wysłania.
+Do spełnienia warunków planu AI pozostaje OFF. Zatrzymanie przed D.
+
+## Historia przygotowania propozycji C2
+
 **P3.3C1 przetestowane i zaakceptowane przez Kasię i Aleksego.**
 Zlecili wyłącznie końcową propozycję C2. Powstały [wymagania V1.9](REQUIREMENTS-V1.9.md),
 [plan V1.9](IMPLEMENTATION-PLAN-V1.9.md), [koszty V1.8](COST-PLAN-V1.8.md)

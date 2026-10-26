@@ -54,11 +54,12 @@ prywatnych wejść, zgód, limitów i usuwania. AI pozostaje wyłączone na serw
 bez klucza AI w chmurze i nowych generacji. [Raport C1](docs/P33C1-VERIFICATION.md)
 rozróżnia testy lokalne, rzeczywisty Supabase i końcową kontrolę publikacji.
 [Porównanie syntetyczne](https://ubranka.vercel.app/p33c1/) używa zachowanych
-wyników B. [Końcowa propozycja C2 — V1.9](docs/IMPLEMENTATION-PLAN-V1.9.md)
-wymaga osobnej zgody: 30 dni / 25 PLN łącznie, maks. 60 wysłań (30/konto,
-5/konto/dobę UTC). Finansowanie z istniejących kredytów i proponowane wyłączenie
-auto-reload całej organizacji, bez nowych doładowań. To plan, nie zmiana konta.
-Nie aktywowano C2 ani nie przesyłano prywatnych zdjęć do AI.
+wyników B. **P3.3C2 zatwierdzone do implementacji według [V1.9](docs/IMPLEMENTATION-PLAN-V1.9.md):**
+30 dni / 25 PLN łącznie, maks. 60 wysłań (30/konto, 5/konto/dobę UTC), bez ponowień.
+Finansowanie z istniejących kredytów; zatwierdzono wyłączenie auto-reload całej
+organizacji i pozostawienie OFF, bez nowych wpłat/abonamentów. Aktywacja dopiero
+po spełnieniu warunków planu; każdy osobiście zatwierdza swoje zdjęcia i wysłania.
+[Stan wdrożenia i testów C2](docs/P33C2-VERIFICATION.md). Do aktywacji AI pozostaje OFF.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
 jest wspólna dla obu adresów. Lokalny zapis demo pozostaje osobny — publikacja
@@ -68,16 +69,17 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 ## Dokumenty
 
-- [Wymagania V1.9 — odebrane C1, końcowa propozycja C2](docs/REQUIREMENTS-V1.9.md)
+- [Wymagania V1.9 — odebrane C1, zatwierdzone C2](docs/REQUIREMENTS-V1.9.md)
 - [Plan implementacji V1.9 — integracja, finansowanie i pilotaż C2](docs/IMPLEMENTATION-PLAN-V1.9.md)
+- [P3.3C2 — realizacja, testy i warunki aktywacji](docs/P33C2-VERIFICATION.md)
 - [P3.3C1 — weryfikacja, publikacja i odbiór](docs/P33C1-VERIFICATION.md)
 - [P3.3C1 — kodek i porównanie miniatur](docs/P33C1-CODEC.md)
-- [Propozycja zasad danych AI V1.2 — prywatny pilotaż C2](docs/P33-AI-DATA-POLICY-V1.2.md)
+- [Przyjęte zasady danych AI V1.2 — prywatny pilotaż C2](docs/P33-AI-DATA-POLICY-V1.2.md)
 - [P3.3B — raport integracji, próby i kosztów](docs/P33B-REPORT.md)
 - [P3.3B — kontrakty i bezpłatne kontrole operatorowe](supabase/P33B-OPERATIONS.md)
 - [P3.3A — weryfikacja i test użytkowników](docs/P33A-VERIFICATION.md)
 - [P3.3A — kontrakty backendu i granice przygotowania AI](docs/P33A-BACKEND.md)
-- [Proponowana kontrola kosztów V1.8 — pilotaż P3.3C2](docs/COST-PLAN-V1.8.md)
+- [Przyjęta kontrola kosztów V1.8 — pilotaż P3.3C2](docs/COST-PLAN-V1.8.md)
 - [P3.2 — raport jakości, kosztów i weryfikacji](docs/P32-REPORT.md)
 - [P3.2 — historyczny preflight i późniejsze rozstrzygnięcie użytkownika](docs/P32-PREFLIGHT.md)
 - [Przypadki P3.2, prompty i hashe wejść](docs/p32/cases.json)

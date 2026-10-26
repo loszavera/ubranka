@@ -150,18 +150,30 @@ Następnie Aleksy doprecyzował test C1: Chrome na PC oraz Chrome na Androidzie
 (2026-10-26). To potwierdzony zakres WWW Aleksego, bez podanych modeli i wersji
 przeglądarek; urządzenie i przeglądarka Kasi pozostają niepodane. Odpowiedź
 dotyczy zakresu testów, nie zatwierdzenia C2 ani zgody na zmianę rozliczeń.
-Aktualne wymagania/plan: V1.9, koszty V1.8, propozycja zasad AI V1.2.
-C2 nadal bez zgody na implementację, aktywację, nowy klucz i płatne wywołania.
-Propozycja: 30 dni / 25 PLN trial + istniejące 25 PLN/miesiąc UTC / 60 wysłań,
+Aktualne wymagania/plan: V1.9, koszty V1.8, zasady AI V1.2.
+Następnie 2026-10-26 użytkownik **zatwierdził implementację P3.3C2 według V1.9**,
+bezpłatne testy syntetyczne na dev i publikację na main. Aktywacja dopiero po
+spełnieniu warunków planu; sama zgoda nie dowodzi uruchomienia. Zakres:
+30 dni / 25 PLN trial + istniejące 25 PLN/miesiąc UTC / 60 wysłań,
 30/konto i 5/konto/dobę UTC, bez retry i dodatkowych płatnych testów operatora.
 Każdy uczestnik sam zatwierdza konkretne zdjęcia i uruchamia swoje generacje.
-Finansowanie z istniejących kredytów; nowe, osobno zatwierdzane wyłączenie
+Finansowanie z istniejących kredytów; jawnie zatwierdzone wyłączenie
 auto-reload CAŁEJ organizacji OpenAI (także innych projektów), pozostawione OFF
-po C2. Bez nowych doładowań/abonamentów. Teraz niczego w rozliczeniach nie zmieniono.
+po C2. Bez nowych doładowań/abonamentów. Wynik zmian sprawdzaj w raporcie C2,
+szczegóły finansowania pozostają wyłącznie w ignorowanym .local.
 Granica 25 PLN dopuszcza nowe żądania; nie gwarantuje maksymalnej ceny przyjętego
-żądania. Nowa zgoda musi wprost obejmować tę granicę. Szczegóły konta tylko .local.
+żądania. Użytkownik jawnie zaakceptował możliwość przekroczenia rezerwy i budżetu
+przez już przyjęte żądanie; nie pytaj o tę samą zgodę ponownie.
 Klucz C ma wygasać najpóźniej z końcem trialu; unieważnienie/usunięcie sekretu
-w kontroli końcowej wymaga osobnego dowodu, nie samej daty. Nie otwieraj B.
+w kontroli końcowej wymaga osobnego dowodu, nie samej daty. Osobny ograniczony
+klucz C2 wyłącznie w sekretach Supabase. Nie używaj kluczy B/P3.2. Nie otwieraj B.
+Właściciel przyjął zasady AI V1.2; każda osoba nadal osobiście zatwierdza swoje
+zdjęcia i wysłania w aplikacji. Operator nie odczytuje/wysyła ich zdjęć w testach,
+nie wykonuje płatnej kalibracji. Po pilotażu OFF, unieważnienie klucza,
+usunięcie sekretu i raport zbiorczy; stop przed D. Stan: docs/P33C2-VERIFICATION.md.
+W tej samej turze użytkownik wskazał urządzenie Kasi dla C2: iPhone/Safari.
+Nie jest to osobny dowód przetestowania C2 ani natywnego iOS. Auto-reload całej
+organizacji wyłączono 2026-10-26 i potwierdzono OFF; bez wpłat/abonamentów.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
 po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,
 promptów ani tokenów. Znika po potwierdzeniu trwałego slotu z serwera lub po
@@ -194,8 +206,9 @@ Stan wykonania C1 sprawdzaj w docs/P33C1-VERIFICATION.md. Kodek używa skończon
 prób JPEG 600×900/450×675 do 100 000 B oraz małego PNG w razie niepowodzenia;
 oryginał nie jest regenerowany. Prywatny wynik ma jawny bucket/MIME/wymiary,
 nie wybieraj autoryzacji po rozszerzeniu. Pełny PNG tylko na żądanie, odczyty
-max 2 naraz. C1 ma twarde OFF w publicznych RPC i handlerze workera; nie dodawaj
-przełącznika env ani klucza w celu ominięcia. C2 wymaga osobnego zatwierdzenia.
+max 2 naraz. Historyczne C1 miało twarde OFF w publicznych RPC i handlerze workera.
+Zatwierdzone C2 zastępuje je pełną autoryzowaną ścieżką z warunkami aktywacji,
+nie obejściem przez sam przełącznik env lub klucz. Do zaliczenia warunków OFF.
 Operatorowe testy SQL używają odrębnego trialu syntetycznego i kont fixture;
 prywatny core rezerwacji nie jest dostępny dla service_role ani przez HTTP.
 Nie myl takiego testu lub wgranego zachowanego B01 z nową generacją C.
