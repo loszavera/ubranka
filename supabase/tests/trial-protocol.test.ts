@@ -77,6 +77,23 @@ test('JSON/base64 probe exercises the actual bounded response parser without AI 
   }finally{globalThis.fetch=original;}
 });
 
+test('probe validation errors are 400 while unexpected decoder failures remain redacted 500',async()=>{
+ const original=globalThis.fetch;globalThis.fetch=async()=>Response.json(true);
+ try{
+  let decodes=0;
+  const handler=createWorkerHandler(env,()=>assert.fail('no dispatch'),()=>{decodes++;throw Error('private decoder detail');});
+  const request=(probe:string,mime:string,body:BodyInit,extra:Record<string,string>={})=>new Request('https://worker.invalid',{
+   method:'POST',headers:{Authorization:'Bearer service-test','X-Ubranka-Probe':probe,'Content-Type':mime,...extra},body});
+  for(const input of [request('png','text/plain',fakePng),request('png','image/png',fakePng,{'Content-Length':'8000001'}),
+   request('json','text/plain','{}'),request('json','application/json','{}')]){
+   const result=await handler(input);assert.equal(result.status,400);assert.deepEqual(await result.json(),{error:{code:'INVALID_REQUEST'}});
+  }
+  assert.equal(decodes,0);
+  const unexpected=await handler(request('png','image/png',fakePng));assert.equal(unexpected.status,500);
+  assert.deepEqual(await unexpected.json(),{error:{code:'INTERNAL'}});assert.equal(decodes,1);
+ }finally{globalThis.fetch=original;}
+});
+
 test('worker verifies a different valid service Bearer through public-key RPC, not string equality or unverified claims',async()=>{
   const original=globalThis.fetch;let calls=0;
   globalThis.fetch=async(input,init)=>{

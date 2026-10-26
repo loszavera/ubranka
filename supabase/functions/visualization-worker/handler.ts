@@ -1,7 +1,7 @@
 import { type ImageDecoder } from './worker.ts';
 import { parseImageResponse } from '../_shared/openai-images.ts';
 import { authorizeWorker } from '../_shared/service-auth.ts';
-import { readBody, safeError, uuid } from '../_shared/protocol.ts';
+import { readBody, safeError, uuid, WardrobeError } from '../_shared/protocol.ts';
 import { createPrivateWorkerTask } from './private-worker.ts';
 
 export function createWorkerHandler(environment:(key:string)=>string|undefined,waitUntil:(task:Promise<unknown>)=>void,decode:ImageDecoder) {
@@ -13,9 +13,9 @@ export function createWorkerHandler(environment:(key:string)=>string|undefined,w
     try {
       if(request.headers.get('x-ubranka-probe')==='json') {
         const started=performance.now();
-        if(request.headers.get('content-type')!=='application/json')throw new Error();
+        if(request.headers.get('content-type')!=='application/json')throw new WardrobeError('INVALID_REQUEST');
         const parsed=await parseImageResponse(new Response(request.body,{headers:request.headers}));
-        if(!parsed.png||!parsed.usage)throw new Error();
+        if(!parsed.png||!parsed.usage)throw new WardrobeError('INVALID_REQUEST');
         const parseMs=performance.now()-started,image=await decode(parsed.png);
         return Response.json({width:image.width,height:image.height,bytes:image.main.length,thumbBytes:image.thumbnail.length,
           thumbMimeType:image.thumbnailMimeType??'image/png',thumbWidth:image.thumbnailWidth??120,thumbHeight:image.thumbnailHeight??180,
@@ -23,10 +23,10 @@ export function createWorkerHandler(environment:(key:string)=>string|undefined,w
       }
       if(request.headers.get('x-ubranka-probe')==='png') {
         // Pure decoder preflight: no key lookup, job, persistence or provider.
-        if(request.headers.get('content-type')!=='image/png'||Number(request.headers.get('content-length'))>8_000_000||!request.body)throw new Error();
+        if(request.headers.get('content-type')!=='image/png'||Number(request.headers.get('content-length'))>8_000_000||!request.body)throw new WardrobeError('INVALID_REQUEST');
         const reader=request.body.getReader(),chunks:Uint8Array[]=[];let length=0;
         while(true){const part=await reader.read();if(part.done)break;length+=part.value.length;
-          if(length>8_000_000){await reader.cancel();throw new Error();}chunks.push(part.value);}
+          if(length>8_000_000){await reader.cancel();throw new WardrobeError('INVALID_REQUEST');}chunks.push(part.value);}
         const bytes=new Uint8Array(length);let at=0;for(const chunk of chunks){bytes.set(chunk,at);at+=chunk.length;}
         const image=await decode(bytes);
         return Response.json({width:image.width,height:image.height,bytes:image.main.length,thumbBytes:image.thumbnail.length,
