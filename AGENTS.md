@@ -126,6 +126,15 @@ C2 to osobno zatwierdzany pilotaż 30 dni / 25 PLN łącznie / maks. 60 wysłań
 30/konto i 5/dobę, bez retry. Te limity są propozycją, nie aktywną konfiguracją.
 Finansowanie B nie przechodzi na C. Nie odnawiaj slotów B ani lokalnego klucza
 P3.2; kolejnym krokiem do zaproponowania jest akceptacja C1, nie aktywacja AI.
+Następnie 2026-10-26 użytkownik **zatwierdził implementację P3.3C1 według V1.8**:
+ostrzejsze miniatury, pełny podgląd oraz przygotowanie prywatnego przepływu,
+zgód, usuwania i kosztów. Praca na dev, testy syntetyczne i publikacja na main
+są zatwierdzone. Nie pytaj ponownie o te czynności. Serwer pozostaje AI OFF,
+bez klucza AI w chmurze, płatnych wywołań, prywatnych zdjęć w AI i nowych
+abonamentów. To aktualizuje wcześniejszy zakaz implementacji C1, ale nie
+uruchamia C2. Limity C2 można przygotować w nieaktywnej konfiguracji i testować
+na odizolowanych syntetycznych danych. Nie aktywuj trialu ani dostawcy.
+Po raporcie/testach/podglądzie C1 zatrzymaj się przed P3.3C2.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
 po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,
 promptów ani tokenów. Znika po potwierdzeniu trwałego slotu z serwera lub po
@@ -153,6 +162,16 @@ Zapisuj otwarte decyzje; nie uznawaj propozycji za zatwierdzone ani nie rozpoczy
 samodzielnie następnego etapu tylko dlatego, że opisano go w planie.
 
 ## Współpraca
+
+Stan wykonania C1 sprawdzaj w docs/P33C1-VERIFICATION.md. Kodek używa skończonych
+prób JPEG 600×900/450×675 do 100 000 B oraz małego PNG w razie niepowodzenia;
+oryginał nie jest regenerowany. Prywatny wynik ma jawny bucket/MIME/wymiary,
+nie wybieraj autoryzacji po rozszerzeniu. Pełny PNG tylko na żądanie, odczyty
+max 2 naraz. C1 ma twarde OFF w publicznych RPC i handlerze workera; nie dodawaj
+przełącznika env ani klucza w celu ominięcia. C2 wymaga osobnego zatwierdzenia.
+Operatorowe testy SQL używają odrębnego trialu syntetycznego i kont fixture;
+prywatny core rezerwacji nie jest dostępny dla service_role ani przez HTTP.
+Nie myl takiego testu lub wgranego zachowanego B01 z nową generacją C.
 
 - Początkowo jeden czat łączy zarządzanie i implementację. Subagenci mogą wykonywać
   rozdzielone zadania i niezależne przeglądy. Nie edytujcie naraz tych samych plików.

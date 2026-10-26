@@ -2,7 +2,8 @@
 
 Data: 2026-10-26. Rozwinięcie [V1.0](P33-AI-DATA-POLICY-V1.0.md) oraz
 [przyjętych zasad szafy](P3-DATA-POLICY-V1.0.md).
-**Odbiór B jest potwierdzony. C i ta propozycja nie są jeszcze zatwierdzone.**
+**Odbiór B jest potwierdzony. Aktualizacja 2026-10-26: przygotowanie C1
+zatwierdzono; prywatny pilotaż C2 i przesyłanie zdjęć do AI nadal nie są zatwierdzone.**
 Aktualne zdjęcia pozostają w dotychczasowym prywatnym Supabase; planowanie
 nie jest zgodą na przekazanie ich OpenAI. C1 przygotowuje mechanizmy przy AI OFF;
 dopiero osobna zgoda C2 oraz decyzja każdej osoby pozwolą na pojedyncze wysłania.

@@ -83,6 +83,10 @@ Nowe wpisy z 2026-10-24:
 | D-051 | 2026-10-26 | Odbiór P3.3B i tylko planowanie C | Kasia i Aleksy zaakceptowali B z opisanymi ograniczeniami i zlecili propozycję C, w tym poprawę ostrości miniatur. Aktualizuje D-050: B zakończone/odebrane, 6/6 wywołań zużyte. Bez implementacji C, nowych płatnych wywołań i prywatnych zdjęć w AI. |
 | D-052 | 2026-10-26 | Propozycja do zatwierdzenia | V1.8 proponuje C1: miniatury, pełny podgląd i przygotowanie całego przepływu C przy AI OFF, bez klucza w chmurze; później osobne C2: 30 dni / 25 PLN łącznie / maks. 60 wysłań, 30/konto i 5/dobę, bez retry. 30 wysłań/konto zastępuje wcześniejszą propozycję 40 prób. Zasady AI V1.1 rozdzielają usunięcie wyników i zdjęcia sylwetki. Finansowanie C2 wymaga osobnego aktualnego uzgodnienia. Żaden z tych zakresów nie jest jeszcze zatwierdzony. |
 
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-053 | 2026-10-26 | Zatwierdzone P3.3C1 | Aktualizuje D-052: implementacja C1 według V1.8 — ostrzejsze miniatury, pełny podgląd, przygotowanie przepływu, zgód, usuwania i kosztów; dev, testy syntetyczne, podgląd main. AI OFF na serwerze, bez klucza AI w chmurze, płatnych wywołań, prywatnych zdjęć w AI i nowych abonamentów. Zatrzymanie przed osobno zatwierdzanym C2. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

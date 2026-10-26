@@ -1,9 +1,10 @@
 # Plan implementacji Ubranka — V1.8
 
 Data: 2026-10-26. Rozwinięcie [V1.7](IMPLEMENTATION-PLAN-V1.7.md).
-**P3.3B odebrane z ograniczeniami. Poniżej propozycja C, nie zgoda na wykonanie.**
-Obecne zlecenie obejmuje tylko dokumentację. Nie zmieniamy kodu, usług, kluczy,
-liczników ani zdjęć. Nie wykonujemy wywołań AI.
+**P3.3B odebrane z ograniczeniami. Aktualizacja 2026-10-26: użytkownik
+zatwierdził implementację C1, testy syntetyczne i podgląd main.** Serwerowe AI
+pozostaje OFF, bez klucza AI w chmurze, płatnych wywołań, prywatnych zdjęć w AI
+i nowych abonamentów. C2 poniżej nadal jest propozycją wymagającą osobnej zgody.
 
 [Wymagania V1.8](REQUIREMENTS-V1.8.md), [koszty V1.7](COST-PLAN-V1.7.md),
 [zasady danych AI V1.1](P33-AI-DATA-POLICY-V1.1.md).
@@ -18,7 +19,7 @@ W C1 cały ten przepływ sprawdzamy syntetycznie; na main AI pozostaje wyłączo
 
 | Zakres do osobnej akceptacji | Rezultat | Granica |
 | --- | --- | --- |
-| **C1 — rekomendowany następny krok** | Ostrzejsze miniatury i pełny podgląd; gotowy przepływ C, zgody, izolacja danych, limity i raport testów. Dev → main. | AI OFF także na serwerze, bez klucza AI w chmurze, płatnych wywołań i prywatnych zdjęć w testach AI. Istniejące usługi, bez nowych abonamentów. |
+| **C1 — zatwierdzone, realizacja** | Ostrzejsze miniatury i pełny podgląd; gotowy przepływ C, zgody, izolacja danych, limity i raport testów. Dev → main. | AI OFF także na serwerze, bez klucza AI w chmurze, płatnych wywołań i prywatnych zdjęć w testach AI. Istniejące usługi, bez nowych abonamentów. |
 | **C2 — po C1 i osobnej zgodzie** | Pilotaż na dwóch kontach, uruchamiany przez użytkowników we własnej aplikacji: 30 dni / 25 PLN AI łącznie / najwyżej 60 wysłań. | Każda osoba potwierdza własne zdjęcia. Bez retry i automatycznego przedłużenia. Osobny klucz i potwierdzone finansowanie, zamknięcie po próbie. |
 
 To podział proponowanego zakresu C, nie powtórzenie B. Wykorzystujemy sprawdzony

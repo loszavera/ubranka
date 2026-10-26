@@ -1,10 +1,11 @@
 # Wymagania Ubranka — V1.8
 
 Data: 2026-10-26. Dodatek do [V1.7](REQUIREMENTS-V1.7.md).
-**Kasia i Aleksy zaakceptowali P3.3B z opisanymi ograniczeniami. Zlecili tylko
-propozycję P3.3C, w tym poprawę ostrości miniatur. C nie jest zatwierdzone do
-implementacji ani uruchomienia.** Nadal brak zgody na nowe płatne wywołania
-i przesyłanie prywatnych zdjęć do AI.
+**Kasia i Aleksy zaakceptowali P3.3B z opisanymi ograniczeniami. Po przygotowaniu
+propozycji użytkownik zatwierdził 2026-10-26 implementację P3.3C1 według V1.8,
+testy syntetyczne i podgląd main.** AI pozostaje OFF. Nie ma zgody na klucz AI
+w chmurze, nowe płatne wywołania, przesyłanie prywatnych zdjęć do AI ani nowe
+abonamenty. C2 i jego aktywacja nadal wymagają osobnej decyzji.
 
 [Plan V1.8](IMPLEMENTATION-PLAN-V1.8.md), [koszty V1.7](COST-PLAN-V1.7.md),
 [proponowane zasady danych AI V1.1](P33-AI-DATA-POLICY-V1.1.md).

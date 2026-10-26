@@ -2,17 +2,35 @@
 
 Aktualizacja: 2026-10-26.
 
+**P3.3C1 zatwierdzone do implementacji według V1.8; praca trwa na dev.**
+Zakres: ostrzejsze miniatury, pełny podgląd, przygotowanie przepływu prywatnych
+wizualizacji, zgód, usuwania i limitów. Testy syntetyczne oraz podgląd na main
+są zatwierdzone. AI pozostaje wyłączone na serwerze; bez klucza AI w chmurze,
+płatnych wywołań, prywatnych zdjęć w AI i nowych abonamentów. Zatrzymanie przed C2.
+Stan początkowy chmury: `ai_enabled=false`, globalna blokada włączona,
+próba B zamknięta. Nie otwieramy jej slotów i nie zerujemy historii kosztów.
+Kod C1 zintegrowano na dev. Kontrole: 82 testy klienta, 97 backendu, 8 kodeka,
+15 E2E demo i 31 E2E prywatnych PASS; typy/lint, eksport trzech platform,
+zgodność zależności i Expo Doctor 21/21 PASS. Migracja i trzy funkcje Supabase
+są wdrożone. Kontrole rzeczywistego OFF oraz dwóch współbieżnych transakcji
+syntetycznych przeszły; po zwolnieniu rezerwy wspólny miesiąc i B nadal mają
+149 groszy wydatku i zero rezerw. Trwa końcowa kontrola odczytu/eksportu,
+publikacji i sprzątanie fixture. Szczegóły: [raport C1](P33C1-VERIFICATION.md).
+
+## Plan C — historia przygotowania
+
 **P3.3B zaakceptowane przez Kasię i Aleksego z opisanymi ograniczeniami
 (2026-10-26).** Zlecono wyłącznie propozycję P3.3C z poprawą ostrości miniatur.
 Powstały [wymagania V1.8](REQUIREMENTS-V1.8.md),
 [plan V1.8](IMPLEMENTATION-PLAN-V1.8.md), [koszty V1.7](COST-PLAN-V1.7.md)
 i [propozycja zasad danych AI V1.1](P33-AI-DATA-POLICY-V1.1.md).
-**C1/C2 nie zatwierdzono do wykonania.** Rekomendacja C1: czytelniejsza
+W chwili przygotowania **C1/C2 nie były zatwierdzone do wykonania**; późniejsza
+zgoda na C1 jest opisana powyżej. Rekomendacja C1: czytelniejsza
 miniatura i pełny podgląd, zgody, izolacja, liczniki i testy syntetyczne przy
 serwerowym AI OFF. C2 osobno: 30 dni / 25 PLN łącznie, maks. 60 wysłań,
 30/konto i 5/dobę, bez ponowień. Szczegóły finansowania trzeba ustalić przed C2;
 zgoda na B nie przechodzi na C.
-W tej turze tylko dokumentacja i odczyt kodu/oficjalnych źródeł, bez zmiany
+W turze planowania tylko dokumentacja i odczyt kodu/oficjalnych źródeł, bez zmiany
 aplikacji, usług, kluczy i danych oraz bez nowych wywołań AI. Testów runtime
 nie powtarzano. Odbiór B nie dopisuje logowania Kasi ani testów urządzeń.
 Kontrola dokumentacji: dziewięć plików, 114 lokalnych odnośników bez braków,
@@ -53,8 +71,9 @@ Vercel Production READY. Końcowy test WWW 390/1440 px: 18 kontroli PASS
 Historia CI dotyczy runtime; nowe dowody galerii zapisano w raporcie B.
 **Odbiór B został następnie potwierdzony 2026-10-26.** Poprawę czytelności
 miniatury 120×180 px uwzględniono w propozycji C1: większa miniatura ≤100 kB
-i podgląd istniejącego oryginału na żądanie. Nie została zaimplementowana.
-Implementacja C/D nadal niezlecona; prywatne zdjęcia pozostają wyłączone z AI.
+i podgląd istniejącego oryginału na żądanie. Późniejsza implementacja C1 jest
+opisana na początku tego dokumentu. C2/D nadal niezlecone; prywatne zdjęcia
+pozostają wyłączone z AI.
 
 ## Odebrane P3.3A — dowody wykonania
 
@@ -295,10 +314,10 @@ dostępu nie zatwierdza płatnej próby, zakupu kredytów ani zmiany rozliczeń.
 
 ## Następny krok
 
-**Zatwierdzenie C1 według V1.8:** ostrzejsze miniatury, pełny podgląd i
-przygotowanie przepływu C z AI OFF, testy syntetyczne, dev i podgląd main.
-Oczekiwany rezultat: gotowa do oceny aplikacja, bez aktywnego AI i klucza AI
-w chmurze. Osobny późniejszy start C2 wymaga zgody na płatny pilotaż,
+**Dokończenie zatwierdzonego C1, następnie test użytkowników na main:**
+ostrość przykładów na telefonie oraz przygotowanie wejść własnego zestawu
+przy AI OFF. Oczekiwany rezultat: odbiór lub konkretny feedback.
+Osobny późniejszy start C2 wymaga zgody na płatny pilotaż,
 finansowanie i świadome wysłanie zdjęć przez każdego uczestnika.
 Nie ponawiamy żadnej generacji B; jego sześć slotów pozostaje wykorzystanych.
 

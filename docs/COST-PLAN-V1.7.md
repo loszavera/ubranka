@@ -2,7 +2,8 @@
 
 Data: 2026-10-26. Zastępuje propozycję limitów C z [V1.5](COST-PLAN-V1.5.md);
 [V1.6](COST-PLAN-V1.6.md) zachowuje historyczny zakres B.
-**C1/C2 oczekują na zgodę. Dziś tylko plan, bez nowych wywołań i zmian usług.**
+**Aktualizacja 2026-10-26: C1 zatwierdzone do implementacji z kosztem AI 0,
+bez klucza AI w chmurze i nowych abonamentów. C2 nadal oczekuje na zgodę.**
 
 ## Co wiemy, a czego jeszcze nie zmierzono
 

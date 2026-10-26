@@ -65,9 +65,9 @@
     "preview": "expo serve --port 4173",
     "test:e2e": "npm run build:web && playwright test",
     "test:private:e2e": "node scripts/private-e2e.mjs",
-    "test:backend": "node --experimental-strip-types --test supabase/tests/protocol.test.ts supabase/tests/cleanup.test.ts supabase/tests/database.test.mjs supabase/tests/styling-database.test.mjs supabase/tests/styling-protocol.test.ts supabase/tests/trial-database.test.mjs supabase/tests/trial-protocol.test.ts",
+    "test:backend": "node --experimental-strip-types --test supabase/tests/protocol.test.ts supabase/tests/cleanup.test.ts supabase/tests/database.test.mjs supabase/tests/styling-database.test.mjs supabase/tests/styling-protocol.test.ts supabase/tests/trial-database.test.mjs supabase/tests/trial-protocol.test.ts supabase/tests/pilot-database.test.mjs supabase/tests/pilot-protocol.test.ts",
     "test:codec": "npx --yes deno@2.9.6 test --config supabase/functions/deno.json supabase/tests/png-codec.deno.ts",
-    "check:backend": "npx --yes deno@2.9.6 check --config supabase/functions/deno.json supabase/functions/wardrobe/index.ts supabase/functions/wardrobe-cleanup/index.ts supabase/functions/visualization-worker/index.ts"
+    "check:backend": "npx --yes deno@2.9.6 check --config supabase/functions/deno.json supabase/functions/wardrobe/index.ts supabase/functions/wardrobe-cleanup/index.ts supabase/functions/visualization-worker/index.ts supabase/functions/visualization-worker/private-worker.ts"
   },
   "private": true
 }

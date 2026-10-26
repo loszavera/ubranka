@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light"><meta name="robots" content="noindex">
+  <title>ubranka · Czytelniejszy podgląd</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#342b32;background:#f7f3ee;line-height:1.55}
+    *{box-sizing:border-box}body{margin:0}header,main,footer{max-width:1060px;margin:auto;padding:24px}header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    a{color:#65465f;text-underline-offset:4px}.brand{font-size:28px;font-weight:800;text-decoration:none;letter-spacing:-1px}
+    button,.back{font:inherit;border:1px solid #d9cdd5;border-radius:24px;padding:11px 18px;background:#fffdfb;color:#563d52;cursor:pointer;min-height:44px}
+    button[aria-pressed=true],.primary{background:#62435e;color:white;border-color:#62435e}button:focus-visible,a:focus-visible{outline:3px solid #aa799d;outline-offset:4px}
+    .languages{display:flex;gap:7px}h1{font-size:clamp(30px,5vw,46px);line-height:1.15;letter-spacing:-1.3px;margin:10px 0 20px}h2{font-size:21px;margin:0 0 18px}
+    .intro{max-width:740px;font-size:17px}.badge{display:inline-block;padding:6px 12px;background:#eae2e9;border-radius:20px;color:#62435e;font-size:13px;font-weight:700}
+    .cards{display:grid;gap:22px;margin:32px 0}.card{background:#fffdfa;border:1px solid #e4dadf;border-radius:24px;padding:24px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:640px;margin:auto}
+    figure{margin:0;min-width:0}figcaption{font-size:14px;font-weight:650;margin-bottom:8px}img{display:block;width:100%;height:auto;aspect-ratio:2/3;object-fit:contain;background:#eee6eb;border-radius:14px}
+    .metadata{color:#766a73;font-size:13px;margin:8px 0}.actions{display:flex;justify-content:center;margin-top:20px}.note{color:#766a73;font-size:14px;max-width:740px}
+    dialog{border:1px solid #ded1da;border-radius:22px;max-width:calc(100vw - 24px);width:720px;max-height:94vh;background:#fffdfa;padding:18px;color:#342b32}dialog::backdrop{background:#221820b8}
+    .dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}dialog h2{margin:0;font-size:18px}dialog img{max-height:75vh;aspect-ratio:auto;width:100%;object-fit:contain}
+    footer{padding-bottom:40px}#error{color:#953c4d}#error:empty{display:none}
+    @media(max-width:500px){header,main,footer{padding:18px}.card{padding:16px}.pair{gap:10px}.metadata{font-size:12px}.brand{font-size:24px}}
+  </style>
+</head>
+<body>
+  <header><a class="brand" href="/">ubranka</a><nav class="languages" aria-label="Język / Language"><button id="pl" aria-pressed="true">PL</button><button id="en" aria-pressed="false">EN</button></nav></header>
+  <main>
+    <span class="badge" id="badge"></span><h1 id="title"></h1><p class="intro" id="intro"></p>
+    <p class="note" id="note"></p><p id="error" role="alert"></p><section class="cards" id="cards" aria-label="Porównanie podglądów"></section>
+    <noscript>Ta strona pokazuje porównanie syntetycznych zdjęć. Włącz JavaScript lub przejdź do <a href="/p33b/">galerii B</a>.</noscript>
+  </main>
+  <footer><a href="/" id="back"></a> · <a href="/p33b/" id="previous"></a></footer>
+  <dialog id="full-dialog" aria-labelledby="full-title"><div class="dialog-head"><h2 id="full-title"></h2><button id="close" autofocus></button></div><img id="full-image" alt=""></dialog>
+  <script>
+    const words={pl:{badge:'P3.3C1 · AI wyłączone',title:'Ten sam obraz. Czytelniejszy podgląd.',intro:'Porównaj małe miniatury z nowymi podglądami. Wszystkie osoby i ubrania są fikcyjne. Wykorzystaliśmy sześć istniejących wyników próby B — bez nowych generacji AI.',note:'To porównanie podglądów, nie nowa ocena jakości AI ani rozmiaru ubrania. Duży podgląd otwiera publiczny obraz z galerii B; w prywatnej aplikacji oryginał wymaga zalogowania.',before:'Przed',after:'Po poprawie',open:'Otwórz duży podgląd',close:'Zamknij',back:'Wróć do aplikacji',previous:'Galeria próby B',error:'Nie udało się wczytać porównania. Odśwież stronę.',aria:'Porównanie podglądów'},en:{badge:'P3.3C1 · AI is off',title:'The same image. A clearer preview.',intro:'Compare the small thumbnails with the new previews. All people and clothing are fictional. We reused six existing results from trial B — no new AI generations.',note:'This compares previews, not AI quality or clothing size. The large view opens a public image from gallery B; originals in the private app require sign-in.',before:'Before',after:'After',open:'Open large preview',close:'Close',back:'Back to the app',previous:'Trial B gallery',error:'Could not load the comparison. Refresh the page.',aria:'Preview comparison'}};
+    let language='pl',data=null,opener=null;const $=id=>document.getElementById(id);
+    const element=(tag,text,className)=>{const e=document.createElement(tag);if(text)e.textContent=text;if(className)e.className=className;return e;};
+    function render(){
+      const t=words[language];document.documentElement.lang=language;document.title='ubranka · '+t.title;
+      for(const id of ['badge','title','intro','note','back','previous','close'])$(id).textContent=t[id];
+      $('pl').setAttribute('aria-pressed',String(language==='pl'));$('en').setAttribute('aria-pressed',String(language==='en'));$('cards').setAttribute('aria-label',t.aria);$('cards').replaceChildren();
+      if(!data)return;
+      for(const item of data.cases){
+        const card=element('article',null,'card'),heading=element('h2',item.label[language]),pair=element('div',null,'pair');card.append(heading,pair);
+        for(const variant of ['before','after']){
+          const imageData=item[variant],figure=element('figure'),caption=element('figcaption',t[variant]),img=element('img');
+          img.src=imageData.path;img.alt=item.label[language]+' — '+t[variant];img.loading='lazy';img.decoding='async';img.width=imageData.width;img.height=imageData.height;
+          figure.append(caption,img,element('p',imageData.width+' × '+imageData.height+' px · '+(imageData.bytes/1000).toFixed(1)+' kB','metadata'));pair.append(figure);
+        }
+        const actions=element('div',null,'actions'),open=element('button',t.open,'primary');
+        open.addEventListener('click',()=>{opener=open;$('full-title').textContent=item.label[language];$('full-image').alt=item.label[language];$('full-image').src=item.fullPath;$('full-dialog').showModal();});
+        actions.append(open);card.append(actions);$('cards').append(card);
+      }
+    }
+    $('close').addEventListener('click',()=>$('full-dialog').close());
+    $('full-dialog').addEventListener('close',()=>{$('full-image').removeAttribute('src');opener?.focus();});
+    for(const value of ['pl','en'])$(value).addEventListener('click',()=>{language=value;render();});
+    render();fetch('./summary.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(value=>{data=value;render();}).catch(()=>$('error').textContent=words[language].error);
+  </script>
+</body>
+</html>

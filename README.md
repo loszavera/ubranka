@@ -48,11 +48,14 @@ generacji syntetycznych, bez ponowień; 0,214403 USD API / 1,49 PLN budżetu.
 AI ponownie OFF, klucz B unieważniony i usunięty, limit 6/6 wyczerpany.
 [Raport P3.3B](docs/P33B-REPORT.md),
 [galeria wejść i wyników](https://ubranka.vercel.app/p33b/).
-**P3.3C: przygotowano tylko propozycję [V1.8](docs/IMPLEMENTATION-PLAN-V1.8.md).**
-Rekomendowane C1: ostrzejsze miniatury, pełny podgląd i przygotowanie prywatnego
-przepływu z AI OFF. Późniejsze C2: osobno zatwierdzany pilotaż 30 dni / 25 PLN
-łącznie, maks. 60 wysłań (30/konto). C nie rozpoczęto; brak nowych wywołań,
-prywatnych zdjęć w AI i nowych abonamentów.
+**P3.3C1 zatwierdzono i zaimplementowano według [V1.8](docs/IMPLEMENTATION-PLAN-V1.8.md).**
+Ostrzejsze miniatury, pełny podgląd na żądanie oraz przygotowanie konkretnych
+prywatnych wejść, zgód, limitów i usuwania. AI pozostaje wyłączone na serwerze,
+bez klucza AI w chmurze i nowych generacji. [Raport C1](docs/P33C1-VERIFICATION.md)
+rozróżnia testy lokalne, rzeczywisty Supabase i końcową kontrolę publikacji.
+[Porównanie syntetyczne](https://ubranka.vercel.app/p33c1/) używa zachowanych
+wyników B. Późniejsze C2 nadal wymaga osobnej zgody: pilotaż 30 dni / 25 PLN
+łącznie, maks. 60 wysłań (30/konto). Nie przesyłano prywatnych zdjęć do AI.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
 jest wspólna dla obu adresów. Lokalny zapis demo pozostaje osobny — publikacja
@@ -64,6 +67,8 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 - [Wymagania V1.8 — odebrane B, propozycja C](docs/REQUIREMENTS-V1.8.md)
 - [Plan implementacji V1.8 — C1 z AI OFF, osobny pilotaż C2](docs/IMPLEMENTATION-PLAN-V1.8.md)
+- [P3.3C1 — weryfikacja, publikacja i odbiór](docs/P33C1-VERIFICATION.md)
+- [P3.3C1 — kodek i porównanie miniatur](docs/P33C1-CODEC.md)
 - [Propozycja zasad danych AI V1.1 — prywatny pilotaż C](docs/P33-AI-DATA-POLICY-V1.1.md)
 - [P3.3B — raport integracji, próby i kosztów](docs/P33B-REPORT.md)
 - [P3.3B — kontrakty i bezpłatne kontrole operatorowe](supabase/P33B-OPERATIONS.md)

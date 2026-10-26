@@ -1,0 +1,166 @@
+{
+  "version": "1.0",
+  "phase": "P3.3C1",
+  "aiEnabled": false,
+  "newPaidCalls": 0,
+  "date": "2026-10-26",
+  "note": "Existing synthetic B results only; original B gallery and financial history unchanged.",
+  "cases": [
+    {
+      "id": "B01",
+      "label": {
+        "pl": "Kobieta / na co dzień",
+        "en": "Woman / everyday"
+      },
+      "fullPath": "/p33b/results/b01.webp",
+      "fullSha256": "f24a09cd874140946515a06653fc340d2fc42432f6e938665f30f4c1cb05d925",
+      "originalPngSha256": "97dab46b21cc9088a917c7b4a5e1b6e78206411e0260ce6d81de789457de48e9",
+      "before": {
+        "path": "images/B01-old120.png",
+        "width": 120,
+        "height": 180,
+        "bytes": 33351,
+        "mimeType": "image/png",
+        "sha256": "6fd489b53a626ee03b2b5f425860a1952f0a80d586e827f72f687837a6870c2c"
+      },
+      "after": {
+        "path": "images/B01-thumb.jpg",
+        "width": 600,
+        "height": 900,
+        "bytes": 45159,
+        "mimeType": "image/jpeg",
+        "sha256": "8ff90b8dafe19b8b1759d6c31a7391fdf65dfe6e3eebc182fd9e806d3bd20b7c"
+      }
+    },
+    {
+      "id": "B02",
+      "label": {
+        "pl": "Mężczyzna / na co dzień",
+        "en": "Man / everyday"
+      },
+      "fullPath": "/p33b/results/b02.webp",
+      "fullSha256": "7ef91f70091b489d29adb4b768f6289931db6a3126c6f8ead6df5403c80524c1",
+      "originalPngSha256": "0d1cbd9920959eb03ac4d0a4ac4f7ed30b454d97f88139f7b430ee2a624076c8",
+      "before": {
+        "path": "images/B02-old120.png",
+        "width": 120,
+        "height": 180,
+        "bytes": 31231,
+        "mimeType": "image/png",
+        "sha256": "ea35cb1fd17682fd8c36bdf1b2530db90f3bfa13deeb4daef37be8ac56dd8340"
+      },
+      "after": {
+        "path": "images/B02-thumb.jpg",
+        "width": 600,
+        "height": 900,
+        "bytes": 42226,
+        "mimeType": "image/jpeg",
+        "sha256": "d3f401b5a28bb9a7b29f2febaa3ed2f5ff4f81ba896777783de4f9e547e59cd3"
+      }
+    },
+    {
+      "id": "B03",
+      "label": {
+        "pl": "Kobieta / elegancko",
+        "en": "Woman / elegant"
+      },
+      "fullPath": "/p33b/results/b03.webp",
+      "fullSha256": "1c5b99501d4f6d7fcd746cbca6fe81fa381771fc630a0466e1d7aa6964c66e05",
+      "originalPngSha256": "ec289c4687df2669f70ef416d205e4461046682552b13c4a9dc6654267babd7a",
+      "before": {
+        "path": "images/B03-old120.png",
+        "width": 120,
+        "height": 180,
+        "bytes": 32061,
+        "mimeType": "image/png",
+        "sha256": "62c153f36768a2fe03519f8348cf51d05dd7398443e7243f7e11dde7b393c21c"
+      },
+      "after": {
+        "path": "images/B03-thumb.jpg",
+        "width": 600,
+        "height": 900,
+        "bytes": 44841,
+        "mimeType": "image/jpeg",
+        "sha256": "d1c3d0c99a742263e02224eda6db35c890eee7555a4869748e790b5e354ff6d9"
+      }
+    },
+    {
+      "id": "B04",
+      "label": {
+        "pl": "Mężczyzna / elegancko",
+        "en": "Man / elegant"
+      },
+      "fullPath": "/p33b/results/b04.webp",
+      "fullSha256": "a1fc63d67b14b043c0a92616ef6d9d70eb1de0aca44f1c1f8507f905a30422b2",
+      "originalPngSha256": "27d937f521552f5074fe0a98d077a8810f85748d204b367d3ec064e8295881ac",
+      "before": {
+        "path": "images/B04-old120.png",
+        "width": 120,
+        "height": 180,
+        "bytes": 31364,
+        "mimeType": "image/png",
+        "sha256": "d8bf3c9c56ab435d74d15cb285639c30748e59e1c01bb5b573cfe6edf5330b0e"
+      },
+      "after": {
+        "path": "images/B04-thumb.jpg",
+        "width": 600,
+        "height": 900,
+        "bytes": 43179,
+        "mimeType": "image/jpeg",
+        "sha256": "29e06d1fca76b4ae24947cb2a3d8eae8291138763b036057f59e51379b3bfb39"
+      }
+    },
+    {
+      "id": "B05",
+      "label": {
+        "pl": "Kobieta / wesele jako gość",
+        "en": "Woman / wedding guest"
+      },
+      "fullPath": "/p33b/results/b05.webp",
+      "fullSha256": "5b63ce4470955cdf15e2dd11e31b6126f73376e50cd129cd1300a92a8002e820",
+      "originalPngSha256": "b70feb6e6221cd6e0d4944fed7215be7466d088d66a0286dd5daac75cee186b0",
+      "before": {
+        "path": "images/B05-old120.png",
+        "width": 120,
+        "height": 180,
+        "bytes": 35575,
+        "mimeType": "image/png",
+        "sha256": "04caf75d08bdf4830e64a52745f345f04081e5d1687e478f512d2d17a5bfc7d1"
+      },
+      "after": {
+        "path": "images/B05-thumb.jpg",
+        "width": 600,
+        "height": 900,
+        "bytes": 49011,
+        "mimeType": "image/jpeg",
+        "sha256": "a66ec7325e8855113860d3e15650121aaa75a97642cf06b0c4cc7701186aa76b"
+      }
+    },
+    {
+      "id": "B06",
+      "label": {
+        "pl": "Mężczyzna / wesele jako gość",
+        "en": "Man / wedding guest"
+      },
+      "fullPath": "/p33b/results/b06.webp",
+      "fullSha256": "a4f0b6bbdcacb8c120cde97fc366faab1b630e881cfa71a09fcf1420878044a9",
+      "originalPngSha256": "cb4447135f0442cc53a6149896c8459706eab309bddc41434ce17e7c0235222b",
+      "before": {
+        "path": "images/B06-old120.png",
+        "width": 120,
+        "height": 180,
+        "bytes": 31088,
+        "mimeType": "image/png",
+        "sha256": "adbcf05e5dc91d1226c45adfcc74b28c256f050cdc970d8e146f2895bde6638b"
+      },
+      "after": {
+        "path": "images/B06-thumb.jpg",
+        "width": 600,
+        "height": 900,
+        "bytes": 42698,
+        "mimeType": "image/jpeg",
+        "sha256": "d29b2d6bfb4abd5cdc4b58d637cba1ad03ff31e2830e28220ad617a9f30b6fc3"
+      }
+    }
+  ]
+}

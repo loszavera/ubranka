@@ -101,5 +101,6 @@ Ignorowany katalog `artifacts/p33c1-codec/` w worktree pomiaru zawiera:
 `entropy-source.png`, `entropy-thumb.png`, `entropy-old120.png` oraz
 `contact-sheet-1.jpg`, `contact-sheet-2.jpg`.
 Artefakty do galerii root pobiera z tego katalogu; istniejące `public/p33b/`
-i oryginalne PNG nie zostały zmienione. W tym zadaniu wykonano **0 wywołań AI**,
-**0 operacji chmurowych** i **0 wdrożeń**.
+i oryginalne PNG nie zostały zmienione. Ten lokalny pomiar obejmował **0 wywołań AI**,
+**0 operacji chmurowych** i **0 wdrożeń**. Późniejsze bezpłatne pomiary rzeczywistego
+Edge oraz publikację C1 opisuje [raport integracyjny](P33C1-VERIFICATION.md).
