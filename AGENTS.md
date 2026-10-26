@@ -117,15 +117,15 @@ zgodne, zero błędów. Dowody: docs/P33B-REPORT.md.
 i zlecili wyłącznie propozycję C, uwzględniającą ostrzejsze miniatury.
 Nie pytaj ponownie o odbiór B. Nie dopisuj testów konkretnych urządzeń ani
 osobnego potwierdzenia logowania Kasi. Obecne wymagania/plan: V1.8,
-koszty V1.7, propozycja zasad danych AI V1.1. To dokumentacja do zatwierdzenia,
-**bez zgody na implementację C, nowe płatne wywołania i prywatne zdjęcia w AI**.
-Rekomendowane C1: ostrzejszy podgląd (kandydat JPEG 600×900 ≤100 kB), osobne
+koszty V1.7, propozycja zasad danych AI V1.1. W chwili sporządzenia była to
+dokumentacja **bez zgody na implementację C, nowe płatne wywołania i prywatne zdjęcia w AI**.
+Ówczesne rekomendowane C1: ostrzejszy podgląd (kandydat JPEG 600×900 ≤100 kB), osobne
 otwarcie istniejącego PNG, gotowy przepływ/zgody/limity C z serwerowym AI OFF,
-bez klucza w chmurze, testy syntetyczne i main. Nie zmieniaj kodeka teraz.
+bez klucza w chmurze, testy syntetyczne i main. Późniejsza zgoda C1 jest poniżej.
 C2 to osobno zatwierdzany pilotaż 30 dni / 25 PLN łącznie / maks. 60 wysłań,
 30/konto i 5/dobę, bez retry. Te limity są propozycją, nie aktywną konfiguracją.
 Finansowanie B nie przechodzi na C. Nie odnawiaj slotów B ani lokalnego klucza
-P3.2; kolejnym krokiem do zaproponowania jest akceptacja C1, nie aktywacja AI.
+P3.2; na tym etapie proponowano akceptację C1, nie aktywację AI.
 Następnie 2026-10-26 użytkownik **zatwierdził implementację P3.3C1 według V1.8**:
 ostrzejsze miniatury, pełny podgląd oraz przygotowanie prywatnego przepływu,
 zgód, usuwania i kosztów. Praca na dev, testy syntetyczne i publikacja na main
@@ -135,6 +135,16 @@ abonamentów. To aktualizuje wcześniejszy zakaz implementacji C1, ale nie
 uruchamia C2. Limity C2 można przygotować w nieaktywnej konfiguracji i testować
 na odizolowanych syntetycznych danych. Nie aktywuj trialu ani dostawcy.
 Po raporcie/testach/podglądzie C1 zatrzymaj się przed P3.3C2.
+P3.3C1 wykonano i opublikowano na dev/main 2026-10-26: runtime `b6363ec`,
+Vercel READY, pełne CI 40364002496 SUCCESS (233 testy). Hosted testy na dwóch
+świeżych kontach syntetycznych przeszły. Naprawiono blokadę cleanupu przez
+Supabase safeupdate bez wyłączania ochrony. Zwykły cron usunął oba konta,
+rekordy i 20 plików; zaproszenia, puste triale fixture i lokalne sesje usunięte.
+B zachowało sześć zużytych slotów i identyczne rozliczenie; C jest prepared,
+bez uczestników/dat/prób. AI OFF, zero nowych wywołań/kosztu API i kluczy AI.
+Raport: docs/P33C1-VERIFICATION.md, porównanie miniatur: /p33c1/.
+Odbiór C1 przez Kasię i Aleksego oczekuje. Zaproponuj test na ich telefonach,
+bez uruchamiania C2. Eksport i emulacja WWW nie są testami fizycznych urządzeń.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
 po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,
 promptów ani tokenów. Znika po potwierdzeniu trwałego slotu z serwera lub po

@@ -1,7 +1,8 @@
 # P3.3C1 — przygotowanie prywatnych wizualizacji
 
 Data: 2026-10-26. Zakres zatwierdzony według [planu V1.8](IMPLEMENTATION-PLAN-V1.8.md).
-Raport w trakcie domykania kontroli wdrożenia. C2 nie jest uruchomione.
+**C1 wykonane i opublikowane na main; odbiór Kasi i Aleksego oczekuje.**
+C2 nie jest uruchomione.
 
 ## Zakres i granice
 
@@ -79,8 +80,97 @@ działania rzeczywistego OpenAI. PL 390 px oraz EN 320/390 px oceniono wzrokowo.
 
 ## Kontrole końcowe
 
-Backend, migracja, współbieżne transakcje, rzeczywiste odczyty/eksport,
-sprzątanie fixture, publikacja i CI: wyniki zostaną uzupełnione po zakończeniu.
+Testy zintegrowane: typy/lint PASS; 82 testy klienta, 97 backendu, 8 kodeka,
+15 E2E demo i 31 prywatnych E2E PASS. `build:all` obejmuje WWW/iOS/Android;
+zgodność zależności PASS, Expo Doctor 21/21. CI dla kodu
+`a03188876a27f49e250673e71849580f52d67504`:
+[40345096974 — SUCCESS](https://github.com/loszavera/ubranka/actions/runs/40345096974).
+Użyto jednego `workflow_dispatch`, bez zmiany ustawień Actions.
+
+Po poprawce retencji pełne CI powtórzono dla końcowego kodu
+`b6363ec68879999ffac1d245e22003b6fd4137d7`:
+[40364002496 — SUCCESS](https://github.com/loszavera/ubranka/actions/runs/40364002496).
+Wszystkie kroki, łącznie z 233 testami, kontrolą Deno, eksportem trzech platform
+i oboma zestawami E2E, przeszły. Jeden dispatch dla tej poprawki; bez zmiany
+ustawień usług. Późniejszy commit aktualizuje wyłącznie dokumentację wykonania.
+
+Migracja `private_visualization_c1` wdrożona jako `20261026113435`.
+Funkcje: wardrobe v10, cleanup v9, worker v8. Bez nowego projektu/usługi.
+Prywatna konfiguracja `p33c-v1` jest nieaktywna; daty i przypisanie uczestników
+pozostają do C2. Mechanizm dopuszcza maksymalnie dwa sloty uczestników.
+Publiczne ścieżki C mają hard OFF; dawne wejścia B straciły uprawnienia
+`service_role`. Rozliczenie starego zlecenia nie jest nowym wysłaniem.
+
+Kontrole rzeczywistego Supabase:
+
+- 12 podstawowych i 10 dodatkowych kontroli: odmowa generacji przez Edge,
+  worker i bezpośrednie RPC A/B/C; brak obejścia przez zgodę lub `service_role`;
+  cudzy zestaw/job/obraz niedostępny, bezpośredni Storage i signed URL odmawiają.
+- Dwie niezależne transakcje SQL w odrębnym trialu syntetycznym: odczyt
+  `pg_blocking_pids()` potwierdził waiter z jednym blokującym procesem. Po COMMIT
+  pierwszej drugi czekał 9298 ms i zakończył się `AI_BUSY`. Obie transakcje
+  zatwierdzono; powstała jedna rezerwacja 23,51 PLN i zero znaczników wysłania.
+  Publiczny przełącznik pozostał OFF. Rezerwę zwolniono, fixture trial usunięto;
+  B i wspólny miesiąc zachowały 149 groszy i zero rezerw.
+- Dwa zachowane B01 wgrano jako jawne syntetyczne próbki odczytu, bez próby AI,
+  `c_attempts`, znaczników wysłania i zapisów kosztu. 16 kontroli manifestu,
+  hashy oryginału/miniatury, właściciela, eksportu i wycofania zgody PASS.
+- Zapis opinii nie unieważnił prawidłowego wyniku. Usunięcie wejścia i wygaśnięcie
+  blokowały odczyt. Usunięcie wyników zachowało sylwetkę i szafę obu kont.
+
+Vercel Production `dpl_3eU8K447Zb7T4hymo4J2tBePY3Aa`: READY dla powyższego SHA,
+alias [ubranka.vercel.app](https://ubranka.vercel.app). Lokalne/zdalne main i dev
+były równe po atomowym, zachowującym historię push.
+Hosted galeria: 8/8 kombinacji PL/EN, 390/1440 px, DPR 1/2 PASS.
+Hosted aplikacja: oba konta, PL/EN, 320/390/1440 px — **12 widoków PASS**.
+Pełny PNG i ZIP miały hash B01, miniatury JPEG 600×900, maks. dwa aktywne
+pobrania, ekran dokładnych czterech wejść, zgoda/wysłanie wyłączone, reload,
+wylogowanie i zwolnienie Blob PASS. Język obu fixture przywrócono.
+Zero błędów i prób wysłania do OpenAI. Zrzuty przejrzano wzrokowo.
+
+Pierwszy pomocnik hosted zbyt wcześnie sprawdzał wyczyszczenie sesji oraz liczył
+anulowane pobrania nadal kończone przez proxy Playwright. Poprawiono wyłącznie
+pomiar i oczekiwanie; ponowny test obu kont przeszedł. Nie zmieniano aplikacji
+na podstawie tego fałszywego alarmu. Dowód: `artifacts/p33c1-ui/report.json`,
+pierwotny wynik zachowano oddzielnie.
+
+Test sprzątania wykrył rzeczywistą różnicę hostingu: rozszerzenie Supabase
+odrzuca `UPDATE` bez `WHERE`. Archiwizacja liczników powodowała przez to rollback
+procedury retencji i zatrzymanie fizycznego cleanupu; dostęp do danych był już
+zablokowany. Poprawka `b6363ec68879999ffac1d245e22003b6fd4137d7` ogranicza
+aktualizację do kwalifikujących się rekordów. Wdrożona migracja `20261026165536`
+(`targeted_c_member_retention`) zachowuje dotychczasowe sumy i granice retencji.
+Test 20/20 PASS: dokładnie jeden kwalifikujący się licznik zostaje zmieniony,
+a kolejne sprzątanie nie aktualizuje żadnego licznika. Niezależny przegląd PASS.
+Ochrona bazy pozostaje włączona; nie uruchamiano globalnego cleanupu ręcznie.
+Końcowy dowód fizycznego usunięcia pochodzi z istniejącego cron co 10 minut.
+
+Aktualizacja 17:00:39 UTC: zwykły cron zakończył usuwanie. Dla obu dokładnie
+wskazanych kont syntetycznych jest **0 Auth, kont, rzeczy, zdjęć, profili sylwetki,
+zapisów stylizacji, jobów, manifestów wyników, intentów, zgód i obiektów Storage**.
+Usunięto wszystkie 20 plików. Następnie usunięto wyłącznie dwa zaproszenia i pusty
+trial fixture; lokalny plik sesji nie istnieje. Dowód lokalny:
+`artifacts/p33c1-final-cleanup.json`. Nie wykonywano ręcznego globalnego cleanupu.
+
+Końcowy odczyt rozliczeń: B zamknięte, 6/6 slotów nadal zużytych,
+214 403 mikro-USD / 149 groszy, zero nierozliczonych wysłań i rezerw.
+Skrót finansowy B `beba2b0c1e20d9f86089f29fe09bd6c4` pozostał identyczny.
+Wspólny miesiąc nadal ma 149 groszy i zero rezerw. C: `prepared`, brak dat,
+uczestników i prób; `ai_enabled=false`, `c_enabled=false`, globalna blokada ON.
+Nowy koszt API C1: **0 PLN**.
+
+Końcowy runtime `b6363ec` jest na main/dev. Vercel Production
+`dpl_ACxjCmCoL19MjHvFh7wwyB7sAbQk` READY, alias główny potwierdzony.
+Poprawka dotyczy wyłącznie SQL/testu; kod UI i galeria są identyczne z
+przetestowanym `a031888`. Odnośniki odbioru:
+[aplikacja](https://ubranka.vercel.app),
+[porównanie miniatur](https://ubranka.vercel.app/p33c1/).
+
+Advisor: siedem prywatnych tabel z RLS bez polityk to celowy brak bezpośredniego
+dostępu; trzy funkcje SECURITY DEFINER mają kontrolę właściciela i zostały
+sprawdzone. Istniejące ostrzeżenie o ochronie haseł pozostaje przy Google OAuth;
+nie uruchomiono dodatkowej usługi. Kontrola nazw sekretów 15:08:37 UTC:
+zero sekretów AI. Nie odczytywano ich wartości.
 
 ## Ograniczenia i odbiór
 

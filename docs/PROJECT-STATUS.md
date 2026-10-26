@@ -2,20 +2,27 @@
 
 Aktualizacja: 2026-10-26.
 
-**P3.3C1 zatwierdzone do implementacji według V1.8; praca trwa na dev.**
-Zakres: ostrzejsze miniatury, pełny podgląd, przygotowanie przepływu prywatnych
-wizualizacji, zgód, usuwania i limitów. Testy syntetyczne oraz podgląd na main
-są zatwierdzone. AI pozostaje wyłączone na serwerze; bez klucza AI w chmurze,
-płatnych wywołań, prywatnych zdjęć w AI i nowych abonamentów. Zatrzymanie przed C2.
-Stan początkowy chmury: `ai_enabled=false`, globalna blokada włączona,
-próba B zamknięta. Nie otwieramy jej slotów i nie zerujemy historii kosztów.
-Kod C1 zintegrowano na dev. Kontrole: 82 testy klienta, 97 backendu, 8 kodeka,
-15 E2E demo i 31 E2E prywatnych PASS; typy/lint, eksport trzech platform,
-zgodność zależności i Expo Doctor 21/21 PASS. Migracja i trzy funkcje Supabase
-są wdrożone. Kontrole rzeczywistego OFF oraz dwóch współbieżnych transakcji
-syntetycznych przeszły; po zwolnieniu rezerwy wspólny miesiąc i B nadal mają
-149 groszy wydatku i zero rezerw. Trwa końcowa kontrola odczytu/eksportu,
-publikacji i sprzątanie fixture. Szczegóły: [raport C1](P33C1-VERIFICATION.md).
+**P3.3C1 wykonane według V1.8 i opublikowane na main. Odbiór użytkowników oczekuje.**
+Ostrzejsze miniatury, pełny podgląd i przygotowany przepływ prywatnych
+wizualizacji, zgód, usuwania i limitów. [Aplikacja](https://ubranka.vercel.app)
+oraz [porównanie miniatur](https://ubranka.vercel.app/p33c1/).
+AI pozostaje wyłączone na serwerze; bez klucza AI w chmurze, nowych płatnych
+wywołań, prywatnych zdjęć w AI i abonamentów. Zatrzymano pracę przed C2.
+Kod końcowy `b6363ec` na dev/main; Vercel Production READY.
+CI [40364002496](https://github.com/loszavera/ubranka/actions/runs/40364002496)
+SUCCESS: 82 testy klienta, 97 backendu, 8 kodeka, 15 E2E demo i 31 prywatnych.
+Typy/lint, Deno, eksport trzech platform, zależności i Expo Doctor 21/21 PASS.
+Rzeczywisty Supabase: odmowy generacji i obcego dostępu, współbieżne transakcje,
+oryginał/miniatura/eksport, wycofanie zgody i usuwanie PASS. Hosted UI:
+12 widoków obu kont PL/EN przy 320/390/1440 px oraz 8 kombinacji galerii PASS.
+Naprawiono blokadę retencji przez hosted safeupdate, zachowując ochronę bazy.
+Po zwykłym cron oba konta syntetyczne, rekordy i 20 plików fizycznie usunięto;
+zaproszenia, puste triale fixture i lokalne sesje także usunięte.
+B pozostaje zamknięte: 6/6 zużytych slotów, 149 groszy, identyczny skrót rozliczeń,
+zero rezerw. C jest nieaktywne, z zerem prób; nowy koszt API 0 PLN.
+Brak testów na fizycznym iOS/Android. Następny krok: odbiór na urządzeniach
+Kasi i Aleksego przy wyłączonym AI. C2 wymaga osobnej decyzji.
+Szczegóły: [raport C1](P33C1-VERIFICATION.md).
 
 ## Plan C — historia przygotowania
 
