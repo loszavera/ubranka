@@ -1,10 +1,14 @@
 {
   "version": "5",
   "specifiers": {
+    "npm:@jsquash/jpeg@1.6.0": "1.6.0",
     "npm:fast-png@8.0.0": "8.0.0",
     "npm:jpeg-js@0.4.4": "0.4.4"
   },
   "npm": {
+    "@jsquash/jpeg@1.6.0": {
+      "integrity": "sha512-zwN46Awh1VM6gXlIcALwb5WzqK5H2e6+Awcs1QP8AvS8ohsK/sbE4esvmH4jhlhW7+CgiUUww66vg0aTnlSIMA=="
+    },
     "fast-png@8.0.0": {
       "integrity": "sha512-gCysNasJ8KEMgfdYIKd/wTDo6ENK1PWT0RJO7O+0pgmuHPw2O6tA1WvdxFRJoLf9V8yFYpG0FA1YgI8X97OhJA==",
       "dependencies": [

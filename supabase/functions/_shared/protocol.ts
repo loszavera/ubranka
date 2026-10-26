@@ -46,7 +46,9 @@ export function jpeg(value: unknown, maxBytes: number): Uint8Array {
     value.length % 4 !== 0 || !/^[A-Za-z0-9+/]*={0,2}$/.test(value)) throw new WardrobeError('INVALID_PHOTO');
   let binary: string;
   try { binary = atob(value); } catch { throw new WardrobeError('INVALID_PHOTO'); }
-  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  // Avoid the iterable Array intermediate for a 1 MB input on 256 MB Edge workers.
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
   if (bytes.length > maxBytes || bytes.length < 12 || bytes[0] !== 255 || bytes[1] !== 216) throw new WardrobeError('INVALID_PHOTO');
   let offset = 2;
   let dimensions = false;

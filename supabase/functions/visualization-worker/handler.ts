@@ -1,8 +1,10 @@
 import { type ImageDecoder } from './worker.ts';
 import { parseImageResponse } from '../_shared/openai-images.ts';
 import { authorizeWorker } from '../_shared/service-auth.ts';
+import { readBody, safeError, uuid } from '../_shared/protocol.ts';
+import { createPrivateWorkerTask } from './private-worker.ts';
 
-export function createWorkerHandler(environment:(key:string)=>string|undefined,_waitUntil:(task:Promise<unknown>)=>void,decode:ImageDecoder) {
+export function createWorkerHandler(environment:(key:string)=>string|undefined,waitUntil:(task:Promise<unknown>)=>void,decode:ImageDecoder) {
   return async(request:Request)=>{
     const headers={'Cache-Control':'no-store'};
     try {
@@ -30,8 +32,13 @@ export function createWorkerHandler(environment:(key:string)=>string|undefined,_
         return Response.json({width:image.width,height:image.height,bytes:image.main.length,thumbBytes:image.thumbnail.length,
           thumbMimeType:image.thumbnailMimeType??'image/png',thumbWidth:image.thumbnailWidth??120,thumbHeight:image.thumbnailHeight??180,metrics:image.metrics},{headers});
       }
-      // C1 has no production dispatch path, regardless of env, job or payload.
-      return Response.json({error:{code:'AI_DISABLED'}},{status:403,headers});
-    }catch{return Response.json({error:{code:'INVALID_REQUEST'}},{status:400,headers});}
+      const body=await readBody(request);
+      // Only the reserved SQL C plan can admit a task. Caller flags, prompts,
+      // inputs, B case IDs and environment toggles cannot authorize a send.
+      if(Object.keys(body).some(key=>!['jobId','accountId'].includes(key)))return Response.json({error:{code:'INVALID_REQUEST'}},{status:400,headers});
+      const task=await createPrivateWorkerTask(environment,uuid(body.accountId),uuid(body.jobId),decode);
+      if(!task)return Response.json({error:{code:'AI_DISABLED'}},{status:403,headers});
+      waitUntil(task());return Response.json({accepted:true},{status:202,headers});
+    }catch(error){const e=safeError(error);return Response.json({error:{code:e.code}},{status:e.status,headers});}
   };
 }

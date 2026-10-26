@@ -51,12 +51,13 @@ test('JPEG extension cannot select input bucket: authorized result metadata sele
  assert.equal((await privatePhotoResponse(caller,admin,path,{})).headers.get('content-type'),'image/jpeg');
  admin.binary=async()=>{active=false;return jpg;};await assert.rejects(privatePhotoResponse(caller,admin,path,{}),/NOT_FOUND/);
 });
-test('hosted service-authenticated worker refuses normal jobs without reading any AI credential or dispatching',async()=>{
+test('hosted service-authenticated worker refuses disabled SQL jobs without reading any AI credential or dispatching',async()=>{
  const original=globalThis.fetch,events:string[]=[];
- globalThis.fetch=async(input)=>{events.push(String(input));assert.ok(String(input).endsWith('/wardrobe_worker_authorized'));return Response.json(true);};
+ globalThis.fetch=async(input)=>{events.push(String(input));if(String(input).endsWith('/wardrobe_worker_authorized'))return Response.json(true);
+  assert.ok(String(input).endsWith('/wardrobe_c_worker_plan'));return Response.json(null);};
  try{
   const handler=createWorkerHandler(key=>{assert.ok(!key.includes('OPENAI'));return({SUPABASE_URL:'https://fixture.invalid',SUPABASE_SERVICE_ROLE_KEY:'fixture-service',SUPABASE_ANON_KEY:'fixture-public'} as Record<string,string>)[key];},()=>assert.fail('no dispatch'),decode);
-  const r=await handler(new Request('https://worker.invalid',{method:'POST',headers:{Authorization:'Bearer fixture'},body:JSON.stringify({jobId:id(9),accountId:id(1),enabled:true})}));
-  assert.equal(r.status,403);assert.equal((await r.json()).error.code,'AI_DISABLED');assert.equal(events.length,1);
+  const r=await handler(new Request('https://worker.invalid',{method:'POST',headers:{Authorization:'Bearer fixture'},body:JSON.stringify({jobId:id(9),accountId:id(1)})}));
+  assert.equal(r.status,403);assert.equal((await r.json()).error.code,'AI_DISABLED');assert.equal(events.length,2);
  }finally{globalThis.fetch=original;}
 });
