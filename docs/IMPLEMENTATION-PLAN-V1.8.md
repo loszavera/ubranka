@@ -19,7 +19,7 @@ W C1 cały ten przepływ sprawdzamy syntetycznie; na main AI pozostaje wyłączo
 
 | Zakres do osobnej akceptacji | Rezultat | Granica |
 | --- | --- | --- |
-| **C1 — wykonane, odbiór oczekuje** | Ostrzejsze miniatury i pełny podgląd; gotowy przepływ C, zgody, izolacja danych, limity i [raport testów](P33C1-VERIFICATION.md). Dev → main. | AI OFF także na serwerze, bez klucza AI w chmurze, płatnych wywołań i prywatnych zdjęć w testach AI. Istniejące usługi, bez nowych abonamentów. |
+| **C1 — wykonane i odebrane 2026-10-26** | Ostrzejsze miniatury i pełny podgląd; gotowy przepływ C, zgody, izolacja danych, limity i [raport testów](P33C1-VERIFICATION.md). Dev → main. | AI OFF także na serwerze, bez klucza AI w chmurze, płatnych wywołań i prywatnych zdjęć w testach AI. Istniejące usługi, bez nowych abonamentów. |
 | **C2 — po C1 i osobnej zgodzie** | Pilotaż na dwóch kontach, uruchamiany przez użytkowników we własnej aplikacji: 30 dni / 25 PLN AI łącznie / najwyżej 60 wysłań. | Każda osoba potwierdza własne zdjęcia. Bez retry i automatycznego przedłużenia. Osobny klucz i potwierdzone finansowanie, zamknięcie po próbie. |
 
 To podział proponowanego zakresu C, nie powtórzenie B. Wykorzystujemy sprawdzony

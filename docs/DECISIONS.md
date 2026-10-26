@@ -87,6 +87,11 @@ Nowe wpisy z 2026-10-24:
 | --- | --- | --- | --- |
 | D-053 | 2026-10-26 | Zatwierdzone P3.3C1 | Aktualizuje D-052: implementacja C1 według V1.8 — ostrzejsze miniatury, pełny podgląd, przygotowanie przepływu, zgód, usuwania i kosztów; dev, testy syntetyczne, podgląd main. AI OFF na serwerze, bez klucza AI w chmurze, płatnych wywołań, prywatnych zdjęć w AI i nowych abonamentów. Zatrzymanie przed osobno zatwierdzanym C2. |
 
+| ID | Data | Status | Ustalenie |
+| --- | --- | --- | --- |
+| D-054 | 2026-10-26 | Odbiór C1 i zlecone tylko planowanie | Kasia i Aleksy potwierdzili test i zaakceptowali C1. Zlecili końcową propozycję C2 z kosztami, finansowaniem i zasadami danych. Bez aktywacji AI, płatnych wywołań i prywatnych zdjęć w AI. Nie dopisano testów konkretnego urządzenia ani zgód uczestników na przekazanie zdjęć. |
+| D-055 | 2026-10-26 | Propozycja do zatwierdzenia | V1.9 konkretyzuje C2: integracja przy OFF i bezpłatne testy, potem odrębnie zatwierdzany 30-dniowy pilotaż 25 PLN / 60 wysłań, 30/konto i 5/dobę UTC. Wyłącznie istniejące kredyty; proponowane wyłączenie auto-reload całej organizacji OpenAI i pozostawienie OFF, bez nowych doładowań. Osobny klucz z terminem, polityka AI V1.2 i osobiste zgody, zamknięcie oraz raport bez prywatnych zdjęć. Nie gwarantuje maksymalnej ceny przyjętego żądania. Dziś tylko dokumentacja i odczyt; żaden warunek C2 nie został aktywowany. |
+
 ## Konsekwencje wyboru Expo
 
 - WWW oraz aplikacje natywne mogą współdzielić komponenty i logikę, ale nie zastępuje to testów na każdej platformie.

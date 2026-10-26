@@ -1,7 +1,7 @@
 # P3.3C1 — przygotowanie prywatnych wizualizacji
 
 Data: 2026-10-26. Zakres zatwierdzony według [planu V1.8](IMPLEMENTATION-PLAN-V1.8.md).
-**C1 wykonane i opublikowane na main; odbiór Kasi i Aleksego oczekuje.**
+**C1 wykonane, opublikowane na main i zaakceptowane przez Kasię i Aleksego (2026-10-26).**
 C2 nie jest uruchomione.
 
 ## Zakres i granice
@@ -179,7 +179,8 @@ jakości płatnej integracji C2 ani dopasowania rozmiaru. Nie wykonano testu na
 fizycznym iOS/Android; eksport JS i emulacja DPR nie zastępują urządzenia.
 Przed C2 konieczny jest test urządzeń rzeczywiście używanych przez uczestników.
 
-Rekomendowany odbiór: sprawdzić porównanie miniatur na telefonie, przygotować
-własny zapisany zestaw i obejrzeć ekran wejść przy wyłączonej generacji. Nie
-trzeba przesyłać niczego do AI. Akceptacja C1 nie uruchamia C2; jego finansowanie,
-klucz, daty i zgody wymagają osobnego zatwierdzenia.
+Kasia i Aleksy następnie potwierdzili przetestowanie i akceptację C1.
+Nie podali w tej wiadomości urządzeń ani konkretnych scenariuszy; nie dopisujemy
+osobnych wyników. Zlecili wyłącznie końcową propozycję C2, bez aktywacji,
+płatnych wywołań i prywatnych zdjęć w AI. [Plan V1.9](IMPLEMENTATION-PLAN-V1.9.md)
+nie uruchamia C2; finansowanie, klucz, daty i zgody nadal wymagają zatwierdzenia.

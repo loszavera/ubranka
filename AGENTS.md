@@ -116,7 +116,7 @@ zgodne, zero błędów. Dowody: docs/P33B-REPORT.md.
 2026-10-26 Kasia i Aleksy **zaakceptowali P3.3B z opisanymi ograniczeniami**
 i zlecili wyłącznie propozycję C, uwzględniającą ostrzejsze miniatury.
 Nie pytaj ponownie o odbiór B. Nie dopisuj testów konkretnych urządzeń ani
-osobnego potwierdzenia logowania Kasi. Obecne wymagania/plan: V1.8,
+osobnego potwierdzenia logowania Kasi. Ówczesne wymagania/plan: V1.8,
 koszty V1.7, propozycja zasad danych AI V1.1. W chwili sporządzenia była to
 dokumentacja **bez zgody na implementację C, nowe płatne wywołania i prywatne zdjęcia w AI**.
 Ówczesne rekomendowane C1: ostrzejszy podgląd (kandydat JPEG 600×900 ≤100 kB), osobne
@@ -143,8 +143,21 @@ rekordy i 20 plików; zaproszenia, puste triale fixture i lokalne sesje usunięt
 B zachowało sześć zużytych slotów i identyczne rozliczenie; C jest prepared,
 bez uczestników/dat/prób. AI OFF, zero nowych wywołań/kosztu API i kluczy AI.
 Raport: docs/P33C1-VERIFICATION.md, porównanie miniatur: /p33c1/.
-Odbiór C1 przez Kasię i Aleksego oczekuje. Zaproponuj test na ich telefonach,
-bez uruchamiania C2. Eksport i emulacja WWW nie są testami fizycznych urządzeń.
+2026-10-26 Kasia i Aleksy **potwierdzili przetestowanie i zaakceptowali C1**.
+Zlecili wyłącznie końcową propozycję C2. Nie pytaj ponownie o odbiór C1.
+Ogólny odbiór nie dopisuje urządzenia/przeglądarki ani testów aplikacji natywnej.
+Aktualne wymagania/plan: V1.9, koszty V1.8, propozycja zasad AI V1.2.
+C2 nadal bez zgody na implementację, aktywację, nowy klucz i płatne wywołania.
+Propozycja: 30 dni / 25 PLN trial + istniejące 25 PLN/miesiąc UTC / 60 wysłań,
+30/konto i 5/konto/dobę UTC, bez retry i dodatkowych płatnych testów operatora.
+Każdy uczestnik sam zatwierdza konkretne zdjęcia i uruchamia swoje generacje.
+Finansowanie z istniejących kredytów; nowe, osobno zatwierdzane wyłączenie
+auto-reload CAŁEJ organizacji OpenAI (także innych projektów), pozostawione OFF
+po C2. Bez nowych doładowań/abonamentów. Teraz niczego w rozliczeniach nie zmieniono.
+Granica 25 PLN dopuszcza nowe żądania; nie gwarantuje maksymalnej ceny przyjętego
+żądania. Nowa zgoda musi wprost obejmować tę granicę. Szczegóły konta tylko .local.
+Klucz C ma wygasać najpóźniej z końcem trialu; unieważnienie/usunięcie sekretu
+w kontroli końcowej wymaga osobnego dowodu, nie samej daty. Nie otwieraj B.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje
 po logout, aby po utracie odpowiedzi/reload nie ponawiać POST. Nie zawiera zdjęć,
 promptów ani tokenów. Znika po potwierdzeniu trwałego slotu z serwera lub po

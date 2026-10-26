@@ -2,7 +2,28 @@
 
 Aktualizacja: 2026-10-26.
 
-**P3.3C1 wykonane według V1.8 i opublikowane na main. Odbiór użytkowników oczekuje.**
+**P3.3C1 przetestowane i zaakceptowane przez Kasię i Aleksego.**
+Zlecili wyłącznie końcową propozycję C2. Powstały [wymagania V1.9](REQUIREMENTS-V1.9.md),
+[plan V1.9](IMPLEMENTATION-PLAN-V1.9.md), [koszty V1.8](COST-PLAN-V1.8.md)
+i [zasady AI V1.2](P33-AI-DATA-POLICY-V1.2.md). C2 nadal niezatwierdzone.
+Propozycja: 30 dni / 25 PLN całego trialu i wspólne 25 PLN/miesiąc UTC,
+60 wysłań łącznie / 30 na konto / 5 na dobę UTC, bez retry. Finansowanie z już
+opłaconych kredytów, z proponowanym wyłączeniem auto-reload całej organizacji
+OpenAI i pozostawieniem OFF po C2; dotyczy również innych projektów API.
+Ta zmiana, klucz i aktywacja wymagają nowej zgody. Każdy osobiście potwierdza
+prywatne wejścia. Limit aplikacji nie gwarantuje ceny przyjętego żądania.
+W turze planowania odczytano panel rozliczeń/ustawienia danych i oficjalne źródła.
+Szczegóły kont pozostają poza Git. Supabase 17:18 UTC: AI OFF, globalna blokada,
+C prepared, bez dat, uczestników i prób; miesiąc/B 149 groszy, zero rezerw.
+Bez zmian runtime, usług, ustawień, kluczy, wywołań modeli i prywatnych zdjęć w AI.
+Kontrola dokumentacji: 10 plików Markdown, 127 lokalnych odnośników bez braków,
+UTF-8 i whitespace PASS; niezależny przegląd kosztów/danych oraz zgodności z kodem.
+Uwzględniono jawne przygotowanie kopii zdjęć i potwierdzone wygaśnięcie klucza
+jako warunek aktywacji. Testów runtime nie powtarzano dla zmian wyłącznie dokumentacyjnych.
+
+## Odebrane C1 — dowody wykonania
+
+**P3.3C1 wykonane według V1.8 i opublikowane na main.**
 Ostrzejsze miniatury, pełny podgląd i przygotowany przepływ prywatnych
 wizualizacji, zgód, usuwania i limitów. [Aplikacja](https://ubranka.vercel.app)
 oraz [porównanie miniatur](https://ubranka.vercel.app/p33c1/).
@@ -20,8 +41,9 @@ Po zwykłym cron oba konta syntetyczne, rekordy i 20 plików fizycznie usunięto
 zaproszenia, puste triale fixture i lokalne sesje także usunięte.
 B pozostaje zamknięte: 6/6 zużytych slotów, 149 groszy, identyczny skrót rozliczeń,
 zero rezerw. C jest nieaktywne, z zerem prób; nowy koszt API 0 PLN.
-Brak testów na fizycznym iOS/Android. Następny krok: odbiór na urządzeniach
-Kasi i Aleksego przy wyłączonym AI. C2 wymaga osobnej decyzji.
+Agent nie wykonywał testów na fizycznym iOS/Android. Użytkownicy potwierdzili
+ogólny odbiór C1, bez wskazania urządzeń i osobnych scenariuszy.
+Następny krok: zatwierdzenie końcowej propozycji C2, jeżeli odpowiadają jej granice.
 Szczegóły: [raport C1](P33C1-VERIFICATION.md).
 
 ## Plan C — historia przygotowania
