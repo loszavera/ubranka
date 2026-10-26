@@ -1,6 +1,10 @@
 import { cors, fingerprint, jpeg, readBody, revision, safeError, uuid, WardrobeError } from '../_shared/protocol.ts';
 import { cleanup, SupabaseRest, type PhotoRow } from '../_shared/rest.ts';
 import { privatePhotoResponse } from '../_shared/photo-read.ts';
+import { canonicalMatches, prepareCanonicalInputs, type CanonicalInput } from '../_shared/canonical-input.ts';
+import { sha256 } from '../_shared/trial.ts';
+
+type PreparedIntent = {id:string;trialId:string;manifestHash:string|null;inputs:CanonicalInput[]};
 
 export function createWardrobeHandler(environment: (key: string) => string | undefined) { return async (request: Request) => {
   let headers: Record<string, string> = { 'Cache-Control': 'no-store' };
@@ -22,13 +26,47 @@ export function createWardrobeHandler(environment: (key: string) => string | und
     const accountId = uuid(user.id);
     const body = await readBody(request);
     const action = body.action;
-    if (action === 'requestVisualization') throw new WardrobeError('AI_DISABLED', 403);
     if (action === 'setAiConsent' && body.accepted !== false) throw new WardrobeError('AI_DISABLED',403);
     const admin = new SupabaseRest(url, serviceKey);
     const cleanupAdmin = new SupabaseRest(url, serviceKey, undefined, 3000);
     let result: unknown;
     if (action === 'downloadPhoto') return await privatePhotoResponse(caller, admin, body.path, headers);
-    if (action === 'uploadPhoto' || action === 'uploadBodyPhoto') {
+    if (action === 'requestVisualization') {
+      if(body.trialId!=='p33c-v1')throw new WardrobeError('AI_DISABLED',403);
+      if(Object.keys(body).some(key=>!['action','operationId','trialId','intentId','accepted','consentVersion','expectedConsentRevision','expectedManifestHash'].includes(key)))throw new WardrobeError('INVALID_REQUEST');
+      if(body.accepted!==true||body.consentVersion!=='p33c-ai-v1.2')throw new WardrobeError('AI_CONSENT_REQUIRED');
+      const jobId=uuid(body.operationId),intentId=uuid(body.intentId);
+      revision(body.expectedConsentRevision);
+      if(typeof body.expectedManifestHash!=='string'||!/^[a-f0-9]{64}$/.test(body.expectedManifestHash))throw new WardrobeError('MANIFEST_MISMATCH');
+      // Caller gate precedes privileged admission. The SQL transaction checks it
+      // again under the shared mutex and binds this exact confirmed manifest.
+      const snapshot=await caller.rpc('wardrobe_execute',{p_action:'bootstrap',p_payload:{}}) as {visualization?:{mode?:string}};
+      if(snapshot.visualization?.mode!=='private_pilot')throw new WardrobeError('AI_DISABLED',403);
+      const admitted=await admin.rpc('wardrobe_c_reserve_v2',{p_account:accountId,p_id:jobId,p_intent:intentId,
+        p_epoch:body.expectedConsentRevision,p_manifest_hash:body.expectedManifestHash,p_consent_version:body.consentVersion}) as {job:unknown;dispatch:boolean};
+      if(admitted.dispatch===true){
+        // Exactly one wake, never a retry. A lost ACK may already mean sent;
+        // retain its durable receipt and let read-only recovery/watchdog settle.
+        try{await admin.request('/functions/v1/visualization-worker',{method:'POST',body:JSON.stringify({accountId,jobId})});}catch{/* no resubmit or unsafe cancellation */}
+      }
+      return Response.json({data:admitted.job},{status:202,headers});
+    } else if(action==='prepareVisualization') {
+      uuid(body.outfitId);revision(body.expectedBodyRevision);revision(body.expectedStylingRevision);
+      const intent=await caller.rpc('wardrobe_execute',{p_action:action,p_payload:body}) as PreparedIntent;
+      const prepared=await prepareCanonicalInputs(admin,intent.inputs,accountId);
+      const hash=await sha256(new TextEncoder().encode(JSON.stringify(prepared.descriptors)));
+      result=await admin.rpc('wardrobe_c_seal_intent',{p_account:accountId,p_intent:intent.id,p_canonical:prepared.descriptors,p_manifest_hash:hash});
+    } else if(action==='downloadCanonicalInput') {
+      const intentId=uuid(body.intentId),photoId=uuid(body.photoId);
+      const intent=await caller.rpc('wardrobe_execute',{p_action:'getVisualizationIntent',p_payload:{intentId}}) as PreparedIntent;
+      const input=intent.inputs.find(value=>value.photoId===photoId);
+      if(!input||!intent.manifestHash||!input.canonical)throw new WardrobeError('NOT_FOUND',404);
+      const prepared=await prepareCanonicalInputs(admin,[input],accountId);
+      if(!canonicalMatches(input.canonical,prepared.descriptors[0]))throw new WardrobeError('MANIFEST_MISMATCH');
+      const current=await caller.rpc('wardrobe_execute',{p_action:'getVisualizationIntent',p_payload:{intentId}}) as PreparedIntent;
+      if(current.manifestHash!==intent.manifestHash)throw new WardrobeError('CONFLICT',409);
+      return new Response(new Uint8Array(prepared.images[0]).buffer,{headers:{...headers,'Content-Type':'image/jpeg','Content-Length':String(prepared.images[0].length),'Cache-Control':'no-store, private','X-Content-Type-Options':'nosniff'}});
+    } else if (action === 'uploadPhoto' || action === 'uploadBodyPhoto') {
       const isBody = action === 'uploadBodyPhoto';
       if (isBody && body.storageConsentVersion !== 'p33a-body-v1') throw new WardrobeError('STORAGE_CONSENT_REQUIRED');
       const itemId = isBody ? accountId : uuid(body.itemId);
@@ -55,14 +93,14 @@ export function createWardrobeHandler(environment: (key: string) => string | und
       try { await cleanup(cleanupAdmin, accountId); } catch { /* pending cleanup is retried by the worker */ }
     } else {
       if (typeof action !== 'string' || !['bootstrap','saveState','createItem','updateItem','deleteItem','deletePhoto','deleteAccount','export',
-        'saveBodyFit','deleteBodyPhoto','deleteAiData','saveStyling','getVisualization','cancelVisualization','deleteVisualization','reviewVisualization','prepareVisualization','setAiConsent'].includes(action)) {
+        'saveBodyFit','deleteBodyPhoto','deleteAiData','saveStyling','getVisualization','cancelVisualization','deleteVisualization','reviewVisualization','getVisualizationIntent','setAiConsent'].includes(action)) {
         throw new WardrobeError('INVALID_ACTION');
       }
       if (['updateItem','deleteItem','deletePhoto','saveState','saveBodyFit','deleteBodyPhoto','deleteAiData','saveStyling','cancelVisualization','deleteVisualization','reviewVisualization'].includes(action)) revision(body.expectedRevision);
       if (['createItem','updateItem','deleteItem','deletePhoto'].includes(action)) uuid(body.itemId);
       if (body.importId !== undefined) uuid(body.importId);
       if (['getVisualization','cancelVisualization','deleteVisualization','reviewVisualization'].includes(action)) uuid(body.jobId);
-      if(action==='prepareVisualization'){uuid(body.outfitId);revision(body.expectedBodyRevision);revision(body.expectedStylingRevision);}
+      if(action==='getVisualizationIntent')uuid(body.intentId);
       if(action==='setAiConsent')revision(body.expectedConsentRevision);
       result = await caller.rpc('wardrobe_execute', { p_action: action, p_payload: body });
       if (['deleteItem','deletePhoto','deleteAccount','deleteBodyPhoto','deleteAiData'].includes(action)) {
