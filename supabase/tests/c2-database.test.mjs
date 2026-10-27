@@ -174,3 +174,73 @@ for(const [scope,count] of [['daily',5],['account',30],['trial',60]])test(`C2 pu
  await assert.rejects(admit(A,i),/AI_ATTEMPT_LIMIT/);
  assert.equal((await user(A,'bootstrap')).visualization.consent.revision,0);
 });
+
+const nonExpiringGates={fundingVerified:true,autoReloadOff:true,nonExpiringKeyApproved:true,qaPassed:true,devicesVerified:true};
+const activateNonExpiring=(g=nonExpiringGates)=>sql('c_activate_nonexpiring',[[A,B],g],'wardrobe_private');
+
+test('non-expiring activation has an explicit gate and never asserts provider expiry; cutoff is exactly 30 days',async()=>{
+ const before=(await db.query('select * from wardrobe_private.c_runtime')).rows[0];assert.equal(before.enabled,false);assert.equal(before.provider_key_expires_at,null);
+ for(const bad of [{...nonExpiringGates,nonExpiringKeyApproved:false},{...nonExpiringGates,nonExpiringKeyApproved:'true'},
+  {fundingVerified:true,autoReloadOff:true,qaPassed:true,devicesVerified:true}])await assert.rejects(activateNonExpiring(bad),/AI_UNAVAILABLE/);
+ await assert.rejects(activateNonExpiring({...nonExpiringGates,keyExpiryVerified:true}),/INVALID_MANIFEST/);
+ await assert.rejects(activateNonExpiring(gates),/INVALID_MANIFEST/);
+ await assert.rejects(sql('c_activate_with_key_mode',[[A,B],'NON_EXPIRING',new Date(Date.now()+31*86400000).toISOString(),nonExpiringGates],'wardrobe_private'),/INVALID_MANIFEST/);
+ assert.deepEqual((await db.query('select * from wardrobe_private.c_runtime')).rows[0],before);
+ const result=await activateNonExpiring(),runtime=(await db.query('select * from wardrobe_private.c_runtime')).rows[0];
+ assert.equal(result.keyExpiryMode,'NON_EXPIRING');assert.equal(result.providerKeyExpiresAt,null);
+ assert.equal(result.keyDeadline,result.serverUseEndsAt);assert.equal(result.keyDeadline,result.endsAt);
+ assert.equal(Date.parse(result.serverUseEndsAt)-Date.parse(result.startsAt),30*86400000);
+ assert.equal(runtime.provider_key_expires_at,null);assert.equal(runtime.gates.keyExpiryVerified,undefined);assert.deepEqual(runtime.gates,nonExpiringGates);
+});
+
+test('new mode preserves all existing funding/device gates and owner-only execution',async()=>{
+ for(const key of ['fundingVerified','autoReloadOff','qaPassed','devicesVerified'])await assert.rejects(activateNonExpiring({...nonExpiringGates,[key]:false}),/AI_UNAVAILABLE/);
+ for(const role of ['anon','authenticated','service_role']){
+  await db.exec(`set role ${role}`);
+  try{
+   await assert.rejects(activateNonExpiring(),/permission denied/);
+   await assert.rejects(sql('c_activate_with_key_mode',[[A,B],'NON_EXPIRING',null,nonExpiringGates],'wardrobe_private'),/permission denied/);
+   await assert.rejects(db.query('select * from wardrobe_private.c_runtime'),/permission denied/);
+  }finally{await db.exec('reset role');}
+ }
+ assert.equal((await db.query('select enabled from wardrobe_private.c_runtime')).rows[0].enabled,false);
+});
+
+test('activation cannot reset a prior hold or B/month spend; approved non-expiring first reserve uses remaining month',async()=>{
+ await db.query("insert into wardrobe_private.ai_budgets(scope,limit_cents,spent_cents,reserved_cents) values('month:'||to_char(now() at time zone 'UTC','YYYY-MM'),2500,149,1),('trial:p33b-v1',1000,149,0)");
+ const before=(await db.query('select * from wardrobe_private.ai_budgets order by scope')).rows;
+ await assert.rejects(activateNonExpiring(),/AI_BUSY/);assert.deepEqual((await db.query('select * from wardrobe_private.ai_budgets order by scope')).rows,before);
+ await db.query("update wardrobe_private.ai_budgets set reserved_cents=0 where scope like 'month:%'");
+ const i=await seal();await activateNonExpiring();assert.equal((await admit(A,i)).job.reservedPln,23.51);
+ assert.equal((await db.query("select spent_cents from wardrobe_private.ai_budgets where scope='trial:p33b-v1'")).rows[0].spent_cents,149);
+});
+
+test('non-expiring provider key cannot extend server use beyond 30 days and cleanup records TRIAL_EXPIRED',async()=>{
+ const i=await seal();await activateNonExpiring();await admit(A,i);
+ await db.query("update wardrobe_private.c_runtime set activated_at=now()-interval '31 days',key_deadline=now()-interval '1 day' where singleton");
+ // Even an accidentally extended trial row cannot override the independent cutoff.
+ assert.equal((await user(A,'bootstrap')).visualization.mode,'off');await assert.rejects(mark(),/AI_DISABLED/);
+ await db.query("update wardrobe_private.c_trials set starts_at=now()-interval '31 days',ends_at=now()-interval '1 day' where id='p33c-v1'");
+ await admin('wardrobe_expire_uploads');const runtime=(await db.query('select * from wardrobe_private.c_runtime')).rows[0];
+ assert.equal(runtime.enabled,false);assert.equal(runtime.stop_reason,'TRIAL_EXPIRED');assert.equal(runtime.provider_key_expires_at,null);
+ assert.equal((await db.query('select reserved_cents from wardrobe_private.c_attempts')).rows[0].reserved_cents,0);
+ await assert.rejects(activateNonExpiring(),/CONFLICT/);await assert.rejects(activate(),/CONFLICT/);
+});
+
+test('closed pilot cannot reopen using another key mode, and sent cost holds survive the server cutoff',async()=>{
+ const i=await seal();await activateNonExpiring();await admit(A,i);await mark();
+ await db.query("update wardrobe_private.c_runtime set key_deadline=now()-interval '1 second' where singleton");
+ await admin('wardrobe_expire_uploads');assert.equal((await db.query('select stop_reason from wardrobe_private.c_runtime')).rows[0].stop_reason,'TRIAL_EXPIRED');
+ assert.equal((await db.query('select reserved_cents from wardrobe_private.c_attempts')).rows[0].reserved_cents,2500);
+ await assert.rejects(activateNonExpiring(),/CONFLICT/);await assert.rejects(activate(),/CONFLICT/);
+ const done=await admin('wardrobe_c_complete',[id(900),usage,false,{}]);assert.equal(done.spentPln,0.25);
+ assert.equal((await db.query('select reserved_cents from wardrobe_private.c_attempts')).rows[0].reserved_cents,0);
+});
+
+test('legacy expiring activation remains truthful, bounded and uses KEY_EXPIRED at its actual deadline',async()=>{
+ const result=await activate();assert.equal(result.keyExpiryMode,'EXPIRING');assert.equal(result.providerKeyExpiresAt,result.keyDeadline);
+ const runtime=(await db.query('select * from wardrobe_private.c_runtime')).rows[0];assert.equal(runtime.gates.keyExpiryVerified,true);
+ assert.equal((await db.query('select provider_key_expires_at=key_deadline as same from wardrobe_private.c_runtime')).rows[0].same,true);
+ await db.query("update wardrobe_private.c_runtime set key_deadline=now()-interval '1 second',provider_key_expires_at=now()-interval '1 second' where singleton");
+ await admin('wardrobe_expire_uploads');assert.equal((await db.query('select stop_reason from wardrobe_private.c_runtime')).rows[0].stop_reason,'KEY_EXPIRED');
+});

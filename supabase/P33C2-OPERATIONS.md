@@ -65,19 +65,38 @@ fixture application names, or report that overlap was not demonstrated.
 
 ## One-time activation (separate operator action after gates)
 
-Require exact two current invited adult account IDs, an externally confirmed
-key expiry timestamp after now and no later than the 30-day pilot end, and all
-five verified gates: fundingVerified, autoReloadOff, keyExpiryVerified, qaPassed,
-devicesVerified. Call private `c_activate(accounts, key_deadline, gates)` as the
-database owner only. This locks global control, rejects active/unknown holds,
-preserves previous monthly/B ledgers and initializes C once. It cannot reopen a
-closed trial or automatically replace a deleted participant.
+Require exact two current invited adult account IDs and verified funding,
+auto-reload OFF, QA and device gates. Both activation paths below are private,
+database-owner only, lock global control, reject active/unknown holds, preserve
+previous monthly/B ledgers and initialize C once. Neither can reopen a closed
+trial, extend it or automatically replace a deleted participant.
+
+- `c_activate(accounts, key_deadline, gates)` retains the original **EXPIRING**
+  mode: an externally confirmed provider expiry after now and no later than the
+  30-day pilot end, plus `keyExpiryVerified:true` and the four common gates.
+- **2026-10-27 explicit user exception:**
+  `c_activate_nonexpiring(accounts, gates)` uses **NON_EXPIRING** mode and requires
+  exactly `fundingVerified:true`, `autoReloadOff:true`, `qaPassed:true`,
+  `devicesVerified:true`, `nonExpiringKeyApproved:true`. Do not submit
+  `keyExpiryVerified` or invent a provider expiry; that gate is rejected here.
+  The runtime records `provider_key_expires_at=NULL`, the actual approval gates
+  and `key_expiry_mode=NON_EXPIRING`. `key_deadline` is still finite and exactly
+  equals `starts_at + 30 days = ends_at`: it is the **server-use cutoff**, not
+  expiry of the provider credential. The existing worker honors that cutoff.
+
+The new exception changes only provider credential lifetime. It does not change
+the 30-day/25 PLN/60 total/30 per account/5 daily limits, shared monthly ledger,
+personal consent, no-retry policy, funding or operator-test restrictions. The
+operator still must revoke the provider key and remove the Supabase secret at
+pilot completion; server closure does not perform or prove those external acts.
 
 For stop, private `c_close('MANUAL_STOP')` blocks admission and cancels only
 unsent reservations. Sent/unknown receipts retain holds until known settlement.
 At key/trial expiry all admission predicates fail immediately; scheduled
-maintenance records closure and releases unsent holds. Key revocation/removal
-is a separate operator action; do not claim a database timestamp revokes a key.
+maintenance records closure and releases unsent holds (`TRIAL_EXPIRED` for
+NON_EXPIRING; `KEY_EXPIRED` for an expiring provider key's elapsed deadline).
+Key revocation/removal is a separate operator action; do not claim a database
+timestamp revokes a key.
 
 After activation, paid sends belong exclusively to users' explicit app clicks.
 No operator test calls, auto-retries, additional funding or automatic restart.
