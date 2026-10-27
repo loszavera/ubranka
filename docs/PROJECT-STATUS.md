@@ -4,26 +4,30 @@ Aktualizacja: 2026-10-27.
 
 **P3.3C2 zatwierdzone według V1.9, z korektą ważności klucza w V1.10.**
 Integracja wdrożona; [raport wykonania C2](P33C2-VERIFICATION.md) zawiera
-testy i publikację. Aktywacja jeszcze nie nastąpiła. Zakres: 30 dni / 25 PLN
+testy i publikację. **Aktywacja: 2026-10-27 09:31 UTC; koniec 2026-11-26
+09:31 UTC (10:31 czasu polskiego).** Zakres: 30 dni / 25 PLN
 łącznie / 60 wysłań, 30 na konto i 5 na konto na dobę UTC, bez retry.
 Właściciel przyjął granicę gwarancji ceny oraz zasady AI V1.2. Zatwierdził
 wyłączenie auto-reload całej organizacji, finansowanie istniejącymi kredytami
 i osobny ograniczony klucz tylko w Supabase. Zero płatnych testów operatora
 i prywatnych zdjęć uczestników w testach. Każdy osobiście potwierdza wysłania.
-Do spełnienia warunków planu AI pozostaje OFF. Zatrzymanie przed D.
+Warunki planu spełnione; AI C2 ON dla obu uczestników. Zatrzymanie przed D.
 
-Integracja C2 jest gotowa na dev; migracja i cztery Edge Functions są wdrożone
-przy OFF. Lokalne kontrole: 88 testów klienta, 129 backendu, 12 kodeka,
+Integrację C2, migracje i cztery Edge Functions wdrożono początkowo przy OFF.
+Lokalne kontrole: 88 testów klienta, 129 backendu, 12 kodeka,
 15 E2E demo i 39 prywatnych; typy/lint, Deno, trzy eksporty i Doctor 21/21 PASS.
 Kasia potwierdziła logowanie Google i prywatną szafę na iPhone/Safari;
 oba konta uczestników są gotowe. Auto-reload organizacji wyłączone.
-Kod `9677fff` na dev/main, CI SUCCESS i Vercel Production READY. Hosted UI
+Poprzednia publikacja `9677fff`: CI SUCCESS i Vercel Production READY. Hosted UI
 30/30 PASS (PL/EN, 320/390/1440 px); dane i konta syntetyczne posprzątane.
 2026-10-27 właściciel potwierdził utworzenie klucza tylko Images Request,
 ważność Never i zapis wyłącznie w Supabase. Klucz utworzono i zapisano;
 migracja rozróżniająca Never od terminu serwera wdrożona przy OFF.
-129 testów backendu i niezależny przegląd PASS. Pozostała końcowa kontrola
-publikacji i aktywacja. Nowe płatne wywołania operatora: 0.
+129 testów backendu i niezależny przegląd PASS. Publikacja `d6b9947`:
+CI SUCCESS, Vercel READY; pakiet klienta identyczny z wcześniej sprawdzonym.
+Aktywacja zakończona: dwa konta, 0 wysłań C / 0 PLN / 0 rezerw. B i wspólny
+miesiąc zachowują 1,49 PLN; obecnie wolne 23,51 PLN w miesiącu. Nowe płatne
+wywołania operatora: 0. Każdy sam zatwierdza pierwsze wysłanie w aplikacji.
 Aktualne [wymagania V1.10](REQUIREMENTS-V1.10.md), [plan V1.10](IMPLEMENTATION-PLAN-V1.10.md)
 i [koszty V1.9](COST-PLAN-V1.9.md) zachowują 30 dni pilotażu; klucz wymaga
 odrębnego unieważnienia po zakończeniu. Zasady danych AI V1.2 bez zmian.

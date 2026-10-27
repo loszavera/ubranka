@@ -1,6 +1,8 @@
 # P3.3C2 — realizacja i weryfikacja
 
-Aktualizacja: 2026-10-27. **Integracja wdrożona i sprawdzona; C2 nieaktywne.**
+Aktualizacja: 2026-10-27. **C2 aktywne dla dwóch zatwierdzonych kont.**
+Start: 2026-10-27 09:31:20 UTC; koniec: 2026-11-26 09:31:20 UTC
+(10:31 czasu polskiego). Płatne testy operatora: 0.
 
 ## Upoważnienie i granice
 
@@ -119,9 +121,47 @@ Stawki i snapshot modelu potwierdzone w [dokumentacji OpenAI](https://developers
 Bez nowych wpłat i abonamentów. Pierwsze płatne wywołanie nadal należy
 wyłącznie do świadomego kliknięcia uczestnika.
 
+## Aktywacja i publikacja — 2026-10-27
+
+- Kod migracji `51f6d1f` i dokumentacja `d6b9947` opublikowane na dev/main,
+  z potwierdzeniem równości czterech lokalnych/zdalnych refów. Pełne
+  [CI 40480768484](https://github.com/loszavera/ubranka/actions/runs/40480768484)
+  **SUCCESS**: wszystkie kontrole kodu, 129 testów backendu, eksporty i E2E.
+- Vercel Production `dpl_6SSM78KLpoB2dKB2GjmhQrGGK2ok` **READY**, alias
+  [ubranka.vercel.app](https://ubranka.vercel.app). Weryfikacja HTTP 09:28 UTC:
+  pakiet WWW ma identyczny SHA-256 jak wcześniej sprawdzony w 30 kontrolach UI;
+  poprawny projekt Supabase, bez zmian kodu klienta i sekretu w publicznym pakiecie.
+- Free Supabase bez przekroczeń w odczytanym panelu: baza 28,63 MB/0,5 GB,
+  transfer 0,12/5 GB, Edge 1643/500000, Storage poniżej 1% limitu 1 GB.
+  Statystyki mają opóźnienie, nie są gwarancją przyszłego zużycia. Harmonogram
+  cleanup aktywny co 10 minut, ostatnie wykonanie zakończone sukcesem.
+- Jednokrotne `c_activate_nonexpiring` zakończyło się sukcesem o
+  **2026-10-27 09:31:20.494750 UTC**. Koniec i termin użycia przez aplikację:
+  **2026-11-26 09:31:20.494750 UTC** — dokładnie 30 dni. Nie ma odnowienia.
+- Odczyt po aktywacji: runtime ON, C active/unblocked, dwa właściwe konta
+  dopuszczone, wszystkie pięć bramek prawdziwych. `NON_EXPIRING`, rzeczywisty
+  termin dostawcy NULL; nie zapisano fikcyjnego `keyExpiryVerified`.
+- Stan startowy C2: **0 wysłań / 0 PLN / 0 rezerw**. Limit C 25 PLN,
+  wspólny miesiąc 25 PLN z zachowanym kosztem B 1,49 PLN — dostępne teraz
+  w miesiącu 23,51 PLN. B nadal zamknięte, sześć zużytych slotów i niezmieniony
+  skrót rozliczeń. Nie zresetowano kosztów ani historii.
+- Zasady AI V1.2 i osobiste potwierdzenie pozostają wymagane w aplikacji.
+  Operator nie odczytał zdjęć uczestników, nie akceptował zgód za nich i nie
+  wysłał żądania modelu. Konfiguracja klucza jest potwierdzona w panelu;
+  jego działanie w płatnym żądaniu C2 nie zostało sprawdzone przez operatora.
+- Przegląd dokumentacji: 11 plików UTF-8, 144 lokalne odnośniki PASS.
+  Receipt i metadane operacyjne zapisano poza Git. Końcowa aktualizacja
+  dokumentacyjna nie zmienia wdrożonego kodu aplikacji.
+
+Następny krok: uczestnik odświeża aplikację, wybiera zapisany zestaw i własne
+wejścia, osobiście potwierdza zasady/podgląd i wysyła jedną wizualizację.
+W razie błędu przekazuje komunikat i godzinę, bez ponawiania operacji.
+
 ## Zakończenie
 
 Po terminie/limicie serwer blokuje nowe wysłania, a przyjęte zlecenie nadal
 podlega rozliczeniu. Kontrola końcowa potwierdzi OFF, unieważnienie klucza,
 usunięcie sekretu i zbiorczy raport. Tych czynności nie uznajemy za wykonane
-na podstawie samego upływu daty. Zatrzymanie przed D.
+na podstawie samego upływu daty. Klucz Never pozostaje ważny u dostawcy aż
+do odrębnego unieważnienia. Nie utworzono automatyzacji Codex ani klucza
+administracyjnego do odwoływania dostępu. Zatrzymanie przed D.

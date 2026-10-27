@@ -62,7 +62,9 @@ organizacji i pozostawienie OFF, bez nowych wpłat/abonamentów. Aktywacja dopie
 po spełnieniu warunków planu; każdy osobiście zatwierdza swoje zdjęcia i wysłania.
 [Zmiana V1.10](docs/IMPLEMENTATION-PLAN-V1.10.md), zatwierdzona 2026-10-27:
 klucz jest bezterminowy; serwer nadal zatrzymuje pilotaż po 30 dniach.
-[Stan wdrożenia i testów C2](docs/P33C2-VERIFICATION.md). Do aktywacji AI pozostaje OFF.
+[C2 aktywne i zweryfikowane](docs/P33C2-VERIFICATION.md): od 2026-10-27 09:31 UTC
+do 2026-11-26 09:31 UTC (10:31 czasu polskiego), wyłącznie dla dwóch uczestników.
+Start 0 wysłań i 0 PLN C2; pierwszą próbę każdy uruchamia osobiście w aplikacji.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
 jest wspólna dla obu adresów. Lokalny zapis demo pozostaje osobny — publikacja

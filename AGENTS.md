@@ -18,8 +18,11 @@ teraz klucza OpenAI Ubranka, tylko Images Request, ważność bezterminowa (Neve
 zapis wyłącznie w sekretach Supabase i dokończenie aktywacji. Nie pytaj ponownie.
 Wymagania/plan V1.10 i koszty V1.9 zapisują to jako zmianę wcześniejszego TTL
 z V1.9, bez zmiany limitów 30 dni / 25 PLN / 60 / 30 / 5 i zakazu retry.
-Klucz utworzono i zapisano; rzeczywisty stan aktywacji sprawdzaj w raporcie C2
-oraz bazie. Serwer ma skończony termin, ale Never nie unieważnia się sam.
+Klucz utworzono i zapisano; C2 aktywowano 2026-10-27 09:31:20 UTC,
+koniec 2026-11-26 09:31:20 UTC, dwa konta, start 0 wysłań/0 PLN/0 rezerw.
+B i miesiąc zachowują 149 gr. Późniejszy stan sprawdzaj w raporcie C2 oraz bazie;
+nie traktuj startowych zer jako stanu bieżącego. Serwer ma skończony termin,
+ale Never nie unieważnia się sam.
 Po pilotażu nadal trzeba odwołać klucz, usunąć sekret i przygotować raport.
 Zero płatnych testów operatora, prywatnych zdjęć uczestników w testach,
 nowych wpłat/abonamentów; auto-reload całej organizacji pozostaje OFF.
