@@ -1,10 +1,10 @@
 # Stan projektu Ubranka
 
-Aktualizacja: 2026-10-26.
+Aktualizacja: 2026-10-27.
 
 **P3.3C2 zatwierdzone do implementacji i warunkowej aktywacji według V1.9.**
-Trwa praca na dev; [raport wykonania C2](P33C2-VERIFICATION.md) będzie zawierał
-testy, publikację i osobne potwierdzenie aktywacji. Zakres: 30 dni / 25 PLN
+Integracja wdrożona; [raport wykonania C2](P33C2-VERIFICATION.md) zawiera
+testy i publikację. Aktywacja jeszcze nie nastąpiła. Zakres: 30 dni / 25 PLN
 łącznie / 60 wysłań, 30 na konto i 5 na konto na dobę UTC, bez retry.
 Właściciel przyjął granicę gwarancji ceny oraz zasady AI V1.2. Zatwierdził
 wyłączenie auto-reload całej organizacji, finansowanie istniejącymi kredytami
@@ -17,7 +17,11 @@ przy OFF. Lokalne kontrole: 88 testów klienta, 123 backendu, 12 kodeka,
 15 E2E demo i 39 prywatnych; typy/lint, Deno, trzy eksporty i Doctor 21/21 PASS.
 Kasia potwierdziła logowanie Google i prywatną szafę na iPhone/Safari;
 oba konta uczestników są gotowe. Auto-reload organizacji wyłączone.
-Publikacja, końcowy hosted UI, klucz oraz aktywacja jeszcze oczekują.
+Kod `9677fff` na dev/main, CI SUCCESS i Vercel Production READY. Hosted UI
+30/30 PASS (PL/EN, 320/390/1440 px); dane i konta syntetyczne posprzątane.
+Pozostaje utworzenie ograniczonego klucza i potwierdzenie jego terminu ważności,
+zapis w Supabase oraz aktywacja. Narzędzie przeglądarki wymaga potwierdzenia
+przy samym tworzeniu dostępu. Klucz nie powstał, C OFF, nowe płatne wywołania: 0.
 
 ## Historia przygotowania propozycji C2
 

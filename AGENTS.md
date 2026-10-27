@@ -174,6 +174,13 @@ usunięcie sekretu i raport zbiorczy; stop przed D. Stan: docs/P33C2-VERIFICATIO
 W tej samej turze użytkownik wskazał urządzenie Kasi dla C2: iPhone/Safari.
 Następnie potwierdził osobiste logowanie Google Kasi i widok prywatnej szafy;
 oba zaproszone konta są aktywne. Nie pytaj ponownie o pierwsze logowanie.
+Integrację C2 opublikowano jako `9677fff` na dev/main, CI i Vercel READY;
+277 lokalnych testów oraz 30 hosted UI PASS. Syntetyczne konta/dane posprzątane.
+Stan 2026-10-27: C2 nadal OFF; nowy klucz jeszcze nie utworzony. Przygotowany
+formularz Images Request/30 dni czeka na potwierdzenie wymagane przez narzędzie
+przeglądarki przy tworzeniu dostępu. Nie myl gotowej integracji z aktywacją.
+Po utworzeniu klucza zweryfikuj rzeczywisty expiry i bramki V1.9, bez płatnego
+testu operatora. Aktualne dowody i następne czynności: docs/P33C2-VERIFICATION.md.
 Nie jest to osobny dowód przetestowania C2 ani natywnego iOS. Auto-reload całej
 organizacji wyłączono 2026-10-26 i potwierdzono OFF; bez wpłat/abonamentów.
 Minimalny lokalny receipt UUID/caseId ma osobny scope projektu/konta i pozostaje

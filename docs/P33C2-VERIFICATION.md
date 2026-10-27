@@ -1,6 +1,6 @@
 # P3.3C2 — realizacja i weryfikacja
 
-Aktualizacja: 2026-10-26. **Integracja gotowa, kontrola publikacji w toku; C2 nieaktywne.**
+Aktualizacja: 2026-10-27. **Integracja wdrożona i sprawdzona; C2 nieaktywne.**
 
 ## Upoważnienie i granice
 
@@ -23,7 +23,7 @@ Operator nie otwiera i nie przesyła prywatnych zdjęć uczestników do AI.
   Functions wdrożone przy OFF; osobny helper przygotowuje kopie JPEG bez AI.
 - Finansowanie: 2026-10-26 wyłączono auto-reload całej organizacji i potwierdzono
   widoczny stan OFF. Kredyty były dostępne; bez wpłat i zmian abonamentów.
-- Testy lokalne i API opisano poniżej; końcowy hosted UI, klucz i aktywacja oczekują.
+- Testy lokalne, API i hosted UI zakończone; klucz i aktywacja oczekują.
 - Płatne wywołania operatora w C2: 0. Zgoda B pozostaje wyczerpana.
 - Potwierdzone urządzenia Aleksego: Chrome na PC i Androidzie. Urządzenie/
   przeglądarka Kasi: iPhone/Safari (odpowiedź użytkownika 2026-10-26). To zakres
@@ -64,6 +64,46 @@ Operator nie otwiera i nie przesyła prywatnych zdjęć uczestników do AI.
 
 Prywatne dowody operacyjne pozostają w ignorowanych `.local/` i `artifacts/`.
 Nie publikujemy identyfikatorów uczestników, sesji ani ich zdjęć.
+
+## Publikacja i końcowy hosted UI
+
+- Kod `9677fffdf31ba1e5ad7489f45382a1b478189920` opublikowany atomowo,
+  bez force push, na dev/main; potwierdzono równość lokalnych i zdalnych refów.
+- [CI 40404830064](https://github.com/loszavera/ubranka/actions/runs/40404830064)
+  SUCCESS. Vercel Production `dpl_CUKiPX1pxJhtK1M3zcSoRCzrdFc1` READY;
+  główny adres [ubranka.vercel.app](https://ubranka.vercel.app).
+- Produkcyjny pakiet `entry-51186fec2991421890e94de7467d3bba.js`:
+  SHA-256 `2fd9652ee4ab9d979220e65a206072a9c168e11aaee5b37a6b76a6bcd57279ab`.
+  Linux/Vercel i Windows mają inne nazwy pakietów; potwierdzono poprawny ref
+  Supabase, obecność C2 i brak konfiguracji testowej w rzeczywistej produkcji.
+- Hosted UI **30/30 PASS**: dwa świeże konta syntetyczne, PL/EN przy 320/390/1440 px,
+  12 zrzutów. 16 odczytów kopii JPEG potwierdzonych po bajtach/hashu/no-store;
+  cztery kompletne podglądy renderowały kopie zgodne z manifestami serwera.
+  Zgody niezaznaczone i zablokowane przy OFF, zero POST generacji, zero
+  zaakceptowanych zgód wysłania w UI i zero lokalnych receipt.
+- Faktyczne aktywne odczyty przeglądarki: maks. 2 na konto. Transport diagnostyczny
+  dokańczał wcześniej anulowane odczyty (maks. 4); nie utożsamiamy obu pomiarów.
+  Poprawiono tylko selektory testu: ikona SVG nie jest zdjęciem wejściowym.
+  Nie było potrzeby zmiany aplikacji ani płatnych prób.
+- Testowy consent wycofano zwykłym API, zachowując przyrost rewizji; żadnych resetów.
+  Usunięcie obu syntetycznych kont zwykłą ścieżką aplikacji zakończyło się fizycznym
+  usunięciem Auth, rekordów, wejść, intentów i plików Storage. Zaproszenia i lokalne
+  sesje również usunięte. Nie uruchamiano ręcznie globalnego cleanupu.
+- Odczyt końcowy 2026-10-27 02:50 UTC: C OFF/prepared, zero uczestników i prób,
+  zero rezerw; B zamknięte, 149 gr i identyczny skrót historycznych rozliczeń.
+
+## Pozostały krok operacyjny
+
+Formularz osobnego klucza projektu Ubranka przygotowano: Restricted,
+wyłącznie Images Request, ważność 30 dni. **Klucz nie został utworzony ani
+zapisany w Supabase.** Narzędzie obsługi przeglądarki wymaga potwierdzenia
+w chwili utworzenia nowego trwałego dostępu, także po wcześniejszym upoważnieniu.
+Nie jest to ponowne zatwierdzanie zakresu C2.
+
+Po tym potwierdzeniu: zapisać klucz wyłącznie w sekretach Supabase, sprawdzić
+rzeczywisty termin wygaśnięcia i aktualne finansowanie, następnie jednokrotnie
+aktywować dwa zatwierdzone konta zgodnie z V1.9. Pierwsze płatne wywołanie
+wykonuje uczestnik własnym kliknięciem w aplikacji. Do tego czasu AI OFF.
 
 ## Zakończenie
 
