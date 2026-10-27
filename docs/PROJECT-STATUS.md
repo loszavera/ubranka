@@ -2,7 +2,7 @@
 
 Aktualizacja: 2026-10-27.
 
-**P3.3C2 zatwierdzone do implementacji i warunkowej aktywacji według V1.9.**
+**P3.3C2 zatwierdzone według V1.9, z korektą ważności klucza w V1.10.**
 Integracja wdrożona; [raport wykonania C2](P33C2-VERIFICATION.md) zawiera
 testy i publikację. Aktywacja jeszcze nie nastąpiła. Zakres: 30 dni / 25 PLN
 łącznie / 60 wysłań, 30 na konto i 5 na konto na dobę UTC, bez retry.
@@ -13,15 +13,20 @@ i prywatnych zdjęć uczestników w testach. Każdy osobiście potwierdza wysła
 Do spełnienia warunków planu AI pozostaje OFF. Zatrzymanie przed D.
 
 Integracja C2 jest gotowa na dev; migracja i cztery Edge Functions są wdrożone
-przy OFF. Lokalne kontrole: 88 testów klienta, 123 backendu, 12 kodeka,
+przy OFF. Lokalne kontrole: 88 testów klienta, 129 backendu, 12 kodeka,
 15 E2E demo i 39 prywatnych; typy/lint, Deno, trzy eksporty i Doctor 21/21 PASS.
 Kasia potwierdziła logowanie Google i prywatną szafę na iPhone/Safari;
 oba konta uczestników są gotowe. Auto-reload organizacji wyłączone.
 Kod `9677fff` na dev/main, CI SUCCESS i Vercel Production READY. Hosted UI
 30/30 PASS (PL/EN, 320/390/1440 px); dane i konta syntetyczne posprzątane.
-Pozostaje utworzenie ograniczonego klucza i potwierdzenie jego terminu ważności,
-zapis w Supabase oraz aktywacja. Narzędzie przeglądarki wymaga potwierdzenia
-przy samym tworzeniu dostępu. Klucz nie powstał, C OFF, nowe płatne wywołania: 0.
+2026-10-27 właściciel potwierdził utworzenie klucza tylko Images Request,
+ważność Never i zapis wyłącznie w Supabase. Klucz utworzono i zapisano;
+migracja rozróżniająca Never od terminu serwera wdrożona przy OFF.
+129 testów backendu i niezależny przegląd PASS. Pozostała końcowa kontrola
+publikacji i aktywacja. Nowe płatne wywołania operatora: 0.
+Aktualne [wymagania V1.10](REQUIREMENTS-V1.10.md), [plan V1.10](IMPLEMENTATION-PLAN-V1.10.md)
+i [koszty V1.9](COST-PLAN-V1.9.md) zachowują 30 dni pilotażu; klucz wymaga
+odrębnego unieważnienia po zakończeniu. Zasady danych AI V1.2 bez zmian.
 
 ## Historia przygotowania propozycji C2
 

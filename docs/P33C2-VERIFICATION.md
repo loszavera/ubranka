@@ -12,8 +12,10 @@ rezerwy i budżetu przez już przyjęte żądanie.
 
 Finansowanie wyłącznie istniejącymi kredytami. Zatwierdzono wyłączenie auto-reload
 całej organizacji OpenAI i pozostawienie OFF po C2, bez nowych wpłat/abonamentów.
-Osobny ograniczony klucz tylko w sekretach Supabase, z potwierdzonym wygaśnięciem
-najpóźniej z końcem pilotażu. Każdy uczestnik sam zatwierdza własne wejścia w UI.
+Osobny ograniczony klucz tylko w sekretach Supabase. 2026-10-27 właściciel
+zmienił ważność na bezterminową i potwierdził utworzenie teraz oraz aktywację.
+[Plan V1.10](IMPLEMENTATION-PLAN-V1.10.md) zapisuje tę zmianę warunku TTL V1.9;
+limity pilotażu pozostają bez zmian. Każdy uczestnik sam zatwierdza własne wejścia w UI.
 Operator nie otwiera i nie przesyła prywatnych zdjęć uczestników do AI.
 
 ## Bieżący stan
@@ -23,7 +25,7 @@ Operator nie otwiera i nie przesyła prywatnych zdjęć uczestników do AI.
   Functions wdrożone przy OFF; osobny helper przygotowuje kopie JPEG bez AI.
 - Finansowanie: 2026-10-26 wyłączono auto-reload całej organizacji i potwierdzono
   widoczny stan OFF. Kredyty były dostępne; bez wpłat i zmian abonamentów.
-- Testy lokalne, API i hosted UI zakończone; klucz i aktywacja oczekują.
+- Testy lokalne, API i hosted UI zakończone. Stan klucza i aktywacji poniżej.
 - Płatne wywołania operatora w C2: 0. Zgoda B pozostaje wyczerpana.
 - Potwierdzone urządzenia Aleksego: Chrome na PC i Androidzie. Urządzenie/
   przeglądarka Kasi: iPhone/Safari (odpowiedź użytkownika 2026-10-26). To zakres
@@ -92,18 +94,30 @@ Nie publikujemy identyfikatorów uczestników, sesji ani ich zdjęć.
 - Odczyt końcowy 2026-10-27 02:50 UTC: C OFF/prepared, zero uczestników i prób,
   zero rezerw; B zamknięte, 149 gr i identyczny skrót historycznych rozliczeń.
 
-## Pozostały krok operacyjny
+## Klucz i zmiana warunku TTL — 2026-10-27
 
-Formularz osobnego klucza projektu Ubranka przygotowano: Restricted,
-wyłącznie Images Request, ważność 30 dni. **Klucz nie został utworzony ani
-zapisany w Supabase.** Narzędzie obsługi przeglądarki wymaga potwierdzenia
-w chwili utworzenia nowego trwałego dostępu, także po wcześniejszym upoważnieniu.
-Nie jest to ponowne zatwierdzanie zakresu C2.
+Po jawnym potwierdzeniu właściciela utworzono osobny klucz projektu Ubranka:
+Restricted, jedna zgoda Images Request, ważność Never. Zapis w sekrecie
+`UBRANKA_P33C_OPENAI_KEY` potwierdzono 02:57:56 UTC. Wartość przeniesiono
+bezpośrednio do Supabase; bez lokalnego pliku, Git i Vercel. Nie użyto klucza
+P3.2/B, nie wykonano żądania modelu. Metadane konta i klucza są poza repo.
 
-Po tym potwierdzeniu: zapisać klucz wyłącznie w sekretach Supabase, sprawdzić
-rzeczywisty termin wygaśnięcia i aktualne finansowanie, następnie jednokrotnie
-aktywować dwa zatwierdzone konta zgodnie z V1.9. Pierwsze płatne wywołanie
-wykonuje uczestnik własnym kliknięciem w aplikacji. Do tego czasu AI OFF.
+Nowa migracja rozdziela ważność klucza u dostawcy i skończony termin używania
+go przez aplikację. Aktywacja NON_EXPIRING wymaga jawnej zgody zamiast
+fałszywego potwierdzenia wygaśnięcia; termin serwerowy to dokładnie 30 dni.
+Bezpłatne testy backendu po zmianie: **129/129 PASS**, w tym sześć dodatkowych
+testów bramek, uprawnień, terminów, braku reopen/reset i starej ścieżki EXPIRING.
+Typy/lint PASS, niezależny przegląd migracji i testów bez blokerów.
+Migrację wdrożono w transakcji przez SQL Editor wraz z wpisem historii,
+po dwóch błędach requestState wtyczki i potwierdzeniu braku wcześniejszego
+wdrożenia. Odczyt bazy: migracja obecna, runtime OFF, C prepared, zero
+uczestników/prób; anon/authenticated/service_role nie mogą aktywować C.
+
+Ponownie odczytano panel OpenAI: finansowanie dostępne, auto-reload OFF,
+limit projektu egzekwowany, udostępnianie danych do ulepszania modeli wyłączone.
+Stawki i snapshot modelu potwierdzone w [dokumentacji OpenAI](https://developers.openai.com/api/docs/models/gpt-image-2.5-flare).
+Bez nowych wpłat i abonamentów. Pierwsze płatne wywołanie nadal należy
+wyłącznie do świadomego kliknięcia uczestnika.
 
 ## Zakończenie
 

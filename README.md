@@ -60,6 +60,8 @@ wyników B. **P3.3C2 zatwierdzone do implementacji według [V1.9](docs/IMPLEMENT
 Finansowanie z istniejących kredytów; zatwierdzono wyłączenie auto-reload całej
 organizacji i pozostawienie OFF, bez nowych wpłat/abonamentów. Aktywacja dopiero
 po spełnieniu warunków planu; każdy osobiście zatwierdza swoje zdjęcia i wysłania.
+[Zmiana V1.10](docs/IMPLEMENTATION-PLAN-V1.10.md), zatwierdzona 2026-10-27:
+klucz jest bezterminowy; serwer nadal zatrzymuje pilotaż po 30 dniach.
 [Stan wdrożenia i testów C2](docs/P33C2-VERIFICATION.md). Do aktywacji AI pozostaje OFF.
 Dev i main korzystają z tego samego istniejącego Supabase Free `ubranka-test`
 we Frankfurcie i tych samych dwóch zaproszonych kont. Prywatna szafa w chmurze
@@ -70,8 +72,8 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 
 ## Dokumenty
 
-- [Wymagania V1.9 — odebrane C1, zatwierdzone C2](docs/REQUIREMENTS-V1.9.md)
-- [Plan implementacji V1.9 — integracja, finansowanie i pilotaż C2](docs/IMPLEMENTATION-PLAN-V1.9.md)
+- [Wymagania V1.10 — C2 z zatwierdzonym bezterminowym kluczem](docs/REQUIREMENTS-V1.10.md)
+- [Plan implementacji V1.10 — 30 dni C2 i cykl życia klucza](docs/IMPLEMENTATION-PLAN-V1.10.md)
 - [P3.3C2 — realizacja, testy i warunki aktywacji](docs/P33C2-VERIFICATION.md)
 - [P3.3C1 — weryfikacja, publikacja i odbiór](docs/P33C1-VERIFICATION.md)
 - [P3.3C1 — kodek i porównanie miniatur](docs/P33C1-CODEC.md)
@@ -80,7 +82,7 @@ Podział środowisk pilotażu i produkcji ustalimy ponownie przed premierą kome
 - [P3.3B — kontrakty i bezpłatne kontrole operatorowe](supabase/P33B-OPERATIONS.md)
 - [P3.3A — weryfikacja i test użytkowników](docs/P33A-VERIFICATION.md)
 - [P3.3A — kontrakty backendu i granice przygotowania AI](docs/P33A-BACKEND.md)
-- [Przyjęta kontrola kosztów V1.8 — pilotaż P3.3C2](docs/COST-PLAN-V1.8.md)
+- [Przyjęta kontrola kosztów V1.9 — pilotaż P3.3C2](docs/COST-PLAN-V1.9.md)
 - [P3.2 — raport jakości, kosztów i weryfikacji](docs/P32-REPORT.md)
 - [P3.2 — historyczny preflight i późniejsze rozstrzygnięcie użytkownika](docs/P32-PREFLIGHT.md)
 - [Przypadki P3.2, prompty i hashe wejść](docs/p32/cases.json)

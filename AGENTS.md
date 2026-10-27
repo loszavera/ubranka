@@ -13,6 +13,19 @@ przed dawnymi rozmowami. Odróżniaj propozycje od przyjętych wymagań.
 
 ## Bieżący etap
 
+**Najnowsze ustalenie C2, 2026-10-27:** właściciel jawnie potwierdził utworzenie
+teraz klucza OpenAI Ubranka, tylko Images Request, ważność bezterminowa (Never),
+zapis wyłącznie w sekretach Supabase i dokończenie aktywacji. Nie pytaj ponownie.
+Wymagania/plan V1.10 i koszty V1.9 zapisują to jako zmianę wcześniejszego TTL
+z V1.9, bez zmiany limitów 30 dni / 25 PLN / 60 / 30 / 5 i zakazu retry.
+Klucz utworzono i zapisano; rzeczywisty stan aktywacji sprawdzaj w raporcie C2
+oraz bazie. Serwer ma skończony termin, ale Never nie unieważnia się sam.
+Po pilotażu nadal trzeba odwołać klucz, usunąć sekret i przygotować raport.
+Zero płatnych testów operatora, prywatnych zdjęć uczestników w testach,
+nowych wpłat/abonamentów; auto-reload całej organizacji pozostaje OFF.
+Pierwszy płatny pomiar należy wyłącznie do świadomego kliknięcia uczestnika
+we własnej aplikacji. Nie twórz automatyzacji Codex. Zatrzymanie przed D.
+
 P2 zatwierdzono do implementacji, testów i podglądu Vercel z dev (2026-10-24).
 Powstał prototyp A — Krem i śliwka: PL/EN, krótki start, profile, szafa demo,
 dwa tryby propozycji, opinie i zapis lokalny. Wyniki i stan publikacji:
